@@ -1,4 +1,6 @@
-import { PRICING, CORPORATE_PRICING, formatPrice } from "@/lib/pricing";
+import { PRICING, CORPORATE_PRICING, USD_TO_THB, formatPrice } from "@/lib/pricing";
+
+const formatUSD = (amount: number) => `$${formatPrice(amount)}`;
 
 export function PricingLogic() {
   return (
@@ -65,27 +67,23 @@ export function PricingLogic() {
 
             {/* Corporate */}
             <div className="bg-muted/30 rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-4">Corporate Services (One-time)</h3>
+              <h3 className="font-semibold text-lg mb-4">Corporate Services (One-time, USD)</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span>Company incorporation</span>
-                  <span className="font-medium">฿{formatPrice(CORPORATE_PRICING.INCORPORATION)}</span>
+                  <span className="font-medium">{formatUSD(CORPORATE_PRICING.INCORPORATION)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Director change</span>
-                  <span>฿{formatPrice(CORPORATE_PRICING.DIRECTOR_CHANGE)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Shareholder change / share transfer</span>
-                  <span>฿{formatPrice(CORPORATE_PRICING.SHAREHOLDER_CHANGE)}</span>
+                  <span>Structural change (directors/shareholders)</span>
+                  <span>{formatUSD(CORPORATE_PRICING.STRUCTURAL_CHANGE)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Registered address update</span>
-                  <span>฿{formatPrice(CORPORATE_PRICING.ADDRESS_UPDATE)}</span>
+                  <span>{formatUSD(CORPORATE_PRICING.ADDRESS_UPDATE)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Company cleanup (multiple updates)</span>
-                  <span>From ฿{formatPrice(CORPORATE_PRICING.COMPANY_CLEANUP)}</span>
+                  <span>Company review / cleanup</span>
+                  <span>{formatUSD(CORPORATE_PRICING.COMPANY_REVIEW)}</span>
                 </div>
               </div>
             </div>
