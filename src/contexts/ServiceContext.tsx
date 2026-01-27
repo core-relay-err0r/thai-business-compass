@@ -89,7 +89,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
   const calculateAccounting = () => {
     const inputs = state.accountingInputs as AccountingInputs;
-    if (inputs.revenueRange && inputs.vatRegistered && inputs.transactionVolume && inputs.yearEndStatements && inputs.auditRequired) {
+    if (inputs.revenueRange && inputs.vatRegistered && inputs.transactionVolume && inputs.yearEndStatements && inputs.auditRequired && inputs.accountingIntent) {
       const result = calculateAccountingCost(inputs);
       setState((prev) => ({ ...prev, accountingResult: result }));
     }

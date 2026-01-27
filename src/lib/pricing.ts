@@ -1,27 +1,27 @@
 // PND50 Pricing Constants - Easily editable
 
-// Monthly fees (THB)
+// Monthly fees (USD)
 export const PRICING = {
   // Base accounting fee
-  BASE_ACCOUNTING: 6000,
+  BASE_ACCOUNTING: 170, // ~6,000 THB
   
   // VAT addon (if VAT registered)
-  VAT_ADDON: 2500,
+  VAT_ADDON: 70, // ~2,500 THB
   
   // Payroll
-  PAYROLL_BASE: 1500,
-  PAYROLL_PER_EMPLOYEE: 250,
+  PAYROLL_BASE: 45, // ~1,500 THB
+  PAYROLL_PER_EMPLOYEE: 7, // ~250 THB
   
   // Transaction complexity
-  TX_MEDIUM_ADDON: 1500,
-  TX_HIGH_ADDON: 3500,
+  TX_MEDIUM_ADDON: 45, // ~1,500 THB
+  TX_HIGH_ADDON: 100, // ~3,500 THB
   
   // International payments
-  INTL_PAYMENTS_ADDON: 1200,
+  INTL_PAYMENTS_ADDON: 35, // ~1,200 THB
   
-  // Annual fees (THB)
-  YEAR_END_STATEMENTS: 12000,
-  AUDIT_ADDON: 25000,
+  // Annual fees (USD)
+  YEAR_END_STATEMENTS: 350, // ~12,000 THB
+  AUDIT_ADDON: 700, // ~25,000 THB
 } as const;
 
 // Corporate Services - One-time fees (USD)
@@ -53,9 +53,11 @@ export const CONSULTING_PRICING = {
 
 // Calculate accounting cost based on user inputs
 export interface AccountingInputs {
-  revenueRange: "0-50k" | "50k-200k" | "200k+";
+  accountingIntent: "full" | "year-end-only";
+  revenueRange: "0-5k" | "5k-50k" | "50k-100k" | "100k-1m" | "1m+";
   vatRegistered: "yes" | "no" | "not-sure";
   employeeCount: number;
+  employeePurpose: "operations" | "visa" | "not-sure";
   payrollNeeded: boolean;
   transactionVolume: "low" | "medium" | "high";
   internationalPayments: boolean;
@@ -176,4 +178,12 @@ export function formatPrice(amount: number): string {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
+}
+
+export function formatUSD(amount: number): string {
+  return `$${formatPrice(amount)}`;
+}
+
+export function formatTHB(amount: number): string {
+  return `฿${formatPrice(Math.round(amount * USD_TO_THB))}`;
 }
