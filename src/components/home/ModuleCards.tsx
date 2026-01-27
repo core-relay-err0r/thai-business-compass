@@ -5,18 +5,18 @@ import { Calculator, Building2, MessageSquare, ArrowRight } from "lucide-react";
 
 const modules = [
   {
-    href: "/accounting",
-    icon: Calculator,
-    title: "Accounting",
-    description: "Calculate monthly + yearly cost while learning what's required.",
-    features: ["Monthly bookkeeping", "Tax filings", "VAT reporting", "Payroll"],
-  },
-  {
     href: "/corporate",
     icon: Building2,
     title: "Corporate Services",
     description: "Choose the event (incorporation, director change, share transfer). Get scope + one-time price.",
     features: ["Company registration", "Director changes", "Share transfers", "Address updates"],
+  },
+  {
+    href: "/accounting",
+    icon: Calculator,
+    title: "Accounting",
+    description: "Calculate monthly + yearly cost while learning what's required.",
+    features: ["Monthly bookkeeping", "Tax filings", "VAT reporting", "Payroll"],
   },
   {
     href: "/consulting",
