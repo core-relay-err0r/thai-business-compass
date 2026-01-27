@@ -11,23 +11,23 @@ export function Header() {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/accounting", label: "Accounting" },
     { href: "/corporate", label: "Corporate" },
+    { href: "/accounting", label: "Accounting" },
     { href: "/consulting", label: "Consulting" },
   ];
 
   const startOptions = [
     {
-      href: "/accounting",
-      icon: Calculator,
-      title: "Accounting",
-      description: "Calculate monthly + yearly cost",
-    },
-    {
       href: "/corporate",
       icon: Building2,
       title: "Corporate",
       description: "One-time corporate services",
+    },
+    {
+      href: "/accounting",
+      icon: Calculator,
+      title: "Accounting",
+      description: "Calculate monthly + yearly cost",
     },
     {
       href: "/consulting",

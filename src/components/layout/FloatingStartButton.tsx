@@ -9,16 +9,16 @@ export function FloatingStartButton() {
 
   const startOptions = [
     {
-      href: "/accounting",
-      icon: Calculator,
-      title: "Accounting",
-      description: "Calculate monthly + yearly cost",
-    },
-    {
       href: "/corporate",
       icon: Building2,
       title: "Corporate",
       description: "One-time corporate services",
+    },
+    {
+      href: "/accounting",
+      icon: Calculator,
+      title: "Accounting",
+      description: "Calculate monthly + yearly cost",
     },
     {
       href: "/consulting",
