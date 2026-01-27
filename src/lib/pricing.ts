@@ -24,14 +24,23 @@ export const PRICING = {
   AUDIT_ADDON: 25000,
 } as const;
 
-// Corporate Services - One-time fees (THB)
+// Corporate Services - One-time fees (USD)
 export const CORPORATE_PRICING = {
-  INCORPORATION: 35000,
-  DIRECTOR_CHANGE: 8000,
-  SHAREHOLDER_CHANGE: 15000,
-  ADDRESS_UPDATE: 6000,
-  COMPANY_CLEANUP: 25000, // Starting from
+  INCORPORATION: 1500,
+  STRUCTURAL_CHANGE: 500,
+  ADDRESS_UPDATE: 300,
+  ADDRESS_UPDATE_VAT: 1000,
+  ADDRESS_UPDATE_OUTSIDE_BKK: 100,
+  COMPANY_REVIEW: 500,
+  COMPANY_REVIEW_FINANCIAL: 500,
+  COMPANY_REVIEW_ENGLISH: 500,
+  COMPANY_REVIEW_FINANCIAL_ENGLISH: 1000,
+  OFFICE_VIRTUAL: 300,
+  OFFICE_PHYSICAL: 1000,
 } as const;
+
+// Approximate THB conversion rate (for reference display)
+export const USD_TO_THB = 35;
 
 // Consulting price ranges (THB)
 export const CONSULTING_PRICING = {

@@ -4,9 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Building2, UserCog, Users, MapPin, Wrench, Check, X, ArrowRight } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Building2, Users, MapPin, FileSearch, Check, X, ArrowRight, ChevronDown } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { CORPORATE_PRICING, formatPrice } from "@/lib/pricing";
+import { CORPORATE_PRICING, USD_TO_THB, formatPrice } from "@/lib/pricing";
+
+const formatUSD = (amount: number) => `$${formatPrice(amount)}`;
+const formatTHB = (usd: number) => `≈ ฿${formatPrice(usd * USD_TO_THB)}`;
 
 const SERVICES = [
   {
@@ -14,9 +18,8 @@ const SERVICES = [
     icon: Building2,
     title: "Company Incorporation",
     price: CORPORATE_PRICING.INCORPORATION,
-    whenNeeded: "Starting a new Thai Co., Ltd. from scratch.",
-    contextLine: "Used when starting operations or restructuring into Thailand.",
-    highlight: "Bank-ready structure",
+    whenNeeded: "Standard Thai Co., Ltd. structure (most common setup).",
+    contextLine: "Most companies start simple and adapt later if needed.",
     included: [
       "Company name reservation",
       "Memorandum of Association drafting",
@@ -31,41 +34,23 @@ const SERVICES = [
     ],
   },
   {
-    id: "director-change",
-    icon: UserCog,
-    title: "Director Change",
-    price: CORPORATE_PRICING.DIRECTOR_CHANGE,
-    whenNeeded: "Adding, removing, or replacing a company director.",
-    contextLine: "Required when control or signing authority changes.",
+    id: "structural-change",
+    icon: Users,
+    title: "Structural Change",
+    price: CORPORATE_PRICING.STRUCTURAL_CHANGE,
+    whenNeeded: "Changing directors, shareholders, or share ownership.",
+    contextLine: "Used when control or ownership changes.",
     included: [
       "Preparation of board resolutions",
       "DBD registration filing",
       "Updated company affidavit",
-      "Signatory updates at bank (guidance)",
+      "Share transfer documentation (if applicable)",
+      "Updated shareholder register",
     ],
     documents: [
-      "New director's passport & address proof",
+      "New party's passport & address proof",
       "Existing director signatures",
       "Current company documents",
-    ],
-  },
-  {
-    id: "shareholder-change",
-    icon: Users,
-    title: "Shareholder Change / Share Transfer",
-    price: CORPORATE_PRICING.SHAREHOLDER_CHANGE,
-    whenNeeded: "Transferring shares or changing the ownership structure.",
-    contextLine: "Required when ownership or profit rights change.",
-    included: [
-      "Share transfer agreement drafting",
-      "Updated shareholder register",
-      "DBD notification filing",
-      "Updated share certificates",
-    ],
-    documents: [
-      "Current shareholder documents",
-      "New shareholder passport & address",
-      "Board resolution for transfer",
     ],
   },
   {
@@ -75,6 +60,11 @@ const SERVICES = [
     price: CORPORATE_PRICING.ADDRESS_UPDATE,
     whenNeeded: "Moving company registered address to a new location.",
     contextLine: "Mandatory when the official address changes.",
+    conditions: [
+      { label: "If VAT registered", price: CORPORATE_PRICING.ADDRESS_UPDATE_VAT },
+      { label: "Outside Bangkok", price: CORPORATE_PRICING.ADDRESS_UPDATE_OUTSIDE_BKK, prefix: "+" },
+    ],
+    hasOfficeAssistance: true,
     included: [
       "DBD address change registration",
       "Updated company affidavit",
@@ -88,22 +78,26 @@ const SERVICES = [
     ],
   },
   {
-    id: "company-cleanup",
-    icon: Wrench,
-    title: "Company Cleanup",
-    price: CORPORATE_PRICING.COMPANY_CLEANUP,
-    pricePrefix: "From",
-    whenNeeded: "Multiple updates or fixing outdated/incorrect registrations.",
-    contextLine: "Typical cases: outdated directors, incorrect shareholders, missing filings.",
+    id: "company-review",
+    icon: FileSearch,
+    title: "Company Review / Cleanup",
+    price: CORPORATE_PRICING.COMPANY_REVIEW,
+    whenNeeded: "Reviewing current company status and registrations.",
+    contextLine: "This service provides clarity, not corrections.",
+    addons: [
+      { label: "Financial filings review", price: CORPORATE_PRICING.COMPANY_REVIEW_FINANCIAL },
+      { label: "English version", price: CORPORATE_PRICING.COMPANY_REVIEW_ENGLISH },
+      { label: "Financial review in English", price: CORPORATE_PRICING.COMPANY_REVIEW_FINANCIAL_ENGLISH },
+    ],
     included: [
-      "Audit of current registrations",
-      "Multiple change filings bundled",
+      "Review of current registrations",
       "Document reconciliation",
-      "Compliance check & fix",
+      "Status summary report",
+      "Recommendations for updates",
     ],
     documents: [
       "All existing company documents",
-      "List of changes needed",
+      "List of concerns (if any)",
       "Director authorizations",
     ],
   },
@@ -176,19 +170,55 @@ export function CorporateServices() {
                 {/* Context line */}
                 <p className="text-xs text-muted-foreground/80 leading-relaxed">
                   {service.contextLine}
-                  {service.highlight && (
-                    <span className="ml-1 text-foreground/60">• {service.highlight}</span>
-                  )}
                 </p>
 
+                {/* Conditions for address update */}
+                {'conditions' in service && service.conditions && (
+                  <div className="space-y-1">
+                    {service.conditions.map((cond) => (
+                      <p key={cond.label} className="text-xs text-muted-foreground/60">
+                        {cond.label}: {cond.prefix || ''}{formatUSD(cond.price)}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
+                {/* Office assistance reveal for address update */}
+                {'hasOfficeAssistance' in service && service.hasOfficeAssistance && (
+                  <Collapsible>
+                    <CollapsibleTrigger className="text-xs text-muted-foreground/70 hover:text-muted-foreground flex items-center gap-1">
+                      We can assist with office selection if needed
+                      <ChevronDown className="h-3 w-3" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="pt-2 space-y-1">
+                      <p className="text-xs text-muted-foreground/60">Virtual office assistance: {formatUSD(CORPORATE_PRICING.OFFICE_VIRTUAL)}</p>
+                      <p className="text-xs text-muted-foreground/60">Physical office assistance: from {formatUSD(CORPORATE_PRICING.OFFICE_PHYSICAL)}</p>
+                      <p className="text-xs text-muted-foreground/50 italic">We do not provide offices directly.</p>
+                    </CollapsibleContent>
+                  </Collapsible>
+                )}
+
+                {/* Add-ons for company review */}
+                {'addons' in service && service.addons && (
+                  <div className="space-y-1">
+                    {service.addons.map((addon) => (
+                      <p key={addon.label} className="text-xs text-muted-foreground/60">
+                        + {formatUSD(addon.price)} — {addon.label}
+                      </p>
+                    ))}
+                  </div>
+                )}
+
                 {/* Price - visually dominant but clean */}
-                <div className="flex items-baseline gap-1.5 pt-2">
-                  {service.pricePrefix && (
-                    <span className="text-sm text-muted-foreground">{service.pricePrefix}</span>
-                  )}
-                  <span className="text-2xl font-semibold tracking-tight">
-                    ฿{formatPrice(service.price)}
-                  </span>
+                <div className="pt-2">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-semibold tracking-tight">
+                      {formatUSD(service.price)}
+                    </span>
+                    <span className="text-xs text-muted-foreground/50">
+                      {formatTHB(service.price)}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Action button */}
@@ -218,10 +248,15 @@ export function CorporateServices() {
       </div>
 
       {/* Trust & boundaries */}
-      <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground/70 pt-4">
-        <span>One-time services only.</span>
-        <span>No visas or work permits.</span>
-        <span>Corporate actions aligned with Thai regulations.</span>
+      <div className="space-y-3 pt-4">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground/70">
+          <span>One-time services only.</span>
+          <span>No visas or work permits.</span>
+          <span>Corporate actions aligned with Thai regulations.</span>
+        </div>
+        <p className="text-center text-xs text-muted-foreground/50">
+          Advanced structures (e.g. BOI) usually make sense only after operations begin.
+        </p>
       </div>
 
       {/* Floating selection summary */}
@@ -234,7 +269,7 @@ export function CorporateServices() {
                 {selectedCorporateServices.map((s) => (
                   <div key={s.id} className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">{s.name}</span>
-                    <span className="font-medium">฿{formatPrice(s.price)}</span>
+                    <span className="font-medium">{formatUSD(s.price)}</span>
                   </div>
                 ))}
               </div>
@@ -243,7 +278,7 @@ export function CorporateServices() {
               <div className="border-t border-border pt-3 flex items-center justify-between">
                 <div>
                   <span className="text-xs text-muted-foreground">One-time total</span>
-                  <div className="text-lg font-semibold">฿{formatPrice(totalPrice)}</div>
+                  <div className="text-lg font-semibold">{formatUSD(totalPrice)}</div>
                 </div>
                 <Button onClick={() => navigate("/submit")} size="sm">
                   Proceed to request
@@ -307,11 +342,11 @@ export function CorporateServices() {
 
                 <div className="flex items-center justify-between pt-4 border-t border-border">
                   <div>
-                    {selectedService.pricePrefix && (
-                      <span className="text-sm text-muted-foreground mr-1">{selectedService.pricePrefix}</span>
-                    )}
                     <span className="text-2xl font-semibold tracking-tight">
-                      ฿{formatPrice(selectedService.price)}
+                      {formatUSD(selectedService.price)}
+                    </span>
+                    <span className="text-xs text-muted-foreground/50 ml-2">
+                      {formatTHB(selectedService.price)}
                     </span>
                   </div>
                   <Button
