@@ -1,6 +1,4 @@
-import { PRICING, CORPORATE_PRICING, USD_TO_THB, formatPrice } from "@/lib/pricing";
-
-const formatUSD = (amount: number) => `$${formatPrice(amount)}`;
+import { PRICING, CORPORATE_PRICING, formatUSD, formatPrice } from "@/lib/pricing";
 
 export function PricingLogic() {
   return (
@@ -21,31 +19,31 @@ export function PricingLogic() {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span>Base accounting fee</span>
-                  <span className="font-medium">฿{formatPrice(PRICING.BASE_ACCOUNTING)}/month</span>
+                  <span className="font-medium">{formatUSD(PRICING.BASE_ACCOUNTING)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ VAT reporting (if registered)</span>
-                  <span>+฿{formatPrice(PRICING.VAT_ADDON)}/month</span>
+                  <span>+{formatUSD(PRICING.VAT_ADDON)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ Payroll base</span>
-                  <span>+฿{formatPrice(PRICING.PAYROLL_BASE)}/month</span>
+                  <span>+{formatUSD(PRICING.PAYROLL_BASE)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ Per employee</span>
-                  <span>+฿{formatPrice(PRICING.PAYROLL_PER_EMPLOYEE)}/employee/month</span>
+                  <span>+{formatUSD(PRICING.PAYROLL_PER_EMPLOYEE)}/employee/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ Medium transaction volume</span>
-                  <span>+฿{formatPrice(PRICING.TX_MEDIUM_ADDON)}/month</span>
+                  <span>+{formatUSD(PRICING.TX_MEDIUM_ADDON)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ High transaction volume</span>
-                  <span>+฿{formatPrice(PRICING.TX_HIGH_ADDON)}/month</span>
+                  <span>+{formatUSD(PRICING.TX_HIGH_ADDON)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ International payments</span>
-                  <span>+฿{formatPrice(PRICING.INTL_PAYMENTS_ADDON)}/month</span>
+                  <span>+{formatUSD(PRICING.INTL_PAYMENTS_ADDON)}/month</span>
                 </div>
               </div>
             </div>
@@ -56,11 +54,11 @@ export function PricingLogic() {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span>Year-end financial statements</span>
-                  <span className="font-medium">฿{formatPrice(PRICING.YEAR_END_STATEMENTS)}/year</span>
+                  <span className="font-medium">{formatUSD(PRICING.YEAR_END_STATEMENTS)}/year</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ Annual audit (if required)</span>
-                  <span>+฿{formatPrice(PRICING.AUDIT_ADDON)}/year</span>
+                  <span>+{formatUSD(PRICING.AUDIT_ADDON)}/year</span>
                 </div>
               </div>
             </div>

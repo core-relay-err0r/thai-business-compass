@@ -8,26 +8,29 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, AlertCircle, XCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { AccountingInputs, calculateAccountingCost, formatPrice } from "@/lib/pricing";
+import { AccountingInputs, calculateAccountingCost, formatUSD, USD_TO_THB, formatPrice } from "@/lib/pricing";
 
 const STEPS = [
+  { id: 0, title: "Intent" },
   { id: 1, title: "Company Basics" },
   { id: 2, title: "Team" },
   { id: 3, title: "Operations" },
   { id: 4, title: "Year-End" },
-  { id: 5, title: "Results" },
+  { id: 5, title: "Overview" },
 ];
 
 export function AccountingWizard() {
   const navigate = useNavigate();
   const { accountingInputs, setAccountingInputs, accountingResult } = useServices();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
-    revenueRange: "0-50k",
+    accountingIntent: "full",
+    revenueRange: "5k-50k",
     vatRegistered: "no",
     employeeCount: 0,
+    employeePurpose: "operations",
     payrollNeeded: false,
     transactionVolume: "low",
     internationalPayments: false,
@@ -39,7 +42,6 @@ export function AccountingWizard() {
   const [liveResult, setLiveResult] = useState(accountingResult);
 
   useEffect(() => {
-    // Calculate live result when inputs change
     if (
       localInputs.revenueRange &&
       localInputs.vatRegistered &&
@@ -60,7 +62,7 @@ export function AccountingWizard() {
   };
 
   const handleBack = () => {
-    if (currentStep > 1) {
+    if (currentStep > 0) {
       setCurrentStep((prev) => prev - 1);
     }
   };
@@ -70,7 +72,11 @@ export function AccountingWizard() {
     navigate("/submit");
   };
 
-  const progressPercent = (currentStep / STEPS.length) * 100;
+  const handleAdjust = () => {
+    setCurrentStep(0);
+  };
+
+  const progressPercent = (currentStep / (STEPS.length - 1)) * 100;
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
@@ -82,7 +88,7 @@ export function AccountingWizard() {
               <div className="flex items-center justify-between">
                 <CardTitle>Accounting Calculator</CardTitle>
                 <span className="text-sm text-muted-foreground">
-                  Step {currentStep} of {STEPS.length}
+                  Step {currentStep + 1} of {STEPS.length}
                 </span>
               </div>
               <Progress value={progressPercent} className="h-2" />
@@ -99,6 +105,9 @@ export function AccountingWizard() {
             </div>
           </CardHeader>
           <CardContent className="min-h-[400px]">
+            {currentStep === 0 && (
+              <Step0Intent inputs={localInputs} setInputs={setLocalInputs} />
+            )}
             {currentStep === 1 && (
               <Step1CompanyBasics inputs={localInputs} setInputs={setLocalInputs} />
             )}
@@ -112,14 +121,14 @@ export function AccountingWizard() {
               <Step4YearEnd inputs={localInputs} setInputs={setLocalInputs} />
             )}
             {currentStep === 5 && liveResult && (
-              <Step5Results result={liveResult} />
+              <Step5Results result={liveResult} onAdjust={handleAdjust} />
             )}
 
             <div className="flex justify-between mt-8 pt-6 border-t border-border">
               <Button
                 variant="outline"
                 onClick={handleBack}
-                disabled={currentStep === 1}
+                disabled={currentStep === 0}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back
@@ -152,23 +161,29 @@ export function AccountingWizard() {
                 <div>
                   <div className="text-sm text-muted-foreground mb-1">Monthly</div>
                   <div className="text-2xl font-bold">
-                    ฿{formatPrice(liveResult.totalMonthly)}
+                    {formatUSD(liveResult.totalMonthly)}
                     {liveResult.potentialMonthly.length > 0 && (
                       <span className="text-lg font-normal text-muted-foreground">
                         –{formatPrice(liveResult.totalMonthlyMax)}
                       </span>
                     )}
                   </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    ≈ ฿{formatPrice(liveResult.totalMonthly * USD_TO_THB)}
+                  </div>
                 </div>
                 <div>
                   <div className="text-sm text-muted-foreground mb-1">Annual (incl. year-end)</div>
                   <div className="text-2xl font-bold">
-                    ฿{formatPrice(liveResult.totalAnnual)}
+                    {formatUSD(liveResult.totalAnnual)}
                     {liveResult.potentialAnnual.length > 0 && (
                       <span className="text-lg font-normal text-muted-foreground">
                         –{formatPrice(liveResult.totalAnnualMax)}
                       </span>
                     )}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    ≈ ฿{formatPrice(liveResult.totalAnnual * USD_TO_THB)}
                   </div>
                 </div>
 
@@ -192,12 +207,12 @@ export function AccountingWizard() {
                     <div className="text-sm font-medium text-amber-600">Potential (if needed):</div>
                     {liveResult.potentialMonthly.map((p) => (
                       <div key={p.name} className="text-sm text-muted-foreground">
-                        {p.name}: +฿{formatPrice(p.amount)}/mo
+                        {p.name}: +{formatUSD(p.amount)}/mo
                       </div>
                     ))}
                     {liveResult.potentialAnnual.map((p) => (
                       <div key={p.name} className="text-sm text-muted-foreground">
-                        {p.name}: +฿{formatPrice(p.amount)}/yr
+                        {p.name}: +{formatUSD(p.amount)}/yr
                       </div>
                     ))}
                   </div>
@@ -221,6 +236,56 @@ interface StepProps {
   setInputs: (inputs: Partial<AccountingInputs>) => void;
 }
 
+function Step0Intent({ inputs, setInputs }: StepProps) {
+  return (
+    <div className="space-y-8">
+      <div className="text-center pb-4">
+        <h3 className="text-xl font-semibold mb-2">What do you need help with?</h3>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <button
+          onClick={() => setInputs({ ...inputs, accountingIntent: "full" })}
+          className={`p-6 rounded-lg border-2 text-left transition-all ${
+            inputs.accountingIntent === "full"
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50"
+          }`}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <Calculator className="h-6 w-6 text-primary" />
+            <span className="font-semibold text-lg">Full accounting support</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Monthly accounting, payroll, taxes, and year-end filings.
+          </p>
+        </button>
+
+        <button
+          onClick={() => setInputs({ ...inputs, accountingIntent: "year-end-only" })}
+          className={`p-6 rounded-lg border-2 text-left transition-all ${
+            inputs.accountingIntent === "year-end-only"
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50"
+          }`}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <FileText className="h-6 w-6 text-primary" />
+            <span className="font-semibold text-lg">Year-end only</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Annual financial statements and audit support if required.
+          </p>
+        </button>
+      </div>
+
+      <p className="text-sm text-muted-foreground text-center">
+        Most operating companies choose full accounting. Year-end only is used in specific cases.
+      </p>
+    </div>
+  );
+}
+
 function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
   return (
     <div className="space-y-8">
@@ -228,21 +293,23 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
         <h3 className="text-lg font-semibold mb-4">Company Type</h3>
         <div className="p-4 bg-muted/50 rounded-lg">
           <span className="font-medium">Thai Co., Ltd.</span>
-          <span className="text-sm text-muted-foreground ml-2">(This is what we specialize in)</span>
+          <span className="text-sm text-muted-foreground ml-2">(standard Thai company)</span>
         </div>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Monthly Revenue Range</h3>
+        <h3 className="text-lg font-semibold mb-4">Monthly Revenue Range (USD)</h3>
         <RadioGroup
           value={inputs.revenueRange}
           onValueChange={(value) => setInputs({ ...inputs, revenueRange: value as AccountingInputs["revenueRange"] })}
           className="grid gap-3"
         >
           {[
-            { value: "0-50k", label: "0 – 50,000 THB" },
-            { value: "50k-200k", label: "50,000 – 200,000 THB" },
-            { value: "200k+", label: "200,000+ THB" },
+            { value: "0-5k", label: "Up to $5,000" },
+            { value: "5k-50k", label: "$5,000 – $50,000" },
+            { value: "50k-100k", label: "$50,000 – $100,000" },
+            { value: "100k-1m", label: "$100,000 – $1,000,000" },
+            { value: "1m+", label: "Over $1,000,000" },
           ].map((option) => (
             <Label
               key={option.value}
@@ -264,7 +331,7 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              VAT registration changes monthly filings. Required if annual revenue exceeds 1.8M THB.
+              VAT affects monthly filings and reporting scope.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -314,6 +381,42 @@ function Step2Team({ inputs, setInputs }: StepProps) {
             <span>30</span>
           </div>
         </div>
+
+        {(inputs.employeeCount || 0) > 0 && (
+          <div className="mt-6 p-4 bg-muted/30 rounded-lg space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Are these employees required for operations or visas?</span>
+              <Tooltip>
+                <TooltipTrigger>
+                  <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  Some companies formally employ staff for visa purposes. This still affects payroll reporting.
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <RadioGroup
+              value={inputs.employeePurpose}
+              onValueChange={(value) => setInputs({ ...inputs, employeePurpose: value as AccountingInputs["employeePurpose"] })}
+              className="grid grid-cols-3 gap-2"
+            >
+              {[
+                { value: "operations", label: "Operations" },
+                { value: "visa", label: "Visa / formal only" },
+                { value: "not-sure", label: "Not sure" },
+              ].map((option) => (
+                <Label
+                  key={option.value}
+                  htmlFor={`emp-purpose-${option.value}`}
+                  className="flex items-center justify-center p-3 text-sm border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5"
+                >
+                  <RadioGroupItem value={option.value} id={`emp-purpose-${option.value}`} className="sr-only" />
+                  <span>{option.label}</span>
+                </Label>
+              ))}
+            </RadioGroup>
+          </div>
+        )}
       </div>
 
       <div>
@@ -324,7 +427,7 @@ function Step2Team({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              Payroll includes salary calculations, payslips, and social security reporting.
+              Payroll includes salary records and social security filings.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -338,6 +441,11 @@ function Step2Team({ inputs, setInputs }: StepProps) {
             {inputs.payrollNeeded ? "Yes, include payroll" : "No payroll needed"}
           </Label>
         </div>
+        {inputs.payrollNeeded && (
+          <p className="text-xs text-muted-foreground mt-2">
+            Payroll includes salary records and social security filings.
+          </p>
+        )}
         {inputs.payrollNeeded && (inputs.employeeCount || 0) === 0 && (
           <p className="text-sm text-amber-600 mt-2">
             Add employees above to include payroll costs.
@@ -411,7 +519,17 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Annual Financial Statements Required?</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-lg font-semibold">Annual Financial Statements Required?</h3>
+          <Tooltip>
+            <TooltipTrigger>
+              <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              If unsure, we show this as a potential requirement in results.
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <RadioGroup
           value={inputs.yearEndStatements}
           onValueChange={(value) => setInputs({ ...inputs, yearEndStatements: value as AccountingInputs["yearEndStatements"] })}
@@ -442,7 +560,7 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              Some companies are required to file audited reports based on size or ownership structure.
+              If unsure, we show this as a potential requirement in results.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -473,21 +591,22 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
 
 interface Step5Props {
   result: NonNullable<ReturnType<typeof calculateAccountingCost>>;
+  onAdjust: () => void;
 }
 
-function Step5Results({ result }: Step5Props) {
+function Step5Results({ result, onAdjust }: Step5Props) {
   return (
     <div className="space-y-8">
       <div className="text-center pb-6 border-b border-border">
-        <h3 className="text-2xl font-bold mb-2">Your Accounting Estimate</h3>
-        <p className="text-muted-foreground">Based on your answers, here's what you need.</p>
+        <h3 className="text-2xl font-bold mb-2">Your accounting setup overview</h3>
+        <p className="text-muted-foreground">Based on your answers</p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-primary" />
-            <h4 className="font-semibold">Legally Required</h4>
+            <h4 className="font-semibold">What is required</h4>
           </div>
           <ul className="space-y-2">
             {result.requiredItems.map((item) => (
@@ -501,14 +620,14 @@ function Step5Results({ result }: Step5Props) {
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-amber-500" />
-            <h4 className="font-semibold">Recommended</h4>
+            <CircleDashed className="h-5 w-5 text-muted-foreground" />
+            <h4 className="font-semibold">What is optional</h4>
           </div>
           <ul className="space-y-2">
             {result.recommendedItems.length > 0 ? (
               result.recommendedItems.map((item) => (
                 <li key={item} className="text-sm flex items-start gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground mt-2 shrink-0" />
                   {item}
                 </li>
               ))
@@ -520,19 +639,32 @@ function Step5Results({ result }: Step5Props) {
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <XCircle className="h-5 w-5 text-muted-foreground" />
-            <h4 className="font-semibold">Not Needed</h4>
+            <Clock className="h-5 w-5 text-amber-500" />
+            <h4 className="font-semibold">What may apply later</h4>
           </div>
           <ul className="space-y-2">
-            {result.notNeededItems.length > 0 ? (
-              result.notNeededItems.map((item) => (
-                <li key={item} className="text-sm flex items-start gap-2 text-muted-foreground">
-                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground mt-2 shrink-0" />
-                  {item}
-                </li>
-              ))
+            {result.potentialMonthly.length > 0 || result.potentialAnnual.length > 0 ? (
+              <>
+                {result.potentialMonthly.map((p) => (
+                  <li key={p.name} className="text-sm flex items-start gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
+                    {p.name}
+                  </li>
+                ))}
+                {result.potentialAnnual.map((p) => (
+                  <li key={p.name} className="text-sm flex items-start gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
+                    {p.name}
+                  </li>
+                ))}
+              </>
             ) : (
               <li className="text-sm text-muted-foreground">—</li>
+            )}
+            {result.notNeededItems.length > 0 && (
+              <li className="text-xs text-muted-foreground mt-4 pt-2 border-t border-border">
+                Not needed: {result.notNeededItems.join(", ")}
+              </li>
             )}
           </ul>
         </div>
@@ -542,41 +674,42 @@ function Step5Results({ result }: Step5Props) {
         <div className="p-6 bg-primary/5 rounded-lg">
           <div className="text-sm text-muted-foreground mb-1">Estimated Monthly Cost</div>
           <div className="text-3xl font-bold">
-            ฿{formatPrice(result.totalMonthly)}
+            {formatUSD(result.totalMonthly)}
             {result.potentialMonthly.length > 0 && (
               <span className="text-xl font-normal text-muted-foreground">
                 –{formatPrice(result.totalMonthlyMax)}
               </span>
             )}
           </div>
+          <div className="text-xs text-muted-foreground mt-1">
+            ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
+          </div>
         </div>
         <div className="p-6 bg-primary/5 rounded-lg">
           <div className="text-sm text-muted-foreground mb-1">Estimated Annual Cost</div>
           <div className="text-3xl font-bold">
-            ฿{formatPrice(result.totalAnnual)}
+            {formatUSD(result.totalAnnual)}
             {result.potentialAnnual.length > 0 && (
               <span className="text-xl font-normal text-muted-foreground">
                 –{formatPrice(result.totalAnnualMax)}
               </span>
             )}
           </div>
+          <div className="text-xs text-muted-foreground mt-1">
+            ≈ ฿{formatPrice(result.totalAnnual * USD_TO_THB)}
+          </div>
         </div>
       </div>
 
-      {(result.potentialMonthly.length > 0 || result.potentialAnnual.length > 0) && (
-        <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-            <div>
-              <div className="font-medium text-amber-900">Potential Requirements</div>
-              <div className="text-sm text-amber-800 mt-1">
-                You selected "Not sure" for some items. The price range reflects both scenarios.
-                We'll confirm these during onboarding.
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <p className="text-sm text-muted-foreground text-center">
+        This is an estimate based on standard Thai requirements.
+      </p>
+
+      <div className="flex justify-center">
+        <Button variant="outline" onClick={onAdjust}>
+          Adjust my answers
+        </Button>
+      </div>
     </div>
   );
 }
