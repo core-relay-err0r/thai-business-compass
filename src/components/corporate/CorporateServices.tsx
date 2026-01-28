@@ -17,6 +17,8 @@ interface ServiceDefinition {
   description: string;
   contextLine: string;
   price: number;
+  priceTHB: number;
+  timeline: string;
   hasPopup: boolean;
 }
 
@@ -29,6 +31,8 @@ const STARTING_SERVICES: ServiceDefinition[] = [
     description: "Standard Thai Co., Ltd. structure (most common setup).",
     contextLine: "Most companies start simple and adapt later if needed.",
     price: CORPORATE_PRICING.INCORPORATION,
+    priceTHB: 52500,
+    timeline: "Up to 1 week",
     hasPopup: false,
   },
   {
@@ -38,6 +42,8 @@ const STARTING_SERVICES: ServiceDefinition[] = [
     description: "Official registered address of the company.",
     contextLine: "Required to register or operate a company in Thailand.",
     price: CORPORATE_PRICING.REGISTERED_OFFICE,
+    priceTHB: 10500,
+    timeline: "1–2 weeks",
     hasPopup: true,
   },
 ];
@@ -50,6 +56,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     description: "Reviewing current company status and registrations.",
     contextLine: "This service provides clarity, not corrections.",
     price: CORPORATE_PRICING.COMPANY_REVIEW,
+    priceTHB: 17500,
+    timeline: "1–4 weeks",
     hasPopup: true,
   },
   {
@@ -59,6 +67,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     description: "Changing directors, shareholders, or share ownership.",
     contextLine: "Used when control or ownership changes.",
     price: CORPORATE_PRICING.STRUCTURAL_CHANGE,
+    priceTHB: 17500,
+    timeline: "3–5 working days",
     hasPopup: false,
   },
   {
@@ -68,6 +78,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     description: "Requesting official company documents.",
     contextLine: "Used for banks, authorities, or legal procedures.",
     price: CORPORATE_PRICING.CORPORATE_DOCUMENTS,
+    priceTHB: 10500,
+    timeline: "From 1 working day",
     hasPopup: true,
   },
   {
@@ -77,6 +89,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     description: "Official tax residency confirmation.",
     contextLine: "Required for tax treaty benefits or foreign compliance.",
     price: CORPORATE_PRICING.TAX_RESIDENCY,
+    priceTHB: 10500,
+    timeline: "Up to 30 days",
     hasPopup: true,
   },
 ];
@@ -191,6 +205,8 @@ export function CorporateServices() {
               description={service.description}
               contextLine={service.contextLine}
               price={service.price}
+              priceTHB={service.priceTHB}
+              timeline={service.timeline}
               isSelected={isSelected(service.id)}
               onCardClick={() => handleCardClick(service)}
               onButtonClick={() => handleButtonClick(service)}
@@ -214,6 +230,8 @@ export function CorporateServices() {
               description={service.description}
               contextLine={service.contextLine}
               price={service.price}
+              priceTHB={service.priceTHB}
+              timeline={service.timeline}
               isSelected={isSelected(service.id)}
               onCardClick={() => handleCardClick(service)}
               onButtonClick={() => handleButtonClick(service)}

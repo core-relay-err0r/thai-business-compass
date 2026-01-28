@@ -5,7 +5,7 @@ export default function Corporate() {
   return (
     <Layout>
       {/* Section Head Block */}
-      <section className="py-12 md:py-16 border-b border-border sticky top-16 bg-background/95 backdrop-blur-sm z-10">
+      <section className="py-12 md:py-16 border-b border-border">
         <div className="container">
           <div className="max-w-2xl mx-auto text-center">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">

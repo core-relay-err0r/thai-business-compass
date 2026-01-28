@@ -1,8 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, LucideIcon } from "lucide-react";
-import { formatUSD } from "@/lib/pricing";
+import { Check, Clock, LucideIcon } from "lucide-react";
+import { formatUSD, formatPrice } from "@/lib/pricing";
 
 interface ServiceCardProps {
   icon: LucideIcon;
@@ -10,6 +10,8 @@ interface ServiceCardProps {
   description: string;
   contextLine: string;
   price: number;
+  priceTHB: number;
+  timeline: string;
   isSelected: boolean;
   onCardClick: () => void;
   onButtonClick: () => void;
@@ -22,6 +24,8 @@ export function ServiceCard({
   description,
   contextLine,
   price,
+  priceTHB,
+  timeline,
   isSelected,
   onCardClick,
   onButtonClick,
@@ -57,12 +61,20 @@ export function ServiceCard({
           {contextLine}
         </p>
 
-        <div className="pt-2">
+        <div className="pt-2 space-y-1">
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-semibold tracking-tight">
               {formatUSD(price)}
             </span>
           </div>
+          <p className="text-xs text-muted-foreground/60">
+            ≈ ฿{formatPrice(priceTHB)}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Clock className="h-3.5 w-3.5" />
+          <span>{timeline}</span>
         </div>
 
         <Button
