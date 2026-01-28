@@ -72,16 +72,24 @@ export function PricingLogic() {
                   <span className="font-medium">{formatUSD(CORPORATE_PRICING.INCORPORATION)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Registered office</span>
+                  <span>{formatUSD(CORPORATE_PRICING.REGISTERED_OFFICE)}</span>
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Structural change (directors/shareholders)</span>
                   <span>{formatUSD(CORPORATE_PRICING.STRUCTURAL_CHANGE)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Registered address update</span>
-                  <span>{formatUSD(CORPORATE_PRICING.ADDRESS_UPDATE)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Company review / cleanup</span>
                   <span>{formatUSD(CORPORATE_PRICING.COMPANY_REVIEW)}</span>
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Corporate documents</span>
+                  <span>{formatUSD(CORPORATE_PRICING.CORPORATE_DOCUMENTS)}</span>
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Tax residency certificate</span>
+                  <span>{formatUSD(CORPORATE_PRICING.TAX_RESIDENCY)}</span>
                 </div>
               </div>
             </div>
