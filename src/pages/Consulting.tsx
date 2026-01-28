@@ -11,7 +11,7 @@ export default function Consulting() {
               Consulting
             </h1>
             <p className="text-lg text-muted-foreground">
-              Choose the business problem. Get expected outcomes and price range.
+              Choose the business problem. See expected scope, timing, and price range.
             </p>
           </div>
 

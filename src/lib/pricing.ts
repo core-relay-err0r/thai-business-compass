@@ -50,13 +50,13 @@ export const CORPORATE_PRICING = {
 // Approximate THB conversion rate (for reference display)
 export const USD_TO_THB = 35;
 
-// Consulting price ranges (THB)
+// Consulting price ranges (USD)
 export const CONSULTING_PRICING = {
-  REDUCE_COSTS: { min: 30000, max: 80000, timeline: "5-10 working days" },
-  NEW_MARKET: { min: 50000, max: 120000, timeline: "7-14 working days" },
-  DUE_DILIGENCE: { min: 40000, max: 100000, timeline: "5-10 working days" },
-  STRUCTURE_STRATEGY: { min: 35000, max: 90000, timeline: "3-7 working days" },
-  BANK_COMPLIANCE: { min: 25000, max: 60000, timeline: "3-5 working days" },
+  REDUCE_COSTS: { min: 800, max: 2200, minTHB: 30000, maxTHB: 80000, timeline: "5–10 working days" },
+  NEW_MARKET: { min: 1400, max: 3300, minTHB: 50000, maxTHB: 120000, timeline: "7–14 working days" },
+  DUE_DILIGENCE: { min: 1100, max: 2800, minTHB: 40000, maxTHB: 100000, timeline: "5–10 working days" },
+  STRUCTURE_STRATEGY: { min: 1000, max: 2500, minTHB: 35000, maxTHB: 90000, timeline: "3–7 working days" },
+  BANK_COMPLIANCE: { min: 700, max: 1700, minTHB: 25000, maxTHB: 60000, timeline: "3–5 working days" },
 } as const;
 
 // Calculate accounting cost based on user inputs
