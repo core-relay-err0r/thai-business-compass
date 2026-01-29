@@ -69,6 +69,17 @@ export function Header() {
               </Link>
 
               <Link
+                to="/about"
+                className={`text-sm font-medium transition-colors hover:text-foreground ${
+                  location.pathname === "/about"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                About
+              </Link>
+
+              <Link
                 to="/contact"
                 className={`text-sm font-medium transition-colors hover:text-foreground ${
                   location.pathname === "/contact"
@@ -162,6 +173,17 @@ export function Header() {
                 }`}
               >
                 Home
+              </Link>
+              <Link
+                to="/about"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-sm font-medium transition-colors hover:text-foreground py-2 ${
+                  location.pathname === "/about"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                About
               </Link>
               <Link
                 to="/contact"
