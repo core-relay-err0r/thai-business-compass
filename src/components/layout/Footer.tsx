@@ -121,7 +121,7 @@ export function Footer() {
                 Privacy Policy
               </Link>
               <Link
-                to="/terms"
+                to="/tos"
                 className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
               >
                 Terms of Service
