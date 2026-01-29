@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -19,7 +19,8 @@ export function LiveEstimate() {
   const { 
     selectedCorporateServices, 
     selectedConsultingServices, 
-    liveAccountingResult 
+    liveAccountingResult,
+    clearAll
   } = useServices();
 
   // Calculate totals
@@ -121,13 +122,22 @@ export function LiveEstimate() {
       )}
 
       {/* Sticky CTA Section */}
-      <div className="pt-4 border-t border-border">
+      <div className="pt-4 border-t border-border space-y-2">
         <Button 
           className="w-full" 
           onClick={() => navigate("/submit")}
         >
           Proceed to request
           <ArrowRight className="w-4 h-4 ml-1" />
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="sm"
+          className="w-full text-muted-foreground hover:text-destructive"
+          onClick={clearAll}
+        >
+          <Trash2 className="w-3 h-3 mr-1" />
+          Clear all
         </Button>
       </div>
 
