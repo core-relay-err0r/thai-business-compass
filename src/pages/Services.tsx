@@ -149,12 +149,10 @@ export default function Services() {
                   })}
                 </div>
 
-                {/* Live Estimate - Only shown when Accounting section is active */}
-                {activeSection === "accounting" && (
-                  <div className="pt-6 border-t border-border">
-                    <LiveEstimate />
-                  </div>
-                )}
+                {/* Live Estimate - Always visible */}
+                <div className="pt-6 border-t border-border">
+                  <LiveEstimate />
+                </div>
               </div>
             </div>
 
