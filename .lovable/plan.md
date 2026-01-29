@@ -1,54 +1,123 @@
 
-## Add Visible Red Pin Marker to Google Maps
 
-The Google Maps embed iframe doesn't support custom markers directly via URL parameters. I'll create a visual overlay solution using CSS to add a red pin marker on top of the map.
+## Fix Overflowing Live Estimate Panel with Scrollable Content
 
----
-
-### Solution Approach
-
-Since the standard Google Maps embed doesn't display markers for place searches (it only shows the location without a pin), I'll add a **CSS-positioned pin icon** that overlays the center of the map.
+When users select many services, the Live Estimate panel content exceeds the viewport height and becomes inaccessible. This plan adds a scrollable area while keeping the CTA buttons always visible.
 
 ---
 
-### How It Will Look
+### Current Problem
 
-The map will have a red location pin icon positioned at the center, pointing to the exact building location. The pin will be styled to look like a standard Google Maps marker.
+The sticky sidebar has a fixed position but no height constraint or scroll mechanism. When the estimate content grows beyond the viewport height:
+- Users cannot see all selected services
+- The "Proceed to request" button may become inaccessible
+- The sidebar overflows off-screen
 
 ---
 
-### Technical Changes
+### Solution Design
 
-| File | Change |
-|------|--------|
-| `src/pages/Contact.tsx` | Wrap the iframe in a relative container and add an absolutely-positioned pin icon using Lucide's `MapPin` component |
-
-The implementation will:
-1. Add a `relative` wrapper around the iframe
-2. Position a red `MapPin` icon at the center of the map
-3. Use CSS transforms to ensure the pin tip points to the exact location
-4. Add a subtle shadow for depth
+Split the Live Estimate into two zones:
 
 ```text
-+---------------------------+
-|                           |
-|          [MAP]            |
-|            📍             |  <-- Red pin overlaid at center
-|                           |
-+---------------------------+
++----------------------------------+
+|  Section Info                    |
+|  (title + description)           |
++----------------------------------+
+|  SECTIONS                        |
+|  - Corporate Services            |
+|  - Accounting Calculator         |
+|  - Business Consulting           |
++----------------------------------+
+|  LIVE ESTIMATE                   |
+|  ┌─────────────────────────────┐ |
+|  │  One-time items...          │ |
+|  │  Recurring items...         │ | <- Scrollable area
+|  │  Consulting items...        │ |
+|  └─────────────────────────────┘ |
++----------------------------------+
+|  Proceed to request  [button]    | <- Sticky footer (always visible)
+|  Clear all                       |
++----------------------------------+
 ```
 
 ---
 
-### Code Preview
+### Technical Approach
 
+**1. Add height constraints to the sticky sidebar**
+
+Use `calc()` with viewport height minus header and padding to determine maximum available space.
+
+**2. Wrap estimate content in ScrollArea**
+
+Use the existing Radix `ScrollArea` component to create a scrollable region for the service list while keeping the CTA buttons fixed at the bottom.
+
+**3. Restructure LiveEstimate component**
+
+Separate the scrollable content (service items) from the sticky footer (CTA buttons):
+
+| Zone | Content | Behavior |
+|------|---------|----------|
+| Scrollable | One-time, Recurring, Consulting lists | Scrolls when content exceeds height |
+| Fixed Footer | "Proceed to request" + "Clear all" buttons | Always visible at bottom |
+
+---
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/pages/Services.tsx` | Add `max-h-[calc(100vh-16rem)]` and `flex flex-col` to the sticky sidebar container; wrap Live Estimate section in a flex layout with overflow |
+| `src/components/accounting/LiveEstimate.tsx` | Restructure to separate scrollable content from fixed CTA footer; wrap item lists in `ScrollArea` component |
+
+---
+
+### Implementation Details
+
+**Services.tsx sidebar changes:**
 ```tsx
-<div className="relative">
-  <iframe src="..." />
-  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full pointer-events-none">
-    <MapPin className="h-10 w-10 text-red-600 fill-red-600 drop-shadow-lg" />
+<div className="sticky top-32 flex flex-col max-h-[calc(100vh-10rem)]">
+  {/* Section info - fixed height */}
+  <div className="space-y-4 flex-shrink-0">...</div>
+  
+  {/* Section nav - fixed height */}
+  <div className="space-y-2 flex-shrink-0">...</div>
+  
+  {/* Live Estimate - flexible, can scroll */}
+  <div className="pt-6 border-t flex-1 min-h-0 overflow-hidden">
+    <LiveEstimate />
   </div>
 </div>
 ```
 
-This approach ensures the pin is always visible regardless of how Google renders the embedded map.
+**LiveEstimate.tsx restructure:**
+```tsx
+<div className="h-full flex flex-col">
+  <h3>Live Estimate</h3>
+  
+  {/* Scrollable content */}
+  <ScrollArea className="flex-1 min-h-0">
+    <div className="space-y-6 pr-2">
+      {/* One-time items */}
+      {/* Recurring items */}
+      {/* Consulting items */}
+    </div>
+  </ScrollArea>
+  
+  {/* Sticky CTA footer - always visible */}
+  <div className="pt-4 border-t mt-auto flex-shrink-0">
+    <Button>Proceed to request</Button>
+    <Button>Clear all</Button>
+  </div>
+</div>
+```
+
+---
+
+### Visual Behavior
+
+- When content fits: No scrollbar visible, normal appearance
+- When content overflows: Subtle scrollbar appears, CTA buttons remain fixed at bottom
+- The scrollbar uses the existing muted design from the ScrollArea component
+
