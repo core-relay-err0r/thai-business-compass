@@ -185,7 +185,7 @@ export function CorporateServicesContent() {
         <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
           Existing Company Services
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {EXISTING_SERVICES.map(service => <ServiceCard key={service.id} icon={service.icon} title={service.title} description={service.description} contextLine={service.contextLine} price={service.price} priceTHB={service.priceTHB} timeline={service.timeline} isSelected={isSelected(service.id)} onCardClick={() => handleCardClick(service)} onButtonClick={() => handleButtonClick(service)} hasPopup={service.hasPopup} />)}
         </div>
       </div>
