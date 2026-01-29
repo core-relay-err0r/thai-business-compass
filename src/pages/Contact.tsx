@@ -319,14 +319,14 @@ export default function Contact() {
           
           <div className="rounded-xl overflow-hidden border border-border/50 bg-background">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5755!2d100.5695!3d13.7304!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29ee5a4a4a7f1%3A0x4a7f1f1f1f1f1f1f!2sBhiraj%20Tower%20at%20EmQuartier!5e0!3m2!1sen!2sth!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5697!2d100.56889!3d13.73089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29ecde20bc5f1%3A0x9c9a1c1c1a1c1c1c!2sBhiraj%20Tower%20at%20EmQuartier!5e0!3m2!1sen!2sth!4v1700000000000!5m2!1sen!2sth"
               width="100%"
               height="350"
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="PND50 Office Location"
+              title="PND50 Office - Suite 3065, Bhiraj Tower at EmQuartier"
             />
           </div>
         </div>
