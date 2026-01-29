@@ -2,11 +2,9 @@ import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowRight, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
 
 export function LiveEstimate() {
-  const navigate = useNavigate();
   const { 
     selectedCorporateServices, 
     selectedConsultingServices, 
@@ -138,21 +136,8 @@ export function LiveEstimate() {
         </div>
       </ScrollArea>
 
-      {/* Sticky CTA Section - Always visible */}
-      <div className="pt-4 border-t border-border space-y-3 mt-auto flex-shrink-0">
-        {oneTimeTotal > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">One-time total</span>
-            <span className="font-semibold">{formatUSD(oneTimeTotal)}</span>
-          </div>
-        )}
-        <Button 
-          className="w-full" 
-          onClick={() => navigate("/submit")}
-        >
-          Proceed to request
-          <ArrowRight className="w-4 h-4 ml-1" />
-        </Button>
+      {/* Clear all button */}
+      <div className="pt-4 border-t border-border mt-auto flex-shrink-0">
         <Button 
           variant="ghost" 
           size="sm"
