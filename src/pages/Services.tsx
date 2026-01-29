@@ -109,9 +109,9 @@ export default function Services() {
           <div className="flex gap-12 max-w-7xl mx-auto">
             {/* Sticky Sidebar - Desktop Only */}
             <div className="hidden lg:block w-80 flex-shrink-0">
-              <div className="sticky top-32 space-y-8">
+              <div className="sticky top-32 flex flex-col max-h-[calc(100vh-10rem)]">
                 {/* Current Section Info */}
-                <div className="space-y-4">
+                <div className="space-y-4 flex-shrink-0">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                       <SectionIcon className="w-5 h-5 text-primary" />
@@ -124,7 +124,7 @@ export default function Services() {
                 </div>
 
                 {/* Section Navigation */}
-                <div className="space-y-2">
+                <div className="space-y-2 mt-8 flex-shrink-0">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
                     Sections
                   </p>
@@ -149,8 +149,8 @@ export default function Services() {
                   })}
                 </div>
 
-                {/* Live Estimate - Always visible */}
-                <div className="pt-6 border-t border-border">
+                {/* Live Estimate - Scrollable with fixed CTA */}
+                <div className="pt-6 mt-8 border-t border-border flex-1 min-h-0 overflow-hidden">
                   <LiveEstimate />
                 </div>
               </div>
