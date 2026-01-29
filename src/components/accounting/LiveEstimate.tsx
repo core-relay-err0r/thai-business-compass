@@ -2,83 +2,125 @@ import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
 
 export function LiveEstimate() {
-  const { liveAccountingResult } = useServices();
+  const { 
+    selectedCorporateServices, 
+    selectedConsultingServices, 
+    liveAccountingResult 
+  } = useServices();
 
-  if (!liveAccountingResult) {
+  // Calculate totals
+  const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
+  
+  const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
+  const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+
+  const hasAnything = 
+    selectedCorporateServices.length > 0 || 
+    selectedConsultingServices.length > 0 || 
+    liveAccountingResult;
+
+  if (!hasAnything) {
     return (
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Live Estimate</h3>
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Live Estimate
+        </h3>
         <p className="text-sm text-muted-foreground">
-          Complete the steps to see your estimate.
+          Select services to see your estimate.
         </p>
       </div>
     );
   }
 
-  const result = liveAccountingResult;
-
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold">Live Estimate</h3>
-      
-      <div>
-        <div className="text-sm text-muted-foreground mb-1">Monthly</div>
-        <div className="text-2xl font-bold">
-          {formatUSD(result.totalMonthly)}
-          {result.potentialMonthly.length > 0 && (
-            <span className="text-lg font-normal text-muted-foreground">
-              –{formatPrice(result.totalMonthlyMax)}
-            </span>
-          )}
-        </div>
-        <div className="text-xs text-muted-foreground mt-1">
-          ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
-        </div>
-      </div>
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+        Live Estimate
+      </h3>
 
-      <div>
-        <div className="text-sm text-muted-foreground mb-1">Annual (incl. year-end)</div>
-        <div className="text-2xl font-bold">
-          {formatUSD(result.totalAnnual)}
-          {result.potentialAnnual.length > 0 && (
-            <span className="text-lg font-normal text-muted-foreground">
-              –{formatPrice(result.totalAnnualMax)}
-            </span>
-          )}
-        </div>
-        <div className="text-xs text-muted-foreground mt-1">
-          ≈ ฿{formatPrice(result.totalAnnual * USD_TO_THB)}
-        </div>
-      </div>
-
-      <div className="pt-4 border-t border-border space-y-2">
-        <div className="text-sm font-medium">Included:</div>
-        <div className="text-sm text-muted-foreground">Base accounting</div>
-        {result.monthlyAddons.map((addon) => (
-          <div key={addon.name} className="text-sm text-muted-foreground">
-            + {addon.name}
+      {/* One-time (Corporate) */}
+      {selectedCorporateServices.length > 0 && (
+        <div className="space-y-2">
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            One-time
           </div>
-        ))}
-        {result.annualAddons.map((addon) => (
-          <div key={addon.name} className="text-sm text-muted-foreground">
-            + {addon.name}
-          </div>
-        ))}
-      </div>
-
-      {(result.potentialMonthly.length > 0 || result.potentialAnnual.length > 0) && (
-        <div className="pt-4 border-t border-border space-y-2">
-          <div className="text-sm font-medium text-amber-600">Potential (if needed):</div>
-          {result.potentialMonthly.map((p) => (
-            <div key={p.name} className="text-sm text-muted-foreground">
-              {p.name}: +{formatUSD(p.amount)}/mo
+          {selectedCorporateServices.map((service) => (
+            <div key={service.id} className="flex justify-between text-sm">
+              <span className="text-muted-foreground truncate pr-2">{service.name}</span>
+              <span className="font-medium">{formatUSD(service.price)}</span>
             </div>
           ))}
-          {result.potentialAnnual.map((p) => (
-            <div key={p.name} className="text-sm text-muted-foreground">
-              {p.name}: +{formatUSD(p.amount)}/yr
+          <div className="flex justify-between text-sm pt-2 border-t border-border/50">
+            <span className="font-medium">Subtotal</span>
+            <span className="font-semibold">{formatUSD(corporateTotal)}</span>
+          </div>
+          <div className="text-xs text-muted-foreground/60">
+            ≈ ฿{formatPrice(corporateTotal * USD_TO_THB)}
+          </div>
+        </div>
+      )}
+
+      {/* Recurring (Accounting) */}
+      {liveAccountingResult && (
+        <div className="space-y-2">
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Recurring
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Monthly</span>
+            <span className="font-medium">
+              {formatUSD(liveAccountingResult.totalMonthly)}
+              {liveAccountingResult.potentialMonthly.length > 0 && (
+                <span className="text-muted-foreground font-normal">
+                  –{formatPrice(liveAccountingResult.totalMonthlyMax)}
+                </span>
+              )}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Annual (incl. year-end)</span>
+            <span className="font-medium">
+              {formatUSD(liveAccountingResult.totalAnnual)}
+              {liveAccountingResult.potentialAnnual.length > 0 && (
+                <span className="text-muted-foreground font-normal">
+                  –{formatPrice(liveAccountingResult.totalAnnualMax)}
+                </span>
+              )}
+            </span>
+          </div>
+          <div className="text-xs text-muted-foreground/60">
+            ≈ ฿{formatPrice(liveAccountingResult.totalAnnual * USD_TO_THB)}/yr
+          </div>
+        </div>
+      )}
+
+      {/* Consulting (Ranges) */}
+      {selectedConsultingServices.length > 0 && (
+        <div className="space-y-2">
+          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            Consulting
+          </div>
+          {selectedConsultingServices.map((service) => (
+            <div key={service.id} className="flex justify-between text-sm">
+              <span className="text-muted-foreground truncate pr-2">{service.name}</span>
+              <span className="font-medium">
+                {formatUSD(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
+              </span>
             </div>
           ))}
+          {selectedConsultingServices.length > 1 && (
+            <>
+              <div className="flex justify-between text-sm pt-2 border-t border-border/50">
+                <span className="font-medium">Range</span>
+                <span className="font-semibold">
+                  {formatUSD(consultingMin)}–{formatPrice(consultingMax)}
+                </span>
+              </div>
+              <div className="text-xs text-muted-foreground/60">
+                ≈ ฿{formatPrice(consultingMin * USD_TO_THB)}–{formatPrice(consultingMax * USD_TO_THB)}
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
