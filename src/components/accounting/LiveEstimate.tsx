@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowRight, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function LiveEstimate() {
   const navigate = useNavigate();
@@ -27,11 +27,11 @@ export function LiveEstimate() {
 
   if (!hasAnything) {
     return (
-      <div className="h-full flex flex-col">
+      <div className="space-y-4">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           Live Estimate
         </h3>
-        <p className="text-sm text-muted-foreground mt-4">
+        <p className="text-sm text-muted-foreground">
           Select services to see your estimate.
         </p>
       </div>
@@ -47,8 +47,8 @@ export function LiveEstimate() {
         Live Estimate
       </h3>
 
-      {/* Scrollable content with max height */}
-      <ScrollArea className="flex-1 min-h-0 max-h-[calc(100vh-400px)]">
+      {/* Scrollable content */}
+      <ScrollArea className="flex-1 min-h-0">
         <div className="space-y-6 pr-2">
           {/* One-time (Corporate) */}
           {selectedCorporateServices.length > 0 && (
@@ -138,8 +138,14 @@ export function LiveEstimate() {
         </div>
       </ScrollArea>
 
-      {/* Sticky CTA Section */}
+      {/* Sticky CTA Section - Always visible */}
       <div className="pt-4 border-t border-border space-y-3 mt-auto flex-shrink-0">
+        {oneTimeTotal > 0 && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">One-time total</span>
+            <span className="font-semibold">{formatUSD(oneTimeTotal)}</span>
+          </div>
+        )}
         <Button 
           className="w-full" 
           onClick={() => navigate("/submit")}
@@ -150,10 +156,10 @@ export function LiveEstimate() {
         <Button 
           variant="ghost" 
           size="sm"
-          className="w-full text-muted-foreground hover:bg-transparent hover:text-destructive [&:hover_svg]:text-destructive"
+          className="w-full text-muted-foreground"
           onClick={clearAll}
         >
-          <Trash2 className="w-3 h-3 mr-1 transition-colors" />
+          <Trash2 className="w-3 h-3 mr-1" />
           Clear all
         </Button>
       </div>
