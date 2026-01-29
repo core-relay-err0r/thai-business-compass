@@ -18,6 +18,7 @@ interface ServiceState {
   // Accounting
   accountingInputs: Partial<AccountingInputs>;
   accountingResult: AccountingResult | null;
+  liveAccountingResult: AccountingResult | null;
   
   // Corporate
   selectedCorporateServices: CorporateService[];
@@ -44,6 +45,7 @@ interface ServiceState {
 
 interface ServiceContextType extends ServiceState {
   setAccountingInputs: (inputs: Partial<AccountingInputs>) => void;
+  setLiveAccountingResult: (result: AccountingResult | null) => void;
   calculateAccounting: () => void;
   addCorporateService: (service: CorporateService) => void;
   removeCorporateService: (id: string) => void;
@@ -59,6 +61,7 @@ interface ServiceContextType extends ServiceState {
 const initialState: ServiceState = {
   accountingInputs: {},
   accountingResult: null,
+  liveAccountingResult: null,
   selectedCorporateServices: [],
   selectedConsultingServices: [],
   contactInfo: {
@@ -85,6 +88,10 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       ...prev,
       accountingInputs: { ...prev.accountingInputs, ...inputs },
     }));
+  };
+
+  const setLiveAccountingResult = (result: AccountingResult | null) => {
+    setState((prev) => ({ ...prev, liveAccountingResult: result }));
   };
 
   const calculateAccounting = () => {
@@ -207,6 +214,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       value={{
         ...state,
         setAccountingInputs,
+        setLiveAccountingResult,
         calculateAccounting,
         addCorporateService,
         removeCorporateService,
