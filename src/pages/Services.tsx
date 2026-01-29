@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
 import { AccountingWizard } from "@/components/accounting/AccountingWizard";
@@ -27,11 +28,28 @@ const sectionData = {
 };
 
 export default function Services() {
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState<ActiveSection>("corporate");
   
   const corporateRef = useRef<HTMLDivElement>(null);
   const accountingRef = useRef<HTMLDivElement>(null);
   const consultingRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to hash on page load or hash change
+  useEffect(() => {
+    const hash = location.hash.replace("#", "") as ActiveSection;
+    if (hash && ["corporate", "accounting", "consulting"].includes(hash)) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        const refs = {
+          corporate: corporateRef,
+          accounting: accountingRef,
+          consulting: consultingRef,
+        };
+        refs[hash].current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [location.hash]);
 
   useEffect(() => {
     const handleScroll = () => {
