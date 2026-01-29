@@ -264,7 +264,7 @@ export default function Contact() {
                   </div>
                   <div className="flex flex-wrap gap-3">
                     <a 
-                      href="https://wa.me/6620172949" 
+                      href="https://wa.me/66843563805" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-green-500/30 bg-green-50 text-green-700 hover:bg-green-100 transition-colors text-sm"
