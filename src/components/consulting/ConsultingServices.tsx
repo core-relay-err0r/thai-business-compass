@@ -60,7 +60,7 @@ export function ConsultingServices() {
     }
   };
   return <>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6">
         {SERVICES.map(service => {
         const Icon = service.icon;
         const selected = isSelected(service.id);
