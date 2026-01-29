@@ -1,43 +1,68 @@
 
 
-## Remove Redundant "Proceed to request" CTA from Live Estimate Sidebar
+## Live Estimate Panel - Always Visible with All Services
 
-The floating selection summary at the bottom of the screen already contains the "Proceed to request" button. Having the same CTA in the sidebar's Live Estimate panel creates redundancy and clutter.
-
----
-
-### Current State
-
-Two places show "Proceed to request":
-
-| Location | Purpose |
-|----------|---------|
-| **Floating summary** (bottom of screen) | Appears when services are selected; primary action point |
-| **Sidebar Live Estimate** | Shows running total and duplicates the CTA |
+Transform the Live Estimate sidebar panel to always be visible and display a unified summary of all selected services across the page (Corporate, Accounting, and Consulting).
 
 ---
 
-### Changes
+### What You'll Get
 
-**Remove from `src/components/accounting/LiveEstimate.tsx`:**
-
-1. Remove the "Proceed to request" button (lines 149-155)
-2. Remove the "One-time total" line that precedes it (lines 143-148) since this is already shown inline with the subtotal
-3. Keep only the "Clear all" button for resetting selections
-4. Remove the unused `useNavigate` hook and `ArrowRight` import
+1. **Always-visible estimate panel** in the left sidebar (regardless of which section you're viewing)
+2. **Unified pricing summary** combining:
+   - Corporate Services (one-time fees)
+   - Accounting Services (monthly/annual)
+   - Consulting Services (price ranges)
+3. **Real-time updates** as you select/deselect services anywhere on the page
+4. **Smart categorization** showing one-time vs recurring costs
 
 ---
 
-### Result
+### How It Will Look
 
-The sidebar footer will simplify to just show the "Clear all" button, while the floating summary handles the primary "Proceed to request" action.
+The sidebar will show:
 
-```text
-Before:                          After:
-+------------------------+       +------------------------+
-| One-time total  $3,700 |       |                        |
-| [Proceed to request →] |  -->  | [Clear all]            |
-| [Clear all]            |       |                        |
-+------------------------+       +------------------------+
 ```
+LIVE ESTIMATE
+─────────────────
+
+One-time
+  Company Incorporation     $1,500
+  Structural Change           $500
+  ─────────────────────────
+  Subtotal                  $2,000
+
+Recurring
+  Monthly                     $240
+  Annual (incl. year-end)   $3,230
+
+Consulting (ranges)
+  Reduce Costs        $800–$2,200
+  Due Diligence     $1,100–$2,800
+```
+
+When nothing is selected, it shows a prompt: "Select services to see your estimate."
+
+---
+
+### Technical Changes
+
+| File | Change |
+|------|--------|
+| `src/components/accounting/LiveEstimate.tsx` | Complete rewrite to pull all three service types from context and display unified summary |
+| `src/pages/Services.tsx` | Remove the `activeSection === "accounting"` condition so the panel always shows |
+
+The component will use existing context data:
+- `selectedCorporateServices` - array with `id`, `name`, `price`
+- `selectedConsultingServices` - array with `id`, `name`, `priceRange`
+- `liveAccountingResult` - calculated accounting totals
+
+---
+
+### Summary Calculation Logic
+
+- **Corporate Total**: Sum of all `selectedCorporateServices[].price`
+- **Accounting**: Use existing `liveAccountingResult.totalMonthly` and `totalAnnual`
+- **Consulting Range**: Aggregate min/max from all `selectedConsultingServices[].priceRange`
+- **Grand Total**: Show one-time + first year recurring + consulting midpoint (as estimate)
 
