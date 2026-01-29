@@ -121,8 +121,44 @@ export function LiveEstimate() {
         </button>
       )}
 
-      {/* Sticky CTA Section */}
+      {/* Summarized Price */}
       <div className="pt-4 border-t border-border space-y-2">
+        <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          Summary
+        </div>
+        {corporateTotal > 0 && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">One-time</span>
+            <span className="font-medium">{formatUSD(corporateTotal)}</span>
+          </div>
+        )}
+        {liveAccountingResult && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Annual</span>
+            <span className="font-medium">{formatUSD(liveAccountingResult.totalAnnual)}</span>
+          </div>
+        )}
+        {selectedConsultingServices.length > 0 && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Consulting</span>
+            <span className="font-medium">{formatUSD(consultingMin)}–{formatPrice(consultingMax)}</span>
+          </div>
+        )}
+        <div className="flex justify-between pt-2 border-t border-border/50">
+          <span className="font-semibold">Est. Total</span>
+          <div className="text-right">
+            <div className="font-bold text-lg">
+              {formatUSD(corporateTotal + (liveAccountingResult?.totalAnnual || 0) + Math.round((consultingMin + consultingMax) / 2))}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              ≈ ฿{formatPrice((corporateTotal + (liveAccountingResult?.totalAnnual || 0) + Math.round((consultingMin + consultingMax) / 2)) * USD_TO_THB)}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="pt-4 space-y-2">
         <Button 
           className="w-full" 
           onClick={() => navigate("/submit")}
