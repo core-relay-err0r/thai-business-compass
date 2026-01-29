@@ -2,18 +2,26 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 import { Calculator, Building2, MessageSquare, Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const location = useLocation();
   const [isStartModalOpen, setIsStartModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/corporate", label: "Corporate" },
-    { href: "/accounting", label: "Accounting" },
-    { href: "/consulting", label: "Consulting" },
+  const serviceLinks = [
+    { href: "/corporate", label: "Corporate", description: "One-time corporate services" },
+    { href: "/accounting", label: "Accounting", description: "Calculate monthly + yearly cost" },
+    { href: "/consulting", label: "Consulting", description: "Business problem solving" },
   ];
 
   const startOptions = [
@@ -37,6 +45,8 @@ export function Header() {
     },
   ];
 
+  const isServiceActive = ["/corporate", "/accounting", "/consulting"].includes(location.pathname);
+
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -47,19 +57,53 @@ export function Header() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`text-sm font-medium transition-colors hover:text-foreground ${
-                    location.pathname === link.href
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <Link
+                to="/"
+                className={`text-sm font-medium transition-colors hover:text-foreground ${
+                  location.pathname === "/"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Home
+              </Link>
+
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger
+                      className={cn(
+                        "text-sm font-medium bg-transparent hover:bg-transparent data-[state=open]:bg-transparent h-auto p-0",
+                        isServiceActive ? "text-foreground" : "text-muted-foreground"
+                      )}
+                    >
+                      Our Services
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[280px] gap-1 p-2">
+                        {serviceLinks.map((link) => (
+                          <li key={link.href}>
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={link.href}
+                                className={cn(
+                                  "block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                  location.pathname === link.href && "bg-accent"
+                                )}
+                              >
+                                <div className="text-sm font-medium leading-none">{link.label}</div>
+                                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
+                                  {link.description}
+                                </p>
+                              </Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
             </nav>
           </div>
 
@@ -94,12 +138,26 @@ export function Header() {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-border/40 bg-background">
             <nav className="container py-4 flex flex-col gap-3">
-              {navLinks.map((link) => (
+              <Link
+                to="/"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-sm font-medium transition-colors hover:text-foreground py-2 ${
+                  location.pathname === "/"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Home
+              </Link>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pt-2">
+                Our Services
+              </div>
+              {serviceLinks.map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-sm font-medium transition-colors hover:text-foreground py-2 ${
+                  className={`text-sm font-medium transition-colors hover:text-foreground py-2 pl-3 ${
                     location.pathname === link.href
                       ? "text-foreground"
                       : "text-muted-foreground"
