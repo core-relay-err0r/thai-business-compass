@@ -221,7 +221,7 @@ export function CorporateServices() {
         <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
           Existing Company Services
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {EXISTING_SERVICES.map((service) => (
             <ServiceCard
               key={service.id}
