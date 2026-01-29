@@ -1,47 +1,19 @@
 
+## Add Visible Red Pin Marker to Google Maps
 
-## Live Estimate Panel - Always Visible with All Services
-
-Transform the Live Estimate sidebar panel to always be visible and display a unified summary of all selected services across the page (Corporate, Accounting, and Consulting).
+The Google Maps embed iframe doesn't support custom markers directly via URL parameters. I'll create a visual overlay solution using CSS to add a red pin marker on top of the map.
 
 ---
 
-### What You'll Get
+### Solution Approach
 
-1. **Always-visible estimate panel** in the left sidebar (regardless of which section you're viewing)
-2. **Unified pricing summary** combining:
-   - Corporate Services (one-time fees)
-   - Accounting Services (monthly/annual)
-   - Consulting Services (price ranges)
-3. **Real-time updates** as you select/deselect services anywhere on the page
-4. **Smart categorization** showing one-time vs recurring costs
+Since the standard Google Maps embed doesn't display markers for place searches (it only shows the location without a pin), I'll add a **CSS-positioned pin icon** that overlays the center of the map.
 
 ---
 
 ### How It Will Look
 
-The sidebar will show:
-
-```
-LIVE ESTIMATE
-─────────────────
-
-One-time
-  Company Incorporation     $1,500
-  Structural Change           $500
-  ─────────────────────────
-  Subtotal                  $2,000
-
-Recurring
-  Monthly                     $240
-  Annual (incl. year-end)   $3,230
-
-Consulting (ranges)
-  Reduce Costs        $800–$2,200
-  Due Diligence     $1,100–$2,800
-```
-
-When nothing is selected, it shows a prompt: "Select services to see your estimate."
+The map will have a red location pin icon positioned at the center, pointing to the exact building location. The pin will be styled to look like a standard Google Maps marker.
 
 ---
 
@@ -49,20 +21,34 @@ When nothing is selected, it shows a prompt: "Select services to see your estima
 
 | File | Change |
 |------|--------|
-| `src/components/accounting/LiveEstimate.tsx` | Complete rewrite to pull all three service types from context and display unified summary |
-| `src/pages/Services.tsx` | Remove the `activeSection === "accounting"` condition so the panel always shows |
+| `src/pages/Contact.tsx` | Wrap the iframe in a relative container and add an absolutely-positioned pin icon using Lucide's `MapPin` component |
 
-The component will use existing context data:
-- `selectedCorporateServices` - array with `id`, `name`, `price`
-- `selectedConsultingServices` - array with `id`, `name`, `priceRange`
-- `liveAccountingResult` - calculated accounting totals
+The implementation will:
+1. Add a `relative` wrapper around the iframe
+2. Position a red `MapPin` icon at the center of the map
+3. Use CSS transforms to ensure the pin tip points to the exact location
+4. Add a subtle shadow for depth
+
+```text
++---------------------------+
+|                           |
+|          [MAP]            |
+|            📍             |  <-- Red pin overlaid at center
+|                           |
++---------------------------+
+```
 
 ---
 
-### Summary Calculation Logic
+### Code Preview
 
-- **Corporate Total**: Sum of all `selectedCorporateServices[].price`
-- **Accounting**: Use existing `liveAccountingResult.totalMonthly` and `totalAnnual`
-- **Consulting Range**: Aggregate min/max from all `selectedConsultingServices[].priceRange`
-- **Grand Total**: Show one-time + first year recurring + consulting midpoint (as estimate)
+```tsx
+<div className="relative">
+  <iframe src="..." />
+  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full pointer-events-none">
+    <MapPin className="h-10 w-10 text-red-600 fill-red-600 drop-shadow-lg" />
+  </div>
+</div>
+```
 
+This approach ensures the pin is always visible regardless of how Google renders the embedded map.
