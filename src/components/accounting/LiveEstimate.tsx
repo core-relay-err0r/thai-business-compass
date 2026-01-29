@@ -141,10 +141,10 @@ export function LiveEstimate() {
         <Button 
           variant="ghost" 
           size="sm"
-          className="w-full text-muted-foreground"
+          className="w-full text-muted-foreground hover:bg-transparent hover:text-destructive [&:hover_svg]:text-destructive"
           onClick={clearAll}
         >
-          <Trash2 className="w-3 h-3 mr-1" />
+          <Trash2 className="w-3 h-3 mr-1 transition-colors" />
           Clear all
         </Button>
       </div>
