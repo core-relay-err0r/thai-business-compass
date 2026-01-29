@@ -317,7 +317,7 @@ export default function Contact() {
               
               <div className="rounded-xl overflow-hidden border border-border/50">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1937.7848500284474!2d100.56889!3d13.73089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29ed269181bb1%3A0x52b3df1540b5c6a!2sBhiraj%20Tower%20at%20EmQuartier!5e0!3m2!1sen!2sth!4v1700000000000!5m2!1sen!2sth"
+                  src="https://www.google.com/maps?q=Bhiraj+Tower+at+EmQuartier,+Bangkok&output=embed"
                   width="100%"
                   height="300"
                   style={{ border: 0 }}
