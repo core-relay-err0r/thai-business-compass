@@ -1,7 +1,11 @@
 import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function LiveEstimate() {
+  const navigate = useNavigate();
   const { 
     selectedCorporateServices, 
     selectedConsultingServices, 
@@ -31,6 +35,9 @@ export function LiveEstimate() {
       </div>
     );
   }
+
+  // Calculate one-time total for display
+  const oneTimeTotal = corporateTotal;
 
   return (
     <div className="space-y-6">
@@ -123,6 +130,23 @@ export function LiveEstimate() {
           )}
         </div>
       )}
+
+      {/* Sticky CTA Section */}
+      <div className="pt-4 border-t border-border space-y-2">
+        {oneTimeTotal > 0 && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">One-time total</span>
+            <span className="font-semibold">{formatUSD(oneTimeTotal)}</span>
+          </div>
+        )}
+        <Button 
+          className="w-full" 
+          onClick={() => navigate("/submit")}
+        >
+          Proceed to request
+          <ArrowRight className="w-4 h-4 ml-1" />
+        </Button>
+      </div>
     </div>
   );
 }
