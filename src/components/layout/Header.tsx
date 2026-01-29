@@ -19,9 +19,9 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const serviceLinks = [
-    { href: "/corporate", label: "Corporate", description: "One-time corporate services" },
-    { href: "/accounting", label: "Accounting", description: "Calculate monthly + yearly cost" },
-    { href: "/consulting", label: "Consulting", description: "Business problem solving" },
+    { href: "/corporate", label: "Corporate", description: "One-time corporate services", icon: Building2 },
+    { href: "/accounting", label: "Accounting", description: "Calculate monthly + yearly cost", icon: Calculator },
+    { href: "/consulting", label: "Consulting", description: "Business problem solving", icon: MessageSquare },
   ];
 
   const startOptions = [
@@ -87,14 +87,17 @@ export function Header() {
                               <Link
                                 to={link.href}
                                 className={cn(
-                                  "block select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:translate-x-1 focus:bg-primary/10 focus:text-primary",
+                                  "flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:translate-x-1 focus:bg-primary/10 focus:text-primary",
                                   location.pathname === link.href && "bg-primary/10 text-primary"
                                 )}
                               >
-                                <div className="text-sm font-medium leading-none">{link.label}</div>
-                                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
-                                  {link.description}
-                                </p>
+                                <link.icon className="h-5 w-5 mt-0.5 shrink-0" />
+                                <div>
+                                  <div className="text-sm font-medium leading-none">{link.label}</div>
+                                  <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
+                                    {link.description}
+                                  </p>
+                                </div>
                               </Link>
                             </NavigationMenuLink>
                           </li>
