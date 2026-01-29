@@ -53,7 +53,11 @@ export function Header() {
     if (hash && location.pathname === "/services") {
       e.preventDefault();
       const element = document.getElementById(hash);
-      element?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Update URL hash without triggering navigation
+        window.history.pushState(null, "", href);
+      }
     }
   };
 
@@ -214,7 +218,10 @@ export function Header() {
                 <Link
                   key={link.href}
                   to={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    handleServiceClick(link.href, e);
+                    setIsMobileMenuOpen(false);
+                  }}
                   className={`text-sm font-medium transition-colors hover:text-foreground py-2 pl-3 ${
                     location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services"
                       ? "text-foreground"
