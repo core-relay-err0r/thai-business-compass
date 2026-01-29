@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText, Plus } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
 import { AccountingInputs, calculateAccountingCost, formatUSD, USD_TO_THB, formatPrice } from "@/lib/pricing";
@@ -116,27 +117,29 @@ export function AccountingWizard() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="min-h-[400px]">
-        {currentStep === 0 && (
-          <Step0Intent inputs={localInputs} setInputs={setLocalInputs} />
-        )}
-        {currentStep === 1 && (
-          <Step1CompanyBasics inputs={localInputs} setInputs={setLocalInputs} />
-        )}
-        {currentStep === 2 && (
-          <Step2Team inputs={localInputs} setInputs={setLocalInputs} />
-        )}
-        {currentStep === 3 && (
-          <Step3Operations inputs={localInputs} setInputs={setLocalInputs} />
-        )}
-        {currentStep === 4 && (
-          <Step4YearEnd inputs={localInputs} setInputs={setLocalInputs} />
-        )}
-        {currentStep === 5 && liveResult && (
-          <Step5Results result={liveResult} onAdjust={handleAdjust} />
-        )}
+      <CardContent className="flex flex-col h-[500px]">
+        <ScrollArea className="flex-1 min-h-0 pr-4">
+          {currentStep === 0 && (
+            <Step0Intent inputs={localInputs} setInputs={setLocalInputs} />
+          )}
+          {currentStep === 1 && (
+            <Step1CompanyBasics inputs={localInputs} setInputs={setLocalInputs} />
+          )}
+          {currentStep === 2 && (
+            <Step2Team inputs={localInputs} setInputs={setLocalInputs} />
+          )}
+          {currentStep === 3 && (
+            <Step3Operations inputs={localInputs} setInputs={setLocalInputs} />
+          )}
+          {currentStep === 4 && (
+            <Step4YearEnd inputs={localInputs} setInputs={setLocalInputs} />
+          )}
+          {currentStep === 5 && liveResult && (
+            <Step5Results result={liveResult} onAdjust={handleAdjust} />
+          )}
+        </ScrollArea>
 
-        <div className="flex justify-between mt-8 pt-6 border-t border-border">
+        <div className="flex justify-between pt-6 border-t border-border flex-shrink-0 mt-auto">
           <Button
             variant="outline"
             onClick={handleBack}
