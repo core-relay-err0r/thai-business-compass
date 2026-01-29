@@ -82,10 +82,10 @@ export default function Contact() {
             </div>
 
             {/* Right - Quick Response Card */}
-            <Card className="lg:w-80">
+            <Card className="lg:w-80 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
               <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-11 w-11 bg-primary/15 rounded-xl flex items-center justify-center ring-1 ring-primary/20">
                     <Clock className="h-5 w-5 text-primary" />
                   </div>
                   <div>
@@ -93,14 +93,14 @@ export default function Contact() {
                     <p className="text-sm text-muted-foreground">We reply within 24 hours</p>
                   </div>
                 </div>
-                <div className="flex gap-8">
-                  <div>
-                    <div className="text-2xl font-bold text-primary">24h</div>
-                    <div className="text-sm text-muted-foreground">Email Response</div>
+                <div className="flex gap-6">
+                  <div className="flex-1 p-4 rounded-xl bg-background/80 backdrop-blur-sm border border-border/50">
+                    <div className="text-3xl font-bold text-primary mb-1">24h</div>
+                    <div className="text-xs text-muted-foreground">Email Response</div>
                   </div>
-                  <div>
-                    <div className="text-2xl font-bold text-primary">1h</div>
-                    <div className="text-sm text-muted-foreground">WhatsApp Reply</div>
+                  <div className="flex-1 p-4 rounded-xl bg-background/80 backdrop-blur-sm border border-border/50">
+                    <div className="text-3xl font-bold text-primary mb-1">1h</div>
+                    <div className="text-xs text-muted-foreground">WhatsApp Reply</div>
                   </div>
                 </div>
               </CardContent>
