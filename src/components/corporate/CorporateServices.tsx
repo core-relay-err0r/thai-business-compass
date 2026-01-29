@@ -84,7 +84,7 @@ const EXISTING_SERVICES: ServiceDefinition[] = [{
   timeline: "Up to 30 days",
   hasPopup: true
 }];
-export function CorporateServices() {
+export function CorporateServicesContent() {
   const navigate = useNavigate();
   const {
     selectedCorporateServices,
