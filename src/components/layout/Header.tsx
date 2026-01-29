@@ -87,12 +87,12 @@ export function Header() {
                               <Link
                                 to={link.href}
                                 className={cn(
-                                  "block select-none rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                  "block select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-accent hover:text-accent-foreground hover:translate-x-1 focus:bg-accent focus:text-accent-foreground",
                                   location.pathname === link.href && "bg-accent"
                                 )}
                               >
                                 <div className="text-sm font-medium leading-none">{link.label}</div>
-                                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
+                                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1 transition-colors duration-200 group-hover:text-muted-foreground/80">
                                   {link.description}
                                 </p>
                               </Link>
