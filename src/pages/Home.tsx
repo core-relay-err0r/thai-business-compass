@@ -4,10 +4,8 @@ import { ModuleCards } from "@/components/home/ModuleCards";
 import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { PricingLogic } from "@/components/home/PricingLogic";
-
 export default function Home() {
-  return (
-    <Layout>
+  return <Layout>
       <HeroSection />
       <ModuleCards />
       <TrustSection />
@@ -15,12 +13,6 @@ export default function Home() {
       <PricingLogic />
       
       {/* Simple footer */}
-      <footer className="py-12 border-t border-border">
-        <div className="container text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} PND50 Co., Ltd. All rights reserved.</p>
-          <p className="mt-2">Thai corporate & accounting services for foreign founders.</p>
-        </div>
-      </footer>
-    </Layout>
-  );
+      
+    </Layout>;
 }
