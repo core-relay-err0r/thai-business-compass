@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
 import { AccountingInputs, calculateAccountingCost, formatUSD, USD_TO_THB, formatPrice } from "@/lib/pricing";
 
@@ -68,9 +68,9 @@ export function AccountingWizard() {
     }
   };
 
-  const handleAddToRequest = () => {
+  const handleSubmit = () => {
     setAccountingInputs(localInputs);
-    // Results are already in Live Estimate via liveAccountingResult
+    navigate("/submit");
   };
 
   const handleAdjust = () => {
@@ -137,9 +137,9 @@ export function AccountingWizard() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Button onClick={handleAddToRequest}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add to request
+            <Button onClick={handleSubmit}>
+              Submit request with this setup
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           )}
         </div>
