@@ -23,9 +23,10 @@ const STEPS = [
 
 export function AccountingWizard() {
   const navigate = useNavigate();
-  const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult } = useServices();
+  const { accountingInputs, setAccountingInputs, accountingResult, liveAccountingResult, setLiveAccountingResult } = useServices();
   const [currentStep, setCurrentStep] = useState(0);
-  const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
+  
+  const defaultInputs: Partial<AccountingInputs> = {
     accountingIntent: "full",
     revenueRange: "5k-50k",
     vatRegistered: "no",
@@ -36,10 +37,23 @@ export function AccountingWizard() {
     internationalPayments: false,
     yearEndStatements: "yes",
     auditRequired: "no",
+  };
+  
+  const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
+    ...defaultInputs,
     ...accountingInputs,
   });
 
   const [liveResult, setLiveResult] = useState(accountingResult);
+
+  // Reset local state when global state is cleared (liveAccountingResult becomes null)
+  useEffect(() => {
+    if (liveAccountingResult === null && liveResult !== null) {
+      setLocalInputs(defaultInputs);
+      setLiveResult(null);
+      setCurrentStep(0);
+    }
+  }, [liveAccountingResult]);
 
   useEffect(() => {
     if (
