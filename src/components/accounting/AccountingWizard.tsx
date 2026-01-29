@@ -23,7 +23,7 @@ const STEPS = [
 
 export function AccountingWizard() {
   const navigate = useNavigate();
-  const { accountingInputs, setAccountingInputs, accountingResult } = useServices();
+  const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult } = useServices();
   const [currentStep, setCurrentStep] = useState(0);
   const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
     accountingIntent: "full",
@@ -51,8 +51,9 @@ export function AccountingWizard() {
     ) {
       const result = calculateAccountingCost(localInputs as AccountingInputs);
       setLiveResult(result);
+      setLiveAccountingResult(result);
     }
-  }, [localInputs]);
+  }, [localInputs, setLiveAccountingResult]);
 
   const handleNext = () => {
     setAccountingInputs(localInputs);
@@ -79,154 +80,71 @@ export function AccountingWizard() {
   const progressPercent = (currentStep / (STEPS.length - 1)) * 100;
 
   return (
-    <div className="grid lg:grid-cols-3 gap-8">
-      {/* Main wizard area */}
-      <div className="lg:col-span-2">
-        <Card>
-          <CardHeader>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <CardTitle>Accounting Calculator</CardTitle>
-                <span className="text-sm text-muted-foreground">
-                  Step {currentStep + 1} of {STEPS.length}
-                </span>
-              </div>
-              <Progress value={progressPercent} className="h-2" />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                {STEPS.map((step) => (
-                  <span
-                    key={step.id}
-                    className={step.id === currentStep ? "text-foreground font-medium" : ""}
-                  >
-                    {step.title}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="min-h-[400px]">
-            {currentStep === 0 && (
-              <Step0Intent inputs={localInputs} setInputs={setLocalInputs} />
-            )}
-            {currentStep === 1 && (
-              <Step1CompanyBasics inputs={localInputs} setInputs={setLocalInputs} />
-            )}
-            {currentStep === 2 && (
-              <Step2Team inputs={localInputs} setInputs={setLocalInputs} />
-            )}
-            {currentStep === 3 && (
-              <Step3Operations inputs={localInputs} setInputs={setLocalInputs} />
-            )}
-            {currentStep === 4 && (
-              <Step4YearEnd inputs={localInputs} setInputs={setLocalInputs} />
-            )}
-            {currentStep === 5 && liveResult && (
-              <Step5Results result={liveResult} onAdjust={handleAdjust} />
-            )}
-
-            <div className="flex justify-between mt-8 pt-6 border-t border-border">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                disabled={currentStep === 0}
+    <Card>
+      <CardHeader>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <CardTitle>Accounting Calculator</CardTitle>
+            <span className="text-sm text-muted-foreground">
+              Step {currentStep + 1} of {STEPS.length}
+            </span>
+          </div>
+          <Progress value={progressPercent} className="h-2" />
+          <div className="flex justify-between text-xs text-muted-foreground">
+            {STEPS.map((step) => (
+              <span
+                key={step.id}
+                className={step.id === currentStep ? "text-foreground font-medium" : ""}
               >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
-              </Button>
-              {currentStep < 5 ? (
-                <Button onClick={handleNext}>
-                  Next
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              ) : (
-                <Button onClick={handleSubmit}>
-                  Submit request with this setup
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                {step.title}
+              </span>
+            ))}
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="min-h-[400px]">
+        {currentStep === 0 && (
+          <Step0Intent inputs={localInputs} setInputs={setLocalInputs} />
+        )}
+        {currentStep === 1 && (
+          <Step1CompanyBasics inputs={localInputs} setInputs={setLocalInputs} />
+        )}
+        {currentStep === 2 && (
+          <Step2Team inputs={localInputs} setInputs={setLocalInputs} />
+        )}
+        {currentStep === 3 && (
+          <Step3Operations inputs={localInputs} setInputs={setLocalInputs} />
+        )}
+        {currentStep === 4 && (
+          <Step4YearEnd inputs={localInputs} setInputs={setLocalInputs} />
+        )}
+        {currentStep === 5 && liveResult && (
+          <Step5Results result={liveResult} onAdjust={handleAdjust} />
+        )}
 
-      {/* Live summary panel */}
-      <div className="lg:col-span-1">
-        <Card className="sticky top-24">
-          <CardHeader>
-            <CardTitle className="text-lg">Live Estimate</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {liveResult ? (
-              <>
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Monthly</div>
-                  <div className="text-2xl font-bold">
-                    {formatUSD(liveResult.totalMonthly)}
-                    {liveResult.potentialMonthly.length > 0 && (
-                      <span className="text-lg font-normal text-muted-foreground">
-                        –{formatPrice(liveResult.totalMonthlyMax)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    ≈ ฿{formatPrice(liveResult.totalMonthly * USD_TO_THB)}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Annual (incl. year-end)</div>
-                  <div className="text-2xl font-bold">
-                    {formatUSD(liveResult.totalAnnual)}
-                    {liveResult.potentialAnnual.length > 0 && (
-                      <span className="text-lg font-normal text-muted-foreground">
-                        –{formatPrice(liveResult.totalAnnualMax)}
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    ≈ ฿{formatPrice(liveResult.totalAnnual * USD_TO_THB)}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-border space-y-3">
-                  <div className="text-sm font-medium">Included:</div>
-                  <div className="text-sm text-muted-foreground">Base accounting</div>
-                  {liveResult.monthlyAddons.map((addon) => (
-                    <div key={addon.name} className="text-sm text-muted-foreground">
-                      + {addon.name}
-                    </div>
-                  ))}
-                  {liveResult.annualAddons.map((addon) => (
-                    <div key={addon.name} className="text-sm text-muted-foreground">
-                      + {addon.name}
-                    </div>
-                  ))}
-                </div>
-
-                {(liveResult.potentialMonthly.length > 0 || liveResult.potentialAnnual.length > 0) && (
-                  <div className="pt-4 border-t border-border space-y-2">
-                    <div className="text-sm font-medium text-amber-600">Potential (if needed):</div>
-                    {liveResult.potentialMonthly.map((p) => (
-                      <div key={p.name} className="text-sm text-muted-foreground">
-                        {p.name}: +{formatUSD(p.amount)}/mo
-                      </div>
-                    ))}
-                    {liveResult.potentialAnnual.map((p) => (
-                      <div key={p.name} className="text-sm text-muted-foreground">
-                        {p.name}: +{formatUSD(p.amount)}/yr
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="text-sm text-muted-foreground">
-                Complete the steps to see your estimate.
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+        <div className="flex justify-between mt-8 pt-6 border-t border-border">
+          <Button
+            variant="outline"
+            onClick={handleBack}
+            disabled={currentStep === 0}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back
+          </Button>
+          {currentStep < 5 ? (
+            <Button onClick={handleNext}>
+              Next
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          ) : (
+            <Button onClick={handleSubmit}>
+              Submit request with this setup
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
