@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -53,7 +54,7 @@ export default function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       {/* Hero Section */}
       <section className="container py-16 md:py-24">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -201,6 +202,6 @@ export default function About() {
           </Link>
         </div>
       </section>
-    </div>
+    </Layout>
   );
 }
