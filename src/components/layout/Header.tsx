@@ -68,6 +68,17 @@ export function Header() {
                 Home
               </Link>
 
+              <Link
+                to="/contact"
+                className={`text-sm font-medium transition-colors hover:text-foreground ${
+                  location.pathname === "/contact"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Contact
+              </Link>
+
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
@@ -151,6 +162,17 @@ export function Header() {
                 }`}
               >
                 Home
+              </Link>
+              <Link
+                to="/contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-sm font-medium transition-colors hover:text-foreground py-2 ${
+                  location.pathname === "/contact"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Contact
               </Link>
               <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pt-2">
                 Our Services
