@@ -100,74 +100,62 @@ export function Header() {
                 Contact
               </Link>
 
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger
-                      className={cn(
-                        "text-sm font-medium bg-transparent hover:bg-transparent hover:text-foreground data-[state=open]:bg-transparent h-auto p-0 transition-colors",
-                        isServiceActive ? "text-foreground" : "text-muted-foreground"
-                      )}
-                    >
-                      Our Services
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid w-[280px] gap-1 p-2">
-                        {serviceLinks.map((link) => (
-                          <li key={link.href}>
-                            <NavigationMenuLink asChild>
-                              <Link
-                                to={link.href}
-                                onClick={(e) => handleServiceClick(link.href, e)}
-                                className={cn(
-                                  "flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:translate-x-1 focus:bg-primary/10 focus:text-primary",
-                                  location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" && "bg-primary/10 text-primary"
-                                )}
-                              >
-                                <link.icon className="h-5 w-5 mt-0.5 shrink-0" />
-                                <div>
-                                  <div className="text-sm font-medium leading-none">{link.label}</div>
-                                  <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
-                                    {link.description}
-                                  </p>
-                                </div>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
-            <Link to="/submit" className="hidden md:block">
-              <Button variant="outline" size="sm">
-                Submit Request
-              </Button>
-            </Link>
-            <Button
-              size="sm"
-              onClick={() => setIsStartModalOpen(true)}
-              className="hidden md:flex"
-            >
-              Start
-            </Button>
-
-            <button
-              className="md:hidden p-2"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </button>
+          <div className="hidden md:flex items-center">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger
+                    className={cn(
+                      "text-sm font-medium bg-transparent hover:bg-transparent hover:text-foreground data-[state=open]:bg-transparent h-auto p-0 transition-colors",
+                      isServiceActive ? "text-foreground" : "text-muted-foreground"
+                    )}
+                  >
+                    Our Services
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[280px] gap-1 p-2">
+                      {serviceLinks.map((link) => (
+                        <li key={link.href}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to={link.href}
+                              onClick={(e) => handleServiceClick(link.href, e)}
+                              className={cn(
+                                "flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:translate-x-1 focus:bg-primary/10 focus:text-primary",
+                                location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" && "bg-primary/10 text-primary"
+                              )}
+                            >
+                              <link.icon className="h-5 w-5 mt-0.5 shrink-0" />
+                              <div>
+                                <div className="text-sm font-medium leading-none">{link.label}</div>
+                                <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
+                                  {link.description}
+                                </p>
+                              </div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
           </div>
+
+          <button
+            className="md:hidden p-2"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
         </div>
 
         {/* Mobile menu */}
