@@ -1,11 +1,21 @@
+import { useState } from "react";
 import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+type DetailType = "corporate" | "accounting" | "consulting" | null;
 
 export function LiveEstimate() {
   const navigate = useNavigate();
+  const [openDetail, setOpenDetail] = useState<DetailType>(null);
   const { 
     selectedCorporateServices, 
     selectedConsultingServices, 
@@ -36,109 +46,82 @@ export function LiveEstimate() {
     );
   }
 
-  // Calculate one-time total for display
-  const oneTimeTotal = corporateTotal;
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
         Live Estimate
       </h3>
 
-      {/* One-time (Corporate) */}
+      {/* Corporate Summary Card */}
       {selectedCorporateServices.length > 0 && (
-        <div className="space-y-2">
-          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            One-time
-          </div>
-          {selectedCorporateServices.map((service) => (
-            <div key={service.id} className="flex justify-between text-sm">
-              <span className="text-muted-foreground truncate pr-2">{service.name}</span>
-              <span className="font-medium">{formatUSD(service.price)}</span>
+        <button
+          onClick={() => setOpenDetail("corporate")}
+          className="w-full text-left p-3 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Corporate
+              </div>
+              <div className="text-lg font-semibold">{formatUSD(corporateTotal)}</div>
+              <div className="text-xs text-muted-foreground">
+                {selectedCorporateServices.length} service{selectedCorporateServices.length !== 1 ? "s" : ""} • One-time
+              </div>
             </div>
-          ))}
-          <div className="flex justify-between text-sm pt-2 border-t border-border/50">
-            <span className="font-medium">Subtotal</span>
-            <span className="font-semibold">{formatUSD(corporateTotal)}</span>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </div>
-          <div className="text-xs text-muted-foreground/60">
-            ≈ ฿{formatPrice(corporateTotal * USD_TO_THB)}
-          </div>
-        </div>
+        </button>
       )}
 
-      {/* Recurring (Accounting) */}
+      {/* Accounting Summary Card */}
       {liveAccountingResult && (
-        <div className="space-y-2">
-          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Recurring
+        <button
+          onClick={() => setOpenDetail("accounting")}
+          className="w-full text-left p-3 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Accounting
+              </div>
+              <div className="text-lg font-semibold">
+                {formatUSD(liveAccountingResult.totalMonthly)}
+                <span className="text-sm font-normal text-muted-foreground">/mo</span>
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {formatUSD(liveAccountingResult.totalAnnual)}/yr • Recurring
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Monthly</span>
-            <span className="font-medium">
-              {formatUSD(liveAccountingResult.totalMonthly)}
-              {liveAccountingResult.potentialMonthly.length > 0 && (
-                <span className="text-muted-foreground font-normal">
-                  –{formatPrice(liveAccountingResult.totalMonthlyMax)}
-                </span>
-              )}
-            </span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Annual (incl. year-end)</span>
-            <span className="font-medium">
-              {formatUSD(liveAccountingResult.totalAnnual)}
-              {liveAccountingResult.potentialAnnual.length > 0 && (
-                <span className="text-muted-foreground font-normal">
-                  –{formatPrice(liveAccountingResult.totalAnnualMax)}
-                </span>
-              )}
-            </span>
-          </div>
-          <div className="text-xs text-muted-foreground/60">
-            ≈ ฿{formatPrice(liveAccountingResult.totalAnnual * USD_TO_THB)}/yr
-          </div>
-        </div>
+        </button>
       )}
 
-      {/* Consulting (Ranges) */}
+      {/* Consulting Summary Card */}
       {selectedConsultingServices.length > 0 && (
-        <div className="space-y-2">
-          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Consulting
-          </div>
-          {selectedConsultingServices.map((service) => (
-            <div key={service.id} className="flex justify-between text-sm">
-              <span className="text-muted-foreground truncate pr-2">{service.name}</span>
-              <span className="font-medium">
-                {formatUSD(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
-              </span>
+        <button
+          onClick={() => setOpenDetail("consulting")}
+          className="w-full text-left p-3 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Consulting
+              </div>
+              <div className="text-lg font-semibold">
+                {formatUSD(consultingMin)}–{formatPrice(consultingMax)}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {selectedConsultingServices.length} task{selectedConsultingServices.length !== 1 ? "s" : ""} • Estimate range
+              </div>
             </div>
-          ))}
-          {selectedConsultingServices.length > 1 && (
-            <>
-              <div className="flex justify-between text-sm pt-2 border-t border-border/50">
-                <span className="font-medium">Range</span>
-                <span className="font-semibold">
-                  {formatUSD(consultingMin)}–{formatPrice(consultingMax)}
-                </span>
-              </div>
-              <div className="text-xs text-muted-foreground/60">
-                ≈ ฿{formatPrice(consultingMin * USD_TO_THB)}–{formatPrice(consultingMax * USD_TO_THB)}
-              </div>
-            </>
-          )}
-        </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </div>
+        </button>
       )}
 
       {/* Sticky CTA Section */}
-      <div className="pt-4 border-t border-border space-y-2">
-        {oneTimeTotal > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">One-time total</span>
-            <span className="font-semibold">{formatUSD(oneTimeTotal)}</span>
-          </div>
-        )}
+      <div className="pt-4 border-t border-border">
         <Button 
           className="w-full" 
           onClick={() => navigate("/submit")}
@@ -147,6 +130,155 @@ export function LiveEstimate() {
           <ArrowRight className="w-4 h-4 ml-1" />
         </Button>
       </div>
+
+      {/* Corporate Details Dialog */}
+      <Dialog open={openDetail === "corporate"} onOpenChange={(open) => !open && setOpenDetail(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Corporate Services</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            {selectedCorporateServices.map((service) => (
+              <div key={service.id} className="flex justify-between text-sm py-2 border-b border-border/50 last:border-0">
+                <span className="text-muted-foreground">{service.name}</span>
+                <span className="font-medium">{formatUSD(service.price)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between pt-3 border-t border-border">
+              <span className="font-medium">Total</span>
+              <div className="text-right">
+                <div className="font-semibold">{formatUSD(corporateTotal)}</div>
+                <div className="text-xs text-muted-foreground">
+                  ≈ ฿{formatPrice(corporateTotal * USD_TO_THB)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Accounting Details Dialog */}
+      <Dialog open={openDetail === "accounting"} onOpenChange={(open) => !open && setOpenDetail(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Accounting Services</DialogTitle>
+          </DialogHeader>
+          {liveAccountingResult && (
+            <div className="space-y-4">
+              <div>
+                <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                  Monthly
+                </div>
+                <div className="flex justify-between text-sm py-1">
+                  <span className="text-muted-foreground">Base accounting</span>
+                  <span className="font-medium">{formatUSD(liveAccountingResult.monthlyBase)}</span>
+                </div>
+                {liveAccountingResult.monthlyAddons.map((item, idx) => (
+                  <div key={idx} className="flex justify-between text-sm py-1">
+                    <span className="text-muted-foreground">{item.name}</span>
+                    <span className="font-medium">+{formatUSD(item.amount)}</span>
+                  </div>
+                ))}
+              </div>
+
+              {liveAccountingResult.potentialMonthly.length > 0 && (
+                <div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    Potential Add-ons (Monthly)
+                  </div>
+                  {liveAccountingResult.potentialMonthly.map((item, idx) => (
+                    <div key={idx} className="flex justify-between text-sm py-1">
+                      <span className="text-muted-foreground">{item.name}</span>
+                      <span className="font-medium">+{formatUSD(item.amount)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {liveAccountingResult.annualAddons.length > 0 && (
+                <div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    Annual Fees
+                  </div>
+                  {liveAccountingResult.annualAddons.map((item, idx) => (
+                    <div key={idx} className="flex justify-between text-sm py-1">
+                      <span className="text-muted-foreground">{item.name}</span>
+                      <span className="font-medium">{formatUSD(item.amount)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {liveAccountingResult.potentialAnnual.length > 0 && (
+                <div>
+                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                    Potential Add-ons (Annual)
+                  </div>
+                  {liveAccountingResult.potentialAnnual.map((item, idx) => (
+                    <div key={idx} className="flex justify-between text-sm py-1">
+                      <span className="text-muted-foreground">{item.name}</span>
+                      <span className="font-medium">+{formatUSD(item.amount)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex justify-between pt-3 border-t border-border">
+                <span className="font-medium">Totals</span>
+                <div className="text-right space-y-1">
+                  <div>
+                    <span className="font-semibold">{formatUSD(liveAccountingResult.totalMonthly)}</span>
+                    {liveAccountingResult.potentialMonthly.length > 0 && (
+                      <span className="text-muted-foreground">–{formatPrice(liveAccountingResult.totalMonthlyMax)}</span>
+                    )}
+                    <span className="text-muted-foreground text-sm">/mo</span>
+                  </div>
+                  <div>
+                    <span className="font-semibold">{formatUSD(liveAccountingResult.totalAnnual)}</span>
+                    {liveAccountingResult.potentialAnnual.length > 0 && (
+                      <span className="text-muted-foreground">–{formatPrice(liveAccountingResult.totalAnnualMax)}</span>
+                    )}
+                    <span className="text-muted-foreground text-sm">/yr</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    ≈ ฿{formatPrice(liveAccountingResult.totalAnnual * USD_TO_THB)}/yr
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Consulting Details Dialog */}
+      <Dialog open={openDetail === "consulting"} onOpenChange={(open) => !open && setOpenDetail(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Consulting Services</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            {selectedConsultingServices.map((service) => (
+              <div key={service.id} className="flex justify-between text-sm py-2 border-b border-border/50 last:border-0">
+                <span className="text-muted-foreground">{service.name}</span>
+                <span className="font-medium">
+                  {formatUSD(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
+                </span>
+              </div>
+            ))}
+            <div className="flex justify-between pt-3 border-t border-border">
+              <span className="font-medium">Total Range</span>
+              <div className="text-right">
+                <div className="font-semibold">
+                  {formatUSD(consultingMin)}–{formatPrice(consultingMax)}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  ≈ ฿{formatPrice(consultingMin * USD_TO_THB)}–{formatPrice(consultingMax * USD_TO_THB)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
