@@ -275,37 +275,6 @@ export function CorporateServicesContent() {
         Advanced structures (e.g. BOI) usually make sense only after operations begin.
       </p>
 
-      {/* Floating selection summary */}
-      {selectedCorporateServices.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
-          <div className="bg-background/95 backdrop-blur-sm border border-border rounded-xl shadow-lg p-4">
-            <div className="space-y-3">
-              {/* Selected items */}
-              <div className="space-y-1">
-                {selectedCorporateServices.map((s) => (
-                  <div key={s.id} className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">{s.name}</span>
-                    <span className="font-medium">{formatUSD(s.price)}</span>
-                  </div>
-                ))}
-              </div>
-              
-              {/* Divider and total */}
-              <div className="border-t border-border pt-3 flex items-center justify-between">
-                <div>
-                  <span className="text-xs text-muted-foreground">One-time total</span>
-                  <div className="text-lg font-semibold">{formatUSD(totalPrice)}</div>
-                </div>
-                <Button onClick={() => navigate("/submit")} size="sm">
-                  Proceed to request
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Popups */}
       <RegisteredOfficePopup
         open={registeredOfficeOpen}
