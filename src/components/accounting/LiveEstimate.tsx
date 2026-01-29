@@ -1,7 +1,7 @@
 import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function LiveEstimate() {
@@ -9,7 +9,8 @@ export function LiveEstimate() {
   const { 
     selectedCorporateServices, 
     selectedConsultingServices, 
-    liveAccountingResult 
+    liveAccountingResult,
+    clearAll
   } = useServices();
 
   // Calculate totals
@@ -132,7 +133,7 @@ export function LiveEstimate() {
       )}
 
       {/* Sticky CTA Section */}
-      <div className="pt-4 border-t border-border space-y-2">
+      <div className="pt-4 border-t border-border space-y-3">
         {oneTimeTotal > 0 && (
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">One-time total</span>
@@ -145,6 +146,15 @@ export function LiveEstimate() {
         >
           Proceed to request
           <ArrowRight className="w-4 h-4 ml-1" />
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="sm"
+          className="w-full text-muted-foreground"
+          onClick={clearAll}
+        >
+          <Trash2 className="w-3 h-3 mr-1" />
+          Clear all
         </Button>
       </div>
     </div>
