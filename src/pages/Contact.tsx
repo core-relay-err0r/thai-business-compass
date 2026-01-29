@@ -58,9 +58,12 @@ export default function Contact() {
       <div className="py-12 md:py-20">
         <div className="container">
           {/* Hero Section - Two Column */}
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-16">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-16 mb-16">
             {/* Left - Title */}
             <div className="max-w-lg">
+              <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-4">
+                Contact
+              </p>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
                 Let's talk about<br />
                 <span className="text-primary">your business</span>
@@ -82,29 +85,27 @@ export default function Contact() {
             </div>
 
             {/* Right - Quick Response Card */}
-            <Card className="lg:w-80 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-11 w-11 bg-primary/15 rounded-xl flex items-center justify-center ring-1 ring-primary/20">
-                    <Clock className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Quick Response</h3>
-                    <p className="text-sm text-muted-foreground">We reply within 24 hours</p>
-                  </div>
+            <div className="lg:w-96 p-6 rounded-2xl bg-muted/30">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-11 w-11 bg-primary/10 rounded-xl flex items-center justify-center">
+                  <Clock className="h-5 w-5 text-primary" />
                 </div>
-                <div className="flex gap-6">
-                  <div className="flex-1 p-4 rounded-xl bg-background/80 backdrop-blur-sm border border-border/50">
-                    <div className="text-3xl font-bold text-primary mb-1">24h</div>
-                    <div className="text-xs text-muted-foreground">Email Response</div>
-                  </div>
-                  <div className="flex-1 p-4 rounded-xl bg-background/80 backdrop-blur-sm border border-border/50">
-                    <div className="text-3xl font-bold text-primary mb-1">1h</div>
-                    <div className="text-xs text-muted-foreground">WhatsApp Reply</div>
-                  </div>
+                <div>
+                  <h3 className="font-semibold">Quick Response</h3>
+                  <p className="text-sm text-muted-foreground">We reply within 24 hours</p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-1 p-4 rounded-xl bg-background border border-border/50 shadow-sm">
+                  <div className="text-2xl font-bold text-primary mb-1">24h</div>
+                  <div className="text-xs text-muted-foreground">Email Response</div>
+                </div>
+                <div className="flex-1 p-4 rounded-xl bg-background border border-border/50 shadow-sm">
+                  <div className="text-2xl font-bold text-primary mb-1">1h</div>
+                  <div className="text-xs text-muted-foreground">WhatsApp Reply</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Form & Info Cards Section */}
