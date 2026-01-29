@@ -27,11 +27,11 @@ export function LiveEstimate() {
 
   if (!hasAnything) {
     return (
-      <div className="space-y-4">
+      <div className="h-full flex flex-col">
         <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           Live Estimate
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground mt-4">
           Select services to see your estimate.
         </p>
       </div>
