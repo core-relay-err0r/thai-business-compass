@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Building2, MapPin, FileSearch, Users, FileText, ScrollText, ArrowRight, Sparkles, Settings } from "lucide-react";
@@ -110,37 +110,16 @@ const SECTIONS = [
   },
 ];
 
-export function CorporateServices() {
+// Embeddable content component (used by /services page)
+export function CorporateServicesContent() {
   const navigate = useNavigate();
   const { selectedCorporateServices, addCorporateService, removeCorporateService } = useServices();
-  const [activeSection, setActiveSection] = useState("starting");
-  
-  const startingRef = useRef<HTMLDivElement>(null);
-  const existingRef = useRef<HTMLDivElement>(null);
 
   // Popup states
   const [registeredOfficeOpen, setRegisteredOfficeOpen] = useState(false);
   const [companyReviewOpen, setCompanyReviewOpen] = useState(false);
   const [corporateDocumentsOpen, setCorporateDocumentsOpen] = useState(false);
   const [taxResidencyOpen, setTaxResidencyOpen] = useState(false);
-
-  // Track which section is in view
-  useEffect(() => {
-    const handleScroll = () => {
-      const startingTop = startingRef.current?.getBoundingClientRect().top ?? 0;
-      const existingTop = existingRef.current?.getBoundingClientRect().top ?? 0;
-      
-      // Determine which section is more in view
-      if (existingTop <= 200) {
-        setActiveSection("existing");
-      } else {
-        setActiveSection("starting");
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const isSelected = (id: string) => selectedCorporateServices.some((s) => s.id === id);
 
@@ -224,130 +203,77 @@ export function CorporateServices() {
   };
 
   const totalPrice = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
-  const currentSection = SECTIONS.find(s => s.id === activeSection) || SECTIONS[0];
 
   return (
-    <div className="relative">
-      {/* Main layout with sticky sidebar */}
-      <div className="flex gap-12 lg:gap-16">
-        {/* Left sticky sidebar */}
-        <div className="hidden lg:block w-80 flex-shrink-0">
-          <div className="sticky top-32">
-            <div className="space-y-6">
-              {/* Current section indicator */}
-              <div className="flex items-center gap-2 text-sm text-primary font-medium">
-                <currentSection.icon className="h-4 w-4" />
-                <span>Current section</span>
-              </div>
-              
-              {/* Section title */}
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight">
-                {currentSection.title}
-              </h2>
-              
-              {/* Section description */}
-              <p className="text-muted-foreground">
-                {currentSection.description}
-              </p>
-
-              {/* Section navigation */}
-              <div className="pt-4 space-y-2">
-                {SECTIONS.map((section) => (
-                  <button
-                    key={section.id}
-                    onClick={() => {
-                      const ref = section.id === "starting" ? startingRef : existingRef;
-                      ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }}
-                    className={`flex items-center gap-3 w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                      activeSection === section.id
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }`}
-                  >
-                    <section.icon className="h-4 w-4" />
-                    <span className="text-sm font-medium">{section.title}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+    <div className="space-y-16">
+      {/* Starting a New Company */}
+      <div>
+        <div className="mb-6">
+          <div className="flex items-center gap-2 text-sm text-primary font-medium mb-2">
+            <Sparkles className="h-4 w-4" />
+            <span>Starting a New Company</span>
           </div>
-        </div>
-
-        {/* Right scrollable content */}
-        <div className="flex-1 min-w-0 space-y-16">
-          {/* Starting a New Company */}
-          <div ref={startingRef} className="scroll-mt-32">
-            {/* Mobile section header */}
-            <div className="lg:hidden mb-6">
-              <div className="flex items-center gap-2 text-sm text-primary font-medium mb-2">
-                <Sparkles className="h-4 w-4" />
-                <span>Starting a New Company</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Foundation services for registering and establishing your Thai Co., Ltd.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {STARTING_SERVICES.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  icon={service.icon}
-                  title={service.title}
-                  description={service.description}
-                  contextLine={service.contextLine}
-                  price={service.price}
-                  priceTHB={service.priceTHB}
-                  timeline={service.timeline}
-                  isSelected={isSelected(service.id)}
-                  onCardClick={() => handleCardClick(service)}
-                  onButtonClick={() => handleButtonClick(service)}
-                  hasPopup={service.hasPopup}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Existing Company Services */}
-          <div ref={existingRef} className="scroll-mt-32">
-            {/* Mobile section header */}
-            <div className="lg:hidden mb-6">
-              <div className="flex items-center gap-2 text-sm text-primary font-medium mb-2">
-                <Settings className="h-4 w-4" />
-                <span>Existing Company Services</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Maintenance, updates, and documentation for companies already operating.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {EXISTING_SERVICES.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  icon={service.icon}
-                  title={service.title}
-                  description={service.description}
-                  contextLine={service.contextLine}
-                  price={service.price}
-                  priceTHB={service.priceTHB}
-                  timeline={service.timeline}
-                  isSelected={isSelected(service.id)}
-                  onCardClick={() => handleCardClick(service)}
-                  onButtonClick={() => handleButtonClick(service)}
-                  hasPopup={service.hasPopup}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom note */}
-          <p className="text-center text-xs text-muted-foreground/60 pb-8">
-            Advanced structures (e.g. BOI) usually make sense only after operations begin.
+          <p className="text-sm text-muted-foreground">
+            Foundation services for registering and establishing your Thai Co., Ltd.
           </p>
         </div>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          {STARTING_SERVICES.map((service) => (
+            <ServiceCard
+              key={service.id}
+              icon={service.icon}
+              title={service.title}
+              description={service.description}
+              contextLine={service.contextLine}
+              price={service.price}
+              priceTHB={service.priceTHB}
+              timeline={service.timeline}
+              isSelected={isSelected(service.id)}
+              onCardClick={() => handleCardClick(service)}
+              onButtonClick={() => handleButtonClick(service)}
+              hasPopup={service.hasPopup}
+            />
+          ))}
+        </div>
       </div>
+
+      {/* Existing Company Services */}
+      <div>
+        <div className="mb-6">
+          <div className="flex items-center gap-2 text-sm text-primary font-medium mb-2">
+            <Settings className="h-4 w-4" />
+            <span>Existing Company Services</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Maintenance, updates, and documentation for companies already operating.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-6">
+          {EXISTING_SERVICES.map((service) => (
+            <ServiceCard
+              key={service.id}
+              icon={service.icon}
+              title={service.title}
+              description={service.description}
+              contextLine={service.contextLine}
+              price={service.price}
+              priceTHB={service.priceTHB}
+              timeline={service.timeline}
+              isSelected={isSelected(service.id)}
+              onCardClick={() => handleCardClick(service)}
+              onButtonClick={() => handleButtonClick(service)}
+              hasPopup={service.hasPopup}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom note */}
+      <p className="text-center text-xs text-muted-foreground/60">
+        Advanced structures (e.g. BOI) usually make sense only after operations begin.
+      </p>
 
       {/* Floating selection summary */}
       {selectedCorporateServices.length > 0 && (
@@ -403,4 +329,9 @@ export function CorporateServices() {
       />
     </div>
   );
+}
+
+// Legacy export for backward compatibility
+export function CorporateServices() {
+  return <CorporateServicesContent />;
 }
