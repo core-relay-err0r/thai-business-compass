@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-
 export function HeroSection() {
-  return (
-    <section className="py-20 md:py-32">
+  return <section className="py-20 md:py-32">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
@@ -27,11 +25,8 @@ export function HeroSection() {
               </a>
             </Button>
           </div>
-          <p className="mt-6 text-sm text-muted-foreground/60">
-            No calls. No sales. No email required to explore.
-          </p>
+          <p className="mt-6 text-sm text-muted-foreground/60">Understand first. Decide later. No pressure.</p>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 }
