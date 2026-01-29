@@ -47,8 +47,8 @@ export function LiveEstimate() {
         Live Estimate
       </h3>
 
-      {/* Scrollable content */}
-      <ScrollArea className="flex-1 min-h-0">
+      {/* Scrollable content with max height */}
+      <ScrollArea className="flex-1 min-h-0 max-h-[300px]">
         <div className="space-y-6 pr-2">
           {/* One-time (Corporate) */}
           {selectedCorporateServices.length > 0 && (
