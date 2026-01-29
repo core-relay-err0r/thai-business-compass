@@ -136,21 +136,6 @@ export function ConsultingServices() {
         })}
       </div>
 
-      {/* Selection summary */}
-      {selectedConsultingServices.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 shadow-lg md:relative md:mt-8 md:border md:rounded-lg md:shadow-none">
-          <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <ShoppingCart className="h-5 w-5 text-muted-foreground" />
-              <span className="font-medium">{selectedConsultingServices.length} problem(s) selected</span>
-            </div>
-            <Button onClick={() => navigate("/submit")}>
-              Continue to submit
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      )}
     </>
   );
 }
