@@ -225,7 +225,7 @@ export function CorporateServicesContent() {
         </div>}
 
       {/* Popups */}
-      
+      <RegisteredOfficePopup open={registeredOfficeOpen} onOpenChange={setRegisteredOfficeOpen} onConfirm={handleRegisteredOfficeConfirm} />
       <CompanyReviewPopup open={companyReviewOpen} onOpenChange={setCompanyReviewOpen} onConfirm={handleCompanyReviewConfirm} />
       <CorporateDocumentsPopup open={corporateDocumentsOpen} onOpenChange={setCorporateDocumentsOpen} onConfirm={handleCorporateDocumentsConfirm} />
       <TaxResidencyPopup open={taxResidencyOpen} onOpenChange={setTaxResidencyOpen} onConfirm={handleTaxResidencyConfirm} />
