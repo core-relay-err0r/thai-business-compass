@@ -2,12 +2,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ServiceProvider } from "@/contexts/ServiceContext";
 import Home from "./pages/Home";
-import Accounting from "./pages/Accounting";
-import Corporate from "./pages/Corporate";
-import Consulting from "./pages/Consulting";
+import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Submit from "./pages/Submit";
@@ -24,9 +22,11 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/accounting" element={<Accounting />} />
-            <Route path="/corporate" element={<Corporate />} />
-            <Route path="/consulting" element={<Consulting />} />
+            <Route path="/services" element={<Services />} />
+            {/* Redirect old routes to unified services page */}
+            <Route path="/corporate" element={<Navigate to="/services#corporate" replace />} />
+            <Route path="/accounting" element={<Navigate to="/services#accounting" replace />} />
+            <Route path="/consulting" element={<Navigate to="/services#consulting" replace />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/submit" element={<Submit />} />

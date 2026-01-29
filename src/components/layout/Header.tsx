@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
@@ -15,37 +15,47 @@ import { cn } from "@/lib/utils";
 
 export function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isStartModalOpen, setIsStartModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const serviceLinks = [
-    { href: "/corporate", label: "Corporate", description: "One-time corporate services", icon: Building2 },
-    { href: "/accounting", label: "Accounting", description: "Calculate monthly + yearly cost", icon: Calculator },
-    { href: "/consulting", label: "Consulting", description: "Business problem solving", icon: MessageSquare },
+    { href: "/services#corporate", label: "Corporate", description: "One-time corporate services", icon: Building2 },
+    { href: "/services#accounting", label: "Accounting", description: "Calculate monthly + yearly cost", icon: Calculator },
+    { href: "/services#consulting", label: "Consulting", description: "Business problem solving", icon: MessageSquare },
   ];
 
   const startOptions = [
     {
-      href: "/corporate",
+      href: "/services#corporate",
       icon: Building2,
       title: "Corporate",
       description: "One-time corporate services",
     },
     {
-      href: "/accounting",
+      href: "/services#accounting",
       icon: Calculator,
       title: "Accounting",
       description: "Calculate monthly + yearly cost",
     },
     {
-      href: "/consulting",
+      href: "/services#consulting",
       icon: MessageSquare,
       title: "Consulting",
       description: "Business problem solving",
     },
   ];
 
-  const isServiceActive = ["/corporate", "/accounting", "/consulting"].includes(location.pathname);
+  const isServiceActive = location.pathname === "/services" || location.pathname.startsWith("/services");
+
+  const handleServiceClick = (href: string, e: React.MouseEvent) => {
+    const hash = href.split("#")[1];
+    if (hash && location.pathname === "/services") {
+      e.preventDefault();
+      const element = document.getElementById(hash);
+      element?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <>
@@ -108,9 +118,10 @@ export function Header() {
                             <NavigationMenuLink asChild>
                               <Link
                                 to={link.href}
+                                onClick={(e) => handleServiceClick(link.href, e)}
                                 className={cn(
                                   "flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:translate-x-1 focus:bg-primary/10 focus:text-primary",
-                                  location.pathname === link.href && "bg-primary/10 text-primary"
+                                  location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" && "bg-primary/10 text-primary"
                                 )}
                               >
                                 <link.icon className="h-5 w-5 mt-0.5 shrink-0" />
@@ -205,7 +216,7 @@ export function Header() {
                   to={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`text-sm font-medium transition-colors hover:text-foreground py-2 pl-3 ${
-                    location.pathname === link.href
+                    location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services"
                       ? "text-foreground"
                       : "text-muted-foreground"
                   }`}
