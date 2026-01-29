@@ -133,7 +133,7 @@ export function LiveEstimate() {
         <Button 
           variant="ghost" 
           size="sm"
-          className="w-full text-muted-foreground hover:text-destructive"
+          className="w-full text-muted-foreground hover:text-destructive hover:bg-transparent"
           onClick={clearAll}
         >
           <Trash2 className="w-3 h-3 mr-1" />
