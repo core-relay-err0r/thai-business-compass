@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Building2, MapPin, FileSearch, Users, FileText, ScrollText, ArrowRight } from "lucide-react";
+import { Building2, MapPin, FileSearch, Users, FileText, ScrollText } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { CORPORATE_PRICING, formatUSD } from "@/lib/pricing";
+import { CORPORATE_PRICING } from "@/lib/pricing";
 import { ServiceCard } from "./ServiceCard";
 import { RegisteredOfficePopup, RegisteredOfficeOptions } from "./RegisteredOfficePopup";
 import { CompanyReviewPopup, CompanyReviewOptions } from "./CompanyReviewPopup";
@@ -85,7 +84,6 @@ const EXISTING_SERVICES: ServiceDefinition[] = [{
   hasPopup: true
 }];
 export function CorporateServicesContent() {
-  const navigate = useNavigate();
   const {
     selectedCorporateServices,
     addCorporateService,
@@ -169,7 +167,7 @@ export function CorporateServicesContent() {
       price: options.totalPrice
     });
   };
-  const totalPrice = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
+
   return <div className="space-y-12">
 
       {/* LINE 1 — Starting a New Company */}
@@ -187,7 +185,7 @@ export function CorporateServicesContent() {
         <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
           Existing Company Services
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {EXISTING_SERVICES.map(service => <ServiceCard key={service.id} icon={service.icon} title={service.title} description={service.description} contextLine={service.contextLine} price={service.price} priceTHB={service.priceTHB} timeline={service.timeline} isSelected={isSelected(service.id)} onCardClick={() => handleCardClick(service)} onButtonClick={() => handleButtonClick(service)} hasPopup={service.hasPopup} />)}
         </div>
       </div>
@@ -196,36 +194,8 @@ export function CorporateServicesContent() {
       <p className="text-center text-xs text-muted-foreground/60">
         Advanced structures (e.g. BOI) usually make sense only after operations begin.
       </p>
-
-      {/* Floating selection summary */}
-      {selectedCorporateServices.length > 0 && <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4">
-          <div className="bg-background/95 backdrop-blur-sm border border-border rounded-xl shadow-lg p-4">
-            <div className="space-y-3">
-              {/* Selected items */}
-              <div className="space-y-1">
-                {selectedCorporateServices.map(s => <div key={s.id} className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">{s.name}</span>
-                    <span className="font-medium">{formatUSD(s.price)}</span>
-                  </div>)}
-              </div>
-              
-              {/* Divider and total */}
-              <div className="border-t border-border pt-3 flex items-center justify-between">
-                <div>
-                  <span className="text-xs text-muted-foreground">One-time total</span>
-                  <div className="text-lg font-semibold">{formatUSD(totalPrice)}</div>
-                </div>
-                <Button onClick={() => navigate("/submit")} size="sm">
-                  Proceed to request
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>}
-
       {/* Popups */}
-      
+      <RegisteredOfficePopup open={registeredOfficeOpen} onOpenChange={setRegisteredOfficeOpen} onConfirm={handleRegisteredOfficeConfirm} />
       <CompanyReviewPopup open={companyReviewOpen} onOpenChange={setCompanyReviewOpen} onConfirm={handleCompanyReviewConfirm} />
       <CorporateDocumentsPopup open={corporateDocumentsOpen} onOpenChange={setCorporateDocumentsOpen} onConfirm={handleCorporateDocumentsConfirm} />
       <TaxResidencyPopup open={taxResidencyOpen} onOpenChange={setTaxResidencyOpen} onConfirm={handleTaxResidencyConfirm} />
