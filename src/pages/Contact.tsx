@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,7 +55,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <Layout>
       {/* Hero Section */}
       <section className="container py-12 md:py-16">
         <div className="grid lg:grid-cols-2 gap-8 items-start">
@@ -330,6 +331,6 @@ export default function Contact() {
           </div>
         </div>
       </section>
-    </div>
+    </Layout>
   );
 }
