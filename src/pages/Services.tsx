@@ -37,7 +37,7 @@ export default function Services() {
   const accountingRef = useRef<HTMLDivElement>(null);
   const consultingRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to hash on page load or hash change
+  // Scroll to hash on page load or hash change (only if hash exists)
   useEffect(() => {
     const hash = location.hash.replace("#", "") as ActiveSection;
     if (hash && ["corporate", "accounting", "consulting"].includes(hash)) {
