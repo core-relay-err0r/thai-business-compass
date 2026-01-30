@@ -81,30 +81,21 @@ export default function About() {
           </div>
 
           {/* Right: Team Visual */}
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="relative">
-              {/* Decorative circles */}
-              <div className="absolute -top-4 -left-4 w-24 h-24 rounded-full bg-primary/20" />
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-muted" />
-              
-              {/* Team avatar placeholders */}
-              <div className="relative z-10 flex items-center gap-4">
-                <div className="flex flex-col gap-4">
-                  <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center border-4 border-background shadow-lg">
-                    <Users className="w-10 h-10 text-primary/60" />
-                  </div>
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center border-4 border-background shadow-lg ml-8">
-                    <Users className="w-8 h-8 text-muted-foreground/60" />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border-4 border-background shadow-lg">
-                    <Users className="w-8 h-8 text-primary/50" />
-                  </div>
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center border-4 border-background shadow-lg">
-                    <Users className="w-12 h-12 text-primary/70" />
-                  </div>
-                </div>
+          <div className="relative w-full max-w-[450px] md:max-w-[550px] lg:max-w-[600px] h-[400px] md:h-[450px] lg:h-[500px] mx-auto">
+            {/* Decorative background circles */}
+            <div className="absolute top-[8%] left-[2%] w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full opacity-90 z-0 bg-primary/20" />
+            <div className="absolute top-[3%] right-[12%] w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-primary/40 opacity-80 z-0" />
+            <div className="absolute bottom-[12%] right-[2%] w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full bg-muted-foreground/70 opacity-90 z-0" />
+            
+            {/* Team member photos */}
+            <div className="absolute top-[12%] right-[8%] w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden border-4 border-background shadow-xl z-10 hover:scale-105 transition-transform duration-300">
+              <div className="w-full h-full bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
+                <Users className="w-16 h-16 md:w-20 md:h-20 text-primary/60" />
+              </div>
+            </div>
+            <div className="absolute bottom-[8%] left-[12%] w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden border-4 border-background shadow-xl z-10 hover:scale-105 transition-transform duration-300">
+              <div className="w-full h-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center">
+                <Users className="w-20 h-20 md:w-24 md:h-24 text-primary/70" />
               </div>
             </div>
           </div>
