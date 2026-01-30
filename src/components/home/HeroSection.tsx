@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 export function HeroSection() {
-  return <section className="py-20 md:py-32">
+  return <section className="min-h-[calc(100vh-4rem)] flex items-center py-20 md:py-32">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
