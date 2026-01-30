@@ -1,13 +1,8 @@
-import { Link } from "react-router-dom";
 import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
 
 export function HeroSection() {
   return (
     <HeroSectionUI
-      logo={{
-        text: "PND50",
-      }}
-      slogan="Thai Corporate & Accounting Services"
       title={
         <>
           Figure out what your business actually needs in Thailand —{" "}
