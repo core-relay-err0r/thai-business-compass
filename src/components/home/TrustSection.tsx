@@ -1,9 +1,10 @@
 import { CheckCircle2, XCircle, Shield } from "lucide-react";
+import { AnimatedSection } from "@/components/ui/animated-section";
 
 export function TrustSection() {
   return (
     <section className="py-20">
-      <div className="container">
+      <AnimatedSection className="container">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <Shield className="h-10 w-10 mx-auto mb-4 text-primary" />
@@ -65,7 +66,7 @@ export function TrustSection() {
             </div>
           </div>
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 }

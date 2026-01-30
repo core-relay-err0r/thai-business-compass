@@ -1,9 +1,10 @@
 import { PRICING, CORPORATE_PRICING, formatUSD, formatPrice } from "@/lib/pricing";
+import { AnimatedSection } from "@/components/ui/animated-section";
 
 export function PricingLogic() {
   return (
     <section id="pricing-logic" className="py-20">
-      <div className="container">
+      <AnimatedSection className="container">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Pricing Logic</h2>
@@ -95,7 +96,7 @@ export function PricingLogic() {
             </div>
           </div>
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 }
