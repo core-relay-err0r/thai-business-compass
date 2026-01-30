@@ -138,7 +138,7 @@ export function AccountingWizard() {
             </Button>
           ) : (
             <Button onClick={handleSubmit}>
-              Submit request with this setup
+              Submit to calculator
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           )}
