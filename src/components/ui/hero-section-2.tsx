@@ -102,7 +102,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
     };
     
     return (
-      <div ref={ref} className={cn("relative min-h-[calc(100vh-4rem)] lg:min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row overflow-hidden bg-background", className)} {...props}>
+      <div ref={ref} className={cn("relative w-full flex flex-col lg:flex-row overflow-hidden bg-background lg:min-h-[calc(100vh-4rem)]", className)} {...props}>
         {/* Mobile Background Image */}
         {slides && slides.length > 0 && (
           <div className="lg:hidden absolute inset-0 z-0">
@@ -117,7 +117,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         
         {/* Left Side: Content */}
         <motion.div 
-          className="w-full lg:w-[70%] flex flex-col justify-center lg:justify-between p-6 sm:p-8 md:p-12 lg:p-20 xl:p-24 relative z-10 min-h-[calc(100vh-4rem)]"
+          className="w-full lg:w-[70%] flex flex-col justify-center lg:justify-between p-6 sm:p-8 md:p-12 lg:p-20 xl:p-24 relative z-10 py-12 sm:py-16 lg:py-20"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -133,6 +133,56 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                   {logo.text && <span className="text-lg sm:text-xl font-bold tracking-tight">{logo.text}</span>}
                   {slogan && <span className="text-xs text-primary uppercase tracking-wider font-medium">{slogan}</span>}
                 </div>
+              </motion.div>
+            )}
+
+            {/* Mobile Service Highlights */}
+            {slides && slides.length > 0 && (
+              <motion.div 
+                variants={itemVariants}
+                className="lg:hidden grid grid-cols-3 gap-3"
+              >
+                {slides.map((slide, index) => (
+                  <div 
+                    key={index}
+                    className="flex flex-col items-center text-center p-3 rounded-xl bg-muted/40 border border-border/50"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
+                      {index === 0 && (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 21h18" />
+                          <path d="M9 8h1" />
+                          <path d="M9 12h1" />
+                          <path d="M9 16h1" />
+                          <path d="M14 8h1" />
+                          <path d="M14 12h1" />
+                          <path d="M14 16h1" />
+                          <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16" />
+                        </svg>
+                      )}
+                      {index === 1 && (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect width="16" height="20" x="4" y="2" rx="2" />
+                          <line x1="8" x2="16" y1="6" y2="6" />
+                          <line x1="16" x2="16" y1="14" y2="18" />
+                          <path d="M16 10h.01" />
+                          <path d="M12 10h.01" />
+                          <path d="M8 10h.01" />
+                          <path d="M12 14h.01" />
+                          <path d="M8 14h.01" />
+                          <path d="M12 18h.01" />
+                          <path d="M8 18h.01" />
+                        </svg>
+                      )}
+                      {index === 2 && (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-xs font-medium">{slide.title}</span>
+                  </div>
+                ))}
               </motion.div>
             )}
 
