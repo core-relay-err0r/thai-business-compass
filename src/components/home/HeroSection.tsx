@@ -42,7 +42,7 @@ export function HeroSection() {
       tagline="Understand first. Decide later. No pressure."
       slides={slides}
       contactInfo={{
-        website: "pnd50.com",
+        website: "info@pnd50.com",
         phone: "+66 84 356 3805",
         address: "Bangkok, Thailand",
       }}
