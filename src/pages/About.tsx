@@ -14,6 +14,8 @@ import {
   ArrowRight,
   ChevronDown
 } from "lucide-react";
+import teamMember1 from "@/assets/team-member-1.jpeg";
+import teamMember2 from "@/assets/team-member-2.png";
 
 export default function About() {
   const stats = [
@@ -173,30 +175,28 @@ export default function About() {
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
               
-              {/* Team member photos with improved styling */}
+              {/* Team member photos */}
               <motion.div 
                 className="absolute top-[12%] right-[8%] w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="w-full h-full bg-gradient-to-br from-primary/40 via-primary/20 to-background flex items-center justify-center">
-                  <div className="text-center">
-                    <Award className="w-12 h-12 md:w-14 md:h-14 text-primary/70 mx-auto mb-2" />
-                    <span className="text-xs font-medium text-primary/60">Excellence</span>
-                  </div>
-                </div>
+                <img 
+                  src={teamMember1} 
+                  alt="Team member" 
+                  className="w-full h-full object-cover object-top"
+                />
               </motion.div>
               <motion.div 
                 className="absolute bottom-[8%] left-[12%] w-48 h-48 md:w-56 md:h-56 lg:w-60 lg:h-60 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="w-full h-full bg-gradient-to-br from-primary/50 via-primary/30 to-primary/10 flex items-center justify-center">
-                  <div className="text-center">
-                    <Users className="w-16 h-16 md:w-20 md:h-20 text-primary/80 mx-auto mb-2" />
-                    <span className="text-sm font-medium text-primary/70">Our Team</span>
-                  </div>
-                </div>
+                <img 
+                  src={teamMember2} 
+                  alt="Team member" 
+                  className="w-full h-full object-cover object-top"
+                />
               </motion.div>
               
               {/* Connection line */}
