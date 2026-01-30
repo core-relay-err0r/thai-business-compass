@@ -225,7 +225,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                     alt={slides[currentSlide].title} 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 via-30% to-transparent" />
+                  {/* Gradient overlays for fading effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 via-20% to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 via-30% to-transparent" />
                   
                   {/* Text overlay */}
                   <motion.div 
