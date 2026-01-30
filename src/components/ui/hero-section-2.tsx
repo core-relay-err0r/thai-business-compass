@@ -200,7 +200,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         </motion.div>
 
         {/* Right Side: Visual with gradient overlay */}
-        <div className="hidden lg:block absolute top-0 right-0 w-[40%] h-full">
+        <div className="hidden lg:block absolute top-0 -right-8 w-[45%] h-full overflow-hidden">
           {slides && slides.length > 0 ? (
             <motion.div
               className="absolute inset-0"
@@ -221,9 +221,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                     src={slides[currentSlide].image} 
                     alt={slides[currentSlide].title} 
                     className="w-full h-full object-cover"
+                    style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 25%, black 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 25%, black 100%)' }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 via-30% to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 via-40% to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 via-30% to-transparent" />
                   
                   {/* Text overlay */}
                   <motion.div 
