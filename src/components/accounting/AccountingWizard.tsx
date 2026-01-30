@@ -480,26 +480,26 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
             </TooltipContent>
           </Tooltip>
         </div>
-        <RadioGroup
-          value={inputs.yearEndStatements}
-          onValueChange={(value) => setInputs({ ...inputs, yearEndStatements: value as AccountingInputs["yearEndStatements"] })}
-          className="grid grid-cols-3 gap-3"
-        >
+        <div className="grid grid-cols-3 gap-3">
           {[
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
             { value: "not-sure", label: "Not sure" },
           ].map((option) => (
-            <Label
+            <button
               key={option.value}
-              htmlFor={`statements-${option.value}`}
-              className="flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5"
+              type="button"
+              onClick={() => setInputs({ ...inputs, yearEndStatements: option.value as AccountingInputs["yearEndStatements"] })}
+              className={`flex items-center justify-center p-4 border rounded-lg cursor-pointer transition-colors min-h-[44px] ${
+                inputs.yearEndStatements === option.value
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:bg-accent/50"
+              }`}
             >
-              <RadioGroupItem value={option.value} id={`statements-${option.value}`} className="sr-only" />
-              <span>{option.label}</span>
-            </Label>
+              {option.label}
+            </button>
           ))}
-        </RadioGroup>
+        </div>
       </div>
 
       <div>
@@ -514,26 +514,26 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
             </TooltipContent>
           </Tooltip>
         </div>
-        <RadioGroup
-          value={inputs.auditRequired}
-          onValueChange={(value) => setInputs({ ...inputs, auditRequired: value as AccountingInputs["auditRequired"] })}
-          className="grid grid-cols-3 gap-3"
-        >
+        <div className="grid grid-cols-3 gap-3">
           {[
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
             { value: "not-sure", label: "Not sure" },
           ].map((option) => (
-            <Label
+            <button
               key={option.value}
-              htmlFor={`audit-${option.value}`}
-              className="flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5"
+              type="button"
+              onClick={() => setInputs({ ...inputs, auditRequired: option.value as AccountingInputs["auditRequired"] })}
+              className={`flex items-center justify-center p-4 border rounded-lg cursor-pointer transition-colors min-h-[44px] ${
+                inputs.auditRequired === option.value
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:bg-accent/50"
+              }`}
             >
-              <RadioGroupItem value={option.value} id={`audit-${option.value}`} className="sr-only" />
-              <span>{option.label}</span>
-            </Label>
+              {option.label}
+            </button>
           ))}
-        </RadioGroup>
+        </div>
       </div>
     </div>
   );
