@@ -67,16 +67,6 @@ export function Header() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <Link
-                to="/"
-                className={`text-sm font-medium transition-colors hover:text-foreground ${
-                  location.pathname === "/"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Home
-              </Link>
 
               <Link
                 to="/about"
@@ -159,17 +149,6 @@ export function Header() {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-border/40 bg-background">
             <nav className="container py-4 flex flex-col gap-3">
-              <Link
-                to="/"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-sm font-medium transition-colors hover:text-foreground py-2 ${
-                  location.pathname === "/"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Home
-              </Link>
               <Link
                 to="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
