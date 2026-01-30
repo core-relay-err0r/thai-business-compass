@@ -95,7 +95,7 @@ export default function Submit() {
                   onClick={() => {
                     clearAll();
                     setIsSubmitted(false);
-                    window.location.href = "/";
+                    window.location.href = "/services";
                   }}
                 >
                   Start new request
@@ -249,11 +249,11 @@ export default function Submit() {
                     <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                       <div>
                         <span className="text-muted-foreground">Monthly:</span>{" "}
-                        <span className="font-medium">฿{formatPrice(accountingResult!.totalMonthly)}</span>
+                        <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}</span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Annual:</span>{" "}
-                        <span className="font-medium">฿{formatPrice(accountingResult!.totalAnnual)}</span>
+                        <span className="font-medium">${formatPrice(accountingResult!.totalAnnual)}</span>
                       </div>
                     </div>
                     <div className="mt-2 sm:mt-3 text-xs sm:text-sm text-muted-foreground">

@@ -285,26 +285,26 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
             </TooltipContent>
           </Tooltip>
         </div>
-        <RadioGroup
-          value={inputs.vatRegistered}
-          onValueChange={(value) => setInputs({ ...inputs, vatRegistered: value as AccountingInputs["vatRegistered"] })}
-          className="grid grid-cols-3 gap-2 sm:gap-3"
-        >
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {[
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
             { value: "not-sure", label: "Not sure" },
           ].map((option) => (
-            <Label
+            <button
               key={option.value}
-              htmlFor={`vat-${option.value}`}
-              className="flex items-center justify-center p-3 sm:p-4 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5 min-h-[44px] text-sm sm:text-base"
+              type="button"
+              onClick={() => setInputs({ ...inputs, vatRegistered: option.value as AccountingInputs["vatRegistered"] })}
+              className={`flex items-center justify-center p-3 sm:p-4 border rounded-lg cursor-pointer transition-colors min-h-[44px] text-sm sm:text-base ${
+                inputs.vatRegistered === option.value
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:bg-accent/50"
+              }`}
             >
-              <RadioGroupItem value={option.value} id={`vat-${option.value}`} className="sr-only" />
-              <span>{option.label}</span>
-            </Label>
+              {option.label}
+            </button>
           ))}
-        </RadioGroup>
+        </div>
       </div>
     </div>
   );
@@ -345,26 +345,26 @@ function Step2Team({ inputs, setInputs }: StepProps) {
                 </TooltipContent>
               </Tooltip>
             </div>
-            <RadioGroup
-              value={inputs.employeePurpose}
-              onValueChange={(value) => setInputs({ ...inputs, employeePurpose: value as AccountingInputs["employeePurpose"] })}
-              className="grid grid-cols-3 gap-2"
-            >
+            <div className="grid grid-cols-3 gap-2">
               {[
                 { value: "operations", label: "Operations" },
                 { value: "visa", label: "Visa / formal only" },
                 { value: "not-sure", label: "Not sure" },
               ].map((option) => (
-                <Label
+                <button
                   key={option.value}
-                  htmlFor={`emp-purpose-${option.value}`}
-                  className="flex items-center justify-center p-3 text-sm border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5"
+                  type="button"
+                  onClick={() => setInputs({ ...inputs, employeePurpose: option.value as AccountingInputs["employeePurpose"] })}
+                  className={`flex items-center justify-center p-3 text-sm border rounded-lg cursor-pointer transition-colors min-h-[44px] ${
+                    inputs.employeePurpose === option.value
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:bg-accent/50"
+                  }`}
                 >
-                  <RadioGroupItem value={option.value} id={`emp-purpose-${option.value}`} className="sr-only" />
-                  <span>{option.label}</span>
-                </Label>
+                  {option.label}
+                </button>
               ))}
-            </RadioGroup>
+            </div>
           </div>
         )}
       </div>
