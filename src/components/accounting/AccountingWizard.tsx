@@ -23,7 +23,7 @@ const STEPS = [
 
 export function AccountingWizard() {
   const navigate = useNavigate();
-  const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult } = useServices();
+  const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult, calculateAccounting } = useServices();
   const [currentStep, setCurrentStep] = useState(0);
   const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
     accountingIntent: "full",
@@ -70,7 +70,7 @@ export function AccountingWizard() {
 
   const handleSubmit = () => {
     setAccountingInputs(localInputs);
-    navigate("/submit");
+    calculateAccounting();
   };
 
   const handleAdjust = () => {
