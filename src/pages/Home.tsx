@@ -3,7 +3,6 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { ModuleCards } from "@/components/home/ModuleCards";
 import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
-import { PricingLogic } from "@/components/home/PricingLogic";
 import { BottomCTA } from "@/components/home/BottomCTA";
 
 export default function Home() {
@@ -13,7 +12,6 @@ export default function Home() {
       <ModuleCards />
       <TrustSection />
       <HowItWorks />
-      <PricingLogic />
       <BottomCTA />
     </Layout>
   );
