@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
 import { AccountingWizard } from "@/components/accounting/AccountingWizard";
 import { LiveEstimate } from "@/components/accounting/LiveEstimate";
+import { MobileEstimateSheet } from "@/components/accounting/MobileEstimateSheet";
 import { ConsultingServices } from "@/components/consulting/ConsultingServices";
 import { Building2, Calculator, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -203,6 +204,9 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      {/* Mobile Floating Estimate Button */}
+      <MobileEstimateSheet />
     </Layout>
   );
 }
