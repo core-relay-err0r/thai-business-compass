@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
@@ -6,7 +6,6 @@ import { AccountingWizard } from "@/components/accounting/AccountingWizard";
 import { LiveEstimate } from "@/components/accounting/LiveEstimate";
 import { ConsultingServices } from "@/components/consulting/ConsultingServices";
 import { Building2, Calculator, MessageSquare } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 type ActiveSection = "corporate" | "accounting" | "consulting";
@@ -31,17 +30,62 @@ const sectionData = {
 
 export default function Services() {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<ActiveSection>("corporate");
+  const [activeSection, setActiveSection] = useState<ActiveSection>("corporate");
+  
+  const corporateRef = useRef<HTMLDivElement>(null);
+  const accountingRef = useRef<HTMLDivElement>(null);
+  const consultingRef = useRef<HTMLDivElement>(null);
 
-  // Set tab based on hash on page load or hash change
+  // Scroll to hash on page load or hash change
   useEffect(() => {
     const hash = location.hash.replace("#", "") as ActiveSection;
     if (hash && ["corporate", "accounting", "consulting"].includes(hash)) {
-      setActiveTab(hash);
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        const refs = {
+          corporate: corporateRef,
+          accounting: accountingRef,
+          consulting: consultingRef,
+        };
+        refs[hash].current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
     }
   }, [location.hash]);
 
-  const currentSection = sectionData[activeTab];
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200;
+
+      const corporateTop = corporateRef.current?.offsetTop || 0;
+      const accountingTop = accountingRef.current?.offsetTop || 0;
+      const consultingTop = consultingRef.current?.offsetTop || 0;
+
+      if (scrollPosition >= consultingTop) {
+        setActiveSection("consulting");
+      } else if (scrollPosition >= accountingTop) {
+        setActiveSection("accounting");
+      } else {
+        setActiveSection("corporate");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check
+    
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (section: ActiveSection) => {
+    const refs = {
+      corporate: corporateRef,
+      accounting: accountingRef,
+      consulting: consultingRef,
+    };
+    
+    refs[section].current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const currentSection = sectionData[activeSection];
   const SectionIcon = currentSection.icon;
 
   return (
@@ -86,11 +130,11 @@ export default function Services() {
                   </p>
                   {(Object.keys(sectionData) as ActiveSection[]).map((section) => {
                     const Icon = sectionData[section].icon;
-                    const isActive = activeTab === section;
+                    const isActive = activeSection === section;
                     return (
                       <button
                         key={section}
-                        onClick={() => setActiveTab(section)}
+                        onClick={() => scrollToSection(section)}
                         className={cn(
                           "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors",
                           isActive
@@ -112,42 +156,48 @@ export default function Services() {
               </div>
             </div>
 
-            {/* Main Content - Tabbed */}
-            <div className="flex-1">
-              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ActiveSection)}>
-                {/* Mobile Tab List */}
-                <TabsList className="lg:hidden w-full mb-6">
-                  <TabsTrigger value="corporate" className="flex-1 gap-2">
-                    <Building2 className="w-4 h-4" />
-                    <span className="hidden sm:inline">Corporate</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="accounting" className="flex-1 gap-2">
-                    <Calculator className="w-4 h-4" />
-                    <span className="hidden sm:inline">Accounting</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="consulting" className="flex-1 gap-2">
-                    <MessageSquare className="w-4 h-4" />
-                    <span className="hidden sm:inline">Consulting</span>
-                  </TabsTrigger>
-                </TabsList>
+            {/* Main Content - Scrollable */}
+            <div className="flex-1 space-y-24 pb-24 lg:pb-0">
+              {/* Corporate Section */}
+              <div ref={corporateRef} id="corporate" className="scroll-mt-32">
+                <div className="lg:hidden mb-8">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Building2 className="w-5 h-5 text-primary" />
+                    <h2 className="text-xl font-semibold">Corporate Services</h2>
+                  </div>
+                  <p className="text-muted-foreground text-sm">
+                    One-time corporate actions for starting or managing a Thai company.
+                  </p>
+                </div>
+                <CorporateServicesContent />
+              </div>
 
-                {/* Tab Contents */}
-                <TabsContent value="corporate" className="mt-0">
-                  <CorporateServicesContent />
-                </TabsContent>
+              {/* Accounting Section */}
+              <div ref={accountingRef} id="accounting" className="scroll-mt-32">
+                <div className="lg:hidden mb-8">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Calculator className="w-5 h-5 text-primary" />
+                    <h2 className="text-xl font-semibold">Accounting Calculator</h2>
+                  </div>
+                  <p className="text-muted-foreground text-sm">
+                    Understand your accounting setup before committing.
+                  </p>
+                </div>
+                <AccountingWizard />
+              </div>
 
-                <TabsContent value="accounting" className="mt-0">
-                  <AccountingWizard />
-                </TabsContent>
-
-                <TabsContent value="consulting" className="mt-0">
-                  <ConsultingServices />
-                </TabsContent>
-              </Tabs>
-
-              {/* Mobile Live Estimate */}
-              <div className="lg:hidden mt-8 pt-6 border-t border-border">
-                <LiveEstimate />
+              {/* Consulting Section */}
+              <div ref={consultingRef} id="consulting" className="scroll-mt-32">
+                <div className="lg:hidden mb-8">
+                  <div className="flex items-center gap-3 mb-2">
+                    <MessageSquare className="w-5 h-5 text-primary" />
+                    <h2 className="text-xl font-semibold">Business Consulting</h2>
+                  </div>
+                  <p className="text-muted-foreground text-sm">
+                    Choose the business question, not a consulting package.
+                  </p>
+                </div>
+                <ConsultingServices />
               </div>
             </div>
           </div>
