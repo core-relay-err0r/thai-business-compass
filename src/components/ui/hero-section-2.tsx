@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from "@/lib/utils";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Icon component for contact details
 const InfoIcon = ({ type }: { type: 'website' | 'phone' | 'address' }) => {
@@ -47,6 +47,11 @@ interface HeroSectionProps {
     href: string;
   };
   backgroundImage?: string;
+  slides?: {
+    image: string;
+    title: string;
+    description: string;
+  }[];
   contactInfo?: {
     website: string;
     phone: string;
@@ -56,7 +61,20 @@ interface HeroSectionProps {
 }
 
 const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
-  ({ className, logo, slogan, title, subtitle, callToAction, secondaryAction, backgroundImage, contactInfo, tagline, ...props }, ref) => {
+  ({ className, logo, slogan, title, subtitle, callToAction, secondaryAction, backgroundImage, slides, contactInfo, tagline, ...props }, ref) => {
+    
+    const [currentSlide, setCurrentSlide] = useState(0);
+    
+    // Auto-rotate slides
+    useEffect(() => {
+      if (!slides || slides.length <= 1) return;
+      
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 4000);
+      
+      return () => clearInterval(interval);
+    }, [slides]);
     
     // Animation variants for the container to orchestrate children animations
     const containerVariants = {
@@ -183,7 +201,65 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
 
         {/* Right Side: Visual with gradient overlay */}
         <div className="hidden lg:block absolute top-0 right-0 w-1/3 h-full">
-          {backgroundImage ? (
+          {slides && slides.length > 0 ? (
+            <motion.div
+              className="absolute inset-0"
+              initial={{ clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)" }}
+              animate={{ clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)" }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="absolute inset-0"
+                >
+                  <img 
+                    src={slides[currentSlide].image} 
+                    alt={slides[currentSlide].title} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+                  
+                  {/* Text overlay */}
+                  <motion.div 
+                    className="absolute bottom-0 left-0 right-0 p-8"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                  >
+                    <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-primary/90 text-primary-foreground rounded-full mb-3">
+                      {slides[currentSlide].title}
+                    </span>
+                    <p className="text-sm text-foreground/80 max-w-xs">
+                      {slides[currentSlide].description}
+                    </p>
+                  </motion.div>
+                </motion.div>
+              </AnimatePresence>
+              
+              {/* Slide indicators */}
+              <div className="absolute bottom-4 right-4 flex gap-2 z-10">
+                {slides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={cn(
+                      "w-2 h-2 rounded-full transition-all duration-300",
+                      index === currentSlide 
+                        ? "bg-primary w-6" 
+                        : "bg-muted-foreground/40 hover:bg-muted-foreground/60"
+                    )}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          ) : backgroundImage ? (
             <motion.div
               className="absolute inset-0"
               initial={{ clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)" }}
