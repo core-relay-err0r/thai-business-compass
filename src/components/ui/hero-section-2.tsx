@@ -103,46 +103,58 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
     
     return (
       <div ref={ref} className={cn("relative min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row overflow-hidden bg-background", className)} {...props}>
+        {/* Mobile Background Image */}
+        {slides && slides.length > 0 && (
+          <div className="lg:hidden absolute inset-0 z-0">
+            <img 
+              src={slides[0].image} 
+              alt="" 
+              className="w-full h-full object-cover opacity-20"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
+          </div>
+        )}
+        
         {/* Left Side: Content */}
         <motion.div 
-          className="w-full lg:w-[70%] flex flex-col justify-between p-8 md:p-12 lg:p-20 xl:p-24 relative z-10"
+          className="w-full lg:w-[70%] flex flex-col justify-between p-6 sm:p-8 md:p-12 lg:p-20 xl:p-24 relative z-10"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Top Section: Logo & Main Content */}
-          <div className="flex flex-col gap-10 md:gap-14">
+          <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-14">
             {logo && (
-              <motion.div variants={itemVariants} className="flex items-center gap-3">
+              <motion.div variants={itemVariants} className="flex items-center gap-2 sm:gap-3">
                 {logo.url && (
-                  <img src={logo.url} alt={logo.alt || "Logo"} className="h-10 w-auto" />
+                  <img src={logo.url} alt={logo.alt || "Logo"} className="h-8 sm:h-10 w-auto" />
                 )}
                 <div className="flex flex-col">
-                  {logo.text && <span className="text-xl font-bold tracking-tight">{logo.text}</span>}
+                  {logo.text && <span className="text-lg sm:text-xl font-bold tracking-tight">{logo.text}</span>}
                   {slogan && <span className="text-xs text-primary uppercase tracking-wider font-medium">{slogan}</span>}
                 </div>
               </motion.div>
             )}
 
-            <div className="flex flex-col gap-8 max-w-2xl">
+            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl">
               <motion.h1 
                 variants={itemVariants}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1]"
               >
                 {title}
               </motion.h1>
               
               <motion.p 
                 variants={itemVariants}
-                className="text-lg md:text-xl text-muted-foreground leading-relaxed"
+                className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed"
               >
                 {subtitle}
               </motion.p>
               
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-4">
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
                 <a 
                   href={callToAction.href}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors neumorphic-button group"
+                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors neumorphic-button group min-h-[44px]"
                 >
                   {callToAction.text}
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -153,7 +165,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 {secondaryAction && (
                   <a 
                     href={secondaryAction.href}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium rounded-lg border border-border bg-background transition-colors group"
+                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm font-medium rounded-lg border border-border bg-background transition-colors group min-h-[44px]"
                   >
                     {secondaryAction.text}
                     <svg className="w-4 h-4 opacity-0 -ml-4 transition-all group-hover:opacity-100 group-hover:ml-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -167,7 +179,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               {tagline && (
                 <motion.p 
                   variants={itemVariants}
-                  className="text-sm text-muted-foreground/60 pt-2"
+                  className="text-xs sm:text-sm text-muted-foreground/60 pt-1 sm:pt-2"
                 >
                   {tagline}
                 </motion.p>
@@ -179,9 +191,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
           {contactInfo && (
             <motion.div 
               variants={itemVariants}
-              className="mt-12 lg:mt-0 pt-8 border-t border-border/40"
+              className="mt-8 sm:mt-10 lg:mt-0 pt-6 sm:pt-8 border-t border-border/40"
             >
-              <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <InfoIcon type="website" />
                   {contactInfo.website}

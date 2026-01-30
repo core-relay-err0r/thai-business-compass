@@ -17,35 +17,35 @@ export function Footer() {
 
   return (
     <footer className="bg-slate-900 text-slate-300 relative overflow-hidden">
-      {/* Background Watermark */}
+      {/* Background Watermark - Hidden on mobile */}
       <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none overflow-hidden">
-        <span className="text-[20rem] font-bold text-slate-800/30 tracking-tight -mr-10">
+        <span className="hidden md:block text-[10rem] lg:text-[15rem] xl:text-[20rem] font-bold text-slate-800/30 tracking-tight -mr-5 lg:-mr-10">
           PND50
         </span>
       </div>
       
       {/* Main Footer */}
-      <div className="container py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+      <div className="container py-10 sm:py-12 md:py-16 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Column */}
-          <div className="lg:col-span-1">
+          <div className="col-span-2 md:col-span-1 lg:col-span-1">
             <Link to="/" className="inline-block mb-4">
-              <span className="text-xl font-bold text-white">PND50</span>
+              <span className="text-lg sm:text-xl font-bold text-white">PND50</span>
             </Link>
-            <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+            <p className="text-sm text-slate-400 mb-4 sm:mb-6 leading-relaxed">
               Professional accounting and business consulting for foreign companies operating in Thailand since 2015.
             </p>
             <div className="space-y-2 text-sm">
               <a 
                 href="mailto:info@pnd50.com" 
-                className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+                className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors min-h-[44px] sm:min-h-0"
               >
                 <Mail className="h-4 w-4" />
                 info@pnd50.com
               </a>
               <a 
                 href="tel:+66843563805" 
-                className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+                className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors min-h-[44px] sm:min-h-0"
               >
                 <Phone className="h-4 w-4" />
                 +66 84 356 3805
@@ -55,15 +55,15 @@ export function Footer() {
 
           {/* Services Column */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+            <h4 className="text-xs sm:text-sm font-semibold text-white uppercase tracking-wider mb-3 sm:mb-4">
               Services
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2 sm:space-y-3">
               {servicesLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
+                    className="text-sm text-slate-400 hover:text-white transition-colors min-h-[44px] sm:min-h-0 flex items-center"
                   >
                     {link.label}
                   </Link>
@@ -74,15 +74,15 @@ export function Footer() {
 
           {/* Company Column */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+            <h4 className="text-xs sm:text-sm font-semibold text-white uppercase tracking-wider mb-3 sm:mb-4">
               Company
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2 sm:space-y-3">
               {companyLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
+                    className="text-sm text-slate-400 hover:text-white transition-colors min-h-[44px] sm:min-h-0 flex items-center"
                   >
                     {link.label}
                   </Link>
@@ -93,7 +93,7 @@ export function Footer() {
 
           {/* Location Column */}
           <div>
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+            <h4 className="text-xs sm:text-sm font-semibold text-white uppercase tracking-wider mb-3 sm:mb-4">
               Location
             </h4>
             <p className="text-sm font-medium text-white mb-2">Bangkok, Thailand</p>
@@ -108,21 +108,21 @@ export function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-slate-800">
-        <div className="container py-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <p className="text-sm text-slate-500">
+        <div className="container py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <p className="text-xs sm:text-sm text-slate-500 text-center sm:text-left">
               © {currentYear} PND50. All rights reserved.
             </p>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center justify-center sm:justify-end gap-4 sm:gap-6">
               <Link
                 to="/privacy"
-                className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+                className="text-xs sm:text-sm text-slate-500 hover:text-slate-300 transition-colors min-h-[44px] sm:min-h-0 flex items-center"
               >
                 Privacy Policy
               </Link>
               <Link
                 to="/tos"
-                className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+                className="text-xs sm:text-sm text-slate-500 hover:text-slate-300 transition-colors min-h-[44px] sm:min-h-0 flex items-center"
               >
                 Terms of Service
               </Link>

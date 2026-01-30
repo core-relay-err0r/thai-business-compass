@@ -109,16 +109,17 @@ export function AccountingWizard() {
 
   return (
     <Card>
-      <CardHeader>
-        <div className="space-y-4">
+      <CardHeader className="p-4 sm:p-6">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
-            <CardTitle>Accounting Calculator</CardTitle>
-            <span className="text-sm text-muted-foreground">
-              Step {currentStep + 1} of {STEPS.length}
+            <CardTitle className="text-lg sm:text-xl">Accounting Calculator</CardTitle>
+            <span className="text-xs sm:text-sm text-muted-foreground">
+              <span className="sm:hidden">{currentStep + 1}/{STEPS.length}</span>
+              <span className="hidden sm:inline">Step {currentStep + 1} of {STEPS.length}</span>
             </span>
           </div>
-          <Progress value={progressPercent} className="h-2" />
-          <div className="flex justify-between text-xs text-muted-foreground">
+          <Progress value={progressPercent} className="h-1.5 sm:h-2" />
+          <div className="hidden sm:flex justify-between text-xs text-muted-foreground">
             {STEPS.map((step) => (
               <span
                 key={step.id}
@@ -130,7 +131,7 @@ export function AccountingWizard() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="min-h-[400px]">
+      <CardContent className="min-h-[350px] sm:min-h-[400px] p-4 sm:p-6 pt-0 sm:pt-0">
         {currentStep === 0 && (
           <Step0Intent inputs={localInputs} setInputs={setLocalInputs} />
         )}
@@ -150,24 +151,27 @@ export function AccountingWizard() {
           <Step5Results result={liveResult} onAdjust={handleAdjust} />
         )}
 
-        <div className="flex justify-between mt-8 pt-6 border-t border-border">
+        <div className="flex justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-border">
           <Button
             variant="outline"
             onClick={handleBack}
             disabled={currentStep === 0}
+            className="min-h-[44px] px-3 sm:px-4"
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Back</span>
           </Button>
           {currentStep < 5 ? (
-            <Button onClick={handleNext}>
-              Next
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button onClick={handleNext} className="min-h-[44px] px-3 sm:px-4">
+              <span className="hidden sm:inline">Next</span>
+              <span className="sm:hidden">Next</span>
+              <ArrowRight className="ml-1 sm:ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Button onClick={handleSubmit}>
-              Submit to calculator
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button onClick={handleSubmit} className="min-h-[44px] px-3 sm:px-4">
+              <span className="hidden sm:inline">Submit to calculator</span>
+              <span className="sm:hidden">Calculate</span>
+              <ArrowRight className="ml-1 sm:ml-2 h-4 w-4" />
             </Button>
           )}
         </div>
@@ -184,48 +188,48 @@ interface StepProps {
 
 function Step0Intent({ inputs, setInputs }: StepProps) {
   return (
-    <div className="space-y-8">
-      <div className="text-center pb-4">
-        <h3 className="text-xl font-semibold mb-2">What do you need help with?</h3>
+    <div className="space-y-6 sm:space-y-8">
+      <div className="text-center pb-2 sm:pb-4">
+        <h3 className="text-lg sm:text-xl font-semibold mb-2">What do you need help with?</h3>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <button
           onClick={() => setInputs({ ...inputs, accountingIntent: "full" })}
-          className={`p-6 rounded-lg border-2 text-left transition-all ${
+          className={`p-4 sm:p-6 rounded-lg border-2 text-left transition-all min-h-[100px] ${
             inputs.accountingIntent === "full"
               ? "border-primary bg-primary/5"
               : "border-border hover:border-primary/50"
           }`}
         >
-          <div className="flex items-center gap-3 mb-3">
-            <Calculator className="h-6 w-6 text-primary" />
-            <span className="font-semibold text-lg">Full accounting support</span>
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <Calculator className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            <span className="font-semibold text-base sm:text-lg">Full accounting support</span>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Monthly accounting, payroll, taxes, and year-end filings.
           </p>
         </button>
 
         <button
           onClick={() => setInputs({ ...inputs, accountingIntent: "year-end-only" })}
-          className={`p-6 rounded-lg border-2 text-left transition-all ${
+          className={`p-4 sm:p-6 rounded-lg border-2 text-left transition-all min-h-[100px] ${
             inputs.accountingIntent === "year-end-only"
               ? "border-primary bg-primary/5"
               : "border-border hover:border-primary/50"
           }`}
         >
-          <div className="flex items-center gap-3 mb-3">
-            <FileText className="h-6 w-6 text-primary" />
-            <span className="font-semibold text-lg">Year-end only</span>
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+            <span className="font-semibold text-base sm:text-lg">Year-end only</span>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Annual financial statements and audit support if required.
           </p>
         </button>
       </div>
 
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-xs sm:text-sm text-muted-foreground text-center">
         Most operating companies choose full accounting. Year-end only is used in specific cases.
       </p>
     </div>
@@ -234,21 +238,21 @@ function Step0Intent({ inputs, setInputs }: StepProps) {
 
 function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h3 className="text-lg font-semibold mb-4">Company Type</h3>
-        <div className="p-4 bg-muted/50 rounded-lg">
-          <span className="font-medium">Thai Co., Ltd.</span>
-          <span className="text-sm text-muted-foreground ml-2">(standard Thai company)</span>
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Company Type</h3>
+        <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
+          <span className="font-medium text-sm sm:text-base">Thai Co., Ltd.</span>
+          <span className="text-xs sm:text-sm text-muted-foreground ml-2">(standard Thai company)</span>
         </div>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Monthly Revenue Range (USD)</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Monthly Revenue Range (USD)</h3>
         <RadioGroup
           value={inputs.revenueRange}
           onValueChange={(value) => setInputs({ ...inputs, revenueRange: value as AccountingInputs["revenueRange"] })}
-          className="grid gap-3"
+          className="grid gap-2 sm:gap-3"
         >
           {[
             { value: "0-5k", label: "Up to $5,000" },
@@ -260,18 +264,18 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
             <Label
               key={option.value}
               htmlFor={option.value}
-              className="flex items-center space-x-3 p-4 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5"
+              className="flex items-center space-x-3 p-3 sm:p-4 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5 min-h-[44px]"
             >
               <RadioGroupItem value={option.value} id={option.value} />
-              <span>{option.label}</span>
+              <span className="text-sm sm:text-base">{option.label}</span>
             </Label>
           ))}
         </RadioGroup>
       </div>
 
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-lg font-semibold">VAT Registered?</h3>
+        <div className="flex items-center gap-2 mb-3 sm:mb-4">
+          <h3 className="text-base sm:text-lg font-semibold">VAT Registered?</h3>
           <Tooltip>
             <TooltipTrigger>
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
@@ -284,7 +288,7 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
         <RadioGroup
           value={inputs.vatRegistered}
           onValueChange={(value) => setInputs({ ...inputs, vatRegistered: value as AccountingInputs["vatRegistered"] })}
-          className="grid grid-cols-3 gap-3"
+          className="grid grid-cols-3 gap-2 sm:gap-3"
         >
           {[
             { value: "yes", label: "Yes" },
@@ -294,7 +298,7 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
             <Label
               key={option.value}
               htmlFor={`vat-${option.value}`}
-              className="flex items-center justify-center p-4 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5"
+              className="flex items-center justify-center p-3 sm:p-4 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5 min-h-[44px] text-sm sm:text-base"
             >
               <RadioGroupItem value={option.value} id={`vat-${option.value}`} className="sr-only" />
               <span>{option.label}</span>
@@ -542,73 +546,73 @@ interface Step5Props {
 
 function Step5Results({ result, onAdjust }: Step5Props) {
   return (
-    <div className="space-y-8">
-      <div className="text-center pb-6 border-b border-border">
-        <h3 className="text-2xl font-bold mb-2">Your accounting setup overview</h3>
-        <p className="text-muted-foreground">Based on your answers</p>
+    <div className="space-y-6 sm:space-y-8">
+      <div className="text-center pb-4 sm:pb-6 border-b border-border">
+        <h3 className="text-xl sm:text-2xl font-bold mb-2">Your accounting setup overview</h3>
+        <p className="text-sm sm:text-base text-muted-foreground">Based on your answers</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-primary" />
-            <h4 className="font-semibold">What is required</h4>
+            <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <h4 className="font-semibold text-sm sm:text-base">What is required</h4>
           </div>
           <ul className="space-y-2">
             {result.requiredItems.map((item) => (
-              <li key={item} className="text-sm flex items-start gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary mt-2 shrink-0" />
+              <li key={item} className="text-xs sm:text-sm flex items-start gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 sm:mt-2 shrink-0" />
                 {item}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2">
-            <CircleDashed className="h-5 w-5 text-muted-foreground" />
-            <h4 className="font-semibold">What is optional</h4>
+            <CircleDashed className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+            <h4 className="font-semibold text-sm sm:text-base">What is optional</h4>
           </div>
           <ul className="space-y-2">
             {result.recommendedItems.length > 0 ? (
               result.recommendedItems.map((item) => (
-                <li key={item} className="text-sm flex items-start gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground mt-2 shrink-0" />
+                <li key={item} className="text-xs sm:text-sm flex items-start gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground mt-1.5 sm:mt-2 shrink-0" />
                   {item}
                 </li>
               ))
             ) : (
-              <li className="text-sm text-muted-foreground">None for your setup</li>
+              <li className="text-xs sm:text-sm text-muted-foreground">None for your setup</li>
             )}
           </ul>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4 sm:col-span-2 md:col-span-1">
           <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-amber-500" />
-            <h4 className="font-semibold">What may apply later</h4>
+            <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500" />
+            <h4 className="font-semibold text-sm sm:text-base">What may apply later</h4>
           </div>
           <ul className="space-y-2">
             {result.potentialMonthly.length > 0 || result.potentialAnnual.length > 0 ? (
               <>
                 {result.potentialMonthly.map((p) => (
-                  <li key={p.name} className="text-sm flex items-start gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
+                  <li key={p.name} className="text-xs sm:text-sm flex items-start gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-1.5 sm:mt-2 shrink-0" />
                     {p.name}
                   </li>
                 ))}
                 {result.potentialAnnual.map((p) => (
-                  <li key={p.name} className="text-sm flex items-start gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-2 shrink-0" />
+                  <li key={p.name} className="text-xs sm:text-sm flex items-start gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-1.5 sm:mt-2 shrink-0" />
                     {p.name}
                   </li>
                 ))}
               </>
             ) : (
-              <li className="text-sm text-muted-foreground">—</li>
+              <li className="text-xs sm:text-sm text-muted-foreground">—</li>
             )}
             {result.notNeededItems.length > 0 && (
-              <li className="text-xs text-muted-foreground mt-4 pt-2 border-t border-border">
+              <li className="text-xs text-muted-foreground mt-3 sm:mt-4 pt-2 border-t border-border">
                 Not needed: {result.notNeededItems.join(", ")}
               </li>
             )}
@@ -616,13 +620,13 @@ function Step5Results({ result, onAdjust }: Step5Props) {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 pt-6 border-t border-border">
-        <div className="p-6 bg-primary/5 rounded-lg">
-          <div className="text-sm text-muted-foreground mb-1">Estimated Monthly Cost</div>
-          <div className="text-3xl font-bold">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-border">
+        <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
+          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Monthly Cost</div>
+          <div className="text-2xl sm:text-3xl font-bold">
             {formatUSD(result.totalMonthly)}
             {result.potentialMonthly.length > 0 && (
-              <span className="text-xl font-normal text-muted-foreground">
+              <span className="text-lg sm:text-xl font-normal text-muted-foreground">
                 –{formatPrice(result.totalMonthlyMax)}
               </span>
             )}
@@ -631,12 +635,12 @@ function Step5Results({ result, onAdjust }: Step5Props) {
             ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
           </div>
         </div>
-        <div className="p-6 bg-primary/5 rounded-lg">
-          <div className="text-sm text-muted-foreground mb-1">Estimated Annual Cost</div>
-          <div className="text-3xl font-bold">
+        <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
+          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Annual Cost</div>
+          <div className="text-2xl sm:text-3xl font-bold">
             {formatUSD(result.totalAnnual)}
             {result.potentialAnnual.length > 0 && (
-              <span className="text-xl font-normal text-muted-foreground">
+              <span className="text-lg sm:text-xl font-normal text-muted-foreground">
                 –{formatPrice(result.totalAnnualMax)}
               </span>
             )}
@@ -647,12 +651,12 @@ function Step5Results({ result, onAdjust }: Step5Props) {
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground text-center">
+      <p className="text-xs sm:text-sm text-muted-foreground text-center">
         This is an estimate based on standard Thai requirements.
       </p>
 
       <div className="flex justify-center">
-        <Button variant="outline" onClick={onAdjust}>
+        <Button variant="outline" onClick={onAdjust} className="min-h-[44px]">
           Adjust my answers
         </Button>
       </div>

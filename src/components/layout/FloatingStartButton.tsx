@@ -32,7 +32,8 @@ export function FloatingStartButton() {
     <>
       <Button
         size="lg"
-        className="fixed bottom-6 right-6 z-50 shadow-lg md:hidden"
+        className="fixed bottom-6 right-6 z-50 shadow-lg md:hidden min-h-[44px] pb-safe"
+        style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}
         onClick={() => setIsOpen(true)}
       >
         Start <ArrowRight className="ml-2 h-4 w-4" />
@@ -43,20 +44,20 @@ export function FloatingStartButton() {
           <DialogHeader>
             <DialogTitle className="text-center">What do you need?</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-3 py-4">
+          <div className="grid gap-2 sm:gap-3 py-3 sm:py-4">
             {startOptions.map((option) => (
               <Link
                 key={option.href}
                 to={option.href}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-4 p-4 rounded-lg border border-border hover:border-foreground/20 hover:bg-accent/50 transition-colors"
+                className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border border-border hover:border-foreground/20 hover:bg-accent/50 transition-colors min-h-[60px]"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <option.icon className="h-5 w-5 text-primary" />
+                <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <option.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 </div>
                 <div>
-                  <div className="font-medium">{option.title}</div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="font-medium text-sm sm:text-base">{option.title}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">
                     {option.description}
                   </div>
                 </div>
