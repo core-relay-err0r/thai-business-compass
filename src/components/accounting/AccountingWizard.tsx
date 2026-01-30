@@ -24,6 +24,7 @@ const STEPS = [
 export function AccountingWizard() {
   const navigate = useNavigate();
   const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult } = useServices();
+  const [isStarted, setIsStarted] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
     accountingIntent: "full",
@@ -77,7 +78,36 @@ export function AccountingWizard() {
     setCurrentStep(0);
   };
 
+  const handleStartCalculator = () => {
+    setIsStarted(true);
+  };
+
   const progressPercent = (currentStep / (STEPS.length - 1)) * 100;
+
+  // Show intro card with button when not started
+  if (!isStarted) {
+    return (
+      <Card>
+        <CardContent className="py-12">
+          <div className="text-center space-y-6 max-w-md mx-auto">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+              <Calculator className="w-8 h-8 text-primary" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold">Accounting Calculator</h3>
+              <p className="text-muted-foreground">
+                Answer a few questions about your business to get an accurate accounting cost estimate.
+              </p>
+            </div>
+            <Button size="lg" onClick={handleStartCalculator}>
+              <Calculator className="mr-2 h-4 w-4" />
+              Start Calculator
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
