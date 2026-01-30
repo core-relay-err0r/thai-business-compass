@@ -101,7 +101,13 @@ export function Header() {
                         isServiceActive ? "text-foreground" : "text-muted-foreground"
                       )}
                     >
-                      Our Services
+                      <Link
+                        to="/services"
+                        className="hover:text-foreground transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Our Services
+                      </Link>
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[280px] gap-1 p-2">
