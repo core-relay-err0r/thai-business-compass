@@ -232,7 +232,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
                   >
-                    <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-primary/90 text-primary-foreground rounded-full mb-3">
+                    <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-background/90 text-foreground border border-border rounded-full mb-3">
                       {slides[currentSlide].title}
                     </span>
                     <p className="text-sm text-foreground/80 max-w-xs">
