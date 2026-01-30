@@ -8,8 +8,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useServices } from "@/contexts/ServiceContext";
 import { formatPrice } from "@/lib/pricing";
-import { Check, Copy, Send, Calculator, Building2, MessageSquare } from "lucide-react";
+import { Check, Copy, Send, Calculator, Building2, MessageSquare, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Submit() {
   const {
@@ -27,6 +28,7 @@ export default function Submit() {
   } = useServices();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const hasAccountingData = !!accountingResult;
@@ -42,18 +44,35 @@ export default function Submit() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would send the data to a backend
-    console.log("Submission:", {
-      contactInfo,
-      companyInfo,
-      notes,
-      accountingResult,
-      selectedCorporateServices,
-      selectedConsultingServices,
-    });
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("send-submission", {
+        body: {
+          contactInfo,
+          companyInfo,
+          notes,
+          accountingResult,
+          selectedCorporateServices,
+          selectedConsultingServices,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Submission sent successfully:", data);
+      setIsSubmitted(true);
+      toast.success("Request submitted successfully!");
+    } catch (error: any) {
+      console.error("Submission error:", error);
+      toast.error(error.message || "Failed to submit request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -352,10 +371,19 @@ export default function Submit() {
                 type="submit"
                 size="lg"
                 className="w-full sm:w-auto min-h-[44px]"
-                disabled={!contactInfo.name || !contactInfo.email || !companyInfo.companyName}
+                disabled={!contactInfo.name || !contactInfo.email || !companyInfo.companyName || isSubmitting}
               >
-                <Send className="mr-2 h-4 w-4" />
-                Submit Request
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    Submit Request
+                  </>
+                )}
               </Button>
             </div>
           </form>
