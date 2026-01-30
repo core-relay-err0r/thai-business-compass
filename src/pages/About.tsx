@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import teamMember1 from "@/assets/team-member-1.jpeg";
 import teamMember2 from "@/assets/team-member-2.png";
+import teamAtWork from "@/assets/team-at-work.jpg";
 
 export default function About() {
   const stats = [
@@ -291,11 +292,12 @@ export default function About() {
 
             {/* Right: Image placeholder */}
             <div className="relative">
-              <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 aspect-[4/3] flex items-center justify-center border border-border/50">
-                <div className="text-center p-8">
-                  <Users className="w-16 h-16 text-primary/40 mx-auto mb-4" />
-                  <p className="text-muted-foreground">Our team at work</p>
-                </div>
+              <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-border/50">
+                <img 
+                  src={teamAtWork} 
+                  alt="Our team at work" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               {/* Decorative element */}
               <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-xl bg-primary/10 -z-10" />
