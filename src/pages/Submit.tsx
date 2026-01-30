@@ -59,19 +59,20 @@ export default function Submit() {
   if (isSubmitted) {
     return (
       <Layout>
-        <section className="py-20 md:py-32">
-          <div className="container">
+        <section className="py-16 sm:py-20 md:py-32">
+          <div className="container px-4 sm:px-6">
             <div className="max-w-xl mx-auto text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mx-auto mb-6">
-                <Check className="h-8 w-8 text-primary" />
+              <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-primary/10 mx-auto mb-4 sm:mb-6">
+                <Check className="h-7 w-7 sm:h-8 sm:w-8 text-primary" />
               </div>
-              <h1 className="text-3xl font-bold mb-4">Request Submitted</h1>
-              <p className="text-lg text-muted-foreground mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Request Submitted</h1>
+              <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
                 Thank you for your submission. We'll review your request and reply with next steps within 1 business day.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <Button
                   variant="outline"
+                  className="min-h-[44px]"
                   onClick={() => {
                     clearAll();
                     setIsSubmitted(false);
@@ -90,61 +91,64 @@ export default function Submit() {
 
   return (
     <Layout>
-      <section className="py-12 md:py-20">
-        <div className="container">
-          <div className="max-w-4xl mx-auto mb-12 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">Submit Request</h1>
-            <p className="text-lg text-muted-foreground">
+      <section className="py-8 sm:py-12 md:py-20">
+        <div className="container px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto mb-8 sm:mb-12 text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Submit Request</h1>
+            <p className="text-base sm:text-lg text-muted-foreground">
               Review your selections and provide your contact details.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-8">
+          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
             {/* Contact Info */}
             <Card>
-              <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
-                <CardDescription>How should we reach you?</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Contact Information</CardTitle>
+                <CardDescription className="text-sm">How should we reach you?</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Full Name *</Label>
+              <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="name" className="text-sm">Full Name *</Label>
                     <Input
                       id="name"
                       value={contactInfo.name}
                       onChange={(e) => setContactInfo({ name: e.target.value })}
                       required
+                      className="min-h-[44px]"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="email" className="text-sm">Email *</Label>
                     <Input
                       id="email"
                       type="email"
                       value={contactInfo.email}
                       onChange={(e) => setContactInfo({ email: e.target.value })}
                       required
+                      className="min-h-[44px]"
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone (optional)</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="phone" className="text-sm">Phone (optional)</Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={contactInfo.phone}
                     onChange={(e) => setContactInfo({ phone: e.target.value })}
+                    className="min-h-[44px]"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>Preferred Contact Method</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label className="text-sm">Preferred Contact Method</Label>
                   <RadioGroup
                     value={contactInfo.preferredContact}
                     onValueChange={(value) =>
                       setContactInfo({ preferredContact: value as "email" | "phone" | "whatsapp" })
                     }
-                    className="flex gap-4"
+                    className="flex flex-wrap gap-3 sm:gap-4"
                   >
                     {[
                       { value: "email", label: "Email" },
@@ -154,10 +158,10 @@ export default function Submit() {
                       <Label
                         key={option.value}
                         htmlFor={`contact-${option.value}`}
-                        className="flex items-center space-x-2 cursor-pointer"
+                        className="flex items-center space-x-2 cursor-pointer min-h-[44px]"
                       >
                         <RadioGroupItem value={option.value} id={`contact-${option.value}`} />
-                        <span>{option.label}</span>
+                        <span className="text-sm">{option.label}</span>
                       </Label>
                     ))}
                   </RadioGroup>
@@ -167,35 +171,38 @@ export default function Submit() {
 
             {/* Company Info */}
             <Card>
-              <CardHeader>
-                <CardTitle>Company Information</CardTitle>
-                <CardDescription>Tell us about your company</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Company Information</CardTitle>
+                <CardDescription className="text-sm">Tell us about your company</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="company-name">Company Name *</Label>
+              <CardContent className="p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="company-name" className="text-sm">Company Name *</Label>
                   <Input
                     id="company-name"
                     value={companyInfo.companyName}
                     onChange={(e) => setCompanyInfo({ companyName: e.target.value })}
                     required
+                    className="min-h-[44px]"
                   />
                 </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="registration">Registration Number (optional)</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="registration" className="text-sm">Registration Number (optional)</Label>
                     <Input
                       id="registration"
                       value={companyInfo.registrationNumber}
                       onChange={(e) => setCompanyInfo({ registrationNumber: e.target.value })}
+                      className="min-h-[44px]"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="industry">Industry (optional)</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="industry" className="text-sm">Industry (optional)</Label>
                     <Input
                       id="industry"
                       value={companyInfo.industry}
                       onChange={(e) => setCompanyInfo({ industry: e.target.value })}
+                      className="min-h-[44px]"
                     />
                   </div>
                 </div>
@@ -204,22 +211,22 @@ export default function Submit() {
 
             {/* Selected Services Summary */}
             <Card>
-              <CardHeader>
-                <CardTitle>Selected Services</CardTitle>
-                <CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Selected Services</CardTitle>
+                <CardDescription className="text-sm">
                   {hasAnySelection
                     ? "Based on your selections from the calculators"
                     : "No services selected yet. Visit the calculators to add services."}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="p-4 sm:p-6 pt-0 space-y-4 sm:space-y-6">
                 {hasAccountingData && (
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Calculator className="h-5 w-5 text-primary" />
-                      <span className="font-medium">Accounting Services</span>
+                  <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                      <Calculator className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      <span className="font-medium text-sm sm:text-base">Accounting Services</span>
                     </div>
-                    <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                       <div>
                         <span className="text-muted-foreground">Monthly:</span>{" "}
                         <span className="font-medium">฿{formatPrice(accountingResult!.totalMonthly)}</span>
@@ -229,27 +236,27 @@ export default function Submit() {
                         <span className="font-medium">฿{formatPrice(accountingResult!.totalAnnual)}</span>
                       </div>
                     </div>
-                    <div className="mt-3 text-sm text-muted-foreground">
+                    <div className="mt-2 sm:mt-3 text-xs sm:text-sm text-muted-foreground">
                       Required: {accountingResult!.requiredItems.join(", ")}
                     </div>
                   </div>
                 )}
 
                 {hasCorporateData && (
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Building2 className="h-5 w-5 text-primary" />
-                      <span className="font-medium">Corporate Services</span>
+                  <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                      <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      <span className="font-medium text-sm sm:text-base">Corporate Services</span>
                     </div>
-                    <ul className="space-y-2">
+                    <ul className="space-y-1.5 sm:space-y-2">
                       {selectedCorporateServices.map((service) => (
-                        <li key={service.id} className="text-sm flex justify-between">
+                        <li key={service.id} className="text-xs sm:text-sm flex justify-between">
                           <span>{service.name}</span>
                           <span className="font-medium">฿{formatPrice(service.price)}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-3 pt-3 border-t border-border flex justify-between text-sm font-medium">
+                    <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-border flex justify-between text-xs sm:text-sm font-medium">
                       <span>Total</span>
                       <span>
                         ฿{formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
@@ -259,14 +266,14 @@ export default function Submit() {
                 )}
 
                 {hasConsultingData && (
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-3">
-                      <MessageSquare className="h-5 w-5 text-primary" />
-                      <span className="font-medium">Consulting Services</span>
+                  <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
+                      <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                      <span className="font-medium text-sm sm:text-base">Consulting Services</span>
                     </div>
-                    <ul className="space-y-2">
+                    <ul className="space-y-1.5 sm:space-y-2">
                       {selectedConsultingServices.map((service) => (
-                        <li key={service.id} className="text-sm flex justify-between">
+                        <li key={service.id} className="text-xs sm:text-sm flex justify-between">
                           <span>{service.name}</span>
                           <span className="font-medium">
                             ฿{formatPrice(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
@@ -278,16 +285,16 @@ export default function Submit() {
                 )}
 
                 {!hasAnySelection && (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <p className="mb-4">You haven't selected any services yet.</p>
+                  <div className="text-center py-6 sm:py-8 text-muted-foreground">
+                    <p className="mb-3 sm:mb-4 text-sm">You haven't selected any services yet.</p>
                     <div className="flex flex-wrap justify-center gap-2">
-                      <Button variant="outline" size="sm" asChild>
+                      <Button variant="outline" size="sm" asChild className="min-h-[44px]">
                         <a href="/accounting">Calculate accounting</a>
                       </Button>
-                      <Button variant="outline" size="sm" asChild>
+                      <Button variant="outline" size="sm" asChild className="min-h-[44px]">
                         <a href="/corporate">Browse corporate</a>
                       </Button>
-                      <Button variant="outline" size="sm" asChild>
+                      <Button variant="outline" size="sm" asChild className="min-h-[44px]">
                         <a href="/consulting">Browse consulting</a>
                       </Button>
                     </div>
@@ -298,11 +305,11 @@ export default function Submit() {
 
             {/* Additional Notes */}
             <Card>
-              <CardHeader>
-                <CardTitle>Additional Notes</CardTitle>
-                <CardDescription>Any other details you'd like to share (optional)</CardDescription>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Additional Notes</CardTitle>
+                <CardDescription className="text-sm">Any other details you'd like to share (optional)</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 sm:p-6 pt-0">
                 <Textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
@@ -315,14 +322,14 @@ export default function Submit() {
             {/* Generate Summary */}
             {hasAnySelection && (
               <Card>
-                <CardHeader>
-                  <CardTitle>Copy Summary</CardTitle>
-                  <CardDescription>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-lg sm:text-xl">Copy Summary</CardTitle>
+                  <CardDescription className="text-sm">
                     Generate a text summary you can paste into email or WhatsApp
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <Button type="button" variant="outline" onClick={handleCopySummary}>
+                <CardContent className="p-4 sm:p-6 pt-0">
+                  <Button type="button" variant="outline" onClick={handleCopySummary} className="min-h-[44px]">
                     {copied ? (
                       <>
                         <Check className="mr-2 h-4 w-4" />
@@ -340,10 +347,11 @@ export default function Submit() {
             )}
 
             {/* Submit */}
-            <div className="flex justify-end">
+            <div className="flex justify-center sm:justify-end">
               <Button
                 type="submit"
                 size="lg"
+                className="w-full sm:w-auto min-h-[44px]"
                 disabled={!contactInfo.name || !contactInfo.email || !companyInfo.companyName}
               >
                 <Send className="mr-2 h-4 w-4" />

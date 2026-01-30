@@ -86,19 +86,19 @@ export default function Privacy() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-20 md:py-28 bg-muted/30 border-b">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-28 bg-muted/30 border-b">
+        <div className="container px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-              <Shield className="w-8 h-8 text-primary" />
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 mb-4 sm:mb-6">
+              <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
             </div>
-            <p className="text-primary font-semibold text-sm uppercase tracking-wider mb-3">
+            <p className="text-primary font-semibold text-xs sm:text-sm uppercase tracking-wider mb-2 sm:mb-3">
               LEGAL
             </p>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
               Privacy Policy
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground">
               Last updated: January 2025
             </p>
           </div>
@@ -106,12 +106,12 @@ export default function Privacy() {
       </section>
 
       {/* Content Section */}
-      <section className="py-16 md:py-24">
-        <div className="container">
+      <section className="py-10 sm:py-16 md:py-24">
+        <div className="container px-4 sm:px-6">
           <div className="max-w-3xl mx-auto">
             {/* Introduction */}
-            <div className="bg-muted/30 rounded-lg p-6 mb-10 border">
-              <p className="text-muted-foreground leading-relaxed">
+            <div className="bg-muted/30 rounded-lg p-4 sm:p-6 mb-8 sm:mb-10 border">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                 At PND50, we are committed to protecting your privacy and ensuring the security of your 
                 personal information. This Privacy Policy explains how we collect, use, disclose, and 
                 safeguard your information when you use our services.
@@ -119,10 +119,10 @@ export default function Privacy() {
             </div>
 
             {/* Policy Sections */}
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               {sections.map((section, index) => (
-                <div key={index} className="pb-8 border-b last:border-b-0 last:pb-0">
-                  <h2 className="text-xl font-semibold mb-4">{section.title}</h2>
+                <div key={index} className="pb-6 sm:pb-8 border-b last:border-b-0 last:pb-0">
+                  <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">{section.title}</h2>
                   {section.content}
                 </div>
               ))}

@@ -65,7 +65,7 @@ export function ConsultingServices() {
 
   return (
     <>
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {SERVICES.map((service) => {
           const Icon = service.icon;
           const selected = isSelected(service.id);
@@ -80,10 +80,10 @@ export function ConsultingServices() {
               }`}
               onClick={() => toggleService(service)}
             >
-              <CardHeader className="pb-3">
+              <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-3">
                 <div className="flex items-start justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10">
-                    <Icon className="h-5 w-5 text-primary" />
+                  <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg bg-primary/10">
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   </div>
                   {selected && (
                     <Badge variant="secondary" className="text-xs font-medium">
@@ -91,15 +91,15 @@ export function ConsultingServices() {
                     </Badge>
                   )}
                 </div>
-                <CardTitle className="text-lg mt-4">{service.title}</CardTitle>
+                <CardTitle className="text-base sm:text-lg mt-3 sm:mt-4">{service.title}</CardTitle>
                 <CardDescription className="text-sm leading-relaxed">
                   {service.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0 space-y-3 sm:space-y-4">
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-semibold tracking-tight">
+                    <span className="text-xl sm:text-2xl font-semibold tracking-tight">
                       ${formatPrice(service.priceRange.min)}–${formatPrice(service.priceRange.max)}
                     </span>
                   </div>
@@ -115,7 +115,7 @@ export function ConsultingServices() {
 
                 <Button
                   variant={selected ? "secondary" : "outline"}
-                  className={`w-full transition-all ${selected ? "border-primary/20" : ""}`}
+                  className={`w-full transition-all min-h-[44px] ${selected ? "border-primary/20" : ""}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleService(service);

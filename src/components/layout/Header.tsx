@@ -61,11 +61,11 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2">
-              <img src={logo} alt="PND50 Logo" className="h-8 w-8" />
-              <span className="text-xl font-bold tracking-tight">PND50</span>
+        <div className="container flex h-14 sm:h-16 items-center justify-between">
+          <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
+            <Link to="/" className="flex items-center gap-1.5 sm:gap-2">
+              <img src={logo} alt="PND50 Logo" className="h-6 w-6 sm:h-8 sm:w-8" />
+              <span className="text-lg sm:text-xl font-bold tracking-tight">PND50</span>
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
@@ -136,8 +136,9 @@ export function Header() {
           </div>
 
           <button
-            className="md:hidden p-2"
+            className="md:hidden p-2.5 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMobileMenuOpen ? (
               <X className="h-5 w-5" />
@@ -148,68 +149,67 @@ export function Header() {
         </div>
 
         {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-border/40 bg-background">
-            <nav className="container py-4 flex flex-col gap-3">
+        <div className={`md:hidden border-t border-border/40 bg-background overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <nav className="container py-4 flex flex-col gap-1">
+            <Link
+              to="/about"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${
+                location.pathname === "/about"
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground"
+              }`}
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${
+                location.pathname === "/contact"
+                  ? "text-foreground bg-accent"
+                  : "text-muted-foreground"
+              }`}
+            >
+              Contact
+            </Link>
+            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pt-3 pb-2 px-2">
+              Our Services
+            </div>
+            {serviceLinks.map((link) => (
               <Link
-                to="/about"
+                key={link.href}
+                to={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-sm font-medium transition-colors hover:text-foreground py-2 ${
-                  location.pathname === "/about"
-                    ? "text-foreground"
+                className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-4 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${
+                  location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services"
+                    ? "text-foreground bg-accent"
                     : "text-muted-foreground"
                 }`}
               >
-                About
+                <link.icon className="h-4 w-4 mr-3" />
+                {link.label}
               </Link>
-              <Link
-                to="/contact"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-sm font-medium transition-colors hover:text-foreground py-2 ${
-                  location.pathname === "/contact"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Contact
-              </Link>
-              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pt-2">
-                Our Services
-              </div>
-              {serviceLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`text-sm font-medium transition-colors hover:text-foreground py-2 pl-3 ${
-                    location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services"
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="flex flex-col gap-2 pt-2 border-t border-border/40">
-                <Link to="/submit" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Button variant="outline" size="sm" className="w-full">
-                    Submit Request
-                  </Button>
-                </Link>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    setIsStartModalOpen(true);
-                  }}
-                  className="w-full"
-                >
-                  Start
+            ))}
+            <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/40">
+              <Link to="/submit" onClick={() => setIsMobileMenuOpen(false)}>
+                <Button variant="outline" size="default" className="w-full min-h-[44px]">
+                  Submit Request
                 </Button>
-              </div>
-            </nav>
-          </div>
-        )}
+              </Link>
+              <Button
+                size="default"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsStartModalOpen(true);
+                }}
+                className="w-full min-h-[44px]"
+              >
+                Start
+              </Button>
+            </div>
+          </nav>
+        </div>
       </header>
 
       {/* Start Modal */}

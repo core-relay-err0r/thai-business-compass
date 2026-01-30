@@ -91,32 +91,32 @@ export default function Services() {
   return (
     <Layout>
       {/* Section Head Block */}
-      <section className="py-12 md:py-16 border-b border-border">
-        <div className="container">
+      <section className="py-8 sm:py-10 md:py-16 border-b border-border">
+        <div className="container px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
               Everything you need to operate in Thailand.
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground">
               Corporate setup, accounting, and strategic consulting — all in one place.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="py-12 md:py-16">
-        <div className="container">
-          <div className="flex gap-12 max-w-7xl mx-auto">
+      <section className="py-8 sm:py-10 md:py-16">
+        <div className="container px-4 sm:px-6">
+          <div className="flex gap-8 lg:gap-12 max-w-7xl mx-auto">
             {/* Sticky Sidebar - Desktop Only */}
-            <div className="hidden lg:block w-80 flex-shrink-0">
-              <div className="sticky top-32 space-y-8">
+            <div className="hidden lg:block w-72 xl:w-80 flex-shrink-0">
+              <div className="sticky top-24 xl:top-32 space-y-6 xl:space-y-8">
                 {/* Current Section Info */}
-                <div className="space-y-4">
+                <div className="space-y-3 xl:space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <SectionIcon className="w-5 h-5 text-primary" />
+                    <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <SectionIcon className="w-4 h-4 xl:w-5 xl:h-5 text-primary" />
                     </div>
-                    <h2 className="text-xl font-semibold">{currentSection.title}</h2>
+                    <h2 className="text-lg xl:text-xl font-semibold">{currentSection.title}</h2>
                   </div>
                   <p className="text-muted-foreground text-sm leading-relaxed">
                     {currentSection.description}
@@ -136,7 +136,7 @@ export default function Services() {
                         key={section}
                         onClick={() => scrollToSection(section)}
                         className={cn(
-                          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors",
+                          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors min-h-[44px]",
                           isActive
                             ? "bg-primary/10 text-primary"
                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -157,13 +157,13 @@ export default function Services() {
             </div>
 
             {/* Main Content - Scrollable */}
-            <div className="flex-1 space-y-24 pb-24 lg:pb-0">
+            <div className="flex-1 space-y-16 sm:space-y-20 md:space-y-24 pb-16 sm:pb-20 md:pb-24 lg:pb-0">
               {/* Corporate Section */}
-              <div ref={corporateRef} id="corporate" className="scroll-mt-32">
-                <div className="lg:hidden mb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Building2 className="w-5 h-5 text-primary" />
-                    <h2 className="text-xl font-semibold">Corporate Services</h2>
+              <div ref={corporateRef} id="corporate" className="scroll-mt-20 sm:scroll-mt-24 lg:scroll-mt-32">
+                <div className="lg:hidden mb-6 sm:mb-8">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                    <h2 className="text-lg sm:text-xl font-semibold">Corporate Services</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
                     One-time corporate actions for starting or managing a Thai company.
@@ -173,11 +173,11 @@ export default function Services() {
               </div>
 
               {/* Accounting Section */}
-              <div ref={accountingRef} id="accounting" className="scroll-mt-32">
-                <div className="lg:hidden mb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Calculator className="w-5 h-5 text-primary" />
-                    <h2 className="text-xl font-semibold">Accounting Calculator</h2>
+              <div ref={accountingRef} id="accounting" className="scroll-mt-20 sm:scroll-mt-24 lg:scroll-mt-32">
+                <div className="lg:hidden mb-6 sm:mb-8">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <Calculator className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                    <h2 className="text-lg sm:text-xl font-semibold">Accounting Calculator</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
                     Understand your accounting setup before committing.
@@ -187,11 +187,11 @@ export default function Services() {
               </div>
 
               {/* Consulting Section */}
-              <div ref={consultingRef} id="consulting" className="scroll-mt-32">
-                <div className="lg:hidden mb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <MessageSquare className="w-5 h-5 text-primary" />
-                    <h2 className="text-xl font-semibold">Business Consulting</h2>
+              <div ref={consultingRef} id="consulting" className="scroll-mt-20 sm:scroll-mt-24 lg:scroll-mt-32">
+                <div className="lg:hidden mb-6 sm:mb-8">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                    <h2 className="text-lg sm:text-xl font-semibold">Business Consulting</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
                     Choose the business question, not a consulting package.

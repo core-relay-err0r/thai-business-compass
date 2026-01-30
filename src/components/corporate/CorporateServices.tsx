@@ -205,10 +205,10 @@ export function CorporateServicesContent() {
   const totalPrice = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-12 sm:space-y-16">
       {/* Starting a New Company */}
       <div>
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="flex items-center gap-2 text-sm text-primary font-medium mb-2">
             <Sparkles className="h-4 w-4" />
             <span>Starting a New Company</span>
@@ -218,7 +218,7 @@ export function CorporateServicesContent() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {STARTING_SERVICES.map((service) => (
             <ServiceCard
               key={service.id}
@@ -240,7 +240,7 @@ export function CorporateServicesContent() {
 
       {/* Existing Company Services */}
       <div>
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="flex items-center gap-2 text-sm text-primary font-medium mb-2">
             <Settings className="h-4 w-4" />
             <span>Existing Company Services</span>
@@ -250,7 +250,7 @@ export function CorporateServicesContent() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {EXISTING_SERVICES.map((service) => (
             <ServiceCard
               key={service.id}
