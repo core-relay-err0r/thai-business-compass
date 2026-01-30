@@ -60,8 +60,8 @@ export default function About() {
 
   return (
     <Layout>
-      {/* Hero Section - Full Viewport */}
-      <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 lg:py-0">
+      {/* Hero Section */}
+      <section className="lg:min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 sm:py-16 lg:py-0">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
         
@@ -131,12 +131,27 @@ export default function About() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <Link to="/contact" className="inline-block mt-6 sm:mt-8">
+                <Link to="/services" className="inline-block mt-6 sm:mt-8">
                   <Button size="lg" className="neumorphic-button group min-h-[44px]">
-                    Contact Us
+                    See what applies to you
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
+              </motion.div>
+
+              {/* Mobile Stats Preview */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="lg:hidden mt-8 grid grid-cols-3 gap-3"
+              >
+                {stats.map((stat) => (
+                  <div key={stat.label} className="text-center p-3 rounded-xl bg-muted/40 border border-border/50">
+                    <div className="text-2xl font-bold text-primary">{stat.value}</div>
+                    <div className="text-[10px] text-muted-foreground leading-tight mt-1">{stat.label}</div>
+                  </div>
+                ))}
               </motion.div>
             </div>
 
@@ -217,12 +232,12 @@ export default function About() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator - Desktop only */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="hidden lg:flex absolute bottom-8 left-1/2 -translate-x-1/2"
         >
           <a href="#stats" className="flex flex-col items-center gap-2 text-muted-foreground/60 hover:text-primary transition-colors">
             <span className="text-xs uppercase tracking-wider">Scroll</span>
@@ -236,8 +251,8 @@ export default function About() {
         </motion.div>
       </section>
 
-      {/* Stats Section */}
-      <section id="stats" className="container py-12 sm:py-16 md:py-24 px-4 sm:px-6">
+      {/* Stats Section - Desktop only (mobile stats are in hero) */}
+      <section id="stats" className="container py-12 sm:py-16 md:py-24 px-4 sm:px-6 hidden lg:block">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {stats.map((stat) => (
             <Card key={stat.label} className="border-border/50 text-center">
@@ -318,15 +333,15 @@ export default function About() {
           Discover what your business needs with our interactive tools, or get in touch directly.
         </p>
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-          <Link to="/corporate">
+          <Link to="/services">
             <Button size="lg" className="min-h-[44px] w-full sm:w-auto">
-              Explore Services
+              See what applies to you
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
           <Link to="/contact">
             <Button variant="outline" size="lg" className="min-h-[44px] w-full sm:w-auto">
-              Contact Us
+              Get in touch
             </Button>
           </Link>
         </div>
