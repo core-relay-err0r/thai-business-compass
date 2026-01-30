@@ -4,15 +4,17 @@ import { ModuleCards } from "@/components/home/ModuleCards";
 import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { PricingLogic } from "@/components/home/PricingLogic";
+import { BottomCTA } from "@/components/home/BottomCTA";
+
 export default function Home() {
-  return <Layout>
+  return (
+    <Layout>
       <HeroSection />
       <ModuleCards />
       <TrustSection />
       <HowItWorks />
       <PricingLogic />
-      
-      {/* Simple footer */}
-      
-    </Layout>;
+      <BottomCTA />
+    </Layout>
+  );
 }
