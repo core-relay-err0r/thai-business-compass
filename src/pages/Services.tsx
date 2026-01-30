@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
@@ -6,87 +6,39 @@ import { AccountingWizard } from "@/components/accounting/AccountingWizard";
 import { LiveEstimate } from "@/components/accounting/LiveEstimate";
 import { ConsultingServices } from "@/components/consulting/ConsultingServices";
 import { Building2, Calculator, MessageSquare } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type ActiveSection = "corporate" | "accounting" | "consulting";
 
 const sectionData = {
   corporate: {
     icon: Building2,
-    title: "Corporate Services",
+    title: "Corporate",
     description: "One-time corporate actions for starting or managing a Thai company.",
   },
   accounting: {
     icon: Calculator,
-    title: "Accounting Calculator",
+    title: "Accounting",
     description: "Understand your accounting setup before committing.",
   },
   consulting: {
     icon: MessageSquare,
-    title: "Business Consulting",
+    title: "Consulting",
     description: "Choose the business question, not a consulting package.",
   },
 };
 
 export default function Services() {
   const location = useLocation();
-  const [activeSection, setActiveSection] = useState<ActiveSection>("corporate");
-  
-  const corporateRef = useRef<HTMLDivElement>(null);
-  const accountingRef = useRef<HTMLDivElement>(null);
-  const consultingRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<ActiveSection>("corporate");
 
-  // Scroll to hash on page load or hash change
+  // Handle hash on page load
   useEffect(() => {
     const hash = location.hash.replace("#", "") as ActiveSection;
     if (hash && ["corporate", "accounting", "consulting"].includes(hash)) {
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        const refs = {
-          corporate: corporateRef,
-          accounting: accountingRef,
-          consulting: consultingRef,
-        };
-        refs[hash].current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
+      setActiveTab(hash);
     }
   }, [location.hash]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
-
-      const corporateTop = corporateRef.current?.offsetTop || 0;
-      const accountingTop = accountingRef.current?.offsetTop || 0;
-      const consultingTop = consultingRef.current?.offsetTop || 0;
-
-      if (scrollPosition >= consultingTop) {
-        setActiveSection("consulting");
-      } else if (scrollPosition >= accountingTop) {
-        setActiveSection("accounting");
-      } else {
-        setActiveSection("corporate");
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
-    
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToSection = (section: ActiveSection) => {
-    const refs = {
-      corporate: corporateRef,
-      accounting: accountingRef,
-      consulting: consultingRef,
-    };
-    
-    refs[section].current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const currentSection = sectionData[activeSection];
-  const SectionIcon = currentSection.icon;
 
   return (
     <Layout>
@@ -107,46 +59,63 @@ export default function Services() {
       <section className="py-12 md:py-16">
         <div className="container">
           <div className="flex gap-12 max-w-7xl mx-auto">
-            {/* Sticky Sidebar - Desktop Only */}
-            <div className="hidden lg:block w-80 flex-shrink-0">
-              <div className="sticky top-32 space-y-8">
-                {/* Current Section Info */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <SectionIcon className="w-5 h-5 text-primary" />
-                    </div>
-                    <h2 className="text-xl font-semibold">{currentSection.title}</h2>
-                  </div>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {currentSection.description}
+            {/* Main Content with Tabs */}
+            <div className="flex-1">
+              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ActiveSection)}>
+                <TabsList className="w-full mb-8 h-auto p-1 grid grid-cols-3">
+                  {(Object.keys(sectionData) as ActiveSection[]).map((section) => {
+                    const Icon = sectionData[section].icon;
+                    return (
+                      <TabsTrigger
+                        key={section}
+                        value={section}
+                        className="flex items-center gap-2 py-3"
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span className="hidden sm:inline">{sectionData[section].title}</span>
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+
+                {/* Section Description - Mobile */}
+                <div className="lg:hidden mb-6 p-4 rounded-lg bg-muted/30">
+                  <p className="text-sm text-muted-foreground">
+                    {sectionData[activeTab].description}
                   </p>
                 </div>
 
-                {/* Section Navigation */}
-                <div className="space-y-2">
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
-                    Sections
+                <TabsContent value="corporate" className="mt-0">
+                  <CorporateServicesContent />
+                </TabsContent>
+
+                <TabsContent value="accounting" className="mt-0">
+                  <AccountingWizard />
+                </TabsContent>
+
+                <TabsContent value="consulting" className="mt-0">
+                  <ConsultingServices />
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* Sticky Sidebar with Live Estimate - Desktop Only */}
+            <div className="hidden lg:block w-80 flex-shrink-0">
+              <div className="sticky top-32 space-y-6">
+                {/* Current Section Info */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                      {(() => {
+                        const Icon = sectionData[activeTab].icon;
+                        return <Icon className="w-5 h-5 text-primary" />;
+                      })()}
+                    </div>
+                    <h2 className="text-lg font-semibold">{sectionData[activeTab].title}</h2>
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {sectionData[activeTab].description}
                   </p>
-                  {(Object.keys(sectionData) as ActiveSection[]).map((section) => {
-                    const Icon = sectionData[section].icon;
-                    const isActive = activeSection === section;
-                    return (
-                      <button
-                        key={section}
-                        onClick={() => scrollToSection(section)}
-                        className={cn(
-                          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors",
-                          isActive
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                        )}
-                      >
-                        <Icon className="w-4 h-4" />
-                        <span className="text-sm font-medium">{sectionData[section].title}</span>
-                      </button>
-                    );
-                  })}
                 </div>
 
                 {/* Live Estimate - Always visible */}
@@ -155,51 +124,11 @@ export default function Services() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Main Content - Scrollable */}
-            <div className="flex-1 space-y-24 pb-24 lg:pb-0">
-              {/* Corporate Section */}
-              <div ref={corporateRef} id="corporate" className="scroll-mt-32">
-                <div className="lg:hidden mb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Building2 className="w-5 h-5 text-primary" />
-                    <h2 className="text-xl font-semibold">Corporate Services</h2>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    One-time corporate actions for starting or managing a Thai company.
-                  </p>
-                </div>
-                <CorporateServicesContent />
-              </div>
-
-              {/* Accounting Section */}
-              <div ref={accountingRef} id="accounting" className="scroll-mt-32">
-                <div className="lg:hidden mb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Calculator className="w-5 h-5 text-primary" />
-                    <h2 className="text-xl font-semibold">Accounting Calculator</h2>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    Understand your accounting setup before committing.
-                  </p>
-                </div>
-                <AccountingWizard />
-              </div>
-
-              {/* Consulting Section */}
-              <div ref={consultingRef} id="consulting" className="scroll-mt-32">
-                <div className="lg:hidden mb-8">
-                  <div className="flex items-center gap-3 mb-2">
-                    <MessageSquare className="w-5 h-5 text-primary" />
-                    <h2 className="text-xl font-semibold">Business Consulting</h2>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    Choose the business question, not a consulting package.
-                  </p>
-                </div>
-                <ConsultingServices />
-              </div>
-            </div>
+          {/* Mobile Live Estimate - Fixed at bottom */}
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 z-40">
+            <LiveEstimate />
           </div>
         </div>
       </section>
