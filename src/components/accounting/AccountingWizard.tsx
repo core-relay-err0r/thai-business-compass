@@ -40,9 +40,33 @@ export function AccountingWizard() {
   });
 
   const [liveResult, setLiveResult] = useState(accountingResult);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  // Reset wizard when clearAll is triggered (accountingResult becomes null)
+  useEffect(() => {
+    if (accountingResult === null && hasSubmitted) {
+      setCurrentStep(0);
+      setLocalInputs({
+        accountingIntent: "full",
+        revenueRange: "5k-50k",
+        vatRegistered: "no",
+        employeeCount: 0,
+        employeePurpose: "operations",
+        payrollNeeded: false,
+        transactionVolume: "low",
+        internationalPayments: false,
+        yearEndStatements: "yes",
+        auditRequired: "no",
+      });
+      setLiveResult(null);
+      setLiveAccountingResult(null);
+      setHasSubmitted(false);
+    }
+  }, [accountingResult, hasSubmitted, setLiveAccountingResult]);
 
   useEffect(() => {
     if (
+      hasSubmitted &&
       localInputs.revenueRange &&
       localInputs.vatRegistered &&
       localInputs.transactionVolume &&
@@ -53,7 +77,7 @@ export function AccountingWizard() {
       setLiveResult(result);
       setLiveAccountingResult(result);
     }
-  }, [localInputs, setLiveAccountingResult]);
+  }, [localInputs, setLiveAccountingResult, hasSubmitted]);
 
   const handleNext = () => {
     setAccountingInputs(localInputs);
@@ -70,6 +94,10 @@ export function AccountingWizard() {
 
   const handleSubmit = () => {
     setAccountingInputs(localInputs);
+    setHasSubmitted(true);
+    const result = calculateAccountingCost(localInputs as AccountingInputs);
+    setLiveResult(result);
+    setLiveAccountingResult(result);
     calculateAccounting();
   };
 
