@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Calculator, Building2, MessageSquare, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png";
 
 export function Header() {
   const location = useLocation();
@@ -63,6 +64,7 @@ export function Header() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
+              <img src={logo} alt="PND50 Logo" className="h-8 w-8" />
               <span className="text-xl font-bold tracking-tight">PND50</span>
             </Link>
 
