@@ -298,6 +298,9 @@ export default function About() {
                   alt="Our team at work" 
                   className="w-full h-full object-cover"
                 />
+                {/* Gradient overlays for fading effect */}
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-background/60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
               </div>
               {/* Decorative element */}
               <div className="absolute -bottom-4 -left-4 w-24 h-24 rounded-xl bg-primary/10 -z-10" />
