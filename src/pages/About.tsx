@@ -142,24 +142,76 @@ export default function About() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative w-full max-w-[450px] md:max-w-[550px] lg:max-w-[600px] h-[400px] md:h-[450px] lg:h-[500px] mx-auto"
+              className="relative w-full max-w-[450px] md:max-w-[550px] lg:max-w-[600px] h-[400px] md:h-[450px] lg:h-[500px] mx-auto hidden lg:block"
             >
-              {/* Decorative background circles */}
-              <div className="absolute top-[8%] left-[2%] w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full opacity-90 z-0 bg-primary/20" />
-              <div className="absolute top-[3%] right-[12%] w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-primary/40 opacity-80 z-0" />
-              <div className="absolute bottom-[12%] right-[2%] w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full bg-muted-foreground/70 opacity-90 z-0" />
+              {/* Animated decorative background circles */}
+              <motion.div 
+                className="absolute top-[8%] left-[2%] w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full z-0 bg-primary/20"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute top-[3%] right-[12%] w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-primary/30 z-0"
+                animate={{ scale: [1.05, 1, 1.05] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute bottom-[12%] right-[2%] w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full bg-muted-foreground/50 z-0"
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              />
               
-              {/* Team member photos */}
-              <div className="absolute top-[12%] right-[8%] w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden border-4 border-background shadow-xl z-10 hover:scale-105 transition-transform duration-300">
-                <div className="w-full h-full bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center">
-                  <Users className="w-16 h-16 md:w-20 md:h-20 text-primary/60" />
+              {/* Floating accent dots */}
+              <motion.div 
+                className="absolute top-[25%] left-[25%] w-4 h-4 rounded-full bg-primary/40 z-0"
+                animate={{ y: [0, -8, 0], x: [0, 4, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.div 
+                className="absolute bottom-[30%] right-[20%] w-3 h-3 rounded-full bg-primary/30 z-0"
+                animate={{ y: [0, 6, 0], x: [0, -4, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              
+              {/* Team member photos with improved styling */}
+              <motion.div 
+                className="absolute top-[12%] right-[8%] w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="w-full h-full bg-gradient-to-br from-primary/40 via-primary/20 to-background flex items-center justify-center">
+                  <div className="text-center">
+                    <Award className="w-12 h-12 md:w-14 md:h-14 text-primary/70 mx-auto mb-2" />
+                    <span className="text-xs font-medium text-primary/60">Excellence</span>
+                  </div>
                 </div>
-              </div>
-              <div className="absolute bottom-[8%] left-[12%] w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden border-4 border-background shadow-xl z-10 hover:scale-105 transition-transform duration-300">
-                <div className="w-full h-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center">
-                  <Users className="w-20 h-20 md:w-24 md:h-24 text-primary/70" />
+              </motion.div>
+              <motion.div 
+                className="absolute bottom-[8%] left-[12%] w-48 h-48 md:w-56 md:h-56 lg:w-60 lg:h-60 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="w-full h-full bg-gradient-to-br from-primary/50 via-primary/30 to-primary/10 flex items-center justify-center">
+                  <div className="text-center">
+                    <Users className="w-16 h-16 md:w-20 md:h-20 text-primary/80 mx-auto mb-2" />
+                    <span className="text-sm font-medium text-primary/70">Our Team</span>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
+              
+              {/* Connection line */}
+              <svg className="absolute inset-0 w-full h-full z-5 pointer-events-none" viewBox="0 0 600 500">
+                <motion.path
+                  d="M 380 150 Q 300 250 220 350"
+                  stroke="hsl(var(--primary) / 0.15)"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeDasharray="8 4"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 2, delay: 0.5 }}
+                />
+              </svg>
             </motion.div>
           </div>
         </div>
