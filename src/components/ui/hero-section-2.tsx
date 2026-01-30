@@ -200,12 +200,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         </motion.div>
 
         {/* Right Side: Visual with gradient overlay */}
-        <div className="hidden lg:block absolute top-0 right-0 w-1/3 h-full">
+        <div className="hidden lg:block absolute top-0 right-0 w-[40%] h-full">
           {slides && slides.length > 0 ? (
             <motion.div
               className="absolute inset-0"
-              initial={{ clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)" }}
-              animate={{ clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             >
               <AnimatePresence mode="wait">
@@ -222,8 +222,8 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                     alt={slides[currentSlide].title} 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 via-30% to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 via-40% to-transparent" />
                   
                   {/* Text overlay */}
                   <motion.div 
