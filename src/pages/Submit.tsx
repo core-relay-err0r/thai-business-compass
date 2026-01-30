@@ -272,14 +272,14 @@ export default function Submit() {
                       {selectedCorporateServices.map((service) => (
                         <li key={service.id} className="text-xs sm:text-sm flex justify-between">
                           <span>{service.name}</span>
-                          <span className="font-medium">฿{formatPrice(service.price)}</span>
+                          <span className="font-medium">${formatPrice(service.price)}</span>
                         </li>
                       ))}
                     </ul>
                     <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-border flex justify-between text-xs sm:text-sm font-medium">
                       <span>Total</span>
                       <span>
-                        ฿{formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
+                        ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
                       </span>
                     </div>
                   </div>
@@ -296,7 +296,7 @@ export default function Submit() {
                         <li key={service.id} className="text-xs sm:text-sm flex justify-between">
                           <span>{service.name}</span>
                           <span className="font-medium">
-                            ฿{formatPrice(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
+                            ${formatPrice(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
                           </span>
                         </li>
                       ))}
