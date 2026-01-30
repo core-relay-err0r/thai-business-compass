@@ -13,9 +13,11 @@ import {
   Building2, 
   MapPin,
   Send,
-  ArrowRight
+  ArrowRight,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -32,18 +34,28 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast.success("Message sent! We'll get back to you within 24 hours.");
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      whatsapp: "",
-      companyName: "",
-      message: "",
-    });
-    setIsSubmitting(false);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact', {
+        body: formData
+      });
+
+      if (error) throw error;
+
+      toast.success("Message sent! We'll get back to you within 24 hours.");
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        whatsapp: "",
+        companyName: "",
+        message: "",
+      });
+    } catch (error: any) {
+      console.error("Error sending message:", error);
+      toast.error("Failed to send message. Please try again or contact us directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -203,8 +215,17 @@ export default function Contact() {
                   </div>
 
                   <Button type="submit" className="w-full min-h-[44px]" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                    <Send className="ml-2 h-4 w-4" />
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send className="ml-2 h-4 w-4" />
+                      </>
+                    )}
                   </Button>
                 </form>
               </CardContent>
