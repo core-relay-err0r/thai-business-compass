@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calculator, Building2, MessageSquare, ArrowRight } from "lucide-react";
+import { AnimatedSection } from "@/components/ui/animated-section";
 
 const modules = [
   {
@@ -30,7 +31,7 @@ const modules = [
 export function ModuleCards() {
   return (
     <section className="py-20 bg-muted/30">
-      <div className="container">
+      <AnimatedSection className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">What do you need?</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -69,7 +70,7 @@ export function ModuleCards() {
             </Card>
           ))}
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 }

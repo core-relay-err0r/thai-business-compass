@@ -1,4 +1,5 @@
 import { MessageSquareText, FileSearch, Send } from "lucide-react";
+import { AnimatedSection } from "@/components/ui/animated-section";
 
 const steps = [
   {
@@ -24,7 +25,7 @@ const steps = [
 export function HowItWorks() {
   return (
     <section id="how-it-works" className="py-20 bg-muted/30">
-      <div className="container">
+      <AnimatedSection className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">How it works</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -49,7 +50,7 @@ export function HowItWorks() {
             </div>
           ))}
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 }
