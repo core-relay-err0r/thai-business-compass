@@ -147,3 +147,26 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .neumorphic-button {
+    @apply relative overflow-hidden;
+  }
+  
+  .neumorphic-button::after {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300 rounded-full;
+    background: linear-gradient(to bottom right, hsl(var(--primary) / 0.2), transparent);
+  }
+    
+  .neumorphic-button:hover::after {
+    @apply opacity-100;
+  }
+
+  .hero-grid-pattern {
+    background-image: 
+      linear-gradient(to right, hsl(var(--primary) / 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
