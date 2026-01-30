@@ -102,22 +102,22 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
     };
     
     return (
-      <div ref={ref} className={cn("relative min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row overflow-hidden bg-background", className)} {...props}>
+      <div ref={ref} className={cn("relative min-h-[calc(100vh-4rem)] lg:min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row overflow-hidden bg-background", className)} {...props}>
         {/* Mobile Background Image */}
         {slides && slides.length > 0 && (
           <div className="lg:hidden absolute inset-0 z-0">
             <img 
               src={slides[0].image} 
               alt="" 
-              className="w-full h-full object-cover opacity-20"
+              className="w-full h-full object-cover opacity-15"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
           </div>
         )}
         
         {/* Left Side: Content */}
         <motion.div 
-          className="w-full lg:w-[70%] flex flex-col justify-between p-6 sm:p-8 md:p-12 lg:p-20 xl:p-24 relative z-10"
+          className="w-full lg:w-[70%] flex flex-col justify-center lg:justify-between p-6 sm:p-8 md:p-12 lg:p-20 xl:p-24 relative z-10 min-h-[calc(100vh-4rem)]"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -139,14 +139,14 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
             <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl">
               <motion.h1 
                 variants={itemVariants}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1]"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]"
               >
                 {title}
               </motion.h1>
               
               <motion.p 
                 variants={itemVariants}
-                className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed"
+                className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed"
               >
                 {subtitle}
               </motion.p>
@@ -187,11 +187,11 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
             </div>
           </div>
 
-          {/* Bottom Section: Footer Info */}
+          {/* Bottom Section: Footer Info - Desktop only */}
           {contactInfo && (
             <motion.div 
               variants={itemVariants}
-              className="mt-8 sm:mt-10 lg:mt-0 pt-6 sm:pt-8 border-t border-border/40"
+              className="hidden lg:block mt-8 sm:mt-10 lg:mt-0 pt-6 sm:pt-8 border-t border-border/40"
             >
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
