@@ -1,7 +1,27 @@
 import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
-import heroOfficeImage from "@/assets/hero-office.jpg";
+import heroCorporate from "@/assets/hero-corporate.jpg";
+import heroAccounting from "@/assets/hero-accounting.jpg";
+import heroConsulting from "@/assets/hero-consulting.jpg";
 
 export function HeroSection() {
+  const slides = [
+    {
+      image: heroCorporate,
+      title: "Corporate",
+      description: "Company setup, registration, and structural changes for your Thai business.",
+    },
+    {
+      image: heroAccounting,
+      title: "Accounting",
+      description: "Monthly bookkeeping, tax filings, and financial compliance handled for you.",
+    },
+    {
+      image: heroConsulting,
+      title: "Consulting",
+      description: "Strategic advisory for business challenges, restructuring, and market entry.",
+    },
+  ];
+
   return (
     <HeroSectionUI
       title={
@@ -20,7 +40,7 @@ export function HeroSection() {
         href: "#how-it-works",
       }}
       tagline="Understand first. Decide later. No pressure."
-      backgroundImage={heroOfficeImage}
+      slides={slides}
       contactInfo={{
         website: "pnd50.com",
         phone: "+66 84 356 3805",
