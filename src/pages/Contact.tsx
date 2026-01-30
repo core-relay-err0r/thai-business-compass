@@ -301,7 +301,7 @@ export default function Contact() {
                       WhatsApp
                     </a>
                     <a 
-                      href="https://t.me/66843563805" 
+                      href="https://t.me/+66843563805"
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border border-blue-500/30 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors text-xs sm:text-sm min-h-[44px]"
