@@ -151,12 +151,13 @@ export default function Submit() {
                   </div>
                 </div>
                 <div className="space-y-1.5 sm:space-y-2">
-                  <Label htmlFor="phone" className="text-sm">Phone (optional)</Label>
+                  <Label htmlFor="phone" className="text-sm">Phone *</Label>
                   <Input
                     id="phone"
                     type="tel"
                     value={contactInfo.phone}
                     onChange={(e) => setContactInfo({ phone: e.target.value })}
+                    required
                     className="min-h-[44px]"
                   />
                 </div>
@@ -371,7 +372,7 @@ export default function Submit() {
                 type="submit"
                 size="lg"
                 className="w-full sm:w-auto min-h-[44px]"
-                disabled={!contactInfo.name || !contactInfo.email || !companyInfo.companyName || isSubmitting}
+                disabled={!contactInfo.name || !contactInfo.email || !contactInfo.phone || !companyInfo.companyName || isSubmitting}
               >
                 {isSubmitting ? (
                   <>
