@@ -83,7 +83,7 @@ export function Header() {
                   <NavigationMenuItem>
                     <NavigationMenuTrigger
                       className={cn(
-                        "text-sm font-medium bg-transparent hover:bg-transparent hover:text-foreground data-[state=open]:bg-transparent h-auto p-0 transition-colors",
+                        "text-sm font-medium bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent data-[active]:bg-transparent h-auto p-0",
                         isServiceActive ? "text-foreground" : "text-muted-foreground"
                       )}
                     >
