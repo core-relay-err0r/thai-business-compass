@@ -136,53 +136,57 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               </motion.div>
             )}
 
-            {/* Mobile Service Highlights */}
+            {/* Mobile Image Carousel */}
             {slides && slides.length > 0 && (
               <motion.div 
                 variants={itemVariants}
-                className="lg:hidden grid grid-cols-3 gap-3"
+                className="lg:hidden relative rounded-2xl overflow-hidden"
               >
-                {slides.map((slide, index) => (
-                  <div 
-                    key={index}
-                    className="flex flex-col items-center text-center p-3 rounded-xl bg-muted/40 border border-border/50"
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentSlide}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="relative aspect-[16/10]"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                      {index === 0 && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M3 21h18" />
-                          <path d="M9 8h1" />
-                          <path d="M9 12h1" />
-                          <path d="M9 16h1" />
-                          <path d="M14 8h1" />
-                          <path d="M14 12h1" />
-                          <path d="M14 16h1" />
-                          <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16" />
-                        </svg>
-                      )}
-                      {index === 1 && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect width="16" height="20" x="4" y="2" rx="2" />
-                          <line x1="8" x2="16" y1="6" y2="6" />
-                          <line x1="16" x2="16" y1="14" y2="18" />
-                          <path d="M16 10h.01" />
-                          <path d="M12 10h.01" />
-                          <path d="M8 10h.01" />
-                          <path d="M12 14h.01" />
-                          <path d="M8 14h.01" />
-                          <path d="M12 18h.01" />
-                          <path d="M8 18h.01" />
-                        </svg>
-                      )}
-                      {index === 2 && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                        </svg>
-                      )}
+                    <img 
+                      src={slides[currentSlide].image} 
+                      alt={slides[currentSlide].title} 
+                      className="w-full h-full object-cover"
+                    />
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                    
+                    {/* Text overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <span className="inline-block px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider bg-background/90 text-foreground border border-border rounded-full mb-2">
+                        {slides[currentSlide].title}
+                      </span>
+                      <p className="text-xs text-foreground/80 line-clamp-2">
+                        {slides[currentSlide].description}
+                      </p>
                     </div>
-                    <span className="text-xs font-medium">{slide.title}</span>
-                  </div>
-                ))}
+                  </motion.div>
+                </AnimatePresence>
+                
+                {/* Slide indicators */}
+                <div className="absolute bottom-3 right-3 flex gap-1.5 z-10">
+                  {slides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full transition-all duration-300",
+                        index === currentSlide 
+                          ? "bg-primary w-4" 
+                          : "bg-muted-foreground/40"
+                      )}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
               </motion.div>
             )}
 
