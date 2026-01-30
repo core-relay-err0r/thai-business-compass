@@ -87,7 +87,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
       <div ref={ref} className={cn("relative min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row overflow-hidden bg-background", className)} {...props}>
         {/* Left Side: Content */}
         <motion.div 
-          className="w-full lg:w-1/2 flex flex-col justify-between p-8 md:p-12 lg:p-16 relative z-10"
+          className="w-full lg:w-2/3 flex flex-col justify-between p-8 md:p-12 lg:p-16 relative z-10"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -182,7 +182,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         </motion.div>
 
         {/* Right Side: Visual with gradient overlay */}
-        <div className="hidden lg:block absolute top-0 right-0 w-1/2 h-full">
+        <div className="hidden lg:block absolute top-0 right-0 w-1/3 h-full">
           {backgroundImage ? (
             <motion.div
               className="absolute inset-0"
