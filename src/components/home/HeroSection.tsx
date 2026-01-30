@@ -1,4 +1,5 @@
 import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
+import heroOfficeImage from "@/assets/hero-office.jpg";
 
 export function HeroSection() {
   return (
@@ -19,6 +20,7 @@ export function HeroSection() {
         href: "#how-it-works",
       }}
       tagline="Understand first. Decide later. No pressure."
+      backgroundImage={heroOfficeImage}
       contactInfo={{
         website: "pnd50.com",
         phone: "+66 84 356 3805",
