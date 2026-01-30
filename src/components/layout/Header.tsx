@@ -67,17 +67,6 @@ export function Header() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <Link
-                to="/"
-                className={`text-sm font-medium transition-colors hover:text-foreground ${
-                  location.pathname === "/"
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Home
-              </Link>
-
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
@@ -118,6 +107,17 @@ export function Header() {
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
+
+              <Link
+                to="/"
+                className={`text-sm font-medium transition-colors hover:text-foreground ${
+                  location.pathname === "/"
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Home
+              </Link>
 
               <Link
                 to="/about"
