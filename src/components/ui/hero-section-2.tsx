@@ -87,13 +87,13 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
       <div ref={ref} className={cn("relative min-h-[calc(100vh-4rem)] w-full flex flex-col lg:flex-row overflow-hidden bg-background", className)} {...props}>
         {/* Left Side: Content */}
         <motion.div 
-          className="w-full lg:w-2/3 flex flex-col justify-between p-8 md:p-12 lg:p-16 relative z-10"
+          className="w-full lg:w-2/3 flex flex-col justify-between p-8 md:p-12 lg:p-20 xl:p-24 relative z-10"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Top Section: Logo & Main Content */}
-          <div className="flex flex-col gap-8 md:gap-12">
+          <div className="flex flex-col gap-10 md:gap-14">
             {logo && (
               <motion.div variants={itemVariants} className="flex items-center gap-3">
                 {logo.url && (
@@ -101,12 +101,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 )}
                 <div className="flex flex-col">
                   {logo.text && <span className="text-xl font-bold tracking-tight">{logo.text}</span>}
-                  {slogan && <span className="text-xs text-muted-foreground uppercase tracking-wider">{slogan}</span>}
+                  {slogan && <span className="text-xs text-primary uppercase tracking-wider font-medium">{slogan}</span>}
                 </div>
               </motion.div>
             )}
 
-            <div className="flex flex-col gap-6 max-w-xl">
+            <div className="flex flex-col gap-8 max-w-2xl">
               <motion.h1 
                 variants={itemVariants}
                 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]"
@@ -116,12 +116,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               
               <motion.p 
                 variants={itemVariants}
-                className="text-lg text-muted-foreground"
+                className="text-lg md:text-xl text-muted-foreground leading-relaxed"
               >
                 {subtitle}
               </motion.p>
               
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-2">
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-4">
                 <a 
                   href={callToAction.href}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors neumorphic-button group"
