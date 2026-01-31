@@ -117,13 +117,13 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         
         {/* Left Side: Content */}
         <motion.div 
-          className="w-full lg:w-[60%] flex flex-col justify-center items-center lg:items-start p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-20"
+          className="w-full lg:w-[60%] flex flex-col justify-center items-center lg:items-start px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-10 sm:py-14 lg:py-20"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {/* Top Section: Logo & Main Content */}
-          <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-14">
+          <div className="flex flex-col gap-5 sm:gap-6 md:gap-8 lg:gap-14 text-center lg:text-left w-full max-w-lg lg:max-w-none">
             {logo && (
               <motion.div variants={itemVariants} className="flex items-center gap-2 sm:gap-3">
                 {logo.url && (
@@ -140,7 +140,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
             {slides && slides.length > 0 && (
               <motion.div 
                 variants={itemVariants}
-                className="lg:hidden relative rounded-2xl overflow-hidden"
+                className="lg:hidden relative rounded-xl overflow-hidden shadow-lg mx-auto w-full"
               >
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -149,7 +149,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.6 }}
-                    className="relative aspect-[16/10]"
+                    className="relative aspect-[4/3] sm:aspect-[16/10]"
                   >
                     <img 
                       src={slides[currentSlide].image} 
@@ -190,25 +190,25 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               </motion.div>
             )}
 
-            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl">
+            <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 max-w-2xl mx-auto lg:mx-0">
               <motion.h1 
                 variants={itemVariants}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]"
+                className="text-[1.625rem] leading-[1.2] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight lg:leading-[1.15]"
               >
                 {title}
               </motion.h1>
               
               <motion.p 
                 variants={itemVariants}
-                className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed"
+                className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed px-2 sm:px-0"
               >
                 {subtitle}
               </motion.p>
               
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-2 sm:pt-4 w-full sm:w-auto sm:justify-center lg:justify-start">
                 <a 
                   href={callToAction.href}
-                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors neumorphic-button group min-h-[44px]"
+                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors neumorphic-button group min-h-[48px]"
                 >
                   {callToAction.text}
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -219,7 +219,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 {secondaryAction && (
                   <a 
                     href={secondaryAction.href}
-                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm font-medium rounded-lg border border-border bg-background transition-colors group min-h-[44px]"
+                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3.5 text-sm font-medium rounded-lg border border-border bg-background transition-colors group min-h-[48px]"
                   >
                     {secondaryAction.text}
                     <svg className="w-4 h-4 opacity-0 -ml-4 transition-all group-hover:opacity-100 group-hover:ml-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -233,7 +233,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               {tagline && (
                 <motion.p 
                   variants={itemVariants}
-                  className="text-xs sm:text-sm text-muted-foreground/60 pt-1 sm:pt-2"
+                  className="text-xs sm:text-sm text-muted-foreground/60 pt-1"
                 >
                   {tagline}
                 </motion.p>
