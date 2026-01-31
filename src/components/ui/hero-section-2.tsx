@@ -111,7 +111,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
       }
     }
   };
-  return <div ref={ref} className={cn("relative w-full flex flex-col lg:flex-row overflow-hidden bg-background min-h-screen", className)} {...props}>
+  return <div ref={ref} className={cn("relative w-full flex flex-col lg:flex-row bg-background min-h-screen overflow-x-hidden", className)} {...props}>
         {/* Mobile Background Image */}
         {slides && slides.length > 0 && <div className="lg:hidden absolute inset-0 z-0">
             <img src={slides[0].image} alt="" className="w-full h-full object-cover opacity-15" />
@@ -216,7 +216,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
         </motion.div>
 
         {/* Right Side: Visual with diagonal clip */}
-        <div className="hidden lg:block absolute top-0 right-0 w-[40%] h-full overflow-hidden" style={{
+        <div className="hidden lg:block absolute top-0 right-0 w-[40%] h-full" style={{
       clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)'
     }}>
           {slides && slides.length > 0 ? <motion.div className="absolute inset-0" initial={{
