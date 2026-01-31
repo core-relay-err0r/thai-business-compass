@@ -117,7 +117,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
         
         {/* Left Side: Content */}
         <motion.div 
-          className="w-full lg:w-[60%] flex flex-col justify-center lg:justify-between p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-20"
+          className="w-full lg:w-[60%] flex flex-col justify-center items-center lg:items-start p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-20"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
