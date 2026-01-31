@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Icon component for contact details
 const InfoIcon = ({
@@ -72,16 +72,6 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
   ...props
 }, ref) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(heroRef, { once: true, amount: 0.1 });
-
-  // Trigger entrance animation once
-  useEffect(() => {
-    if (isInView && !hasAnimated) {
-      setHasAnimated(true);
-    }
-  }, [isInView, hasAnimated]);
 
   // Auto-rotate slides
   useEffect(() => {
@@ -121,22 +111,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
       }
     }
   };
-  return <div ref={(node) => {
-    // Combine refs
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-    (heroRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] overflow-x-hidden", className)} {...props}>
+  return <div ref={ref} className={cn("relative w-full flex flex-col lg:flex-row bg-background min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] overflow-x-hidden", className)} {...props}>
         {/* Mobile Background Image */}
-        {slides && slides.length > 0 && <motion.div 
-          className="lg:hidden absolute inset-0 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: hasAnimated ? 1 : 0 }}
-          transition={{ duration: 0.8 }}
-        >
+        {slides && slides.length > 0 && <div className="lg:hidden absolute inset-0 z-0">
             <img src={slides[0].image} alt="" className="w-full h-full object-cover opacity-15" />
             <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
-          </motion.div>}
+          </div>}
         
         {/* Left Side: Content */}
         <motion.div className="w-full lg:w-[60%] flex flex-col justify-center p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-24 xl:py-28" variants={containerVariants} initial="hidden" animate="visible">
@@ -236,22 +216,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
         </motion.div>
 
         {/* Right Side: Visual with diagonal clip */}
-        <motion.div 
-          className="hidden lg:block absolute top-0 right-0 w-[40%] h-full"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ 
-            opacity: hasAnimated ? 1 : 0, 
-            x: hasAnimated ? 0 : 40 
-          }}
-          transition={{ 
-            duration: 0.9, 
-            delay: 0.3,
-            ease: [0.22, 1, 0.36, 1]
-          }}
-          style={{
-            clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)'
-          }}
-        >
+        <div className="hidden lg:block absolute top-0 right-0 w-[40%] h-full" style={{
+      clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)'
+    }}>
           {slides && slides.length > 0 ? <div className="absolute inset-0">
               {/* Render all slides, control visibility with opacity for smoother transitions */}
               {slides.map((slide, index) => (
@@ -335,7 +302,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
           ease: "easeInOut"
         }} />
             </motion.div>}
-        </motion.div>
+        </div>
       </div>;
 });
 HeroSection.displayName = "HeroSection";
