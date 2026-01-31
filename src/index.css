@@ -11,6 +11,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    --header-height: 3.5rem;
     --background: 0 0% 100%;
     --foreground: 0 0% 10%;
 
@@ -83,6 +84,12 @@ All colors MUST be HSL.
     --tracking-normal: 0em;
 
     --spacing: 0.25rem;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --header-height: 4rem;
+    }
   }
 
   .dark {

@@ -126,7 +126,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
     if (typeof ref === 'function') ref(node);
     else if (ref) ref.current = node;
     (heroRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] overflow-hidden", className)} {...props}>
+  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background overflow-hidden", className)} style={{ minHeight: 'calc(100vh - var(--header-height, 4rem))', height: 'calc(100vh - var(--header-height, 4rem))' }} {...props}>
         {/* Mobile Background Image */}
         {slides && slides.length > 0 && <motion.div 
           className="lg:hidden absolute inset-0 z-0"
