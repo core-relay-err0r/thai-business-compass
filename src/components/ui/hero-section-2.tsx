@@ -139,9 +139,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
             <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
           </motion.div>}
         
-        {/* Globe Background - Desktop only, bottom-left positioned */}
-        <div className="hidden lg:block absolute -left-80 -bottom-96 opacity-30 pointer-events-none z-0">
-          <Globe size={1300} />
+        {/* Globe Background - Desktop only */}
+        <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/4 opacity-[0.08] pointer-events-none z-0">
+          <Globe size={700} />
         </div>
         
         {/* Left Side: Content */}
@@ -190,7 +190,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 </div>
               </motion.div>}
 
-            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl lg:py-12 xl:py-16 relative z-10">
+            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl lg:py-12 xl:py-16">
               <motion.h1 variants={itemVariants} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]">
                 {title}
               </motion.h1>
