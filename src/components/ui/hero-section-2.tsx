@@ -219,55 +219,51 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
         <div className="hidden lg:block absolute top-0 right-0 w-[40%] h-full" style={{
       clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)'
     }}>
-          {slides && slides.length > 0 ? <motion.div className="absolute inset-0" initial={{
-        opacity: 0
-      }} animate={{
-        opacity: 1
-      }} transition={{
-        duration: 1.2,
-        ease: [0.22, 1, 0.36, 1]
-      }}>
-              <AnimatePresence mode="wait">
-                <motion.div key={currentSlide} initial={{
-            opacity: 0
-          }} animate={{
-            opacity: 1
-          }} exit={{
-            opacity: 0
-          }} transition={{
-            duration: 0.8
-          }} className="absolute inset-0">
-                  <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-full object-cover" />
+          {slides && slides.length > 0 ? <div className="absolute inset-0">
+              {/* Render all slides, control visibility with opacity for smoother transitions */}
+              {slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+                  style={{
+                    opacity: index === currentSlide ? 1 : 0,
+                    willChange: 'opacity',
+                  }}
+                >
+                  <img 
+                    src={slide.image} 
+                    alt={slide.title} 
+                    className="w-full h-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
                   {/* Gradient overlays for fading effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 via-20% to-transparent" />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 via-30% to-transparent" />
                   
                   {/* Text overlay */}
-                  <motion.div className="absolute bottom-0 left-0 right-0 p-8" initial={{
-              y: 20,
-              opacity: 0
-            }} animate={{
-              y: 0,
-              opacity: 1
-            }} transition={{
-              delay: 0.3,
-              duration: 0.5
-            }}>
+                  <div 
+                    className="absolute bottom-0 left-0 right-0 p-8 transition-all duration-500 ease-out"
+                    style={{
+                      opacity: index === currentSlide ? 1 : 0,
+                      transform: index === currentSlide ? 'translateY(0)' : 'translateY(10px)',
+                      transitionDelay: index === currentSlide ? '200ms' : '0ms',
+                    }}
+                  >
                     <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-background/90 text-foreground border border-border rounded-full mb-3">
-                      {slides[currentSlide].title}
+                      {slide.title}
                     </span>
                     <p className="text-sm text-foreground/80 max-w-xs">
-                      {slides[currentSlide].description}
+                      {slide.description}
                     </p>
-                  </motion.div>
-                </motion.div>
-              </AnimatePresence>
+                  </div>
+                </div>
+              ))}
               
               {/* Slide indicators */}
               <div className="absolute bottom-4 right-4 flex gap-2 z-10">
                 {slides.map((_, index) => <button key={index} onClick={() => setCurrentSlide(index)} className={cn("w-2 h-2 rounded-full transition-all duration-300", index === currentSlide ? "bg-primary w-6" : "bg-muted-foreground/40 hover:bg-muted-foreground/60")} aria-label={`Go to slide ${index + 1}`} />)}
               </div>
-            </motion.div> : backgroundImage ? <motion.div className="absolute inset-0" initial={{
+            </div> : backgroundImage ? <motion.div className="absolute inset-0" initial={{
         clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)"
       }} animate={{
         clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)"
