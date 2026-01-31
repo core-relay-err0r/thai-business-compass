@@ -140,7 +140,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
           </motion.div>}
         
         {/* Globe Background - Desktop only */}
-        <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/4 opacity-[0.08] pointer-events-none z-0">
+        <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/4 opacity-25 pointer-events-none z-0">
           <Globe size={700} />
         </div>
         
