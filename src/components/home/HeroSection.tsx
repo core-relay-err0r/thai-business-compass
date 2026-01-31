@@ -29,9 +29,5 @@ export function HeroSection() {
     website: "info@pnd50.com",
     phone: "+66 84 356 3805",
     address: "Bangkok, Thailand"
-  }} highlights={[
-    { value: "10+", label: "Years in Thailand" },
-    { value: "500+", label: "Companies served" },
-    { value: "100%", label: "Compliance rate" }
-  ]} />;
+  }} />;
 }

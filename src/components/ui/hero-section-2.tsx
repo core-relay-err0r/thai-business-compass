@@ -56,10 +56,6 @@ interface HeroSectionProps {
     address: string;
   };
   tagline?: string;
-  highlights?: {
-    label: string;
-    value: string;
-  }[];
 }
 const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
   className,
@@ -73,7 +69,6 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
   slides,
   contactInfo,
   tagline,
-  highlights,
   ...props
 }, ref) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -218,22 +213,6 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
               {tagline && <motion.p variants={itemVariants} className="text-xs sm:text-sm text-muted-foreground/60 pt-1 sm:pt-2">
                   {tagline}
                 </motion.p>}
-
-              {/* Trust Highlights */}
-              {highlights && highlights.length > 0 && (
-                <motion.div variants={itemVariants} className="flex flex-wrap gap-6 sm:gap-8 md:gap-12 pt-6 sm:pt-8 mt-2">
-                  {highlights.map((highlight, index) => (
-                    <div key={index} className="flex flex-col">
-                      <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-                        {highlight.value}
-                      </span>
-                      <span className="text-xs sm:text-sm text-muted-foreground mt-1">
-                        {highlight.label}
-                      </span>
-                    </div>
-                  ))}
-                </motion.div>
-              )}
             </div>
           </div>
 
