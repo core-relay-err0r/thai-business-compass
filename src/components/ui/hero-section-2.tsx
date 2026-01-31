@@ -141,7 +141,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
         
         {/* Globe Background - Desktop only, bottom-left positioned */}
         <div className="hidden lg:block absolute -left-40 -bottom-60 opacity-30 pointer-events-none z-0">
-          <Globe size={800} />
+          <Globe size={1600} />
         </div>
         
         {/* Left Side: Content */}
