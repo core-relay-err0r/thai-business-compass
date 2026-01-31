@@ -190,7 +190,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 </div>
               </motion.div>}
 
-            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl lg:py-12 xl:py-16">
+            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl lg:py-12 xl:py-16 relative z-10">
               <motion.h1 variants={itemVariants} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]">
                 {title}
               </motion.h1>
