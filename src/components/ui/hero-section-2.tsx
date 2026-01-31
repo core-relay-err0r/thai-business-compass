@@ -119,9 +119,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
           </div>}
         
         {/* Left Side: Content */}
-        <motion.div className="w-full lg:w-[60%] flex flex-col justify-center lg:justify-between p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-20" variants={containerVariants} initial="hidden" animate="visible">
+        <motion.div className="w-full lg:w-[60%] flex flex-col justify-center p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-24 xl:py-28" variants={containerVariants} initial="hidden" animate="visible">
           {/* Top Section: Logo & Main Content */}
-          <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-14">
+          <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-14 lg:my-auto">
             {logo && <motion.div variants={itemVariants} className="flex items-center gap-2 sm:gap-3">
                 {logo.url && <img src={logo.url} alt={logo.alt || "Logo"} className="h-8 sm:h-10 w-auto" />}
                 <div className="flex flex-col">
@@ -164,7 +164,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 </div>
               </motion.div>}
 
-            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl lg:my-auto">
+            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl lg:py-12 xl:py-16">
               <motion.h1 variants={itemVariants} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]">
                 {title}
               </motion.h1>
