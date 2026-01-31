@@ -47,7 +47,7 @@ export function Globe({ className, size = 600 }: GlobeProps) {
       phi: 0,
       theta: 0.3,
       dark: 0,
-      diffuse: 0,
+      diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
       baseColor: [0.9, 0.9, 0.95],
