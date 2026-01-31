@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { Globe } from './globe';
 
 // Icon component for contact details
 const InfoIcon = ({
@@ -137,6 +138,11 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
             <img src={slides[0].image} alt="" className="w-full h-full object-cover opacity-15" />
             <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
           </motion.div>}
+        
+        {/* Globe Background - Desktop only */}
+        <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/4 opacity-[0.08] pointer-events-none z-0">
+          <Globe size={700} />
+        </div>
         
         {/* Left Side: Content */}
         <motion.div className="w-full lg:w-[60%] flex flex-col justify-center p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-24 xl:py-28" variants={containerVariants} initial="hidden" animate="visible">
