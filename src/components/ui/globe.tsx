@@ -84,7 +84,9 @@ export function Globe({ className, size = 600 }: GlobeProps) {
       onPointerUp={() => updatePointerInteraction(null)}
       onPointerOut={() => updatePointerInteraction(null)}
       onMouseMove={(e) => updateMovement(e.clientX)}
-      onTouchMove={(e) => e.touches[0] && updateMovement(e.touches[0].clientX)}
+      onTouchMove={(e) =>
+        e.touches[0] && updateMovement(e.touches[0].clientX)
+      }
       className={cn("aspect-square", className)}
       style={{
         width: size,

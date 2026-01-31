@@ -139,9 +139,9 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
             <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
           </motion.div>}
         
-        {/* Globe Background - Desktop only, bottom-left positioned */}
-        <div className="hidden lg:block absolute -left-80 -bottom-96 opacity-30 pointer-events-none z-0">
-          <Globe size={1300} />
+        {/* Globe Background - Desktop only */}
+        <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/4 opacity-[0.08] pointer-events-none z-0">
+          <Globe size={700} />
         </div>
         
         {/* Left Side: Content */}
