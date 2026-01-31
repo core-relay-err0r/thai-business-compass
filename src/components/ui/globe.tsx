@@ -49,10 +49,10 @@ export function Globe({ className, size = 600 }: GlobeProps) {
       dark: 0,
       diffuse: 1.2,
       mapSamples: 16000,
-      mapBrightness: 4,
-      baseColor: [0.98, 0.98, 0.98],
+      mapBrightness: 6,
+      baseColor: [0.9, 0.9, 0.95],
       markerColor: [0.34, 0.56, 0.88],
-      glowColor: [0.98, 0.98, 0.98],
+      glowColor: [0.85, 0.9, 1],
       markers: [
         // Bangkok, Thailand - highlighted
         { location: [13.7563, 100.5018], size: 0.08 },
