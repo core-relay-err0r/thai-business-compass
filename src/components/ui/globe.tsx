@@ -46,7 +46,7 @@ export function Globe({ className, size = 600 }: GlobeProps) {
       height: size * 2,
       phi: 0,
       theta: 0.3,
-      dark: 0,
+      dark: 1,
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
@@ -84,9 +84,7 @@ export function Globe({ className, size = 600 }: GlobeProps) {
       onPointerUp={() => updatePointerInteraction(null)}
       onPointerOut={() => updatePointerInteraction(null)}
       onMouseMove={(e) => updateMovement(e.clientX)}
-      onTouchMove={(e) =>
-        e.touches[0] && updateMovement(e.touches[0].clientX)
-      }
+      onTouchMove={(e) => e.touches[0] && updateMovement(e.touches[0].clientX)}
       className={cn("aspect-square", className)}
       style={{
         width: size,
