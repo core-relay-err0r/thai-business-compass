@@ -245,7 +245,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
           {contactInfo && (
             <motion.div 
               variants={itemVariants}
-              className="hidden lg:block mt-8 sm:mt-10 lg:mt-0 pt-6 sm:pt-8 border-t border-border/40"
+              className="hidden lg:block lg:mt-auto pt-6 sm:pt-8 border-t border-border/40"
             >
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
