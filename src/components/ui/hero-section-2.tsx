@@ -111,7 +111,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
       }
     }
   };
-  return <div ref={ref} className={cn("relative w-full flex flex-col lg:flex-row overflow-hidden bg-background lg:min-h-[calc(100vh-4rem)]", className)} {...props}>
+  return <div ref={ref} className={cn("relative w-full flex flex-col lg:flex-row overflow-hidden bg-background min-h-screen", className)} {...props}>
         {/* Mobile Background Image */}
         {slides && slides.length > 0 && <div className="lg:hidden absolute inset-0 z-0">
             <img src={slides[0].image} alt="" className="w-full h-full object-cover opacity-15" />
