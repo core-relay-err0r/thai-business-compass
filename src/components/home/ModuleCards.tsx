@@ -41,7 +41,7 @@ export function ModuleCards() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
           {modules.map((module) => (
-            <Card key={module.href} className="relative group hover:shadow-lg transition-shadow">
+            <Card key={module.href} className="relative group hover:shadow-lg transition-shadow flex flex-col h-full">
               <CardHeader className="p-4 sm:p-6">
                 <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-primary/10 mb-3 sm:mb-4">
                   <module.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
@@ -51,7 +51,7 @@ export function ModuleCards() {
                   {module.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0">
+              <CardContent className="p-4 sm:p-6 pt-0 flex flex-col flex-1">
                 <ul className="text-xs sm:text-sm text-muted-foreground space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
                   {module.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2">
@@ -60,12 +60,14 @@ export function ModuleCards() {
                     </li>
                   ))}
                 </ul>
-                <Link to={module.href}>
-                  <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px]">
-                    Get started
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
+                <div className="mt-auto">
+                  <Link to={module.href}>
+                    <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px]">
+                      Get started
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           ))}
