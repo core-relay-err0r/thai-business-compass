@@ -50,7 +50,7 @@ export function Globe({ className, size = 600 }: GlobeProps) {
       diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [0.9, 0.9, 0.95],
+      baseColor: [255, 255, 255],
       markerColor: [0.34, 0.56, 0.88],
       glowColor: [0.85, 0.9, 1],
       markers: [
