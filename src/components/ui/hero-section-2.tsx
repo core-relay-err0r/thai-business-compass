@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 // Icon component for contact details
 const InfoIcon = ({
@@ -218,18 +219,18 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
           {/* Bottom Section: Footer Info - Desktop only */}
           {contactInfo && <motion.div variants={itemVariants} className="hidden lg:block mt-8 sm:mt-10 lg:mt-0 pt-6 sm:pt-8 border-t border-border/40">
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
+                <Link to="/contact" className="flex items-center gap-2 hover:text-primary transition-colors">
                   <InfoIcon type="website" />
                   {contactInfo.website}
-                </div>
-                <div className="flex items-center gap-2">
+                </Link>
+                <Link to="/contact" className="flex items-center gap-2 hover:text-primary transition-colors">
                   <InfoIcon type="phone" />
                   {contactInfo.phone}
-                </div>
-                <div className="flex items-center gap-2">
+                </Link>
+                <Link to="/contact" className="flex items-center gap-2 hover:text-primary transition-colors">
                   <InfoIcon type="address" />
                   {contactInfo.address}
-                </div>
+                </Link>
               </div>
             </motion.div>}
         </motion.div>
