@@ -147,8 +147,12 @@ export function AccountingWizard() {
         {currentStep === 4 && (
           <Step4YearEnd inputs={localInputs} setInputs={setLocalInputs} />
         )}
-        {currentStep === 5 && liveResult && (
-          <Step5Results result={liveResult} onAdjust={handleAdjust} />
+        {currentStep === 5 && (
+          liveResult ? (
+            <Step5Results result={liveResult} onAdjust={handleAdjust} />
+          ) : (
+            <Step5EmptyState />
+          )
         )}
 
         <div className="flex justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-border">
@@ -535,6 +539,20 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function Step5EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-center px-4">
+      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
+        <Calculator className="h-6 w-6 text-muted-foreground" />
+      </div>
+      <h3 className="text-lg font-semibold mb-2">Ready to calculate</h3>
+      <p className="text-sm text-muted-foreground max-w-sm">
+        Click "Submit to calculator" to see your personalized accounting estimate based on your answers.
+      </p>
     </div>
   );
 }
