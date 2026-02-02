@@ -239,83 +239,79 @@ export default function Submit() {
                     : "No services selected yet. Visit the calculators to add services."}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0 space-y-4 sm:space-y-6">
-                {hasAccountingData && (
-                  <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                      <Calculator className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                      <span className="font-medium text-sm sm:text-base">Accounting Services</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-                      <div>
-                        <span className="text-muted-foreground">Monthly:</span>{" "}
-                        <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}</span>
+              <CardContent className="p-4 sm:p-6 pt-0">
+                {hasAnySelection ? (
+                  <div className="divide-y divide-border">
+                    {hasAccountingData && (
+                      <div className="pb-5 sm:pb-6">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Calculator className="h-4 w-4 text-primary" />
+                          <span className="font-medium">Accounting Services</span>
+                        </div>
+                        <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-2">
+                          <div>
+                            <span className="text-primary">Monthly:</span>{" "}
+                            <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}</span>
+                          </div>
+                          <div>
+                            <span className="text-primary">Annual:</span>{" "}
+                            <span className="font-medium">${formatPrice(accountingResult!.totalAnnual)}</span>
+                          </div>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Required: {accountingResult!.requiredItems.join(", ")}
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-muted-foreground">Annual:</span>{" "}
-                        <span className="font-medium">${formatPrice(accountingResult!.totalAnnual)}</span>
+                    )}
+
+                    {hasCorporateData && (
+                      <div className={`${hasAccountingData ? "pt-5 sm:pt-6" : ""} ${hasConsultingData ? "pb-5 sm:pb-6" : ""}`}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <Building2 className="h-4 w-4 text-primary" />
+                          <span className="font-medium">Corporate Services</span>
+                        </div>
+                        <div className="space-y-2">
+                          {selectedCorporateServices.map((service) => (
+                            <div key={service.id} className="flex justify-between text-sm">
+                              <span className="text-primary">{service.name}</span>
+                              <span className="font-medium">${formatPrice(service.price)}</span>
+                            </div>
+                          ))}
+                          <div className="flex justify-between text-sm pt-3 border-t border-border/50">
+                            <span>Total</span>
+                            <span className="font-medium">
+                              ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="mt-2 sm:mt-3 text-xs sm:text-sm text-muted-foreground">
-                      Required: {accountingResult!.requiredItems.join(", ")}
-                    </div>
-                  </div>
-                )}
+                    )}
 
-                {hasCorporateData && (
-                  <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                      <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                      <span className="font-medium text-sm sm:text-base">Corporate Services</span>
-                    </div>
-                    <ul className="space-y-1.5 sm:space-y-2">
-                      {selectedCorporateServices.map((service) => (
-                        <li key={service.id} className="text-xs sm:text-sm flex justify-between">
-                          <span>{service.name}</span>
-                          <span className="font-medium">${formatPrice(service.price)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-border flex justify-between text-xs sm:text-sm font-medium">
-                      <span>Total</span>
-                      <span>
-                        ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
-                      </span>
-                    </div>
+                    {hasConsultingData && (
+                      <div className={`${hasAccountingData || hasCorporateData ? "pt-5 sm:pt-6" : ""}`}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <MessageSquare className="h-4 w-4 text-primary" />
+                          <span className="font-medium">Consulting Services</span>
+                        </div>
+                        <div className="space-y-2">
+                          {selectedConsultingServices.map((service) => (
+                            <div key={service.id} className="flex justify-between text-sm">
+                              <span className="text-primary">{service.name}</span>
+                              <span className="font-medium">
+                                ${formatPrice(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-
-                {hasConsultingData && (
-                  <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                      <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                      <span className="font-medium text-sm sm:text-base">Consulting Services</span>
-                    </div>
-                    <ul className="space-y-1.5 sm:space-y-2">
-                      {selectedConsultingServices.map((service) => (
-                        <li key={service.id} className="text-xs sm:text-sm flex justify-between">
-                          <span>{service.name}</span>
-                          <span className="font-medium">
-                            ${formatPrice(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {!hasAnySelection && (
+                ) : (
                   <div className="text-center py-6 sm:py-8 text-muted-foreground">
                     <p className="mb-3 sm:mb-4 text-sm">You haven't selected any services yet.</p>
                     <div className="flex flex-wrap justify-center gap-2">
                       <Button variant="outline" size="sm" asChild className="min-h-[44px]">
-                        <a href="/accounting">Calculate accounting</a>
-                      </Button>
-                      <Button variant="outline" size="sm" asChild className="min-h-[44px]">
-                        <a href="/corporate">Browse corporate</a>
-                      </Button>
-                      <Button variant="outline" size="sm" asChild className="min-h-[44px]">
-                        <a href="/consulting">Browse consulting</a>
+                        <a href="/services">Browse services</a>
                       </Button>
                     </div>
                   </div>
