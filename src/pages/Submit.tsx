@@ -327,7 +327,7 @@ export default function Submit() {
 
             {/* Payment Summary */}
             {hasAnySelection && (
-              <Card>
+              <Card className="bg-muted/30 border-primary/10">
                 <CardHeader className="p-4 sm:p-6">
                   <CardTitle className="text-lg sm:text-xl">Payment Summary</CardTitle>
                   <CardDescription className="text-sm">How you'll pay for these services</CardDescription>
