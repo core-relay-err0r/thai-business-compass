@@ -1,43 +1,72 @@
 
 
-# Design Improvements for Submit Page Service Summary
+# Payment Summary Caption for Submit Page
 
-## Current State Analysis
+## Overview
 
-The "Selected Services" card on the `/submit` page currently displays three sections (Accounting, Corporate, Consulting) using basic gray boxes (`bg-muted/50`). The design is functional but lacks visual refinement compared to the rest of the application's clean, premium aesthetic.
+Adding a clear, practical payment breakdown section below the Selected Services card that explains exactly how the customer will pay for these services in real terms.
 
-## Proposed Design Changes
+## Design Approach
 
-### Visual Structure
+The payment summary will be a clean, well-organized section that groups costs by payment frequency:
 
-The redesigned summary will feature:
+- **Initial Payment** - One-time fees due at project start (Corporate Services + Consulting engagements)
+- **Monthly Recurring** - Ongoing monthly costs (Accounting monthly fees)
+- **Annual Fees** - Year-end costs (Statements, audits)
+- **Grand Total Estimate** - Combined first-year cost with clear note that this is indicative
 
-- **Clean white/card background sections** instead of gray boxes
-- **Subtle borders** to separate service categories
-- **Improved typography hierarchy** with consistent sizing
-- **Icon styling** matching the primary color scheme
-- **Better price alignment** using a cleaner table-like layout
+## Visual Structure
 
-### Layout Per Section
+The summary will appear as a highlighted box below the services list, using a subtle background and clean typography:
 
-**Accounting Services**
-- Header row with calculator icon + "Accounting Services" title
-- Two-column inline display: "Monthly: $X" and "Annual: $X"
-- Required items shown as a subtle subtext line
+```
+------------------------------------------------------------
+Payment Summary
 
-**Corporate Services**
-- Header row with building icon + "Corporate Services" title
-- Individual line items in a clean list format
-- Price right-aligned for each item
-- Total row with border separator above
+INITIAL PAYMENT (due at engagement start)
+Corporate Services                              $X,XXX
+Consulting (indicative, scoped on confirmation) $X,XXX–$X,XXX
+                                          ─────────────────
+Initial Total                                   $X,XXX–$X,XXX
 
-**Consulting Services**
-- Header row with message icon + "Consulting Services" title
-- Individual line items with price ranges
-- Clean list format matching Corporate
+MONTHLY RECURRING
+Accounting Services                             $XXX/month
+First Year (12 months)                          $X,XXX
 
-### Empty State
-- Maintains current centered messaging with navigation buttons
+ANNUAL FEES (due at year-end)
+Financial statements, Audit, etc.               $X,XXX
+
+────────────────────────────────────────────────────────────
+ESTIMATED FIRST-YEAR TOTAL                      $X,XXX–$X,XXX
+
+Note: Final pricing confirmed after initial consultation.
+Consulting fees scoped based on specific requirements.
+------------------------------------------------------------
+```
+
+## Key Information to Display
+
+1. **Initial Payment Section**
+   - Corporate Services total (one-time)
+   - Consulting total range (project-based, indicative)
+   - Combined initial payment range
+
+2. **Monthly Section**
+   - Accounting monthly fee
+   - Annualized (monthly x 12)
+
+3. **Annual Fees Section**
+   - Year-end statements
+   - Audit fees (if applicable)
+
+4. **Grand Total**
+   - Combined first-year estimate
+   - Range format when consulting is included
+
+5. **Disclaimer Caption**
+   - "Estimates based on your inputs"
+   - "Consulting fees scoped during initial consultation"
+   - "Final pricing confirmed before engagement"
 
 ---
 
@@ -45,89 +74,110 @@ The redesigned summary will feature:
 
 ### File Changes
 
-**`src/pages/Submit.tsx`** (lines 232-324)
+**`src/pages/Submit.tsx`**
 
-1. **Remove gray background boxes** from service sections
-2. **Add proper borders** between sections using `divide-y` or explicit borders
-3. **Restructure accounting section**:
-   - Add section header with icon and title on same line
-   - Show Monthly and Annual prices inline with labels
-   - Move "Required" text below as muted subtext
-4. **Restructure corporate section**:
-   - Add section header with building icon
-   - Create clean list with `justify-between` for name/price pairs
-   - Use `text-primary` for service names to add visual interest
-   - Add total row with `border-t` separator
-5. **Restructure consulting section**:
-   - Add section header with message icon
-   - List items with price ranges in same format as corporate
-6. **Adjust spacing**:
-   - Use `space-y-6` between major sections
-   - Add `pb-4` or `pb-6` with borders between categories
-7. **Typography refinements**:
-   - Section titles: `font-medium text-base`
-   - Item names: `text-sm text-primary` for interactivity feel
-   - Prices: `text-sm font-medium` right-aligned
-   - Total labels: `text-sm font-medium`
+1. Add a new "Payment Summary" section below the Selected Services card
+2. Calculate totals:
+   - `initialTotal`: Corporate total + Consulting midpoint
+   - `monthlyTotal`: Accounting monthly
+   - `annualTotal`: Accounting annual addons
+   - `firstYearTotal`: initialTotal + (monthlyTotal x 12) + annualTotal
 
-### Code Changes Summary
+3. Add a new styled box with the payment breakdown:
+   - Use `bg-muted/30` or subtle border to differentiate from cards
+   - Clear section headers with `text-xs uppercase tracking-wide text-muted-foreground`
+   - Price rows using the same `flex justify-between` pattern
+   - Separator line before grand total
+   - Disclaimer text in `text-xs text-muted-foreground`
+
+### Component Structure
 
 ```tsx
-{/* Accounting Section */}
-<div className="pb-6 border-b border-border last:border-0 last:pb-0">
-  <div className="flex items-center gap-2 mb-3">
-    <Calculator className="h-4 w-4 text-primary" />
-    <span className="font-medium">Accounting Services</span>
-  </div>
-  <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-2">
-    <div>
-      <span className="text-primary">Monthly:</span>{" "}
-      <span className="font-medium">$205</span>
-    </div>
-    <div>
-      <span className="text-primary">Annual:</span>{" "}
-      <span className="font-medium">$2,460</span>
-    </div>
-  </div>
-  <div className="text-xs text-muted-foreground">
-    Required: Monthly bookkeeping, Tax filings
-  </div>
-</div>
-
-{/* Corporate Section */}
-<div className="pb-6 border-b border-border last:border-0 last:pb-0">
-  <div className="flex items-center gap-2 mb-3">
-    <Building2 className="h-4 w-4 text-primary" />
-    <span className="font-medium">Corporate Services</span>
-  </div>
-  <div className="space-y-2">
-    {services.map(s => (
-      <div className="flex justify-between text-sm">
-        <span className="text-primary">{s.name}</span>
-        <span className="font-medium">${s.price}</span>
+{/* Payment Summary - Only show when there are selections */}
+{hasAnySelection && (
+  <Card>
+    <CardHeader>
+      <CardTitle>Payment Summary</CardTitle>
+      <CardDescription>How you'll pay for these services</CardDescription>
+    </CardHeader>
+    <CardContent>
+      {/* Initial Payment Section */}
+      {(hasCorporateData || hasConsultingData) && (
+        <div className="space-y-2 pb-4 border-b">
+          <h4 className="text-xs uppercase tracking-wide text-muted-foreground">
+            Initial Payment
+          </h4>
+          {/* Corporate line */}
+          {/* Consulting line */}
+          {/* Subtotal */}
+        </div>
+      )}
+      
+      {/* Monthly Recurring Section */}
+      {hasAccountingData && (
+        <div className="space-y-2 py-4 border-b">
+          <h4 className="text-xs uppercase tracking-wide text-muted-foreground">
+            Monthly Recurring
+          </h4>
+          {/* Monthly fee */}
+          {/* First year projection */}
+        </div>
+      )}
+      
+      {/* Annual Fees Section */}
+      {hasAccountingData && accountingResult.annualAddons.length > 0 && (
+        <div className="space-y-2 py-4 border-b">
+          <h4 className="text-xs uppercase tracking-wide text-muted-foreground">
+            Annual Fees
+          </h4>
+          {/* Annual items */}
+        </div>
+      )}
+      
+      {/* Grand Total */}
+      <div className="pt-4">
+        <div className="flex justify-between font-medium text-base">
+          <span>Estimated First-Year Total</span>
+          <span>$X,XXX–$X,XXX</span>
+        </div>
       </div>
-    ))}
-    <div className="flex justify-between text-sm pt-3 border-t border-border/50">
-      <span>Total</span>
-      <span className="font-medium">$5,400</span>
-    </div>
-  </div>
-</div>
+      
+      {/* Disclaimer */}
+      <p className="text-xs text-muted-foreground mt-4">
+        Final pricing confirmed after consultation...
+      </p>
+    </CardContent>
+  </Card>
+)}
 ```
 
-### Styling Tokens
+### Calculation Logic
+
+```typescript
+// Calculate totals for payment summary
+const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
+const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
+const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+
+const initialMin = corporateTotal + consultingMin;
+const initialMax = corporateTotal + consultingMax;
+
+const monthlyFee = accountingResult?.totalMonthly ?? 0;
+const annualFees = accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
+
+const firstYearMin = initialMin + (monthlyFee * 12) + annualFees;
+const firstYearMax = initialMax + (monthlyFee * 12) + annualFees;
+```
+
+### Styling Classes
 
 | Element | Classes |
 |---------|---------|
-| Section wrapper | `pb-6 border-b border-border last:border-0 last:pb-0` |
-| Section header | `flex items-center gap-2 mb-3` |
-| Icon | `h-4 w-4 text-primary` |
-| Title | `font-medium` (inherits base text size) |
-| Item row | `flex justify-between text-sm` |
-| Item name | `text-primary` |
-| Item price | `font-medium` |
-| Total row | `flex justify-between text-sm pt-3 border-t border-border/50` |
-| Subtext | `text-xs text-muted-foreground` |
+| Section header | `text-xs uppercase tracking-wide text-muted-foreground font-medium` |
+| Price row | `flex justify-between text-sm` |
+| Subtotal row | `flex justify-between text-sm pt-2 border-t border-border/50` |
+| Grand total | `flex justify-between font-medium text-base pt-4` |
+| Disclaimer | `text-xs text-muted-foreground mt-4 leading-relaxed` |
 
-This approach maintains the clean, premium aesthetic defined in the design principles while providing clear visual hierarchy and better scannability for users reviewing their selections before submission.
+This implementation provides clear, practical payment information helping customers understand exactly how their costs will be structured.
 
