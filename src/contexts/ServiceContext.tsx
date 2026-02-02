@@ -171,40 +171,118 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
     lines.push("COMPANY INFORMATION");
     lines.push(`Company: ${state.companyInfo.companyName}`);
     if (state.companyInfo.registrationNumber) lines.push(`Registration: ${state.companyInfo.registrationNumber}`);
-    if (state.companyInfo.industry) lines.push(`Industry: ${state.companyInfo.industry}\n`);
+    if (state.companyInfo.industry) lines.push(`Industry: ${state.companyInfo.industry}`);
+    lines.push("");
 
-    // Accounting
-    if (state.accountingResult) {
-      lines.push("ACCOUNTING SERVICES");
-      lines.push(`Monthly estimate: ฿${state.accountingResult.totalMonthly.toLocaleString()}`);
-      lines.push(`Annual estimate: ฿${state.accountingResult.totalAnnual.toLocaleString()}`);
-      lines.push(`Required items: ${state.accountingResult.requiredItems.join(", ")}\n`);
-    }
+    // Selected Services Section
+    const hasAccountingData = !!state.accountingResult;
+    const hasCorporateData = state.selectedCorporateServices.length > 0;
+    const hasConsultingData = state.selectedConsultingServices.length > 0;
 
-    // Corporate
-    if (state.selectedCorporateServices.length > 0) {
-      lines.push("CORPORATE SERVICES");
-      state.selectedCorporateServices.forEach((s) => {
-        lines.push(`- ${s.name}: ฿${s.price.toLocaleString()}`);
-      });
-      const corpTotal = state.selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
-      lines.push(`Total: ฿${corpTotal.toLocaleString()}\n`);
-    }
+    if (hasAccountingData || hasCorporateData || hasConsultingData) {
+      lines.push("SELECTED SERVICES");
+      lines.push("─".repeat(40));
 
-    // Consulting
-    if (state.selectedConsultingServices.length > 0) {
-      lines.push("CONSULTING SERVICES");
-      state.selectedConsultingServices.forEach((s) => {
-        lines.push(`- ${s.name}: ฿${s.priceRange.min.toLocaleString()}–${s.priceRange.max.toLocaleString()}`);
-      });
-      lines.push("");
+      // Accounting
+      if (hasAccountingData) {
+        lines.push("\n📊 Accounting Services");
+        lines.push(`   Monthly: $${state.accountingResult!.totalMonthly.toLocaleString()}`);
+        lines.push(`   Annual: $${state.accountingResult!.totalAnnual.toLocaleString()}`);
+        lines.push(`   Required: ${state.accountingResult!.requiredItems.join(", ")}`);
+      }
+
+      // Corporate
+      if (hasCorporateData) {
+        lines.push("\n🏢 Corporate Services");
+        state.selectedCorporateServices.forEach((s) => {
+          lines.push(`   • ${s.name}: $${s.price.toLocaleString()}`);
+        });
+        const corpTotal = state.selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
+        lines.push(`   Total: $${corpTotal.toLocaleString()}`);
+      }
+
+      // Consulting
+      if (hasConsultingData) {
+        lines.push("\n💼 Consulting Services");
+        state.selectedConsultingServices.forEach((s) => {
+          lines.push(`   • ${s.name}: $${s.priceRange.min.toLocaleString()}–$${s.priceRange.max.toLocaleString()}`);
+        });
+        const consultingMin = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
+        const consultingMax = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+        lines.push(`   Total: $${consultingMin.toLocaleString()}–$${consultingMax.toLocaleString()}`);
+      }
+
+      // Payment Summary
+      lines.push("\n" + "─".repeat(40));
+      lines.push("PAYMENT SUMMARY");
+      lines.push("─".repeat(40));
+
+      const corporateTotal = state.selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
+      const consultingMin = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
+      const consultingMax = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+      const monthlyFee = state.accountingResult?.totalMonthly ?? 0;
+      const annualFees = state.accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
+
+      // Initial Payment
+      if (hasCorporateData || hasConsultingData) {
+        lines.push("\nINITIAL PAYMENT (due at engagement start)");
+        if (hasCorporateData) {
+          lines.push(`   Corporate Services: $${corporateTotal.toLocaleString()}`);
+        }
+        if (hasConsultingData) {
+          lines.push(`   Consulting (indicative): $${consultingMin.toLocaleString()}–$${consultingMax.toLocaleString()}`);
+        }
+        if (hasCorporateData && hasConsultingData) {
+          const initialMin = corporateTotal + consultingMin;
+          const initialMax = corporateTotal + consultingMax;
+          lines.push(`   Initial Total: $${initialMin.toLocaleString()}–$${initialMax.toLocaleString()}`);
+        }
+      }
+
+      // Monthly Recurring
+      if (hasAccountingData) {
+        lines.push("\nMONTHLY RECURRING");
+        lines.push(`   Accounting Services: $${monthlyFee.toLocaleString()}/month`);
+        lines.push(`   First Year (12 months): $${(monthlyFee * 12).toLocaleString()}`);
+      }
+
+      // Annual Fees
+      if (hasAccountingData && state.accountingResult!.annualAddons.length > 0) {
+        lines.push("\nANNUAL FEES (due at year-end)");
+        state.accountingResult!.annualAddons.forEach((addon) => {
+          lines.push(`   ${addon.name}: $${addon.amount.toLocaleString()}`);
+        });
+        lines.push(`   Annual Total: $${annualFees.toLocaleString()}`);
+      }
+
+      // Grand Total
+      const firstYearMin = corporateTotal + consultingMin + (monthlyFee * 12) + annualFees;
+      const firstYearMax = corporateTotal + consultingMax + (monthlyFee * 12) + annualFees;
+      const hasRange = consultingMax > consultingMin;
+
+      lines.push("\n" + "═".repeat(40));
+      if (hasRange) {
+        lines.push(`ESTIMATED FIRST-YEAR TOTAL: $${firstYearMin.toLocaleString()}–$${firstYearMax.toLocaleString()}`);
+      } else {
+        lines.push(`ESTIMATED FIRST-YEAR TOTAL: $${firstYearMin.toLocaleString()}`);
+      }
+      lines.push("═".repeat(40));
+      lines.push("\nNote: Final pricing confirmed after initial consultation.");
+      if (hasConsultingData) {
+        lines.push("Consulting fees scoped based on specific requirements.");
+      }
     }
 
     // Notes
     if (state.notes) {
+      lines.push("\n" + "─".repeat(40));
       lines.push("ADDITIONAL NOTES");
       lines.push(state.notes);
     }
+
+    lines.push("\n─".repeat(40));
+    lines.push("Generated from PND50 Service Calculator");
+    lines.push("https://scope-guide-thailand.lovable.app");
 
     return lines.join("\n");
   };
