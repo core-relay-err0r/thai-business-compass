@@ -370,31 +370,41 @@ function generateClientConfirmationHtml(data: SubmissionRequest): string {
 
         <h2 style="margin: 0 0 20px 0; color: #1f2937; font-size: 18px;">🚀 What Happens Next</h2>
         
-        <div style="margin-bottom: 28px;">
-          <div style="display: flex; margin-bottom: 16px;">
-            <div style="background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; margin-right: 12px; flex-shrink: 0;">1</div>
-            <div>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 28px;">
+          <tr>
+            <td style="width: 40px; vertical-align: top; padding: 0 12px 16px 0;">
+              <table style="width: 28px; height: 28px; border-collapse: collapse; background: #3b82f6; border-radius: 50%;">
+                <tr><td style="text-align: center; vertical-align: middle; color: white; font-weight: 600; font-size: 14px;">1</td></tr>
+              </table>
+            </td>
+            <td style="vertical-align: top; padding-bottom: 16px;">
               <p style="margin: 0; font-weight: 600; color: #1f2937;">Review</p>
               <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 14px;">Our team will carefully review your requirements</p>
-            </div>
-          </div>
-          
-          <div style="display: flex; margin-bottom: 16px;">
-            <div style="background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; margin-right: 12px; flex-shrink: 0;">2</div>
-            <div>
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 40px; vertical-align: top; padding: 0 12px 16px 0;">
+              <table style="width: 28px; height: 28px; border-collapse: collapse; background: #3b82f6; border-radius: 50%;">
+                <tr><td style="text-align: center; vertical-align: middle; color: white; font-weight: 600; font-size: 14px;">2</td></tr>
+              </table>
+            </td>
+            <td style="vertical-align: top; padding-bottom: 16px;">
               <p style="margin: 0; font-weight: 600; color: #1f2937;">Contact</p>
               <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 14px;">We'll reach out within <strong>1-2 business days</strong></p>
-            </div>
-          </div>
-          
-          <div style="display: flex;">
-            <div style="background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; margin-right: 12px; flex-shrink: 0;">3</div>
-            <div>
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 40px; vertical-align: top; padding: 0 12px 0 0;">
+              <table style="width: 28px; height: 28px; border-collapse: collapse; background: #3b82f6; border-radius: 50%;">
+                <tr><td style="text-align: center; vertical-align: middle; color: white; font-weight: 600; font-size: 14px;">3</td></tr>
+              </table>
+            </td>
+            <td style="vertical-align: top;">
               <p style="margin: 0; font-weight: 600; color: #1f2937;">Consultation</p>
               <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 14px;">We'll schedule a call to finalize scope and pricing</p>
-            </div>
-          </div>
-        </div>
+            </td>
+          </tr>
+        </table>
 
         <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 28px; text-align: center;">
           <p style="margin: 0 0 12px 0; color: #374151; font-weight: 600;">Questions? Get in touch:</p>
