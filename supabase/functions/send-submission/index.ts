@@ -304,6 +304,117 @@ function generateEmailHtml(data: SubmissionRequest): string {
   `;
 }
 
+function generateClientConfirmationHtml(data: SubmissionRequest): string {
+  const { contactInfo, companyInfo, accountingResult, selectedCorporateServices, selectedConsultingServices } = data;
+  
+  // Calculate totals
+  const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
+  const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
+  const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+  const monthlyFee = accountingResult?.totalMonthly ?? 0;
+  const annualFees = accountingResult?.annualAddons?.reduce((sum, a) => sum + a.amount, 0) ?? 0;
+  
+  const initialMin = corporateTotal + consultingMin;
+  const initialMax = corporateTotal + consultingMax;
+  const firstYearMin = initialMin + (monthlyFee * 12) + annualFees;
+  const firstYearMax = initialMax + (monthlyFee * 12) + annualFees;
+
+  // Build services list
+  const servicesList: string[] = [];
+  if (accountingResult) servicesList.push("Accounting Services");
+  if (selectedCorporateServices.length > 0) {
+    selectedCorporateServices.forEach(s => servicesList.push(s.name));
+  }
+  if (selectedConsultingServices.length > 0) {
+    selectedConsultingServices.forEach(s => servicesList.push(s.name));
+  }
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 640px; margin: 0 auto; padding: 20px; color: #1f2937; background-color: #f9fafb;">
+      <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 32px; border-radius: 12px 12px 0 0; color: white; text-align: center;">
+        <h1 style="margin: 0; font-size: 26px; font-weight: 700;">Thank you for your inquiry!</h1>
+        <p style="margin: 12px 0 0 0; opacity: 0.95; font-size: 16px;">We've received your service request, ${contactInfo.name.split(' ')[0]}</p>
+      </div>
+      
+      <div style="background: white; padding: 32px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 28px; border: 1px solid #bae6fd;">
+          <h2 style="margin: 0 0 16px 0; color: #0369a1; font-size: 16px;">📋 Your Request Summary</h2>
+          <table style="width: 100%;">
+            <tr>
+              <td style="padding: 6px 0; color: #6b7280;">Company</td>
+              <td style="padding: 6px 0; font-weight: 600; text-align: right;">${companyInfo.companyName}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #6b7280; vertical-align: top;">Services</td>
+              <td style="padding: 6px 0; font-weight: 500; text-align: right;">${servicesList.length > 0 ? servicesList.join(', ') : 'None selected'}</td>
+            </tr>
+          </table>
+        </div>
+
+        ${firstYearMin > 0 ? `
+          <div style="background: linear-gradient(135deg, #dbeafe, #ede9fe); padding: 24px; border-radius: 12px; margin-bottom: 28px; border: 1px solid #c7d2fe; text-align: center;">
+            <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Estimated First-Year Total</p>
+            <p style="margin: 0; font-size: 28px; font-weight: 800; color: #1e3a8a;">
+              ${firstYearMin === firstYearMax ? `$${formatPrice(firstYearMin)}` : `$${formatPrice(firstYearMin)} – $${formatPrice(firstYearMax)}`}
+            </p>
+            <p style="margin: 8px 0 0 0; font-size: 12px; color: #6b7280;">Final pricing confirmed after consultation</p>
+          </div>
+        ` : ''}
+
+        <h2 style="margin: 0 0 20px 0; color: #1f2937; font-size: 18px;">🚀 What Happens Next</h2>
+        
+        <div style="margin-bottom: 28px;">
+          <div style="display: flex; margin-bottom: 16px;">
+            <div style="background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; margin-right: 12px; flex-shrink: 0;">1</div>
+            <div>
+              <p style="margin: 0; font-weight: 600; color: #1f2937;">Review</p>
+              <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 14px;">Our team will carefully review your requirements</p>
+            </div>
+          </div>
+          
+          <div style="display: flex; margin-bottom: 16px;">
+            <div style="background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; margin-right: 12px; flex-shrink: 0;">2</div>
+            <div>
+              <p style="margin: 0; font-weight: 600; color: #1f2937;">Contact</p>
+              <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 14px;">We'll reach out within <strong>1-2 business days</strong></p>
+            </div>
+          </div>
+          
+          <div style="display: flex;">
+            <div style="background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; margin-right: 12px; flex-shrink: 0;">3</div>
+            <div>
+              <p style="margin: 0; font-weight: 600; color: #1f2937;">Consultation</p>
+              <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 14px;">We'll schedule a call to finalize scope and pricing</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 28px; text-align: center;">
+          <p style="margin: 0 0 12px 0; color: #374151; font-weight: 600;">Questions? Get in touch:</p>
+          <p style="margin: 0;">
+            <a href="mailto:info@pnd50.com" style="color: #2563eb; text-decoration: none; font-weight: 500;">info@pnd50.com</a>
+            <span style="color: #9ca3af; margin: 0 8px;">•</span>
+            <a href="tel:+66843563805" style="color: #2563eb; text-decoration: none; font-weight: 500;">+66 84 356 3805</a>
+          </p>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 24px; color: #9ca3af; font-size: 12px;">
+        <p style="margin: 0 0 4px 0; font-weight: 500;">PND50 Co., Ltd.</p>
+        <p style="margin: 0;">Suite 3065, Bhiraj Tower at EmQuartier, Bangkok, Thailand</p>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -320,19 +431,32 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Missing required fields: name, email, or company name");
     }
 
-    const html = generateEmailHtml(data);
+    // Generate both email templates
+    const companyEmailHtml = generateEmailHtml(data);
+    const clientEmailHtml = generateClientConfirmationHtml(data);
 
-    const emailResponse = await resend.emails.send({
-      from: "PND50 <noreply@pnd50.com>",
-      to: ["info@pnd50.com"],
-      reply_to: data.contactInfo.email,
-      subject: `New Service Request from ${data.contactInfo.name} (${data.companyInfo.companyName})`,
-      html,
-    });
+    // Send both emails in parallel
+    const [companyResponse, clientResponse] = await Promise.all([
+      // Email to company (internal notification)
+      resend.emails.send({
+        from: "PND50 <noreply@pnd50.com>",
+        to: ["info@pnd50.com"],
+        reply_to: data.contactInfo.email,
+        subject: `New Service Request from ${data.contactInfo.name} (${data.companyInfo.companyName})`,
+        html: companyEmailHtml,
+      }),
+      // Email to client (confirmation)
+      resend.emails.send({
+        from: "PND50 <noreply@pnd50.com>",
+        to: [data.contactInfo.email],
+        subject: `Your Service Request Received - PND50`,
+        html: clientEmailHtml,
+      }),
+    ]);
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Emails sent successfully:", { company: companyResponse, client: clientResponse });
 
-    return new Response(JSON.stringify({ success: true, data: emailResponse }), {
+    return new Response(JSON.stringify({ success: true, data: { company: companyResponse, client: clientResponse } }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
