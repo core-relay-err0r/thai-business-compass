@@ -302,6 +302,12 @@ export default function Submit() {
                               </span>
                             </div>
                           ))}
+                          <div className="flex justify-between text-sm pt-3 border-t border-border/50">
+                            <span>Total</span>
+                            <span className="font-medium">
+                              ${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0))}–{formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0))}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     )}
