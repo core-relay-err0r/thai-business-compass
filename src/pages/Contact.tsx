@@ -166,13 +166,14 @@ export default function Contact() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-1.5 sm:space-y-2">
-                      <Label htmlFor="phone" className="text-sm">Phone</Label>
+                      <Label htmlFor="phone" className="text-sm">Phone *</Label>
                       <Input
                         id="phone"
                         name="phone"
                         placeholder="+66 XX XXX XXXX"
                         value={formData.phone}
                         onChange={handleChange}
+                        required
                         className="min-h-[44px]"
                       />
                     </div>
