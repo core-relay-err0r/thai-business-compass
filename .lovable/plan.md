@@ -1,237 +1,133 @@
 
 
-# Responsive Optimization Plan
+# Design Improvements for Submit Page Service Summary
 
-This plan covers comprehensive mobile and multi-resolution optimization across all pages and components of the PND50 website.
+## Current State Analysis
 
----
+The "Selected Services" card on the `/submit` page currently displays three sections (Accounting, Corporate, Consulting) using basic gray boxes (`bg-muted/50`). The design is functional but lacks visual refinement compared to the rest of the application's clean, premium aesthetic.
 
-## Summary
+## Proposed Design Changes
 
-The website already has basic responsive foundations (Tailwind breakpoints, mobile menu), but several areas need improvement for a truly scalable experience across mobile phones, tablets, and various desktop resolutions.
+### Visual Structure
 
----
+The redesigned summary will feature:
 
-## Areas to Optimize
+- **Clean white/card background sections** instead of gray boxes
+- **Subtle borders** to separate service categories
+- **Improved typography hierarchy** with consistent sizing
+- **Icon styling** matching the primary color scheme
+- **Better price alignment** using a cleaner table-like layout
 
-### 1. Hero Section (Home Page)
+### Layout Per Section
 
-**Current Issues:**
-- The diagonal image section is completely hidden on mobile (`hidden lg:block`)
-- Title text is large on smaller screens
-- Contact info at bottom may wrap awkwardly
+**Accounting Services**
+- Header row with calculator icon + "Accounting Services" title
+- Two-column inline display: "Monthly: $X" and "Annual: $X"
+- Required items shown as a subtle subtext line
 
-**Changes:**
-- Show a simplified image background on mobile/tablet (without diagonal clip)
-- Reduce heading sizes further for very small screens (add `text-3xl` base)
-- Make contact info stack vertically on mobile
-- Improve button sizing for touch targets
+**Corporate Services**
+- Header row with building icon + "Corporate Services" title
+- Individual line items in a clean list format
+- Price right-aligned for each item
+- Total row with border separator above
 
----
+**Consulting Services**
+- Header row with message icon + "Consulting Services" title
+- Individual line items with price ranges
+- Clean list format matching Corporate
 
-### 2. Header Navigation
-
-**Current Issues:**
-- Mobile menu works but could be smoother
-- Logo + text spacing could be tighter on small screens
-
-**Changes:**
-- Reduce logo size on mobile (`h-6 w-6` on mobile, `h-8 w-8` on desktop)
-- Improve mobile menu padding and touch targets
-- Add smooth transition for menu open/close
-
----
-
-### 3. Footer
-
-**Current Issues:**
-- The large "PND50" watermark can overflow on smaller screens
-- Grid layout may not stack properly on mobile
-
-**Changes:**
-- Hide or reduce watermark text on mobile screens
-- Ensure single-column stacking on mobile
-- Improve spacing for readability
+### Empty State
+- Maintains current centered messaging with navigation buttons
 
 ---
 
-### 4. Services Page (Unified Page)
+## Technical Implementation
 
-**Current Issues:**
-- Sidebar is hidden on mobile (good), but mobile headers need better spacing
-- Service cards grid may be too wide on tablet
-- Accounting wizard steps indicator text wraps on small screens
+### File Changes
 
-**Changes:**
-- Add responsive padding/margins for mobile headers
-- Ensure 1-column grid on mobile, 2-column on tablet+
-- Simplify step indicator on mobile (show current/total only)
-- Improve touch targets for all interactive elements
+**`src/pages/Submit.tsx`** (lines 232-324)
 
----
+1. **Remove gray background boxes** from service sections
+2. **Add proper borders** between sections using `divide-y` or explicit borders
+3. **Restructure accounting section**:
+   - Add section header with icon and title on same line
+   - Show Monthly and Annual prices inline with labels
+   - Move "Required" text below as muted subtext
+4. **Restructure corporate section**:
+   - Add section header with building icon
+   - Create clean list with `justify-between` for name/price pairs
+   - Use `text-primary` for service names to add visual interest
+   - Add total row with `border-t` separator
+5. **Restructure consulting section**:
+   - Add section header with message icon
+   - List items with price ranges in same format as corporate
+6. **Adjust spacing**:
+   - Use `space-y-6` between major sections
+   - Add `pb-4` or `pb-6` with borders between categories
+7. **Typography refinements**:
+   - Section titles: `font-medium text-base`
+   - Item names: `text-sm text-primary` for interactivity feel
+   - Prices: `text-sm font-medium` right-aligned
+   - Total labels: `text-sm font-medium`
 
-### 5. Corporate & Consulting Service Cards
+### Code Changes Summary
 
-**Current Issues:**
-- Cards already use `md:grid-cols-2`, but may need single column on small devices
-- Price and button text sizing
+```tsx
+{/* Accounting Section */}
+<div className="pb-6 border-b border-border last:border-0 last:pb-0">
+  <div className="flex items-center gap-2 mb-3">
+    <Calculator className="h-4 w-4 text-primary" />
+    <span className="font-medium">Accounting Services</span>
+  </div>
+  <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-2">
+    <div>
+      <span className="text-primary">Monthly:</span>{" "}
+      <span className="font-medium">$205</span>
+    </div>
+    <div>
+      <span className="text-primary">Annual:</span>{" "}
+      <span className="font-medium">$2,460</span>
+    </div>
+  </div>
+  <div className="text-xs text-muted-foreground">
+    Required: Monthly bookkeeping, Tax filings
+  </div>
+</div>
 
-**Changes:**
-- Ensure single column on mobile
-- Improve card padding for mobile
-- Make buttons full-width on mobile for easier tapping
+{/* Corporate Section */}
+<div className="pb-6 border-b border-border last:border-0 last:pb-0">
+  <div className="flex items-center gap-2 mb-3">
+    <Building2 className="h-4 w-4 text-primary" />
+    <span className="font-medium">Corporate Services</span>
+  </div>
+  <div className="space-y-2">
+    {services.map(s => (
+      <div className="flex justify-between text-sm">
+        <span className="text-primary">{s.name}</span>
+        <span className="font-medium">${s.price}</span>
+      </div>
+    ))}
+    <div className="flex justify-between text-sm pt-3 border-t border-border/50">
+      <span>Total</span>
+      <span className="font-medium">$5,400</span>
+    </div>
+  </div>
+</div>
+```
 
----
+### Styling Tokens
 
-### 6. Accounting Wizard
+| Element | Classes |
+|---------|---------|
+| Section wrapper | `pb-6 border-b border-border last:border-0 last:pb-0` |
+| Section header | `flex items-center gap-2 mb-3` |
+| Icon | `h-4 w-4 text-primary` |
+| Title | `font-medium` (inherits base text size) |
+| Item row | `flex justify-between text-sm` |
+| Item name | `text-primary` |
+| Item price | `font-medium` |
+| Total row | `flex justify-between text-sm pt-3 border-t border-border/50` |
+| Subtext | `text-xs text-muted-foreground` |
 
-**Current Issues:**
-- Step titles wrap on small screens
-- Intent cards (`grid md:grid-cols-2`) need single column on mobile
-- Radio buttons/options spacing
-
-**Changes:**
-- Hide step titles on mobile, show only current step number
-- Ensure proper stacking of all form elements
-- Improve touch target sizes for sliders and switches
-
----
-
-### 7. About Page
-
-**Current Issues:**
-- Team visual section is hidden on mobile (`hidden lg:block`)
-- Stats grid may need 2-column instead of 3 on tablet
-- Values list spacing
-
-**Changes:**
-- Show a simplified hero on mobile (without floating team photos)
-- Make stats `grid-cols-1` on mobile, `grid-cols-2` on tablet, `grid-cols-3` on desktop
-- Improve scroll indicator visibility on mobile
-
----
-
-### 8. Contact Page
-
-**Current Issues:**
-- Form and info cards layout works but spacing could improve
-- Quick response card positioning
-- Map height on mobile
-
-**Changes:**
-- Improve responsive padding
-- Stack all elements single-column on mobile
-- Reduce map height on mobile (`h-48` mobile, `h-64` tablet, `h-300px` desktop)
-
----
-
-### 9. Submit Page
-
-**Current Issues:**
-- Forms work but could benefit from tighter mobile spacing
-- Button positioning
-
-**Changes:**
-- Improve form field spacing on mobile
-- Center submit button on mobile
-- Ensure service summary cards scroll horizontally if needed
-
----
-
-### 10. Privacy/Terms Pages
-
-**Current Issues:**
-- Generally good, but hero section padding could be reduced on mobile
-
-**Changes:**
-- Reduce vertical padding on mobile
-- Improve typography spacing
-
----
-
-### 11. Module Cards (Home Page)
-
-**Current Issues:**
-- Already uses `md:grid-cols-3` but could stack better
-
-**Changes:**
-- Ensure clean single-column stack on mobile
-- Improve card feature list spacing
-
----
-
-### 12. Floating Start Button
-
-**Current Issues:**
-- Only shows on mobile (good)
-- Position could conflict with content
-
-**Changes:**
-- Add safe area inset for devices with home indicators
-- Improve z-index layering
-
----
-
-### 13. Live Estimate Sidebar
-
-**Current Issues:**
-- Hidden on mobile in sidebar form, but estimate could be shown inline on mobile
-
-**Changes:**
-- Consider showing a collapsed/expandable estimate banner at bottom of mobile screens
-- Improve dialog sizing for mobile
-
----
-
-## Technical Approach
-
-### CSS/Tailwind Changes
-- Add custom breakpoints if needed (most work uses existing `sm`, `md`, `lg`, `xl`)
-- Use `container` with proper padding
-- Leverage `@apply` for repeated patterns
-- Use `clamp()` for fluid typography where beneficial
-
-### Component Updates
-- Add responsive variants to all layout grids
-- Improve touch targets (minimum 44px)
-- Test all interactive elements for mobile usability
-
----
-
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/ui/hero-section-2.tsx` | Add mobile image fallback, responsive text, contact info stacking |
-| `src/components/layout/Header.tsx` | Responsive logo sizing, improved mobile menu |
-| `src/components/layout/Footer.tsx` | Hide watermark on mobile, improve grid stacking |
-| `src/pages/Services.tsx` | Mobile header spacing, improved touch targets |
-| `src/components/corporate/CorporateServices.tsx` | Ensure mobile grid, button sizing |
-| `src/components/consulting/ConsultingServices.tsx` | Ensure mobile grid, button sizing |
-| `src/components/accounting/AccountingWizard.tsx` | Mobile step indicator, form spacing |
-| `src/pages/About.tsx` | Mobile hero, stats grid breakpoints |
-| `src/pages/Contact.tsx` | Responsive map height, spacing |
-| `src/pages/Submit.tsx` | Form spacing improvements |
-| `src/components/home/ModuleCards.tsx` | Mobile card spacing |
-| `src/components/home/TrustSection.tsx` | Mobile grid improvements |
-| `src/components/home/HowItWorks.tsx` | Mobile step layout |
-| `src/components/home/BottomCTA.tsx` | Mobile padding |
-| `src/components/layout/FloatingStartButton.tsx` | Safe area inset |
-| `src/pages/Privacy.tsx` | Mobile padding |
-| `src/index.css` | Add any global responsive utilities |
-
----
-
-## Testing Considerations
-
-After implementation:
-- Test on iPhone SE (320px) - smallest common viewport
-- Test on standard mobile (375px - iPhone, 390px - newer iPhones)
-- Test on tablet portrait (768px - iPad)
-- Test on tablet landscape (1024px)
-- Test on laptop (1280px)
-- Test on desktop (1920px+)
-- Verify all touch targets are 44px minimum
-- Check text readability at all sizes
-- Verify no horizontal scroll on any viewport
+This approach maintains the clean, premium aesthetic defined in the design principles while providing clear visual hierarchy and better scannability for users reviewing their selections before submission.
 
