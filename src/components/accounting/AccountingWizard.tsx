@@ -151,7 +151,7 @@ export function AccountingWizard() {
           liveResult ? (
             <Step5Results result={liveResult} onAdjust={handleAdjust} />
           ) : (
-            <Step5EmptyState />
+            <Step5Summary inputs={localInputs} setInputs={setLocalInputs} />
           )
         )}
 
@@ -543,16 +543,48 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
   );
 }
 
-function Step5EmptyState() {
+function Step5Summary({ inputs }: StepProps) {
+  const intentLabel = inputs.accountingIntent === "full" ? "Full accounting support" : "Year-end only";
+  const revenueLabels: Record<string, string> = {
+    "0-5k": "Up to $5,000",
+    "5k-50k": "$5,000 – $50,000",
+    "50k-100k": "$50,000 – $100,000",
+    "100k-1m": "$100,000 – $1,000,000",
+    "1m+": "Over $1,000,000",
+  };
+  const vatLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
+  const purposeLabels: Record<string, string> = { operations: "Operations", visa: "Visa / formal only", "not-sure": "Not sure" };
+  const volumeLabels: Record<string, string> = { low: "Low (<50)", medium: "Medium (50–200)", high: "High (200+)" };
+  const yearEndLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
+  const auditLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
+
+  const summaryItems = [
+    { label: "Intent", value: intentLabel },
+    { label: "Monthly Revenue", value: revenueLabels[inputs.revenueRange || "5k-50k"] },
+    { label: "VAT Registered", value: vatLabels[inputs.vatRegistered || "no"] },
+    { label: "Employees", value: `${inputs.employeeCount || 0} staff${(inputs.employeeCount || 0) > 0 ? ` (${purposeLabels[inputs.employeePurpose || "operations"]})` : ""}` },
+    { label: "Payroll", value: inputs.payrollNeeded ? "Yes" : "No" },
+    { label: "Transaction Volume", value: volumeLabels[inputs.transactionVolume || "low"] },
+    { label: "International Payments", value: inputs.internationalPayments ? "Yes" : "No" },
+    { label: "Year-End Statements", value: yearEndLabels[inputs.yearEndStatements || "yes"] },
+    { label: "Audit Required", value: auditLabels[inputs.auditRequired || "no"] },
+  ];
+
   return (
-    <div className="flex flex-col items-center justify-center h-full min-h-[200px] text-center px-4">
-      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-        <Calculator className="h-6 w-6 text-muted-foreground" />
+    <div className="space-y-6">
+      <div className="text-center pb-4 border-b border-border">
+        <h3 className="text-lg sm:text-xl font-semibold mb-1">Review your answers</h3>
+        <p className="text-sm text-muted-foreground">Click "Submit to calculator" to get your estimate</p>
       </div>
-      <h3 className="text-lg font-semibold mb-2">Ready to calculate</h3>
-      <p className="text-sm text-muted-foreground max-w-sm">
-        Click "Submit to calculator" to see your personalized accounting estimate based on your answers.
-      </p>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {summaryItems.map((item) => (
+          <div key={item.label} className="flex justify-between items-center p-3 bg-muted/30 rounded-lg">
+            <span className="text-sm text-muted-foreground">{item.label}</span>
+            <span className="text-sm font-medium">{item.value}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
