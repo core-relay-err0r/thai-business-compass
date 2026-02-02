@@ -1,72 +1,79 @@
 
 
-# Payment Summary Caption for Submit Page
+# Redesign Email Format for /submit Page
 
 ## Overview
 
-Adding a clear, practical payment breakdown section below the Selected Services card that explains exactly how the customer will pay for these services in real terms.
+The email sent from the /submit page needs to be redesigned to include all the information shown on the page, with consistent USD formatting and a practical payment breakdown that matches what the user sees.
 
-## Design Approach
+## Current Issues
 
-The payment summary will be a clean, well-organized section that groups costs by payment frequency:
+1. **Currency mismatch**: Email uses Thai Baht (฿) but the UI displays USD ($)
+2. **Missing Payment Summary**: The email doesn't include the practical payment breakdown (Initial, Monthly, Annual, First-Year Total)
+3. **Missing accounting details**: No breakdown of monthly/annual addons from accounting calculations
+4. **Limited structure**: Current email only shows basic totals without the full cost structure
 
-- **Initial Payment** - One-time fees due at project start (Corporate Services + Consulting engagements)
-- **Monthly Recurring** - Ongoing monthly costs (Accounting monthly fees)
-- **Annual Fees** - Year-end costs (Statements, audits)
-- **Grand Total Estimate** - Combined first-year cost with clear note that this is indicative
+## Proposed Email Design
 
-## Visual Structure
-
-The summary will appear as a highlighted box below the services list, using a subtle background and clean typography:
+The redesigned email will mirror the /submit page layout with these sections:
 
 ```
-------------------------------------------------------------
-Payment Summary
-
-INITIAL PAYMENT (due at engagement start)
-Corporate Services                              $X,XXX
-Consulting (indicative, scoped on confirmation) $X,XXX–$X,XXX
-                                          ─────────────────
-Initial Total                                   $X,XXX–$X,XXX
-
-MONTHLY RECURRING
-Accounting Services                             $XXX/month
-First Year (12 months)                          $X,XXX
-
-ANNUAL FEES (due at year-end)
-Financial statements, Audit, etc.               $X,XXX
-
-────────────────────────────────────────────────────────────
-ESTIMATED FIRST-YEAR TOTAL                      $X,XXX–$X,XXX
-
-Note: Final pricing confirmed after initial consultation.
-Consulting fees scoped based on specific requirements.
-------------------------------------------------------------
+┌────────────────────────────────────────────────────────────┐
+│  Header (gradient): "New Service Request from [Name]"      │
+├────────────────────────────────────────────────────────────┤
+│  Contact Information                                       │
+│  • Name, Email, Phone, Preferred Contact                   │
+├────────────────────────────────────────────────────────────┤
+│  Company Information                                       │
+│  • Company Name, Registration #, Industry                  │
+├────────────────────────────────────────────────────────────┤
+│  Selected Services (detailed breakdown)                    │
+│  ┌─ Accounting ──────────────────────────────────────────┐ │
+│  │ Monthly Base: $170                                    │ │
+│  │ + VAT Reporting: $70                                  │ │
+│  │ + Payroll (3 employees): $66                          │ │
+│  │ = Monthly Total: $306                                 │ │
+│  │                                                       │ │
+│  │ Annual Addons:                                        │ │
+│  │ • Financial Statements: $350                          │ │
+│  │ • Annual Audit: $700                                  │ │
+│  │ Required: Monthly bookkeeping, VAT, Payroll...        │ │
+│  └───────────────────────────────────────────────────────┘ │
+│  ┌─ Corporate ───────────────────────────────────────────┐ │
+│  │ • Company Incorporation: $1,500                       │ │
+│  │ • Registered Office: $300                             │ │
+│  │ Total: $1,800                                         │ │
+│  └───────────────────────────────────────────────────────┘ │
+│  ┌─ Consulting ──────────────────────────────────────────┐ │
+│  │ • Reduce Costs: $800–$2,200                           │ │
+│  │ • Due Diligence: $1,100–$2,800                        │ │
+│  │ Total: $1,900–$5,000                                  │ │
+│  └───────────────────────────────────────────────────────┘ │
+├────────────────────────────────────────────────────────────┤
+│  💵 Payment Summary (highlighted section)                  │
+│  ┌───────────────────────────────────────────────────────┐ │
+│  │ INITIAL PAYMENT (due at start)                        │ │
+│  │   Corporate Services: $1,800                          │ │
+│  │   Consulting (indicative): $1,900–$5,000              │ │
+│  │   Initial Total: $3,700–$6,800                        │ │
+│  │                                                       │ │
+│  │ MONTHLY RECURRING                                     │ │
+│  │   Accounting Services: $306/month                     │ │
+│  │   First Year (12 months): $3,672                      │ │
+│  │                                                       │ │
+│  │ ANNUAL FEES (due at year-end)                         │ │
+│  │   Financial Statements: $350                          │ │
+│  │   Annual Audit: $700                                  │ │
+│  │   Annual Total: $1,050                                │ │
+│  │ ═════════════════════════════════════════════════════ │ │
+│  │ ESTIMATED FIRST-YEAR TOTAL: $8,422–$11,522            │ │
+│  └───────────────────────────────────────────────────────┘ │
+├────────────────────────────────────────────────────────────┤
+│  Additional Notes (if provided)                            │
+├────────────────────────────────────────────────────────────┤
+│  Footer: Disclaimer about estimates                        │
+└────────────────────────────────────────────────────────────┘
 ```
-
-## Key Information to Display
-
-1. **Initial Payment Section**
-   - Corporate Services total (one-time)
-   - Consulting total range (project-based, indicative)
-   - Combined initial payment range
-
-2. **Monthly Section**
-   - Accounting monthly fee
-   - Annualized (monthly x 12)
-
-3. **Annual Fees Section**
-   - Year-end statements
-   - Audit fees (if applicable)
-
-4. **Grand Total**
-   - Combined first-year estimate
-   - Range format when consulting is included
-
-5. **Disclaimer Caption**
-   - "Estimates based on your inputs"
-   - "Consulting fees scoped during initial consultation"
-   - "Final pricing confirmed before engagement"
 
 ---
 
@@ -74,84 +81,60 @@ Consulting fees scoped based on specific requirements.
 
 ### File Changes
 
-**`src/pages/Submit.tsx`**
+**`supabase/functions/send-submission/index.ts`**
 
-1. Add a new "Payment Summary" section below the Selected Services card
-2. Calculate totals:
-   - `initialTotal`: Corporate total + Consulting midpoint
-   - `monthlyTotal`: Accounting monthly
-   - `annualTotal`: Accounting annual addons
-   - `firstYearTotal`: initialTotal + (monthlyTotal x 12) + annualTotal
+1. **Update the interface** to include the full accounting result structure:
+   ```typescript
+   interface SubmissionRequest {
+     contactInfo: { ... };
+     companyInfo: { ... };
+     notes?: string;
+     accountingResult?: {
+       totalMonthly: number;
+       totalAnnual: number;
+       monthlyBase: number;
+       monthlyAddons: Array<{ name: string; amount: number; required: boolean }>;
+       annualAddons: Array<{ name: string; amount: number; required: boolean }>;
+       requiredItems: string[];
+       recommendedItems: string[];
+     };
+     selectedCorporateServices: Array<{ ... }>;
+     selectedConsultingServices: Array<{ ... }>;
+   }
+   ```
 
-3. Add a new styled box with the payment breakdown:
-   - Use `bg-muted/30` or subtle border to differentiate from cards
-   - Clear section headers with `text-xs uppercase tracking-wide text-muted-foreground`
-   - Price rows using the same `flex justify-between` pattern
-   - Separator line before grand total
-   - Disclaimer text in `text-xs text-muted-foreground`
+2. **Change currency formatting** from THB to USD:
+   ```typescript
+   // Before: ฿${formatPrice(price)}
+   // After:  $${formatPrice(price)}
+   ```
 
-### Component Structure
+3. **Add accounting breakdown section** showing:
+   - Monthly base fee
+   - Each monthly addon with name and amount
+   - Monthly total
+   - Each annual addon with name and amount
+   - Required items list
 
-```tsx
-{/* Payment Summary - Only show when there are selections */}
-{hasAnySelection && (
-  <Card>
-    <CardHeader>
-      <CardTitle>Payment Summary</CardTitle>
-      <CardDescription>How you'll pay for these services</CardDescription>
-    </CardHeader>
-    <CardContent>
-      {/* Initial Payment Section */}
-      {(hasCorporateData || hasConsultingData) && (
-        <div className="space-y-2 pb-4 border-b">
-          <h4 className="text-xs uppercase tracking-wide text-muted-foreground">
-            Initial Payment
-          </h4>
-          {/* Corporate line */}
-          {/* Consulting line */}
-          {/* Subtotal */}
-        </div>
-      )}
-      
-      {/* Monthly Recurring Section */}
-      {hasAccountingData && (
-        <div className="space-y-2 py-4 border-b">
-          <h4 className="text-xs uppercase tracking-wide text-muted-foreground">
-            Monthly Recurring
-          </h4>
-          {/* Monthly fee */}
-          {/* First year projection */}
-        </div>
-      )}
-      
-      {/* Annual Fees Section */}
-      {hasAccountingData && accountingResult.annualAddons.length > 0 && (
-        <div className="space-y-2 py-4 border-b">
-          <h4 className="text-xs uppercase tracking-wide text-muted-foreground">
-            Annual Fees
-          </h4>
-          {/* Annual items */}
-        </div>
-      )}
-      
-      {/* Grand Total */}
-      <div className="pt-4">
-        <div className="flex justify-between font-medium text-base">
-          <span>Estimated First-Year Total</span>
-          <span>$X,XXX–$X,XXX</span>
-        </div>
-      </div>
-      
-      {/* Disclaimer */}
-      <p className="text-xs text-muted-foreground mt-4">
-        Final pricing confirmed after consultation...
-      </p>
-    </CardContent>
-  </Card>
-)}
-```
+4. **Add Payment Summary section** with:
+   - Initial Payment breakdown (Corporate + Consulting)
+   - Monthly Recurring breakdown
+   - Annual Fees breakdown
+   - Grand total calculation (First-Year Total)
 
-### Calculation Logic
+5. **Add disclaimer** at the bottom matching the UI
+
+### Email Styling
+
+| Element | Style |
+|---------|-------|
+| Section headers | Bold, dark color, border-bottom |
+| Price rows | Two-column layout (name + amount) |
+| Payment Summary | Light blue/gray background to highlight |
+| Grand total | Bold, larger font, separator line above |
+| Disclaimer | Small text, muted color |
+
+### Calculation Logic (in edge function)
 
 ```typescript
 // Calculate totals for payment summary
@@ -163,21 +146,23 @@ const initialMin = corporateTotal + consultingMin;
 const initialMax = corporateTotal + consultingMax;
 
 const monthlyFee = accountingResult?.totalMonthly ?? 0;
-const annualFees = accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
+const annualFees = accountingResult?.annualAddons?.reduce((sum, a) => sum + a.amount, 0) ?? 0;
 
 const firstYearMin = initialMin + (monthlyFee * 12) + annualFees;
 const firstYearMax = initialMax + (monthlyFee * 12) + annualFees;
 ```
 
-### Styling Classes
+---
 
-| Element | Classes |
-|---------|---------|
-| Section header | `text-xs uppercase tracking-wide text-muted-foreground font-medium` |
-| Price row | `flex justify-between text-sm` |
-| Subtotal row | `flex justify-between text-sm pt-2 border-t border-border/50` |
-| Grand total | `flex justify-between font-medium text-base pt-4` |
-| Disclaimer | `text-xs text-muted-foreground mt-4 leading-relaxed` |
+## Summary of Changes
 
-This implementation provides clear, practical payment information helping customers understand exactly how their costs will be structured.
+1. Update `supabase/functions/send-submission/index.ts`:
+   - Expand the `SubmissionRequest` interface to accept full accounting data
+   - Change all currency symbols from ฿ to $
+   - Add detailed accounting breakdown (base + addons)
+   - Add Payment Summary section with Initial/Monthly/Annual breakdown
+   - Calculate and display Estimated First-Year Total
+   - Add professional disclaimer text
+
+The email will now provide recipients with the same comprehensive, practical payment information that users see on the /submit page, all displayed consistently in USD.
 
