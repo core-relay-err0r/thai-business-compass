@@ -325,6 +325,129 @@ export default function Submit() {
               </CardContent>
             </Card>
 
+            {/* Payment Summary */}
+            {hasAnySelection && (
+              <Card>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-lg sm:text-xl">Payment Summary</CardTitle>
+                  <CardDescription className="text-sm">How you'll pay for these services</CardDescription>
+                </CardHeader>
+                <CardContent className="p-4 sm:p-6 pt-0 space-y-0">
+                  {/* Initial Payment Section */}
+                  {(hasCorporateData || hasConsultingData) && (
+                    <div className="space-y-2 pb-4 border-b border-border">
+                      <h4 className="text-xs uppercase tracking-wide text-muted-foreground font-medium">
+                        Initial Payment
+                      </h4>
+                      <p className="text-xs text-muted-foreground">Due at engagement start</p>
+                      {hasCorporateData && (
+                        <div className="flex justify-between text-sm">
+                          <span>Corporate Services</span>
+                          <span className="font-medium">
+                            ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
+                          </span>
+                        </div>
+                      )}
+                      {hasConsultingData && (
+                        <div className="flex justify-between text-sm">
+                          <span>Consulting (indicative)</span>
+                          <span className="font-medium">
+                            ${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0))}–{formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0))}
+                          </span>
+                        </div>
+                      )}
+                      {hasCorporateData && hasConsultingData && (
+                        <div className="flex justify-between text-sm pt-2 border-t border-border/50">
+                          <span className="font-medium">Initial Total</span>
+                          <span className="font-medium">
+                            ${formatPrice(
+                              selectedCorporateServices.reduce((sum, s) => sum + s.price, 0) +
+                              selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0)
+                            )}–{formatPrice(
+                              selectedCorporateServices.reduce((sum, s) => sum + s.price, 0) +
+                              selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0)
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Monthly Recurring Section */}
+                  {hasAccountingData && (
+                    <div className={`space-y-2 py-4 border-b border-border ${!(hasCorporateData || hasConsultingData) ? 'pt-0' : ''}`}>
+                      <h4 className="text-xs uppercase tracking-wide text-muted-foreground font-medium">
+                        Monthly Recurring
+                      </h4>
+                      <div className="flex justify-between text-sm">
+                        <span>Accounting Services</span>
+                        <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}/month</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>First year (12 months)</span>
+                        <span>${formatPrice(accountingResult!.totalMonthly * 12)}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Annual Fees Section */}
+                  {hasAccountingData && accountingResult!.annualAddons.length > 0 && (
+                    <div className="space-y-2 py-4 border-b border-border">
+                      <h4 className="text-xs uppercase tracking-wide text-muted-foreground font-medium">
+                        Annual Fees
+                      </h4>
+                      <p className="text-xs text-muted-foreground">Due at year-end</p>
+                      {accountingResult!.annualAddons.map((addon, index) => (
+                        <div key={index} className="flex justify-between text-sm">
+                          <span>{addon.name}</span>
+                          <span className="font-medium">${formatPrice(addon.amount)}</span>
+                        </div>
+                      ))}
+                      <div className="flex justify-between text-sm pt-2 border-t border-border/50">
+                        <span className="font-medium">Annual Total</span>
+                        <span className="font-medium">
+                          ${formatPrice(accountingResult!.annualAddons.reduce((sum, a) => sum + a.amount, 0))}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Grand Total */}
+                  <div className="pt-4">
+                    {(() => {
+                      const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
+                      const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
+                      const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+                      const monthlyFee = accountingResult?.totalMonthly ?? 0;
+                      const annualFees = accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
+
+                      const firstYearMin = corporateTotal + consultingMin + (monthlyFee * 12) + annualFees;
+                      const firstYearMax = corporateTotal + consultingMax + (monthlyFee * 12) + annualFees;
+
+                      const hasRange = consultingMax > consultingMin;
+
+                      return (
+                        <div className="flex justify-between font-medium text-base">
+                          <span>Estimated First-Year Total</span>
+                          <span>
+                            {hasRange
+                              ? `$${formatPrice(firstYearMin)}–${formatPrice(firstYearMax)}`
+                              : `$${formatPrice(firstYearMin)}`}
+                          </span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Disclaimer */}
+                  <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
+                    Estimates based on your inputs. Final pricing confirmed after initial consultation.
+                    {hasConsultingData && " Consulting fees scoped based on specific requirements."}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Additional Notes */}
             <Card>
               <CardHeader className="p-4 sm:p-6">
