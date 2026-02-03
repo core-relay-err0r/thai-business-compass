@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -41,11 +41,16 @@ export function AccountingWizard() {
 
   const [liveResult, setLiveResult] = useState(accountingResult);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  
+  // Ref to synchronously track when we're in the process of clearing
+  // This prevents the recalculation effect from re-setting values during the same render cycle
+  const isResettingRef = useRef(false);
 
   // Reset wizard when clearAll is triggered (liveAccountingResult becomes null from context)
   useEffect(() => {
     // Check if context's liveAccountingResult was cleared while we have local submitted state
     if (liveAccountingResult === null && hasSubmitted) {
+      isResettingRef.current = true;
       setCurrentStep(0);
       setLocalInputs({
         accountingIntent: "full",
@@ -65,6 +70,12 @@ export function AccountingWizard() {
   }, [liveAccountingResult, hasSubmitted]);
 
   useEffect(() => {
+    // Skip recalculation if we're in the middle of resetting
+    if (isResettingRef.current) {
+      isResettingRef.current = false;
+      return;
+    }
+    
     if (
       hasSubmitted &&
       localInputs.revenueRange &&
