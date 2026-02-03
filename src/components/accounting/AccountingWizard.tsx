@@ -23,7 +23,7 @@ const STEPS = [
 
 export function AccountingWizard() {
   const navigate = useNavigate();
-  const { accountingInputs, setAccountingInputs, accountingResult, liveAccountingResult, setLiveAccountingResult, calculateAccounting } = useServices();
+  const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult, calculateAccounting } = useServices();
   const [currentStep, setCurrentStep] = useState(0);
   const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
     accountingIntent: "full",
@@ -42,10 +42,9 @@ export function AccountingWizard() {
   const [liveResult, setLiveResult] = useState(accountingResult);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  // Reset wizard when clearAll is triggered (liveAccountingResult becomes null after submission)
+  // Reset wizard when clearAll is triggered (accountingResult becomes null)
   useEffect(() => {
-    // Only reset if we had submitted and now liveAccountingResult is cleared
-    if (liveAccountingResult === null && hasSubmitted) {
+    if (accountingResult === null && hasSubmitted) {
       setCurrentStep(0);
       setLocalInputs({
         accountingIntent: "full",
@@ -60,9 +59,10 @@ export function AccountingWizard() {
         auditRequired: "no",
       });
       setLiveResult(null);
+      setLiveAccountingResult(null);
       setHasSubmitted(false);
     }
-  }, [liveAccountingResult, hasSubmitted]);
+  }, [accountingResult, hasSubmitted, setLiveAccountingResult]);
 
   useEffect(() => {
     if (
