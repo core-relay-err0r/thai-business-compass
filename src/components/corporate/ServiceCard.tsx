@@ -33,7 +33,7 @@ export function ServiceCard({
 }: ServiceCardProps) {
   return (
     <Card
-      className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
+      className={`cursor-pointer transition-all duration-200 hover:shadow-md h-full flex flex-col ${
         isSelected 
           ? "border-primary/50 bg-primary/[0.02] shadow-sm" 
           : "hover:border-border/80"
@@ -56,7 +56,7 @@ export function ServiceCard({
           {description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 flex-1 flex flex-col">
         <p className="text-xs text-muted-foreground/80 leading-relaxed">
           {contextLine}
         </p>
@@ -79,7 +79,7 @@ export function ServiceCard({
 
         <Button
           variant={isSelected ? "secondary" : "outline"}
-          className={`w-full transition-all ${isSelected ? "border-primary/20" : ""}`}
+          className={`w-full transition-all mt-auto ${isSelected ? "border-primary/20" : ""}`}
           onClick={(e) => {
             e.stopPropagation();
             onButtonClick();
