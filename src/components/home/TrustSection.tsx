@@ -10,7 +10,7 @@ export function TrustSection() {
             <Shield className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-3 sm:mb-4 text-primary" />
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Our Focus & Boundaries</h2>
             <p className="text-sm sm:text-base text-muted-foreground">
-              PND50 accounting services Thailand — we specialize in corporate tax, bookkeeping, and compliance for foreign-owned companies. Your trusted English-speaking accountant in Thailand.
+              We specialize in what we do best—Thai corporate and accounting for foreign-owned companies.
             </p>
           </div>
 
