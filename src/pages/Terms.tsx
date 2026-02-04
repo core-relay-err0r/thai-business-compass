@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { FileText } from "lucide-react";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Terms() {
   const sections = [
@@ -102,6 +103,11 @@ export default function Terms() {
 
   return (
     <Layout>
+      <SEOHead
+        title="Terms of Service | PND50"
+        description="PND50 Terms of Service. Read our terms and conditions for using Thai accounting, corporate, and consulting services."
+        path="/tos"
+      />
       {/* Hero Section */}
       <section className="py-20 md:py-28 bg-muted/30 border-b">
         <div className="container">

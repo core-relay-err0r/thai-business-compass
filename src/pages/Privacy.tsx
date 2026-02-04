@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Shield } from "lucide-react";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Privacy() {
   const sections = [
@@ -85,6 +86,11 @@ export default function Privacy() {
 
   return (
     <Layout>
+      <SEOHead
+        title="Privacy Policy | PND50"
+        description="PND50 Privacy Policy. Learn how we collect, use, and protect your personal information when using our Thai accounting and corporate services."
+        path="/privacy"
+      />
       {/* Hero Section */}
       <section className="py-12 sm:py-16 md:py-28 bg-muted/30 border-b">
         <div className="container px-4 sm:px-6">
