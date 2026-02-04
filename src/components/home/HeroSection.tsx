@@ -25,7 +25,7 @@ export function HeroSection() {
             <span className="text-accent">before you talk to anyone.</span>
           </>} subtitle="An interactive way for foreign founders to understand their company setup, accounting, corporate actions, and advisory scope — with clear structure and transparent cost." callToAction={{
       text: "See what applies to you",
-      href: "/services/calculator"
+      href: "/services"
     }} secondaryAction={{
       text: "See how it works",
       href: "#how-it-works"
