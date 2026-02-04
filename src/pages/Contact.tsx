@@ -81,7 +81,7 @@ export default function Contact() {
                 <span className="text-primary">your business</span>
               </h1>
               <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
-                Have questions about Thai accounting or compliance? We're here to help you navigate with confidence.
+                Have questions about Thai accounting or compliance? PND50 Bangkok is here to help you navigate with confidence — your trusted Thai tax advisory services partner.
               </p>
               <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 sm:gap-4 text-sm">
                 <a href="tel:+6620172949" className="flex items-center gap-2 hover:text-primary transition-colors min-h-[44px] sm:min-h-0">

@@ -98,8 +98,11 @@ export default function Services() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
               Everything you need to operate in Thailand.
             </h1>
-            <p className="text-base sm:text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground mb-4">
               Corporate setup, accounting, and strategic consulting — all in one place.
+            </p>
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+              Comprehensive accounting services Thailand businesses trust: company registration, bookkeeping services, tax filing, payroll, and business advisory — designed for foreign companies navigating Thai corporate tax compliance.
             </p>
           </div>
         </div>
