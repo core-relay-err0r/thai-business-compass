@@ -1,121 +1,77 @@
 
-# SEO/GEO Keyword Implementation Plan
+
+# Send Confirmation Email to Both Client and Company
 
 ## Overview
 
-Implement brand-focused SEO keywords throughout the site to improve search visibility for PND50-related searches. The keywords will be naturally integrated into meta tags, page content, and structured data.
+Modify the submission email flow to send two separate emails:
+1. **Company notification** (existing) - Full details sent to info@pnd50.com
+2. **Client confirmation** (new) - A confirmation email sent to the user's email address
 
-## Keyword Groups to Implement
+## Changes Required
 
-**Core Brand Terms:**
-- PND50, PND50 accounting, PND50 accounting firm, PND50 tax services
-- PND50 Thailand, PND50 Bangkok, PND50 corporate tax, PND50 accounting services Thailand
+### File: `supabase/functions/send-submission/index.ts`
 
-**Brand + Service Hybrids:**
-- PND50 tax filing, PND50 bookkeeping services, PND50 payroll services
-- PND50 business advisory, PND50 company registration
+**1. Create a client confirmation email template**
 
----
+A new function `generateClientConfirmationHtml` that creates a professional confirmation email for the client with:
+- Confirmation header thanking them for their inquiry
+- Summary of their selected services and estimated costs
+- Payment summary breakdown
+- Clear next steps (expect contact within 1-2 business days)
+- Company contact information
 
-## Implementation Strategy
+**2. Send two emails using Promise.all**
 
-### 1. Primary Meta Tags (index.html)
+Modify the handler to send both emails in parallel:
 
-Update the global meta tags with comprehensive keywords:
+```typescript
+// Send to company (internal notification)
+const companyEmail = resend.emails.send({
+  from: "PND50 <noreply@pnd50.com>",
+  to: ["info@pnd50.com"],
+  reply_to: data.contactInfo.email,
+  subject: `New Service Request from ${data.contactInfo.name} (${data.companyInfo.companyName})`,
+  html: generateEmailHtml(data),  // existing detailed internal email
+});
 
-**Title tag:**
-`PND50 | Thai Accounting & Corporate Services | Bangkok`
+// Send to client (confirmation)
+const clientEmail = resend.emails.send({
+  from: "PND50 <noreply@pnd50.com>",
+  to: [data.contactInfo.email],
+  subject: `Your Service Request - PND50`,
+  html: generateClientConfirmationHtml(data),  // new client-facing email
+});
 
-**Meta description:**
-`PND50 accounting firm in Bangkok, Thailand. Tax services, bookkeeping, payroll, company registration, and business advisory for foreign-owned companies. Calculate costs instantly.`
-
-**New meta keywords tag:**
-Add a keywords meta tag with all brand terms (while meta keywords aren't heavily weighted by Google, they're still useful for other search engines and brand signal clarity).
-
-**Open Graph updates:**
-- Update og:title and twitter:title to include "Bangkok"
-- Update og:description and twitter:description with keyword-rich content
-
-### 2. Page-Level SEO Content
-
-#### Home Page (HeroSection.tsx)
-- Add a visually hidden (sr-only) H1 tag for SEO: "PND50 - Thai Accounting Firm in Bangkok, Thailand"
-- The visible content remains unchanged for design purposes
-
-#### About Page (About.tsx)
-- Update the hero text to naturally include "PND50 accounting firm" and "PND50 Thailand"
-- Enhance the footer description with "PND50 Bangkok" context
-
-#### Services Page (Services.tsx)
-- Add an SEO-friendly introductory paragraph that includes:
-  - "PND50 company registration"
-  - "PND50 tax filing"
-  - "PND50 bookkeeping services"
-  - "PND50 payroll services"
-
-#### Contact Page (Contact.tsx)
-- Add schema-relevant text mentioning "PND50 Bangkok" and "PND50 Thailand"
-
-### 3. Footer Enhancement (Footer.tsx)
-
-Update the brand description to include more keywords:
-```
-PND50 is a Bangkok-based accounting firm providing tax services, bookkeeping, payroll, and business advisory for foreign companies in Thailand since 2015.
+// Send both in parallel
+const [companyResponse, clientResponse] = await Promise.all([companyEmail, clientEmail]);
 ```
 
-### 4. Trust Section (TrustSection.tsx)
+**3. Client email content structure**
 
-Enhance the section intro to include:
-- "PND50 accounting services Thailand"
-- "PND50 corporate tax"
+```
+Header: "Thank you for your inquiry, [Name]!"
 
-### 5. Module Cards (ModuleCards.tsx)
+YOUR REQUEST SUMMARY
+- Company: [Company Name]
+- Services requested: [list]
+- Estimated First-Year Total: $X,XXX - $X,XXX
 
-Update feature descriptions to include brand + service keywords:
-- "PND50 company registration" in Corporate
-- "PND50 bookkeeping services" and "PND50 tax filing" in Accounting
-- "PND50 business advisory" in Consulting
+WHAT HAPPENS NEXT
+1. Our team will review your requirements
+2. We'll contact you within 1-2 business days
+3. We'll schedule a consultation to finalize scope and pricing
 
----
+Questions? Contact us at info@pnd50.com or +66 84 356 3805
 
-## Technical Implementation Details
-
-### File: index.html
-- Add `<meta name="keywords">` tag with all brand keywords
-- Update title to include "Bangkok"
-- Enhance meta description with keyword-rich content
-- Update OG/Twitter meta tags
-
-### File: src/components/home/HeroSection.tsx
-- Add visually hidden SEO heading for screen readers and search engines
-
-### File: src/components/layout/Footer.tsx
-- Update brand description with keyword-rich copy
-
-### File: src/components/home/TrustSection.tsx
-- Update section description to include brand keywords naturally
-
-### File: src/components/home/ModuleCards.tsx
-- Update feature bullet points with brand-prefixed terms
-
-### File: src/pages/About.tsx
-- Enhance hero paragraph with natural keyword integration
-
-### File: src/pages/Services.tsx
-- Add introductory text with service-specific brand keywords
-
----
+Footer: PND50 Co., Ltd. | Bangkok, Thailand
+```
 
 ## Summary
 
-| File | Changes |
-|------|---------|
-| index.html | Add keywords meta tag, enhance title/description/OG tags |
-| HeroSection.tsx | Add sr-only SEO heading |
-| Footer.tsx | Update brand description with keywords |
-| TrustSection.tsx | Add brand context to section intro |
-| ModuleCards.tsx | Update feature lists with brand terms |
-| About.tsx | Enhance hero text with keywords |
-| Services.tsx | Add SEO intro paragraph |
+The edge function will be updated to:
+- Keep the existing detailed email for the company
+- Add a new client-facing confirmation email
+- Send both emails in parallel for efficiency
+- Include proper error handling for both sends
 
-All keyword integrations will feel natural and avoid keyword stuffing, maintaining the site's professional, non-salesy tone while improving search visibility for brand-related queries.
