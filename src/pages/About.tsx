@@ -17,6 +17,7 @@ import {
 import teamMember1 from "@/assets/team-member-1.jpeg";
 import teamMember2 from "@/assets/team-member-2.png";
 import teamAtWork from "@/assets/team-at-work.jpg";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function About() {
   const stats = [
@@ -60,6 +61,12 @@ export default function About() {
 
   return (
     <Layout>
+      <SEOHead
+        title="About PND50 | Bangkok Accounting Firm for Foreign Companies"
+        description="PND50 is a Bangkok-based accounting firm with 10+ years helping foreign-owned businesses navigate Thai accounting, corporate tax, and compliance. English-speaking accountants."
+        path="/about"
+        keywords="PND50 about, Bangkok accounting firm, English speaking accountant Thailand, accountant for foreigners Thailand, Thai accounting company"
+      />
       {/* Hero Section */}
       <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-16 sm:py-20 lg:py-0">
         {/* Background gradient */}

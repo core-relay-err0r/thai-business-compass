@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { LocalBusinessSchema } from "@/components/seo/StructuredData";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -67,6 +69,13 @@ export default function Contact() {
 
   return (
     <Layout>
+      <SEOHead
+        title="Contact PND50 | Thai Accounting & Tax Services | Bangkok"
+        description="Contact PND50 for Thai accounting, corporate tax, and business advisory services. Office in EmQuartier, Bangkok. English-speaking team responds within 24 hours."
+        path="/contact"
+        keywords="contact PND50, Bangkok accountant contact, Thai accounting firm contact, EmQuartier accountant, accountant Bangkok"
+      />
+      <LocalBusinessSchema />
       <div className="py-8 sm:py-12 md:py-20">
         <div className="container px-4 sm:px-6">
           {/* Hero Section - Two Column */}
