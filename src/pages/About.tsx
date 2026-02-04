@@ -61,16 +61,16 @@ export default function About() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="lg:min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-12 sm:py-16 lg:py-0">
+      <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-16 sm:py-20 lg:py-0">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
         
         {/* Grid pattern overlay */}
         <div className="absolute inset-0 hero-grid-pattern" />
         
-        {/* Animated gradient orbs */}
+        {/* Animated gradient orbs - Much larger */}
         <motion.div
-          className="absolute top-1/4 -right-32 w-64 sm:w-80 lg:w-96 h-64 sm:h-80 lg:h-96 rounded-full bg-primary/10 blur-3xl"
+          className="absolute top-1/4 -right-32 w-[400px] sm:w-[500px] lg:w-[700px] h-[400px] sm:h-[500px] lg:h-[700px] rounded-full bg-primary/10 blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -82,7 +82,7 @@ export default function About() {
           }}
         />
         <motion.div
-          className="absolute -bottom-32 -left-32 w-64 sm:w-80 lg:w-96 h-64 sm:h-80 lg:h-96 rounded-full bg-primary/5 blur-3xl"
+          className="absolute -bottom-32 -left-32 w-[400px] sm:w-[500px] lg:w-[600px] h-[400px] sm:h-[500px] lg:h-[600px] rounded-full bg-primary/5 blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             opacity: [0.2, 0.4, 0.2],
@@ -94,16 +94,16 @@ export default function About() {
           }}
         />
 
-        <div className="container relative z-10 px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="container relative z-10 px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left: Content */}
-            <div>
+            <div className="lg:pr-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <Badge variant="secondary" className="mb-3 sm:mb-4">
+                <Badge variant="secondary" className="mb-4 sm:mb-6 text-sm px-4 py-1.5">
                   About PND50
                 </Badge>
               </motion.div>
@@ -111,7 +111,7 @@ export default function About() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]"
               >
                 Regional corporate specialist with{" "}
                 <span className="text-primary">Global standards</span>
@@ -120,7 +120,7 @@ export default function About() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-muted-foreground mt-4 sm:mt-6 text-base sm:text-lg max-w-lg"
+                className="text-muted-foreground mt-6 sm:mt-8 text-lg sm:text-xl lg:text-2xl max-w-xl leading-relaxed"
               >
                 PND50 is a Bangkok-based accounting firm helping foreign-owned businesses 
                 navigate Thai accounting, corporate tax, and compliance. English-speaking 
@@ -131,10 +131,10 @@ export default function About() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <Link to="/services" className="inline-block mt-6 sm:mt-8">
-                  <Button size="lg" className="neumorphic-button group min-h-[44px]">
+                <Link to="/services" className="inline-block mt-8 sm:mt-10">
+                  <Button size="lg" className="neumorphic-button group min-h-[56px] text-lg px-8">
                     See what applies to you
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
               </motion.div>
@@ -144,56 +144,56 @@ export default function About() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="lg:hidden mt-8 grid grid-cols-3 gap-3"
+                className="lg:hidden mt-10 grid grid-cols-3 gap-4"
               >
                 {stats.map((stat) => (
-                  <div key={stat.label} className="text-center p-3 rounded-xl bg-muted/40 border border-border/50">
-                    <div className="text-2xl font-bold text-primary">{stat.value}</div>
-                    <div className="text-[10px] text-muted-foreground leading-tight mt-1">{stat.label}</div>
+                  <div key={stat.label} className="text-center p-4 rounded-xl bg-muted/40 border border-border/50">
+                    <div className="text-3xl font-bold text-primary">{stat.value}</div>
+                    <div className="text-xs text-muted-foreground leading-tight mt-1.5">{stat.label}</div>
                   </div>
                 ))}
               </motion.div>
             </div>
 
-            {/* Right: Team Visual */}
+            {/* Right: Team Visual - Much larger */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative w-full max-w-[450px] md:max-w-[550px] lg:max-w-[600px] h-[400px] md:h-[450px] lg:h-[500px] mx-auto hidden lg:block"
+              className="relative w-full max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] h-[500px] lg:h-[600px] xl:h-[700px] mx-auto hidden lg:block"
             >
-              {/* Animated decorative background circles */}
+              {/* Animated decorative background circles - Larger */}
               <motion.div 
-                className="absolute top-[8%] left-[2%] w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full z-0 bg-primary/20"
+                className="absolute top-[5%] left-[0%] w-44 h-44 lg:w-56 lg:h-56 xl:w-64 xl:h-64 rounded-full z-0 bg-primary/20"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
               <motion.div 
-                className="absolute top-[3%] right-[12%] w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full bg-primary/30 z-0"
+                className="absolute top-[0%] right-[8%] w-32 h-32 lg:w-40 lg:h-40 xl:w-48 xl:h-48 rounded-full bg-primary/30 z-0"
                 animate={{ scale: [1.05, 1, 1.05] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               />
               <motion.div 
-                className="absolute bottom-[12%] right-[2%] w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full bg-muted-foreground/50 z-0"
+                className="absolute bottom-[8%] right-[0%] w-36 h-36 lg:w-44 lg:h-44 xl:w-52 xl:h-52 rounded-full bg-muted-foreground/50 z-0"
                 animate={{ scale: [1, 1.08, 1] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               />
               
-              {/* Floating accent dots */}
+              {/* Floating accent dots - Larger */}
               <motion.div 
-                className="absolute top-[25%] left-[25%] w-4 h-4 rounded-full bg-primary/40 z-0"
-                animate={{ y: [0, -8, 0], x: [0, 4, 0] }}
+                className="absolute top-[22%] left-[22%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-primary/40 z-0"
+                animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               />
               <motion.div 
-                className="absolute bottom-[30%] right-[20%] w-3 h-3 rounded-full bg-primary/30 z-0"
-                animate={{ y: [0, 6, 0], x: [0, -4, 0] }}
+                className="absolute bottom-[28%] right-[18%] w-4 h-4 lg:w-5 lg:h-5 rounded-full bg-primary/30 z-0"
+                animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               />
               
-              {/* Team member photos */}
+              {/* Team member photos - Much larger */}
               <motion.div 
-                className="absolute top-[12%] right-[8%] w-40 h-40 md:w-48 md:h-48 lg:w-52 lg:h-52 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
+                className="absolute top-[8%] right-[5%] w-52 h-52 lg:w-64 lg:h-64 xl:w-72 xl:h-72 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
@@ -204,7 +204,7 @@ export default function About() {
                 />
               </motion.div>
               <motion.div 
-                className="absolute bottom-[8%] left-[12%] w-48 h-48 md:w-56 md:h-56 lg:w-60 lg:h-60 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
+                className="absolute bottom-[5%] left-[8%] w-60 h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
@@ -216,13 +216,13 @@ export default function About() {
               </motion.div>
               
               {/* Connection line */}
-              <svg className="absolute inset-0 w-full h-full z-5 pointer-events-none" viewBox="0 0 600 500">
+              <svg className="absolute inset-0 w-full h-full z-5 pointer-events-none" viewBox="0 0 800 700">
                 <motion.path
-                  d="M 380 150 Q 300 250 220 350"
+                  d="M 520 180 Q 400 350 280 520"
                   stroke="hsl(var(--primary) / 0.15)"
                   strokeWidth="2"
                   fill="none"
-                  strokeDasharray="8 4"
+                  strokeDasharray="10 5"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 2, delay: 0.5 }}
@@ -237,15 +237,15 @@ export default function About() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="hidden lg:flex absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="hidden lg:flex absolute bottom-10 left-1/2 -translate-x-1/2"
         >
           <a href="#stats" className="flex flex-col items-center gap-2 text-muted-foreground/60 hover:text-primary transition-colors">
-            <span className="text-xs uppercase tracking-wider">Scroll</span>
+            <span className="text-sm uppercase tracking-wider font-medium">Scroll</span>
             <motion.div
-              animate={{ y: [0, 6, 0] }}
+              animate={{ y: [0, 8, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <ChevronDown className="h-5 w-5" />
+              <ChevronDown className="h-6 w-6" />
             </motion.div>
           </a>
         </motion.div>
