@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { PageTransition } from "./PageTransition";
-import { lazy, Suspense } from "react";
 
 // Core pages
 import Home from "@/pages/Home";
@@ -66,15 +65,6 @@ import AccountantForForeignersThailand from "@/pages/seo/AccountantForForeigners
 import EnglishSpeakingAccountantThailand from "@/pages/seo/EnglishSpeakingAccountantThailand";
 import AccountingServicesForExpats from "@/pages/seo/AccountingServicesForExpats";
 import TaxServicesForForeignBusinesses from "@/pages/seo/TaxServicesForForeignBusinesses";
-
-// Loading fallback
-function PageLoader() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse text-muted-foreground">Loading...</div>
-    </div>
-  );
-}
 
 export function AnimatedRoutes() {
   const location = useLocation();
