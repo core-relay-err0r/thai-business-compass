@@ -10,21 +10,21 @@ const modules = [
     icon: Building2,
     title: "Corporate Services",
     description: "Choose the event (incorporation, director change, share transfer). Get scope + one-time price.",
-    features: ["Company registration", "Director changes", "Share transfers", "Address updates"],
+    features: ["Company registration Thailand", "Director changes", "Share transfers", "Business setup Thailand"],
   },
   {
     href: "/accounting",
     icon: Calculator,
     title: "Accounting",
     description: "Calculate monthly + yearly cost while learning what's required.",
-    features: ["Monthly bookkeeping", "Tax filings", "VAT reporting", "Payroll"],
+    features: ["Monthly bookkeeping", "Corporate tax filing", "VAT reporting", "Payroll services Thailand"],
   },
   {
     href: "/consulting",
     icon: MessageSquare,
     title: "Consulting",
     description: "Choose the business problem. Get expected outcomes + price range.",
-    features: ["Cost reduction", "Market entry", "Due diligence", "Compliance"],
+    features: ["Business advisory", "Market entry", "Due diligence", "Tax planning Thailand"],
   },
 ];
 

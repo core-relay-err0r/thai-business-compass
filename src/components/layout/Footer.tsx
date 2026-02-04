@@ -33,7 +33,7 @@ export function Footer() {
               <span className="text-lg sm:text-xl font-bold text-white">PND50</span>
             </Link>
             <p className="text-sm text-slate-400 mb-4 sm:mb-6 leading-relaxed">
-              Professional accounting and business consulting for foreign companies operating in Thailand since 2015.
+              PND50 is a Bangkok-based accounting firm providing corporate tax, bookkeeping, payroll, and business advisory services for foreign-owned companies in Thailand.
             </p>
             <div className="space-y-2 text-sm">
               <a 
