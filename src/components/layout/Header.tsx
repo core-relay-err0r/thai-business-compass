@@ -12,33 +12,33 @@ export function Header() {
   const [isStartModalOpen, setIsStartModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const serviceLinks = [{
-    href: "/services#corporate",
+    href: "/services/calculator#corporate",
     label: "Corporate",
     description: "One-time corporate services",
     icon: Building2
   }, {
-    href: "/services#accounting",
+    href: "/services/calculator#accounting",
     label: "Accounting",
     description: "Calculate monthly + yearly cost",
     icon: Calculator
   }, {
-    href: "/services#consulting",
+    href: "/services/calculator#consulting",
     label: "Consulting",
     description: "Business problem solving",
     icon: MessageSquare
   }];
   const startOptions = [{
-    href: "/services#corporate",
+    href: "/services/calculator#corporate",
     icon: Building2,
     title: "Corporate",
     description: "One-time corporate services"
   }, {
-    href: "/services#accounting",
+    href: "/services/calculator#accounting",
     icon: Calculator,
     title: "Accounting",
     description: "Calculate monthly + yearly cost"
   }, {
-    href: "/services#consulting",
+    href: "/services/calculator#consulting",
     icon: MessageSquare,
     title: "Consulting",
     description: "Business problem solving"
@@ -46,7 +46,7 @@ export function Header() {
   const isServiceActive = location.pathname === "/services" || location.pathname.startsWith("/services");
   const handleServiceClick = (href: string, e: React.MouseEvent) => {
     const hash = href.split("#")[1];
-    if (hash && location.pathname === "/services") {
+    if (hash && location.pathname === "/services/calculator") {
       e.preventDefault();
       const element = document.getElementById(hash);
       element?.scrollIntoView({
@@ -85,7 +85,7 @@ export function Header() {
                       <ul className="grid w-[280px] gap-1 p-2">
                         {serviceLinks.map(link => <li key={link.href}>
                             <NavigationMenuLink asChild>
-                              <Link to={link.href} onClick={e => handleServiceClick(link.href, e)} className={cn("flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-accent hover:translate-x-1 focus:bg-accent", location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" && "bg-accent")}>
+                              <Link to={link.href} onClick={e => handleServiceClick(link.href, e)} className={cn("flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-accent hover:translate-x-1 focus:bg-accent", location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services/calculator" && "bg-accent")}>
                                 <link.icon className="h-5 w-5 mt-0.5 shrink-0" />
                                 <div>
                                   <div className="text-sm font-medium leading-none">{link.label}</div>
@@ -121,7 +121,7 @@ export function Header() {
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pt-3 pb-2 px-2">
               Our Services
             </div>
-            {serviceLinks.map(link => <Link key={link.href} to={link.href} onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-4 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
+            {serviceLinks.map(link => <Link key={link.href} to={link.href} onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-4 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services/calculator" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
                 <link.icon className="h-4 w-4 mr-3" />
                 {link.label}
               </Link>)}
