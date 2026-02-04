@@ -47,7 +47,7 @@ export function BottomCTA() {
           <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
             Understand your requirements and get transparent pricing in minutes.
           </p>
-          <Link to="/services">
+          <Link to="/services/calculator">
             <Button size="lg" className="group neumorphic-button min-h-[44px]">
               See what applies to you
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

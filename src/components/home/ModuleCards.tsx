@@ -6,21 +6,21 @@ import { AnimatedSection } from "@/components/ui/animated-section";
 
 const modules = [
   {
-    href: "/corporate",
+    href: "/services/calculator#corporate",
     icon: Building2,
     title: "Corporate Services",
     description: "Choose the event (incorporation, director change, share transfer). Get scope + one-time price.",
     features: ["PND50 company registration", "Director changes", "Share transfers", "Business setup Thailand"],
   },
   {
-    href: "/accounting",
+    href: "/services/calculator#accounting",
     icon: Calculator,
     title: "Accounting",
     description: "Calculate monthly + yearly cost while learning what's required.",
     features: ["PND50 bookkeeping services", "PND50 tax filing", "VAT reporting", "PND50 payroll services"],
   },
   {
-    href: "/consulting",
+    href: "/services/calculator#consulting",
     icon: MessageSquare,
     title: "Consulting",
     description: "Choose the business problem. Get expected outcomes + price range.",
