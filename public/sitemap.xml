@@ -13,6 +13,18 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://pnd50.com/blog</loc>
+    <lastmod>2025-02-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pnd50.com/blog/pnd50-tax-filing-thailand-foreign-business-guide</loc>
+    <lastmod>2025-02-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pnd50.com/about</loc>
     <lastmod>2025-02-04</lastmod>
     <changefreq>monthly</changefreq>
