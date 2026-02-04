@@ -8,6 +8,8 @@ import About from "@/pages/About";
 import Submit from "@/pages/Submit";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 import NotFound from "@/pages/NotFound";
 
 export function AnimatedRoutes() {
@@ -73,6 +75,22 @@ export function AnimatedRoutes() {
           element={
             <PageTransition>
               <Terms />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/blog"
+          element={
+            <PageTransition>
+              <Blog />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/blog/:slug"
+          element={
+            <PageTransition>
+              <BlogPost />
             </PageTransition>
           }
         />
