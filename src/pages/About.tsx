@@ -131,7 +131,7 @@ export default function About() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <Link to="/services" className="inline-block mt-6 sm:mt-8">
+                <Link to="/services/calculator" className="inline-block mt-6 sm:mt-8">
                   <Button size="lg" className="neumorphic-button group min-h-[44px]">
                     See what applies to you
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -333,7 +333,7 @@ export default function About() {
           Discover what your business needs with our interactive tools, or get in touch directly.
         </p>
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-          <Link to="/services">
+          <Link to="/services/calculator">
             <Button size="lg" className="min-h-[44px] w-full sm:w-auto">
               See what applies to you
               <ArrowRight className="ml-2 h-4 w-4" />
