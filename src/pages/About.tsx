@@ -122,9 +122,9 @@ export default function About() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-muted-foreground mt-4 sm:mt-6 text-base sm:text-lg max-w-lg"
               >
-                PND50 is an accounting and advisory firm based in Thailand, helping 
-                foreign-owned businesses navigate Thai accounting and compliance with 
-                clarity and confidence.
+                PND50 is a Bangkok-based accounting firm helping foreign-owned businesses 
+                navigate Thai accounting, corporate tax, and compliance. English-speaking 
+                accountants who understand your needs.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

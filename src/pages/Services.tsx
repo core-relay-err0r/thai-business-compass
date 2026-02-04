@@ -99,7 +99,7 @@ export default function Services() {
               Everything you need to operate in Thailand.
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground">
-              Corporate setup, accounting, and strategic consulting — all in one place.
+              Accounting services Thailand, corporate tax filing, payroll, and business consulting — tailored for foreign companies.
             </p>
           </div>
         </div>
