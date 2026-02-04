@@ -111,7 +111,7 @@ export default function About() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]"
               >
                 Regional corporate specialist with{" "}
                 <span className="text-primary">Global standards</span>
@@ -120,7 +120,7 @@ export default function About() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-muted-foreground mt-4 sm:mt-6 text-base sm:text-lg max-w-lg"
+                className="text-muted-foreground mt-6 sm:mt-8 text-lg sm:text-xl max-w-xl"
               >
                 PND50 is an accounting and advisory firm based in Thailand, helping 
                 foreign-owned businesses navigate Thai accounting and compliance with 
