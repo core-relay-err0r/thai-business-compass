@@ -18,6 +18,7 @@ import teamMember1 from "@/assets/team-member-1.jpeg";
 import teamMember2 from "@/assets/team-member-2.png";
 import teamAtWork from "@/assets/team-at-work.jpg";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { BreadcrumbSchema, OrganizationSchema } from "@/components/seo/StructuredData";
 
 export default function About() {
   const stats = [
@@ -67,6 +68,13 @@ export default function About() {
         path="/about"
         keywords="PND50 about, Bangkok accounting firm, English speaking accountant Thailand, accountant for foreigners Thailand, Thai accounting company"
       />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://pnd50.com/" },
+          { name: "About", url: "https://pnd50.com/about" },
+        ]}
+      />
+      <OrganizationSchema />
       {/* Hero Section */}
       <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-16 sm:py-20 lg:py-0">
         {/* Background gradient */}
@@ -206,7 +214,7 @@ export default function About() {
               >
                 <img 
                   src={teamMember1} 
-                  alt="Team member" 
+                  alt="Senior Thai accountant at PND50 Bangkok office" 
                   className="w-full h-full object-cover object-top"
                 />
               </motion.div>
@@ -217,7 +225,7 @@ export default function About() {
               >
                 <img 
                   src={teamMember2} 
-                  alt="Team member" 
+                  alt="PND50 accounting specialist for foreign businesses in Thailand" 
                   className="w-full h-full object-cover object-top"
                 />
               </motion.div>
@@ -317,7 +325,7 @@ export default function About() {
               <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-border/50">
                 <img 
                   src={teamAtWork} 
-                  alt="Our team at work" 
+                  alt="PND50 accounting team meeting in Bangkok office" 
                   className="w-full h-full object-cover"
                 />
                 {/* Gradient overlays for fading effect */}
