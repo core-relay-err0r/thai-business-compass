@@ -69,6 +69,10 @@ export function Header() {
               <Link to="/about" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/about" ? "text-foreground" : "text-muted-foreground"}`}>About Us
             </Link>
 
+              <Link to="/blog" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/blog" || location.pathname.startsWith("/blog/") ? "text-foreground" : "text-muted-foreground"}`}>
+                Blog
+              </Link>
+
               <Link to="/contact" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/contact" ? "text-foreground" : "text-muted-foreground"}`}>
                 Contact
               </Link>
@@ -114,6 +118,9 @@ export function Header() {
           <nav className="container py-4 flex flex-col gap-1">
             <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.pathname === "/about" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
               About
+            </Link>
+            <Link to="/blog" onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.pathname === "/blog" || location.pathname.startsWith("/blog/") ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
+              Blog
             </Link>
             <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.pathname === "/contact" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
               Contact
