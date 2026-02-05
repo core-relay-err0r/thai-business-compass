@@ -144,13 +144,22 @@ export default function Blog() {
             <p className="text-muted-foreground mb-6">
               Our English-speaking team is ready to help you navigate Thai accounting and compliance.
             </p>
-            <Link 
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
-            >
-              Get in touch
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link 
+                to="/services"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                See what applies to you
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link 
+                to="/contact"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-border bg-background text-foreground rounded-lg font-medium hover:bg-accent transition-colors"
+              >
+                Get in touch
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
