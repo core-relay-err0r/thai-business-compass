@@ -7,6 +7,7 @@ import { Calendar, ArrowRight, BookOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { BreadcrumbSchema } from "@/components/seo/StructuredData";
 import { format } from "date-fns";
 
 export default function Blog() {
@@ -31,6 +32,12 @@ export default function Blog() {
         description="Expert insights on Thai accounting, corporate tax filing, PND50 compliance, and business advisory for foreign companies operating in Thailand."
         path="/blog"
         keywords="Thailand accounting blog, PND50 tax filing guide, Thai corporate tax, foreign business Thailand, accounting tips Thailand"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://pnd50.com/" },
+          { name: "Blog", url: "https://pnd50.com/blog" },
+        ]}
       />
 
       {/* Hero Section */}
@@ -81,7 +88,7 @@ export default function Blog() {
                         <div className="aspect-video overflow-hidden">
                           <img
                             src={post.featured_image}
-                            alt={post.title}
+                            alt={`${post.title} - Thai accounting insights by PND50`}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>

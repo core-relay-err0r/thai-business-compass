@@ -7,7 +7,7 @@ import { Calendar, ArrowLeft, ArrowRight, BookOpen, Clock } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { BreadcrumbSchema } from "@/components/seo/StructuredData";
+import { BreadcrumbSchema, ArticleSchema } from "@/components/seo/StructuredData";
 import { format } from "date-fns";
 import { useEffect } from "react";
 
@@ -126,6 +126,14 @@ export default function BlogPost() {
           { name: post.title, url: `https://pnd50.com/blog/${post.slug}` },
         ]}
       />
+      <ArticleSchema
+        title={post.title}
+        description={post.meta_description || post.excerpt || `Read about ${post.title}`}
+        url={`https://pnd50.com/blog/${post.slug}`}
+        image={post.featured_image || undefined}
+        datePublished={post.published_at || post.created_at}
+        dateModified={post.updated_at}
+      />
 
       {/* Article Header */}
       <article>
@@ -177,7 +185,7 @@ export default function BlogPost() {
               <div className="rounded-xl overflow-hidden shadow-lg border border-border">
                 <img
                   src={post.featured_image}
-                  alt={post.title}
+                  alt={`${post.title} - Thai accounting and tax guide by PND50`}
                   className="w-full h-auto object-cover"
                 />
               </div>

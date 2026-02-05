@@ -9,7 +9,30 @@ import { ConsultingServices } from "@/components/consulting/ConsultingServices";
 import { Building2, Calculator, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { FAQSchema } from "@/components/seo/StructuredData";
+import { FAQSchema, ServiceSchema } from "@/components/seo/StructuredData";
+
+const servicesList = [
+  {
+    name: "Company Registration Thailand",
+    description: "Full support for registering a Thai Limited Company, including BOI applications and work permit processing.",
+  },
+  {
+    name: "Monthly Bookkeeping",
+    description: "Comprehensive bookkeeping services including transaction recording, bank reconciliation, and financial reporting.",
+  },
+  {
+    name: "Corporate Tax Filing",
+    description: "PND50 and PND51 corporate income tax filing, VAT returns, and withholding tax compliance.",
+  },
+  {
+    name: "Payroll Services Thailand",
+    description: "Full payroll processing including salary calculations, social security contributions, and tax withholding.",
+  },
+  {
+    name: "Business Consulting",
+    description: "Strategic advisory on tax optimization, visa requirements, and corporate restructuring for foreign businesses.",
+  },
+];
 
 const serviceFAQs = [
   {
@@ -119,6 +142,7 @@ export default function Services() {
         keywords="accounting services Thailand, Thai tax filing, bookkeeping Thailand, payroll Thailand, corporate tax Thailand, VAT Thailand, foreign company accounting"
       />
       <FAQSchema items={serviceFAQs} />
+      <ServiceSchema services={servicesList} />
       {/* Section Head Block */}
       <section className="py-8 sm:py-10 md:py-16 border-b border-border">
         <div className="container px-4 sm:px-6">
