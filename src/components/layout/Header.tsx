@@ -69,10 +69,6 @@ export function Header() {
               <Link to="/about" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/about" ? "text-foreground" : "text-muted-foreground"}`}>About Us
             </Link>
 
-              <Link to="/blog" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/blog" || location.pathname.startsWith("/blog/") ? "text-foreground" : "text-muted-foreground"}`}>
-                Blog
-              </Link>
-
               <Link to="/contact" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/contact" ? "text-foreground" : "text-muted-foreground"}`}>
                 Contact
               </Link>
@@ -105,6 +101,10 @@ export function Header() {
                   </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
+
+              <Link to="/blog" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/blog" || location.pathname.startsWith("/blog/") ? "text-foreground" : "text-muted-foreground"}`}>
+                Blog
+              </Link>
             </nav>
           </div>
 
