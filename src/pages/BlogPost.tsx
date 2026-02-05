@@ -172,7 +172,7 @@ export default function BlogPost() {
 
         {/* Featured Image */}
         {post.featured_image && (
-          <div className="container px-4 sm:px-6 py-8 sm:py-12">
+          <div className="container px-4 sm:px-6 pt-8 sm:pt-12 pb-4 sm:pb-6">
             <div className="max-w-4xl mx-auto">
               <div className="rounded-xl overflow-hidden shadow-lg border border-border">
                 <img
