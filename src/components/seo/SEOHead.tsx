@@ -10,7 +10,7 @@ interface SEOHeadProps {
 }
 
 const SITE_URL = "https://pnd50.com";
-const DEFAULT_OG_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/wilCd8qP7mc38iOT4EdYctUuEo03/social-images/social-1769751785494-openGL.png";
+const DEFAULT_OG_IMAGE = "https://pnd50.com/og-image.png";
 
 export function SEOHead({
   title,
