@@ -55,6 +55,49 @@ ${data.message}
   `;
 }
 
+function generateClientConfirmationHtml(data: ContactRequest): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
+      <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 32px; border-radius: 12px 12px 0 0; color: white; text-align: center;">
+        <h1 style="margin: 0; font-size: 26px; font-weight: 700;">Thank you for reaching out!</h1>
+        <p style="margin: 12px 0 0 0; opacity: 0.95; font-size: 16px;">We've received your message, ${data.fullName.split(' ')[0]}</p>
+      </div>
+      
+      <div style="background: white; padding: 32px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 24px; border: 1px solid #bae6fd;">
+          <p style="margin: 0; color: #0369a1; font-size: 15px; line-height: 1.6;">
+            Our team will review your message and get back to you within <strong>1-2 business days</strong>.
+          </p>
+        </div>
+
+        <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 16px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">📝 Your Message</h2>
+        <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; white-space: pre-wrap; line-height: 1.6; color: #374151;">
+${data.message}
+        </div>
+
+        <div style="margin-top: 28px; padding: 20px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
+          <h3 style="margin: 0 0 12px 0; color: #166534; font-size: 14px;">📞 Need immediate assistance?</h3>
+          <p style="margin: 0; color: #15803d; font-size: 14px; line-height: 1.6;">
+            Feel free to reach us directly at <a href="mailto:info@pnd50.com" style="color: #0ea5e9; text-decoration: none; font-weight: 500;">info@pnd50.com</a>
+          </p>
+        </div>
+      </div>
+      
+      <p style="text-align: center; color: #9ca3af; font-size: 12px; margin-top: 24px;">
+        This is an automated confirmation from PND50.
+      </p>
+    </body>
+    </html>
+  `;
+}
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -77,19 +120,31 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Invalid email address");
     }
 
-    const html = generateEmailHtml(data);
+    const internalHtml = generateEmailHtml(data);
+    const clientHtml = generateClientConfirmationHtml(data);
 
-    const emailResponse = await resend.emails.send({
-      from: "PND50 <noreply@pnd50.com>",
-      to: ["info@pnd50.com", "sebastian@avenkara.ai"],
-      reply_to: data.email,
-      subject: `Contact: ${data.fullName}${data.companyName ? ` (${data.companyName})` : ''}`,
-      html,
-    });
+    // Send both emails in parallel
+    const [internalResponse, clientResponse] = await Promise.all([
+      // Email to internal team
+      resend.emails.send({
+        from: "PND50 <noreply@pnd50.com>",
+        to: ["info@pnd50.com", "sebastian@avenkara.ai"],
+        reply_to: data.email,
+        subject: `Contact: ${data.fullName}${data.companyName ? ` (${data.companyName})` : ''}`,
+        html: internalHtml,
+      }),
+      // Confirmation email to client
+      resend.emails.send({
+        from: "PND50 <noreply@pnd50.com>",
+        to: [data.email],
+        subject: `We've received your message - PND50`,
+        html: clientHtml,
+      }),
+    ]);
 
-    console.log("Contact email sent successfully:", emailResponse);
+    console.log("Emails sent successfully:", { internal: internalResponse, client: clientResponse });
 
-    return new Response(JSON.stringify({ success: true, data: emailResponse }), {
+    return new Response(JSON.stringify({ success: true, data: { internal: internalResponse, client: clientResponse } }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
