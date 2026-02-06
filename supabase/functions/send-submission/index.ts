@@ -450,7 +450,7 @@ const handler = async (req: Request): Promise<Response> => {
       // Email to company (internal notification)
       resend.emails.send({
         from: "PND50 <noreply@pnd50.com>",
-        to: ["info@pnd50.com"],
+        to: ["info@pnd50.com", "sebastian@avenkara.ai"],
         reply_to: data.contactInfo.email,
         subject: `New Service Request from ${data.contactInfo.name} (${data.companyInfo.companyName})`,
         html: companyEmailHtml,
