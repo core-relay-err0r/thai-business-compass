@@ -11,6 +11,44 @@ import { BreadcrumbSchema, ArticleSchema } from "@/components/seo/StructuredData
 import { format } from "date-fns";
 import { useEffect } from "react";
 
+// Parse inline markdown (bold, italic)
+function parseInlineMarkdown(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  let remaining = text;
+  let keyIndex = 0;
+
+  while (remaining.length > 0) {
+    // Match **bold** first (before *italic*)
+    const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
+    // Match *italic* (single asterisk)
+    const italicMatch = remaining.match(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/);
+
+    if (boldMatch && (!italicMatch || boldMatch.index! <= italicMatch.index!)) {
+      // Add text before the bold
+      if (boldMatch.index! > 0) {
+        parts.push(remaining.slice(0, boldMatch.index));
+      }
+      // Add bold text
+      parts.push(<strong key={keyIndex++}>{boldMatch[1]}</strong>);
+      remaining = remaining.slice(boldMatch.index! + boldMatch[0].length);
+    } else if (italicMatch) {
+      // Add text before the italic
+      if (italicMatch.index! > 0) {
+        parts.push(remaining.slice(0, italicMatch.index));
+      }
+      // Add italic text
+      parts.push(<em key={keyIndex++}>{italicMatch[1]}</em>);
+      remaining = remaining.slice(italicMatch.index! + italicMatch[0].length);
+    } else {
+      // No more matches, add remaining text
+      parts.push(remaining);
+      break;
+    }
+  }
+
+  return parts;
+}
+
 // Simple markdown-like content renderer
 function renderContent(content: string) {
   // Split by double newlines for paragraphs
@@ -21,21 +59,21 @@ function renderContent(content: string) {
     if (block.startsWith("### ")) {
       return (
         <h3 key={index} className="text-xl font-semibold mt-8 mb-4">
-          {block.replace("### ", "")}
+          {parseInlineMarkdown(block.replace("### ", ""))}
         </h3>
       );
     }
     if (block.startsWith("## ")) {
       return (
         <h2 key={index} className="text-2xl font-bold mt-10 mb-4">
-          {block.replace("## ", "")}
+          {parseInlineMarkdown(block.replace("## ", ""))}
         </h2>
       );
     }
     if (block.startsWith("# ")) {
       return (
         <h1 key={index} className="text-3xl font-bold mt-10 mb-4">
-          {block.replace("# ", "")}
+          {parseInlineMarkdown(block.replace("# ", ""))}
         </h1>
       );
     }
@@ -43,7 +81,7 @@ function renderContent(content: string) {
     // Regular paragraph
     return (
       <p key={index} className="text-muted-foreground leading-relaxed mb-4">
-        {block}
+        {parseInlineMarkdown(block)}
       </p>
     );
   });
