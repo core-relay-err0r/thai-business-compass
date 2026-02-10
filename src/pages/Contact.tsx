@@ -200,13 +200,14 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-1.5 sm:space-y-2">
-                    <Label htmlFor="companyName" className="text-sm">Company Name</Label>
+                    <Label htmlFor="companyName" className="text-sm">Company Name *</Label>
                     <Input
                       id="companyName"
                       name="companyName"
                       placeholder="Your Company Ltd."
                       value={formData.companyName}
                       onChange={handleChange}
+                      required
                       className="min-h-[44px]"
                     />
                   </div>
