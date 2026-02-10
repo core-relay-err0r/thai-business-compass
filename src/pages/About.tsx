@@ -267,7 +267,7 @@ export default function About() {
       </section>
 
       {/* Stats Section - Desktop only (mobile stats are in hero) */}
-      <section id="stats" className="container py-20 sm:py-28 md:py-36 px-4 sm:px-6 hidden lg:block">
+      <section id="stats" className="container py-28 sm:py-36 md:py-44 px-4 sm:px-6 hidden lg:block">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {stats.map((stat) => (
             <Card key={stat.label} className="border-border/50 text-center">
@@ -288,7 +288,7 @@ export default function About() {
 
       {/* Mission Section */}
       <section className="bg-muted/30 border-y border-border/40">
-        <div className="container py-20 sm:py-28 md:py-36 px-4 sm:px-6">
+        <div className="container py-28 sm:py-36 md:py-44 px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left: Content */}
             <div>
@@ -340,7 +340,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="container py-20 sm:py-28 md:py-36 text-center px-4 sm:px-6">
+      <section className="container py-28 sm:py-36 md:py-44 text-center px-4 sm:px-6">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">
           Ready to simplify your Thai compliance?
         </h2>
