@@ -156,7 +156,7 @@ export default function About() {
               </motion.div>
             </div>
 
-            {/* Right: Team Visual - Much larger */}
+            {/* Right: Team Visual */}
             <motion.div initial={{
             opacity: 0,
             scale: 0.95
@@ -166,77 +166,24 @@ export default function About() {
           }} transition={{
             duration: 0.6,
             delay: 0.2
-          }} className="relative w-full max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] h-[500px] lg:h-[600px] xl:h-[700px] mx-auto hidden lg:block">
-              {/* Animated decorative background circles - Larger */}
-              <motion.div className="absolute top-[5%] left-[0%] w-44 h-44 lg:w-56 lg:h-56 xl:w-64 xl:h-64 rounded-full z-0 bg-primary/20" animate={{
-              scale: [1, 1.05, 1]
-            }} transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }} />
-              <motion.div className="absolute top-[0%] right-[8%] w-32 h-32 lg:w-40 lg:h-40 xl:w-48 xl:h-48 rounded-full bg-primary/30 z-0" animate={{
-              scale: [1.05, 1, 1.05]
-            }} transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }} />
-              <motion.div className="absolute bottom-[8%] right-[0%] w-36 h-36 lg:w-44 lg:h-44 xl:w-52 xl:h-52 rounded-full bg-muted-foreground/50 z-0" animate={{
-              scale: [1, 1.08, 1]
-            }} transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }} />
-              
-              {/* Floating accent dots - Larger */}
-              <motion.div className="absolute top-[22%] left-[22%] w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-primary/40 z-0" animate={{
-              y: [0, -10, 0],
-              x: [0, 5, 0]
-            }} transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }} />
-              <motion.div className="absolute bottom-[28%] right-[18%] w-4 h-4 lg:w-5 lg:h-5 rounded-full bg-primary/30 z-0" animate={{
-              y: [0, 8, 0],
-              x: [0, -5, 0]
-            }} transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }} />
-              
-              {/* Team member photos - Much larger */}
-              <motion.div className="absolute top-[8%] right-[5%] w-52 h-52 lg:w-64 lg:h-64 xl:w-72 xl:h-72 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10" whileHover={{
-              scale: 1.05
+          }} className="relative w-full max-w-[600px] lg:max-w-[700px] h-[500px] lg:h-[600px] mx-auto hidden lg:block">
+              {/* Team member photos */}
+              <motion.div className="absolute top-[8%] right-[5%] w-52 h-52 lg:w-64 lg:h-64 xl:w-72 xl:h-72 rounded-2xl overflow-hidden border border-border/50 shadow-lg z-10" whileHover={{
+              scale: 1.02
             }} transition={{
               type: "spring",
               stiffness: 300
             }}>
                 <img src={teamMember1} alt="Senior Thai accountant at PND50 Bangkok office" className="w-full h-full object-cover object-top" />
               </motion.div>
-              <motion.div className="absolute bottom-[5%] left-[8%] w-60 h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full overflow-hidden border-4 border-background shadow-2xl z-10" whileHover={{
-              scale: 1.05
+              <motion.div className="absolute bottom-[5%] left-[8%] w-60 h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-2xl overflow-hidden border border-border/50 shadow-lg z-10" whileHover={{
+              scale: 1.02
             }} transition={{
               type: "spring",
               stiffness: 300
             }}>
                 <img src={teamMember2} alt="PND50 accounting specialist for foreign businesses in Thailand" className="w-full h-full object-cover object-top" />
               </motion.div>
-              
-              {/* Connection line */}
-              <svg className="absolute inset-0 w-full h-full z-5 pointer-events-none" viewBox="0 0 800 700">
-                <motion.path d="M 520 180 Q 400 350 280 520" stroke="hsl(var(--primary) / 0.15)" strokeWidth="2" fill="none" strokeDasharray="10 5" initial={{
-                pathLength: 0
-              }} animate={{
-                pathLength: 1
-              }} transition={{
-                duration: 2,
-                delay: 0.5
-              }} />
-              </svg>
             </motion.div>
           </div>
         </div>
