@@ -11,6 +11,14 @@ import { BreadcrumbSchema, ArticleSchema } from "@/components/seo/StructuredData
 import { format } from "date-fns";
 import { useEffect } from "react";
 
+const SITE_URL = "https://pnd50.com";
+
+function toAbsoluteUrl(path: string | null | undefined): string | undefined {
+  if (!path) return undefined;
+  if (path.startsWith("http")) return path;
+  return `${SITE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+}
+
 // Parse inline markdown (bold, italic)
 function parseInlineMarkdown(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
@@ -155,7 +163,7 @@ export default function BlogPost() {
         description={post.meta_description || post.excerpt || `Read about ${post.title} - PND50 Thailand accounting insights`}
         path={`/blog/${post.slug}`}
         keywords={post.target_keyword || undefined}
-        ogImage={post.featured_image || undefined}
+        ogImage={toAbsoluteUrl(post.featured_image)}
       />
       <BreadcrumbSchema
         items={[
@@ -168,7 +176,7 @@ export default function BlogPost() {
         title={post.title}
         description={post.meta_description || post.excerpt || `Read about ${post.title}`}
         url={`https://pnd50.com/blog/${post.slug}`}
-        image={post.featured_image || undefined}
+        image={toAbsoluteUrl(post.featured_image)}
         datePublished={post.published_at || post.created_at}
         dateModified={post.updated_at}
       />
