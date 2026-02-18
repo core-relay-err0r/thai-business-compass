@@ -48,11 +48,14 @@ export function Header() {
     const hash = href.split("#")[1];
     if (hash && location.pathname === "/services") {
       e.preventDefault();
-      const element = document.getElementById(hash);
-      element?.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      // Use setTimeout to allow the dropdown to close first
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        element?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }, 100);
     }
   };
   return <>
