@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Award, Users, ThumbsUp, MessageCircle, ShieldCheck, Heart, ArrowRight, ChevronDown } from "lucide-react";
-import teamMember1 from "@/assets/team-member-1.jpeg";
+import teamMember2 from "@/assets/team-member-2.png";
 import teamAtWork from "@/assets/team-at-work.jpg";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { BreadcrumbSchema, OrganizationSchema } from "@/components/seo/StructuredData";
@@ -95,7 +95,7 @@ export default function About() {
             {/* Right: Portrait */}
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:flex items-center justify-center">
               <div className="w-[400px] h-[400px] xl:w-[480px] xl:h-[480px] rounded-full overflow-hidden border-4 border-background shadow-2xl">
-                <img src={teamMember1} alt="PND50 accounting professional in Bangkok" className="w-full h-full object-cover object-top" />
+                <img src={teamMember2} alt="PND50 accounting professional in Bangkok" className="w-full h-full object-cover object-top" />
               </div>
             </motion.div>
           </div>
