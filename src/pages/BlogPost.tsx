@@ -86,6 +86,22 @@ function renderContent(content: string) {
       );
     }
     
+    // Check if block contains list items (lines starting with "- ")
+    const lines = block.split("\n");
+    const isListBlock = lines.every(line => line.trim().startsWith("- ") || line.trim() === "");
+    
+    if (isListBlock && lines.some(line => line.trim().startsWith("- "))) {
+      return (
+        <ul key={index} className="list-disc list-inside space-y-2 text-muted-foreground leading-relaxed mb-4 pl-2">
+          {lines
+            .filter(line => line.trim().startsWith("- "))
+            .map((line, i) => (
+              <li key={i}>{parseInlineMarkdown(line.trim().slice(2))}</li>
+            ))}
+        </ul>
+      );
+    }
+
     // Regular paragraph
     return (
       <p key={index} className="text-muted-foreground leading-relaxed mb-4">
