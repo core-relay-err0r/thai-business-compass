@@ -89,7 +89,7 @@ export function Header() {
                       <ul className="grid w-[280px] gap-1 p-2">
                         {serviceLinks.map(link => <li key={link.href}>
                             <NavigationMenuLink asChild>
-                              <Link to={link.href} onClick={e => handleServiceClick(link.href, e)} className={cn("flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-accent hover:translate-x-1 focus:bg-accent", location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" && "bg-accent")}>
+                              <Link to={link.href} onClick={e => handleServiceClick(link.href, e)} className={cn("flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-foreground hover:text-background hover:translate-x-1 focus:bg-foreground focus:text-background [&:hover_p]:text-background/70", location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" && "bg-foreground text-background")}>
                                 <link.icon className="h-5 w-5 mt-0.5 shrink-0" />
                                 <div>
                                   <div className="text-sm font-medium leading-none">{link.label}</div>
