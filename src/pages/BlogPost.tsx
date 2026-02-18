@@ -86,20 +86,58 @@ function renderContent(content: string) {
       );
     }
     
-    // Check if block contains list items (lines starting with "- ")
+    // Split block into lines and render mixed content (text + lists)
     const lines = block.split("\n");
-    const isListBlock = lines.every(line => line.trim().startsWith("- ") || line.trim() === "");
-    
-    if (isListBlock && lines.some(line => line.trim().startsWith("- "))) {
-      return (
-        <ul key={index} className="list-disc list-inside space-y-2 text-muted-foreground leading-relaxed mb-4 pl-2">
-          {lines
-            .filter(line => line.trim().startsWith("- "))
-            .map((line, i) => (
-              <li key={i}>{parseInlineMarkdown(line.trim().slice(2))}</li>
-            ))}
-        </ul>
-      );
+    const hasUnorderedItems = lines.some(line => line.trim().startsWith("- "));
+    const hasOrderedItems = lines.some(line => /^\d+\.\s/.test(line.trim()));
+
+    if (hasUnorderedItems || hasOrderedItems) {
+      // Render mixed block: group consecutive list items, render text lines as paragraphs
+      const elements: React.ReactNode[] = [];
+      let currentList: { type: "ul" | "ol"; items: string[] } | null = null;
+      let subKey = 0;
+
+      const flushList = () => {
+        if (currentList) {
+          const ListTag = currentList.type === "ul" ? "ul" : "ol";
+          const listClass = currentList.type === "ul"
+            ? "list-disc list-inside space-y-2 text-muted-foreground leading-relaxed mb-4 pl-2"
+            : "list-decimal list-inside space-y-2 text-muted-foreground leading-relaxed mb-4 pl-2";
+          elements.push(
+            <ListTag key={subKey++} className={listClass}>
+              {currentList.items.map((item, i) => (
+                <li key={i}>{parseInlineMarkdown(item)}</li>
+              ))}
+            </ListTag>
+          );
+          currentList = null;
+        }
+      };
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed === "") {
+          continue;
+        } else if (trimmed.startsWith("- ")) {
+          if (currentList && currentList.type !== "ul") flushList();
+          if (!currentList) currentList = { type: "ul", items: [] };
+          currentList.items.push(trimmed.slice(2));
+        } else if (/^\d+\.\s/.test(trimmed)) {
+          if (currentList && currentList.type !== "ol") flushList();
+          if (!currentList) currentList = { type: "ol", items: [] };
+          currentList.items.push(trimmed.replace(/^\d+\.\s/, ""));
+        } else {
+          flushList();
+          elements.push(
+            <p key={subKey++} className="text-muted-foreground leading-relaxed mb-2">
+              {parseInlineMarkdown(trimmed)}
+            </p>
+          );
+        }
+      }
+      flushList();
+
+      return <div key={index} className="mb-4">{elements}</div>;
     }
 
     // Regular paragraph
