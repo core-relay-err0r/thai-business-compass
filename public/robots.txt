@@ -1,6 +1,19 @@
 # PND50 - Bangkok Accounting Services for Foreign Companies
 # https://pnd50.com
 
+# Block bad bots (scrapers, spam)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
 # Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
@@ -54,25 +67,8 @@ Allow: /
 # Default - Allow All
 User-agent: *
 Allow: /
-
-# Block internal/dev paths
 Disallow: /api/
-Disallow: /_next/
 Disallow: /admin/
-Disallow: /*.json$
-
-# Block bad bots (scrapers, spam)
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: MJ12bot
-Disallow: /
-
-User-agent: DotBot
-Disallow: /
 
 # Sitemaps
 Sitemap: https://pnd50.com/sitemap.xml
