@@ -17,6 +17,21 @@ interface ContactRequest {
   message: string;
 }
 
+function escapeHtml(text: string): string {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
+}
+
+function truncate(str: string, max: number): string {
+  return str.length > max ? str.slice(0, max) : str;
+}
+
 function generateEmailHtml(data: ContactRequest): string {
   return `
     <!DOCTYPE html>
@@ -34,16 +49,16 @@ function generateEmailHtml(data: ContactRequest): string {
       <div style="background: white; padding: 24px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
         <h2 style="margin: 0 0 16px 0; color: #333; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">Contact Details</h2>
         <table style="width: 100%; margin-bottom: 24px;">
-          <tr><td style="padding: 8px 0; color: #666; width: 120px;">Name:</td><td style="padding: 8px 0;"><strong>${data.fullName}</strong></td></tr>
-          <tr><td style="padding: 8px 0; color: #666;">Email:</td><td style="padding: 8px 0;"><strong><a href="mailto:${data.email}" style="color: #0ea5e9;">${data.email}</a></strong></td></tr>
-          ${data.phone ? `<tr><td style="padding: 8px 0; color: #666;">Phone:</td><td style="padding: 8px 0;"><strong><a href="tel:${data.phone}" style="color: #0ea5e9;">${data.phone}</a></strong></td></tr>` : ''}
-          ${data.whatsapp ? `<tr><td style="padding: 8px 0; color: #666;">WhatsApp:</td><td style="padding: 8px 0;"><strong><a href="https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}" style="color: #25D366;">${data.whatsapp}</a></strong></td></tr>` : ''}
-          ${data.companyName ? `<tr><td style="padding: 8px 0; color: #666;">Company:</td><td style="padding: 8px 0;"><strong>${data.companyName}</strong></td></tr>` : ''}
+          <tr><td style="padding: 8px 0; color: #666; width: 120px;">Name:</td><td style="padding: 8px 0;"><strong>${escapeHtml(data.fullName)}</strong></td></tr>
+          <tr><td style="padding: 8px 0; color: #666;">Email:</td><td style="padding: 8px 0;"><strong><a href="mailto:${encodeURIComponent(data.email)}" style="color: #0ea5e9;">${escapeHtml(data.email)}</a></strong></td></tr>
+          ${data.phone ? `<tr><td style="padding: 8px 0; color: #666;">Phone:</td><td style="padding: 8px 0;"><strong><a href="tel:${data.phone.replace(/[^0-9+\- ]/g, '')}" style="color: #0ea5e9;">${escapeHtml(data.phone)}</a></strong></td></tr>` : ''}
+          ${data.whatsapp ? `<tr><td style="padding: 8px 0; color: #666;">WhatsApp:</td><td style="padding: 8px 0;"><strong><a href="https://wa.me/${data.whatsapp.replace(/[^0-9]/g, '')}" style="color: #25D366;">${escapeHtml(data.whatsapp)}</a></strong></td></tr>` : ''}
+          ${data.companyName ? `<tr><td style="padding: 8px 0; color: #666;">Company:</td><td style="padding: 8px 0;"><strong>${escapeHtml(data.companyName)}</strong></td></tr>` : ''}
         </table>
 
         <h2 style="margin: 0 0 16px 0; color: #333; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">Message</h2>
         <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; white-space: pre-wrap; line-height: 1.6;">
-${data.message}
+${escapeHtml(data.message)}
         </div>
       </div>
       
@@ -66,7 +81,7 @@ function generateClientConfirmationHtml(data: ContactRequest): string {
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
       <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 32px; border-radius: 12px 12px 0 0; color: white; text-align: center;">
         <h1 style="margin: 0; font-size: 26px; font-weight: 700;">Thank you for reaching out!</h1>
-        <p style="margin: 12px 0 0 0; opacity: 0.95; font-size: 16px;">We've received your message, ${data.fullName.split(' ')[0]}</p>
+        <p style="margin: 12px 0 0 0; opacity: 0.95; font-size: 16px;">We've received your message, ${escapeHtml(data.fullName.split(' ')[0])}</p>
       </div>
       
       <div style="background: white; padding: 32px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
@@ -79,7 +94,7 @@ function generateClientConfirmationHtml(data: ContactRequest): string {
 
         <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 16px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">📝 Your Message</h2>
         <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; white-space: pre-wrap; line-height: 1.6; color: #374151;">
-${data.message}
+${escapeHtml(data.message)}
         </div>
 
         <div style="margin-top: 28px; padding: 20px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
@@ -106,18 +121,31 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const data: ContactRequest = await req.json();
-    
-    console.log("Received contact message from:", data.fullName, data.email);
+
+    // Truncate and sanitize inputs
+    data.fullName = truncate(String(data.fullName || '').trim(), 100);
+    data.email = truncate(String(data.email || '').trim(), 255);
+    data.message = truncate(String(data.message || '').trim(), 5000);
+    if (data.phone) data.phone = truncate(String(data.phone).trim(), 30);
+    if (data.whatsapp) data.whatsapp = truncate(String(data.whatsapp).trim(), 30);
+    if (data.companyName) data.companyName = truncate(String(data.companyName).trim(), 200);
 
     // Validate required fields
     if (!data.fullName || !data.email || !data.message) {
-      throw new Error("Missing required fields: name, email, or message");
+      return new Response(JSON.stringify({ error: "Missing required fields: name, email, or message" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {
-      throw new Error("Invalid email address");
+      return new Response(JSON.stringify({ error: "Invalid email address" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
     }
 
     const internalHtml = generateEmailHtml(data);
