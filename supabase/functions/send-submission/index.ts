@@ -42,6 +42,21 @@ interface SubmissionRequest {
   }>;
 }
 
+function escapeHtml(text: string): string {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
+}
+
+function truncate(str: string, max: number): string {
+  return str.length > max ? str.slice(0, max) : str;
+}
+
 function formatPrice(price: number): string {
   return price.toLocaleString();
 }
@@ -259,24 +274,24 @@ function generateEmailHtml(data: SubmissionRequest): string {
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 640px; margin: 0 auto; padding: 20px; color: #1f2937; background-color: #f9fafb;">
       <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 28px; border-radius: 12px 12px 0 0; color: white;">
         <h1 style="margin: 0; font-size: 24px; font-weight: 700;">New Service Request</h1>
-        <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 15px;">from ${contactInfo.name} • ${companyInfo.companyName}</p>
+        <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 15px;">from ${escapeHtml(contactInfo.name)} • ${escapeHtml(companyInfo.companyName)}</p>
       </div>
       
       <div style="background: white; padding: 28px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
         
         <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 16px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">👤 Contact Information</h2>
         <table style="width: 100%; margin-bottom: 28px;">
-          <tr><td style="padding: 6px 0; color: #6b7280; width: 140px;">Name</td><td style="padding: 6px 0; font-weight: 500;">${contactInfo.name}</td></tr>
-          <tr><td style="padding: 6px 0; color: #6b7280;">Email</td><td style="padding: 6px 0; font-weight: 500;"><a href="mailto:${contactInfo.email}" style="color: #2563eb; text-decoration: none;">${contactInfo.email}</a></td></tr>
-          <tr><td style="padding: 6px 0; color: #6b7280;">Phone</td><td style="padding: 6px 0; font-weight: 500;">${contactInfo.phone || "Not provided"}</td></tr>
-          <tr><td style="padding: 6px 0; color: #6b7280;">Preferred Contact</td><td style="padding: 6px 0; font-weight: 500;">${contactInfo.preferredContact}</td></tr>
+          <tr><td style="padding: 6px 0; color: #6b7280; width: 140px;">Name</td><td style="padding: 6px 0; font-weight: 500;">${escapeHtml(contactInfo.name)}</td></tr>
+          <tr><td style="padding: 6px 0; color: #6b7280;">Email</td><td style="padding: 6px 0; font-weight: 500;"><a href="mailto:${encodeURIComponent(contactInfo.email)}" style="color: #2563eb; text-decoration: none;">${escapeHtml(contactInfo.email)}</a></td></tr>
+          <tr><td style="padding: 6px 0; color: #6b7280;">Phone</td><td style="padding: 6px 0; font-weight: 500;">${escapeHtml(contactInfo.phone || "Not provided")}</td></tr>
+          <tr><td style="padding: 6px 0; color: #6b7280;">Preferred Contact</td><td style="padding: 6px 0; font-weight: 500;">${escapeHtml(contactInfo.preferredContact)}</td></tr>
         </table>
 
         <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 16px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">🏬 Company Information</h2>
         <table style="width: 100%; margin-bottom: 28px;">
-          <tr><td style="padding: 6px 0; color: #6b7280; width: 140px;">Company Name</td><td style="padding: 6px 0; font-weight: 500;">${companyInfo.companyName}</td></tr>
-          <tr><td style="padding: 6px 0; color: #6b7280;">Registration #</td><td style="padding: 6px 0; font-weight: 500;">${companyInfo.registrationNumber || "Not provided"}</td></tr>
-          <tr><td style="padding: 6px 0; color: #6b7280;">Industry</td><td style="padding: 6px 0; font-weight: 500;">${companyInfo.industry || "Not provided"}</td></tr>
+          <tr><td style="padding: 6px 0; color: #6b7280; width: 140px;">Company Name</td><td style="padding: 6px 0; font-weight: 500;">${escapeHtml(companyInfo.companyName)}</td></tr>
+          <tr><td style="padding: 6px 0; color: #6b7280;">Registration #</td><td style="padding: 6px 0; font-weight: 500;">${escapeHtml(companyInfo.registrationNumber || "Not provided")}</td></tr>
+          <tr><td style="padding: 6px 0; color: #6b7280;">Industry</td><td style="padding: 6px 0; font-weight: 500;">${escapeHtml(companyInfo.industry || "Not provided")}</td></tr>
         </table>
 
         <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 16px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">📋 Selected Services</h2>
@@ -286,7 +301,7 @@ function generateEmailHtml(data: SubmissionRequest): string {
 
         ${notes ? `
           <h2 style="margin: 28px 0 16px 0; color: #1f2937; font-size: 16px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px;">📝 Additional Notes</h2>
-          <p style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin: 0; white-space: pre-wrap; color: #374151; line-height: 1.6;">${notes}</p>
+          <p style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin: 0; white-space: pre-wrap; color: #374151; line-height: 1.6;">${escapeHtml(notes)}</p>
         ` : ""}
         
         <div style="margin-top: 28px; padding: 16px; background: #fef3c7; border-radius: 8px; border: 1px solid #fcd34d;">
@@ -339,7 +354,7 @@ function generateClientConfirmationHtml(data: SubmissionRequest): string {
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 640px; margin: 0 auto; padding: 20px; color: #1f2937; background-color: #f9fafb;">
       <div style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); padding: 32px; border-radius: 12px 12px 0 0; color: white; text-align: center;">
         <h1 style="margin: 0; font-size: 26px; font-weight: 700;">Thank you for your inquiry!</h1>
-        <p style="margin: 12px 0 0 0; opacity: 0.95; font-size: 16px;">We've received your service request, ${contactInfo.name.split(' ')[0]}</p>
+        <p style="margin: 12px 0 0 0; opacity: 0.95; font-size: 16px;">We've received your service request, ${escapeHtml(contactInfo.name.split(' ')[0])}</p>
       </div>
       
       <div style="background: white; padding: 32px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 12px 12px;">
@@ -349,7 +364,7 @@ function generateClientConfirmationHtml(data: SubmissionRequest): string {
           <table style="width: 100%;">
             <tr>
               <td style="padding: 6px 0; color: #6b7280;">Company</td>
-              <td style="padding: 6px 0; font-weight: 600; text-align: right;">${companyInfo.companyName}</td>
+              <td style="padding: 6px 0; font-weight: 600; text-align: right;">${escapeHtml(companyInfo.companyName)}</td>
             </tr>
             <tr>
               <td style="padding: 6px 0; color: #6b7280; vertical-align: top;">Services</td>
@@ -433,12 +448,36 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const data: SubmissionRequest = await req.json();
-    
-    console.log("Received submission request:", JSON.stringify(data, null, 2));
+
+    // Sanitize and truncate user inputs
+    if (data.contactInfo) {
+      data.contactInfo.name = truncate(String(data.contactInfo.name || '').trim(), 100);
+      data.contactInfo.email = truncate(String(data.contactInfo.email || '').trim(), 255);
+      if (data.contactInfo.phone) data.contactInfo.phone = truncate(String(data.contactInfo.phone).trim(), 30);
+      data.contactInfo.preferredContact = truncate(String(data.contactInfo.preferredContact || '').trim(), 50);
+    }
+    if (data.companyInfo) {
+      data.companyInfo.companyName = truncate(String(data.companyInfo.companyName || '').trim(), 200);
+      if (data.companyInfo.registrationNumber) data.companyInfo.registrationNumber = truncate(String(data.companyInfo.registrationNumber).trim(), 50);
+      if (data.companyInfo.industry) data.companyInfo.industry = truncate(String(data.companyInfo.industry).trim(), 100);
+    }
+    if (data.notes) data.notes = truncate(String(data.notes).trim(), 5000);
 
     // Validate required fields
     if (!data.contactInfo?.name || !data.contactInfo?.email || !data.companyInfo?.companyName) {
-      throw new Error("Missing required fields: name, email, or company name");
+      return new Response(JSON.stringify({ error: "Missing required fields: name, email, or company name" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.contactInfo.email)) {
+      return new Response(JSON.stringify({ error: "Invalid email address" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
     // Generate both email templates
