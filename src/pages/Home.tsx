@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { ModuleCards } from "@/components/home/ModuleCards";
 import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
+import { Testimonials } from "@/components/home/Testimonials";
 import { BottomCTA } from "@/components/home/BottomCTA";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { LocalBusinessSchema, OrganizationSchema } from "@/components/seo/StructuredData";
@@ -21,6 +22,7 @@ export default function Home() {
       <HeroSection />
       <ModuleCards />
       <TrustSection />
+      <Testimonials />
       <HowItWorks />
       <BottomCTA />
     </Layout>
