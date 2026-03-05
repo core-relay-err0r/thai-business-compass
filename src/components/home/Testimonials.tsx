@@ -1,126 +1,53 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Quote, Star } from "lucide-react";
-import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { ClientsSection, type Stat, type Testimonial } from "@/components/ui/testimonial-card";
 import yuryAvatar from "@/assets/testimonials/yury.jpg";
 import annaAvatar from "@/assets/testimonials/anna.jpg";
 import katjaAvatar from "@/assets/testimonials/katja.jpg";
 
-interface Testimonial {
-  name: string;
-  position: string;
-  company: string;
-  quote: string;
-  avatar: string;
-}
+const stats: Stat[] = [
+  { value: "10+", label: "Years of Excellence" },
+  { value: "150+", label: "Happy Clients" },
+  { value: "100%", label: "Satisfaction" },
+];
 
 const testimonials: Testimonial[] = [
   {
     name: "Mr. Yury Chertkov",
-    position: "Director",
-    company: "Novo Alliance Co., Ltd.",
+    title: "Director, Novo Alliance Co., Ltd.",
     quote:
-      "We were very satisfied with the quality of the service. The entire process was handled professionally and efficiently. We especially appreciate the quick turnaround, the prompt and helpful responses to our questions, and the clarity of the information provided throughout the process. All communication was straightforward and well-organized, which made the experience smooth and easy for us. Overall, the service met our expectations and we would gladly recommend it to others looking for reliable and responsive support.",
-    avatar: yuryAvatar,
+      "We were very satisfied with the quality of the service. The entire process was handled professionally and efficiently. We especially appreciate the quick turnaround, the prompt and helpful responses to our questions, and the clarity of the information provided throughout the process.",
+    avatarSrc: yuryAvatar,
+    rating: 5.0,
   },
   {
     name: "Anna",
-    position: "",
-    company: "Meridian Bridge Co., Ltd.",
+    title: "Meridian Bridge Co., Ltd.",
     quote:
-      "The audit team demonstrated a high level of professionalism and strong organizational skills. Throughout the engagement, the auditors responded promptly to requests and provided timely clarifications and well-reasoned explanations on arising matters. Communication was conducted in a professional and constructive manner, which contributed to efficient cooperation during the audit process. The comments and recommendations issued as a result of the audit are well-founded, precise, and practically applicable, and are aimed at improving transparency, accuracy of accounting, and the effectiveness of internal control procedures.",
-    avatar: annaAvatar,
+      "The audit team demonstrated a high level of professionalism and strong organizational skills. Communication was conducted in a professional and constructive manner, which contributed to efficient cooperation during the audit process.",
+    avatarSrc: annaAvatar,
+    rating: 5.0,
   },
   {
     name: "Katja Vanhanen",
-    position: "Managing Partner",
-    company: "MPG Trade Co., Ltd.",
+    title: "Managing Partner, MPG Trade Co., Ltd.",
     quote:
-      "We are very satisfied with the accounting and tax services provided by PND50 Co., Ltd., particularly during the preparation of our last annual company accounts. The process was handled professionally, accurately, and on time. Ms. Jenjira Wongprahat, who manages our company's accounting matters, is highly knowledgeable, detail-oriented, and always ready to provide clear explanations and practical advice. Her excellent customer service and responsiveness give us great confidence and peace of mind. We truly appreciate the high quality of service and customer support provided by PND50 Co., Ltd., thank you!",
-    avatar: katjaAvatar,
+      "We are very satisfied with the accounting and tax services provided by PND50. The process was handled professionally, accurately, and on time. We truly appreciate the high quality of service and customer support.",
+    avatarSrc: katjaAvatar,
+    rating: 5.0,
   },
 ];
 
 export function Testimonials() {
   return (
-    <section className="bg-muted/30 border-y border-border/40">
-      <div className="container py-16 md:py-24 px-4 sm:px-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <Badge variant="secondary" className="mb-4 text-sm px-4 py-1.5">
-            Client Testimonials
-          </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
-            Trusted by businesses{" "}
-            <span className="text-primary">across Thailand</span>
-          </h2>
-          <p className="text-muted-foreground mt-4 max-w-lg mx-auto text-sm sm:text-base">
-            Hear from the companies we've helped navigate Thai compliance with
-            confidence.
-          </p>
-        </motion.div>
-
-        {/* Testimonial Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-            >
-              <Card className="border-border/50 relative overflow-hidden">
-                {/* Decorative gradient accent */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/60 via-primary to-primary/60" />
-
-                <CardContent className="p-6 sm:p-8 md:p-10">
-                  {/* Quote icon */}
-                  <Quote className="h-8 w-8 text-primary/20 mb-4" />
-
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-5">
-                    {Array.from({ length: 5 }).map((_, idx) => (
-                      <Star
-                        key={idx}
-                        className="h-4 w-4 fill-primary text-primary"
-                      />
-                    ))}
-                  </div>
-
-                  {/* Quote text */}
-                  <blockquote className="text-sm sm:text-base leading-relaxed text-muted-foreground italic mb-8">
-                    "{t.quote}"
-                  </blockquote>
-
-                  {/* Author */}
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={t.avatar}
-                      alt={t.name}
-                      className="h-12 w-12 rounded-full object-cover shrink-0 border-2 border-primary/20"
-                    />
-                    <div>
-                      <div className="font-semibold text-sm sm:text-base">
-                        {t.name}
-                      </div>
-                      <div className="text-xs sm:text-sm text-muted-foreground">
-                        {t.position ? `${t.position}, ${t.company}` : t.company}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+    <ClientsSection
+      tagLabel="Client Testimonials"
+      title="Trusted by businesses across Thailand"
+      description="Hear from the companies we've helped navigate Thai compliance with confidence."
+      stats={stats}
+      testimonials={testimonials}
+      primaryActionLabel="Get in Touch"
+      secondaryActionLabel="Our Services"
+      className="bg-muted/30 border-y border-border/40"
+    />
   );
 }
