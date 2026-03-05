@@ -25,6 +25,13 @@ const testimonials: Testimonial[] = [
     quote:
       "The audit team demonstrated a high level of professionalism and strong organizational skills. Throughout the engagement, the auditors responded promptly to requests and provided timely clarifications and well-reasoned explanations on arising matters. Communication was conducted in a professional and constructive manner, which contributed to efficient cooperation during the audit process. The comments and recommendations issued as a result of the audit are well-founded, precise, and practically applicable, and are aimed at improving transparency, accuracy of accounting, and the effectiveness of internal control procedures.",
   },
+  {
+    name: "Katja Vanhanen",
+    position: "Managing Partner",
+    company: "MPG Trade Co., Ltd.",
+    quote:
+      "We are very satisfied with the accounting and tax services provided by PND50 Co., Ltd., particularly during the preparation of our last annual company accounts. The process was handled professionally, accurately, and on time. Ms. Jenjira Wongprahat, who manages our company's accounting matters, is highly knowledgeable, detail-oriented, and always ready to provide clear explanations and practical advice. Her excellent customer service and responsiveness give us great confidence and peace of mind. We truly appreciate the high quality of service and customer support provided by PND50 Co., Ltd., thank you!",
+  },
 ];
 
 export function Testimonials() {
@@ -53,7 +60,7 @@ export function Testimonials() {
         </motion.div>
 
         {/* Testimonial Cards */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
