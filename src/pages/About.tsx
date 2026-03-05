@@ -95,8 +95,14 @@ export default function About() {
 
             {/* Right: Portrait */}
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:flex items-center justify-center">
-              <div className="w-full max-w-[500px] xl:max-w-[560px] flex items-center justify-center p-12">
-                <img src={companyLogo} alt="PND50 company logo" className="w-full h-auto" />
+              <div className="relative w-full max-w-[560px] xl:max-w-[620px] flex items-center justify-center">
+                {/* Decorative glow behind logo */}
+                <div className="absolute inset-0 rounded-full bg-primary/10 blur-3xl scale-75" />
+                {/* Subtle ring */}
+                <div className="absolute inset-8 rounded-full border border-primary/10" />
+                <div className="absolute inset-16 rounded-full border border-primary/5" />
+                {/* Logo */}
+                <img src={companyLogo} alt="PND50 company logo" className="relative z-10 w-[85%] h-auto drop-shadow-lg" />
               </div>
             </motion.div>
           </div>
