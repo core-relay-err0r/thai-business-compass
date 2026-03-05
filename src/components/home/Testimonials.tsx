@@ -18,6 +18,13 @@ const testimonials: Testimonial[] = [
     quote:
       "We were very satisfied with the quality of the service. The entire process was handled professionally and efficiently. We especially appreciate the quick turnaround, the prompt and helpful responses to our questions, and the clarity of the information provided throughout the process. All communication was straightforward and well-organized, which made the experience smooth and easy for us. Overall, the service met our expectations and we would gladly recommend it to others looking for reliable and responsive support.",
   },
+  {
+    name: "Anna",
+    position: "",
+    company: "Meridian Bridge Co., Ltd.",
+    quote:
+      "The audit team demonstrated a high level of professionalism and strong organizational skills. Throughout the engagement, the auditors responded promptly to requests and provided timely clarifications and well-reasoned explanations on arising matters. Communication was conducted in a professional and constructive manner, which contributed to efficient cooperation during the audit process. The comments and recommendations issued as a result of the audit are well-founded, precise, and practically applicable, and are aimed at improving transparency, accuracy of accounting, and the effectiveness of internal control procedures.",
+  },
 ];
 
 export function Testimonials() {
@@ -46,7 +53,7 @@ export function Testimonials() {
         </motion.div>
 
         {/* Testimonial Cards */}
-        <div className="max-w-3xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
@@ -95,7 +102,7 @@ export function Testimonials() {
                         {t.name}
                       </div>
                       <div className="text-xs sm:text-sm text-muted-foreground">
-                        {t.position}, {t.company}
+                        {t.position ? `${t.position}, ${t.company}` : t.company}
                       </div>
                     </div>
                   </div>
