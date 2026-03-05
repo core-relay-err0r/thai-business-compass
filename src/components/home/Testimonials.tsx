@@ -2,12 +2,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Quote, Star } from "lucide-react";
 import { motion } from "framer-motion";
+import yuryAvatar from "@/assets/testimonials/yury.jpg";
+import annaAvatar from "@/assets/testimonials/anna.jpg";
+import katjaAvatar from "@/assets/testimonials/katja.jpg";
 
 interface Testimonial {
   name: string;
   position: string;
   company: string;
   quote: string;
+  avatar: string;
 }
 
 const testimonials: Testimonial[] = [
@@ -17,6 +21,7 @@ const testimonials: Testimonial[] = [
     company: "Novo Alliance Co., Ltd.",
     quote:
       "We were very satisfied with the quality of the service. The entire process was handled professionally and efficiently. We especially appreciate the quick turnaround, the prompt and helpful responses to our questions, and the clarity of the information provided throughout the process. All communication was straightforward and well-organized, which made the experience smooth and easy for us. Overall, the service met our expectations and we would gladly recommend it to others looking for reliable and responsive support.",
+    avatar: yuryAvatar,
   },
   {
     name: "Anna",
@@ -24,6 +29,7 @@ const testimonials: Testimonial[] = [
     company: "Meridian Bridge Co., Ltd.",
     quote:
       "The audit team demonstrated a high level of professionalism and strong organizational skills. Throughout the engagement, the auditors responded promptly to requests and provided timely clarifications and well-reasoned explanations on arising matters. Communication was conducted in a professional and constructive manner, which contributed to efficient cooperation during the audit process. The comments and recommendations issued as a result of the audit are well-founded, precise, and practically applicable, and are aimed at improving transparency, accuracy of accounting, and the effectiveness of internal control procedures.",
+    avatar: annaAvatar,
   },
   {
     name: "Katja Vanhanen",
@@ -31,6 +37,7 @@ const testimonials: Testimonial[] = [
     company: "MPG Trade Co., Ltd.",
     quote:
       "We are very satisfied with the accounting and tax services provided by PND50 Co., Ltd., particularly during the preparation of our last annual company accounts. The process was handled professionally, accurately, and on time. Ms. Jenjira Wongprahat, who manages our company's accounting matters, is highly knowledgeable, detail-oriented, and always ready to provide clear explanations and practical advice. Her excellent customer service and responsiveness give us great confidence and peace of mind. We truly appreciate the high quality of service and customer support provided by PND50 Co., Ltd., thank you!",
+    avatar: katjaAvatar,
   },
 ];
 
@@ -94,16 +101,11 @@ export function Testimonials() {
 
                   {/* Author */}
                   <div className="flex items-center gap-4">
-                    {/* Avatar placeholder with initials */}
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <span className="text-primary font-semibold text-sm">
-                        {t.name
-                          .replace(/^(Mr\.|Mrs\.|Ms\.)\s*/, "")
-                          .split(" ")
-                          .map((w) => w[0])
-                          .join("")}
-                      </span>
-                    </div>
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      className="h-12 w-12 rounded-full object-cover shrink-0 border-2 border-primary/20"
+                    />
                     <div>
                       <div className="font-semibold text-sm sm:text-base">
                         {t.name}
