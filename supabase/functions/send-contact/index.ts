@@ -146,7 +146,6 @@ const handler = async (req: Request): Promise<Response> => {
         headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
-    }
 
     const internalHtml = generateEmailHtml(data);
     const clientHtml = generateClientConfirmationHtml(data);
