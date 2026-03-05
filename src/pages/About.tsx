@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Award, Users, ThumbsUp, MessageCircle, ShieldCheck, Heart, ArrowRight, ChevronDown } from "lucide-react";
 import aboutHeroBuilding from "@/assets/about-hero-building.jpg";
+import companyLogo from "@/assets/company-logo.png";
 import teamAtWork from "@/assets/team-at-work.jpg";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { BreadcrumbSchema, OrganizationSchema } from "@/components/seo/StructuredData";
@@ -94,8 +95,8 @@ export default function About() {
 
             {/* Right: Portrait */}
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:flex items-center justify-center">
-              <div className="w-full max-w-[500px] xl:max-w-[560px] rounded-2xl overflow-hidden border border-border/50 shadow-2xl">
-                <img src={aboutHeroBuilding} alt="PND50 corporate office building in Bangkok, Thailand" className="w-full h-full object-cover" />
+              <div className="w-full max-w-[500px] xl:max-w-[560px] flex items-center justify-center p-12">
+                <img src={companyLogo} alt="PND50 company logo" className="w-full h-auto" />
               </div>
             </motion.div>
           </div>
