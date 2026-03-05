@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Award, Users, ThumbsUp, MessageCircle, ShieldCheck, Heart, ArrowRight, ChevronDown } from "lucide-react";
+import { AnimatedSection } from "@/components/ui/animated-section";
 import aboutHeroBuilding from "@/assets/about-hero-building.jpg";
 import companyLogo from "@/assets/company-logo.png";
 import teamAtWork from "@/assets/team-at-work.jpg";
@@ -108,92 +109,98 @@ export default function About() {
         </div>
       </section>
 
-      {/* Stats Section - Desktop only (mobile stats are in hero) */}
-      <section id="stats" className="container py-12 sm:py-16 md:py-24 px-4 sm:px-6 hidden lg:block">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-          {stats.map(stat => <Card key={stat.label} className="border-border/50 text-center">
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex justify-center mb-3 sm:mb-4">
-                  <div className="p-2.5 sm:p-3 rounded-full bg-primary/10">
-                    <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+      <AnimatedSection>
+        <section id="stats" className="container py-12 sm:py-16 md:py-24 px-4 sm:px-6 hidden lg:block">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {stats.map((stat, i) => <AnimatedSection key={stat.label} delay={i * 100}>
+                <Card className="border-border/50 text-center">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex justify-center mb-3 sm:mb-4">
+                      <div className="p-2.5 sm:p-3 rounded-full bg-primary/10">
+                        <stat.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                      </div>
+                    </div>
+                    <div className="text-3xl sm:text-4xl font-bold text-primary mb-1">{stat.value}</div>
+                    <div className="font-semibold text-sm sm:text-base mb-1">{stat.label}</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">{stat.description}</div>
+                  </CardContent>
+                </Card>
+              </AnimatedSection>)}
+          </div>
+        </section>
+      </AnimatedSection>
+
+      <AnimatedSection>
+        <section className="bg-muted/30 border-y border-border/40">
+          <div className="container py-12 sm:py-16 md:py-24 px-4 sm:px-6">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              {/* Left: Content */}
+              <AnimatedSection delay={100}>
+                <div>
+                  <Badge variant="secondary" className="mb-3 sm:mb-4">
+                    Our Mission
+                  </Badge>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-tight">
+                    Making Thai Accounting{" "}
+                    <span className="text-primary">Clear & Stress-Free</span>
+                  </h2>
+                  <p className="text-muted-foreground mt-4 sm:mt-6 text-sm sm:text-base max-w-lg">
+                    We believe accounting should empower, not confuse. Our approach combines 
+                    expert knowledge with modern technology to make Thai compliance transparent 
+                    and manageable.
+                  </p>
+                  <div className="mt-6 sm:mt-8 space-y-4 sm:space-y-6">
+                    {values.map(value => <div key={value.title} className="flex items-start gap-3 sm:gap-4">
+                        <div className="p-1.5 sm:p-2 rounded-full bg-primary/10 shrink-0 mt-0.5">
+                          <value.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-sm sm:text-base">{value.title}</h3>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{value.description}</p>
+                        </div>
+                      </div>)}
                   </div>
                 </div>
-                <div className="text-3xl sm:text-4xl font-bold text-primary mb-1">{stat.value}</div>
-                <div className="font-semibold text-sm sm:text-base mb-1">{stat.label}</div>
-                <div className="text-xs sm:text-sm text-muted-foreground">{stat.description}</div>
-              </CardContent>
-            </Card>)}
-        </div>
-      </section>
+              </AnimatedSection>
 
-      {/* Mission Section */}
-      <section className="bg-muted/30 border-y border-border/40">
-        <div className="container py-12 sm:py-16 md:py-24 px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Left: Content */}
-            <div>
-              <Badge variant="secondary" className="mb-3 sm:mb-4">
-                Our Mission
-              </Badge>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-tight">
-                Making Thai Accounting{" "}
-                <span className="text-primary">Clear & Stress-Free</span>
-              </h2>
-              <p className="text-muted-foreground mt-4 sm:mt-6 text-sm sm:text-base max-w-lg">
-                We believe accounting should empower, not confuse. Our approach combines 
-                expert knowledge with modern technology to make Thai compliance transparent 
-                and manageable.
-              </p>
-
-              <div className="mt-6 sm:mt-8 space-y-4 sm:space-y-6">
-                {values.map(value => <div key={value.title} className="flex items-start gap-3 sm:gap-4">
-                    <div className="p-1.5 sm:p-2 rounded-full bg-primary/10 shrink-0 mt-0.5">
-                      <value.icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-sm sm:text-base">{value.title}</h3>
-                      <p className="text-xs sm:text-sm text-muted-foreground">{value.description}</p>
-                    </div>
-                  </div>)}
-              </div>
-            </div>
-
-            {/* Right: Image placeholder */}
-            <div className="relative">
-              <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-border/50">
-                <img src={teamAtWork} alt="PND50 accounting team meeting in Bangkok office" className="w-full h-full object-cover" />
-                {/* Gradient overlays for fading effect */}
-                <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-background/60" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
-              </div>
-              {/* Decorative element */}
-              <div className="absolute -bottom-4 -left-4 w-16 sm:w-24 h-16 sm:h-24 rounded-xl bg-primary/10 -z-10" />
+              {/* Right: Image */}
+              <AnimatedSection delay={200}>
+                <div className="relative">
+                  <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-border/50">
+                    <img src={teamAtWork} alt="PND50 accounting team meeting in Bangkok office" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-background/60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+                  </div>
+                  <div className="absolute -bottom-4 -left-4 w-16 sm:w-24 h-16 sm:h-24 rounded-xl bg-primary/10 -z-10" />
+                </div>
+              </AnimatedSection>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AnimatedSection>
 
-      {/* CTA Section */}
-      <section className="container py-12 sm:py-16 text-center px-4 sm:px-6">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">
-          Ready to simplify your Thai compliance?
-        </h2>
-        <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-md mx-auto">
-          Discover what your business needs with our interactive tools, or get in touch directly.
-        </p>
-        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-          <Link to="/services">
-            <Button size="lg" className="min-h-[44px] w-full sm:w-auto">
-              See what applies to you
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-          <Link to="/contact">
-            <Button variant="outline" size="lg" className="min-h-[44px] w-full sm:w-auto">
-              Get in touch
-            </Button>
-          </Link>
-        </div>
-      </section>
+      <AnimatedSection>
+        <section className="container py-12 sm:py-16 text-center px-4 sm:px-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">
+            Ready to simplify your Thai compliance?
+          </h2>
+          <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-md mx-auto">
+            Discover what your business needs with our interactive tools, or get in touch directly.
+          </p>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
+            <Link to="/services">
+              <Button size="lg" className="min-h-[44px] w-full sm:w-auto">
+                See what applies to you
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/contact">
+              <Button variant="outline" size="lg" className="min-h-[44px] w-full sm:w-auto">
+                Get in touch
+              </Button>
+            </Link>
+          </div>
+        </section>
+      </AnimatedSection>
     </Layout>;
 }
