@@ -53,7 +53,7 @@ export function Testimonials() {
         </motion.div>
 
         {/* Testimonial Cards */}
-        <div className="max-w-3xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
@@ -102,7 +102,7 @@ export function Testimonials() {
                         {t.name}
                       </div>
                       <div className="text-xs sm:text-sm text-muted-foreground">
-                        {t.position}, {t.company}
+                        {t.position ? `${t.position}, ${t.company}` : t.company}
                       </div>
                     </div>
                   </div>
