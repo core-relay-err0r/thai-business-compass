@@ -95,11 +95,13 @@ export default function About() {
 
             {/* Right: Portrait */}
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="hidden lg:flex items-center justify-center">
-              <div className="relative w-full max-w-[560px] xl:max-w-[620px] flex items-center justify-center">
-                {/* Radial gradient fade-out background */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.12)_0%,hsl(var(--primary)/0.04)_40%,transparent_70%)]" />
+              <div className="relative w-full max-w-[560px] xl:max-w-[620px] aspect-square flex items-center justify-center">
+                {/* Large soft radial glow */}
+                <div className="absolute inset-[-20%] bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.18)_0%,hsl(var(--primary)/0.10)_30%,hsl(var(--primary)/0.04)_55%,transparent_75%)] blur-sm" />
+                {/* Secondary warm glow offset */}
+                <div className="absolute inset-[-10%] bg-[radial-gradient(ellipse_at_60%_40%,hsl(var(--primary)/0.12)_0%,transparent_60%)]" />
                 {/* Logo */}
-                <img src={companyLogo} alt="PND50 company logo" className="relative z-10 w-[85%] h-auto" />
+                <img src={companyLogo} alt="PND50 company logo" className="relative z-10 w-[80%] h-auto drop-shadow-md" />
               </div>
             </motion.div>
           </div>
