@@ -75,7 +75,7 @@ export function ConsultingServices() {
               key={service.id}
               className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
                 selected 
-                  ? "border-primary/50 bg-primary/[0.02] shadow-sm" 
+                  ? "border-2 border-green-400 bg-green-50/50 shadow-sm" 
                   : "hover:border-border/80"
               }`}
               onClick={() => toggleService(service)}

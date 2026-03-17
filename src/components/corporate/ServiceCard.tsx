@@ -35,7 +35,7 @@ export function ServiceCard({
     <Card
       className={`cursor-pointer transition-all duration-200 hover:shadow-md h-full flex flex-col ${
         isSelected 
-          ? "border-primary/50 bg-primary/[0.02] shadow-sm" 
+          ? "border-2 border-green-400 bg-green-50/50 shadow-sm" 
           : "hover:border-border/80"
       }`}
       onClick={onCardClick}
