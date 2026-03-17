@@ -179,6 +179,12 @@ export function AccountingWizard() {
               <span className="sm:hidden">Next</span>
               <ArrowRight className="ml-1 sm:ml-2 h-4 w-4" />
             </Button>
+          ) : hasSubmitted ? (
+            <Button disabled className="min-h-[44px] px-3 sm:px-4 bg-muted text-muted-foreground">
+              <CheckCircle2 className="mr-1 sm:mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Saved to estimate</span>
+              <span className="sm:hidden">Saved</span>
+            </Button>
           ) : (
             <Button onClick={handleSubmit} className="min-h-[44px] px-3 sm:px-4">
               <span className="hidden sm:inline">Submit to calculator</span>
