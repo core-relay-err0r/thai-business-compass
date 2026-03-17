@@ -100,6 +100,11 @@ export function AccountingWizard() {
     setLiveResult(result);
     setLiveAccountingResult(result);
     calculateAccounting();
+    toast({
+      title: "✅ Estimate saved!",
+      description: "Your accounting estimate has been added to the calculator on the left.",
+      duration: 4000,
+    });
   };
 
   const handleAdjust = () => {
