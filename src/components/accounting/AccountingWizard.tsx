@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -99,6 +100,11 @@ export function AccountingWizard() {
     setLiveResult(result);
     setLiveAccountingResult(result);
     calculateAccounting();
+    toast({
+      title: "✅ Estimate saved!",
+      description: "Your accounting estimate has been added to the calculator on the left.",
+      duration: 4000,
+    });
   };
 
   const handleAdjust = () => {
