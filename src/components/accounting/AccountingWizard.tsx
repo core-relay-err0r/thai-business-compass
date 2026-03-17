@@ -180,10 +180,10 @@ export function AccountingWizard() {
               <ArrowRight className="ml-1 sm:ml-2 h-4 w-4" />
             </Button>
           ) : hasSubmitted ? (
-            <Button disabled className="min-h-[44px] px-3 sm:px-4 bg-muted text-muted-foreground">
-              <CheckCircle2 className="mr-1 sm:mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Saved to estimate</span>
-              <span className="sm:hidden">Saved</span>
+            <Button disabled className="min-h-[44px] px-3 sm:px-4 bg-green-100 text-green-700 border border-green-300 hover:bg-green-100">
+              <CheckCircle2 className="mr-1 sm:mr-2 h-5 w-5 text-green-600" />
+              <span className="hidden sm:inline font-medium">Saved to estimate</span>
+              <span className="sm:hidden font-medium">Saved ✓</span>
             </Button>
           ) : (
             <Button onClick={handleSubmit} className="min-h-[44px] px-3 sm:px-4">
