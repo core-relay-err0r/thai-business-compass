@@ -114,7 +114,7 @@ export function AccountingWizard() {
   const progressPercent = (currentStep / (STEPS.length - 1)) * 100;
 
   return (
-    <Card>
+    <Card className={hasSubmitted ? "border-2 border-green-400 bg-green-50/50 transition-all duration-300" : "transition-all duration-300"}>
       <CardHeader className="p-4 sm:p-6">
         <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center justify-between">
