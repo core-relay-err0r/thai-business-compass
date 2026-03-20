@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { AccountingInputs, AccountingResult, calculateAccountingCost } from "@/lib/pricing";
+import React, { createContext, useCallback, useContext, useState, ReactNode } from "react";
+import { AccountingInputs, AccountingResult } from "@/lib/pricing";
 
 export interface CorporateService {
   id: string;
@@ -46,7 +46,6 @@ interface ServiceState {
 interface ServiceContextType extends ServiceState {
   setAccountingInputs: (inputs: Partial<AccountingInputs>) => void;
   setLiveAccountingResult: (result: AccountingResult | null) => void;
-  calculateAccounting: () => void;
   addCorporateService: (service: CorporateService) => void;
   removeCorporateService: (id: string) => void;
   addConsultingService: (service: ConsultingService) => void;
@@ -90,17 +89,13 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const setLiveAccountingResult = (result: AccountingResult | null) => {
-    setState((prev) => ({ ...prev, liveAccountingResult: result }));
-  };
-
-  const calculateAccounting = () => {
-    const inputs = state.accountingInputs as AccountingInputs;
-    if (inputs.revenueRange && inputs.vatRegistered && inputs.transactionVolume && inputs.yearEndStatements && inputs.auditRequired && inputs.accountingIntent) {
-      const result = calculateAccountingCost(inputs);
-      setState((prev) => ({ ...prev, accountingResult: result }));
-    }
-  };
+  const setLiveAccountingResult = useCallback((result: AccountingResult | null) => {
+    setState((prev) => ({
+      ...prev,
+      liveAccountingResult: result,
+      accountingResult: result,
+    }));
+  }, []);
 
   const addCorporateService = (service: CorporateService) => {
     setState((prev) => ({
@@ -293,7 +288,6 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         ...state,
         setAccountingInputs,
         setLiveAccountingResult,
-        calculateAccounting,
         addCorporateService,
         removeCorporateService,
         addConsultingService,

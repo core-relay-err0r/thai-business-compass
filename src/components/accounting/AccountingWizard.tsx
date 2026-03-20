@@ -24,7 +24,7 @@ const STEPS = [
 
 export function AccountingWizard() {
   const navigate = useNavigate();
-  const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult, calculateAccounting } = useServices();
+  const { accountingInputs, setAccountingInputs, accountingResult, setLiveAccountingResult } = useServices();
   const [currentStep, setCurrentStep] = useState(0);
   const [localInputs, setLocalInputs] = useState<Partial<AccountingInputs>>({
     accountingIntent: "full",
@@ -104,7 +104,6 @@ export function AccountingWizard() {
     const result = calculateAccountingCost(localInputs as AccountingInputs);
     setLiveResult(result);
     setLiveAccountingResult(result);
-    calculateAccounting();
     toast({
       title: "✅ Estimate saved!",
       description: "Your accounting estimate has been added to the calculator on the left.",
