@@ -89,6 +89,11 @@ export function AccountingWizard() {
 
   const handleBack = () => {
     if (currentStep > 0) {
+      if (hasSubmitted) {
+        setHasSubmitted(false);
+        setLiveResult(null);
+        setLiveAccountingResult(null);
+      }
       setCurrentStep((prev) => prev - 1);
     }
   };
