@@ -89,17 +89,13 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const setLiveAccountingResult = (result: AccountingResult | null) => {
-    setState((prev) => ({ ...prev, liveAccountingResult: result }));
-  };
-
-  const calculateAccounting = () => {
-    const inputs = state.accountingInputs as AccountingInputs;
-    if (inputs.revenueRange && inputs.vatRegistered && inputs.transactionVolume && inputs.yearEndStatements && inputs.auditRequired && inputs.accountingIntent) {
-      const result = calculateAccountingCost(inputs);
-      setState((prev) => ({ ...prev, accountingResult: result }));
-    }
-  };
+  const setLiveAccountingResult = useCallback((result: AccountingResult | null) => {
+    setState((prev) => ({
+      ...prev,
+      liveAccountingResult: result,
+      accountingResult: result,
+    }));
+  }, []);
 
   const addCorporateService = (service: CorporateService) => {
     setState((prev) => ({
