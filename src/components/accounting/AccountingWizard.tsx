@@ -113,6 +113,9 @@ export function AccountingWizard() {
   };
 
   const handleAdjust = () => {
+    setHasSubmitted(false);
+    setLiveResult(null);
+    setLiveAccountingResult(null);
     setCurrentStep(0);
   };
 
