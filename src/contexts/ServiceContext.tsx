@@ -46,7 +46,6 @@ interface ServiceState {
 interface ServiceContextType extends ServiceState {
   setAccountingInputs: (inputs: Partial<AccountingInputs>) => void;
   setLiveAccountingResult: (result: AccountingResult | null) => void;
-  calculateAccounting: () => void;
   addCorporateService: (service: CorporateService) => void;
   removeCorporateService: (id: string) => void;
   addConsultingService: (service: ConsultingService) => void;
