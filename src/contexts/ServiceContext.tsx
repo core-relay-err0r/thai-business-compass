@@ -288,7 +288,6 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         ...state,
         setAccountingInputs,
         setLiveAccountingResult,
-        calculateAccounting,
         addCorporateService,
         removeCorporateService,
         addConsultingService,

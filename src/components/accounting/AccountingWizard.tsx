@@ -104,7 +104,6 @@ export function AccountingWizard() {
     const result = calculateAccountingCost(localInputs as AccountingInputs);
     setLiveResult(result);
     setLiveAccountingResult(result);
-    calculateAccounting();
     toast({
       title: "✅ Estimate saved!",
       description: "Your accounting estimate has been added to the calculator on the left.",
