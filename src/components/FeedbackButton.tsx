@@ -69,7 +69,7 @@ export function FeedbackButton() {
         aria-label="Send Feedback"
       >
         <MessageSquarePlus className="h-4 w-4 sm:h-5 sm:w-5" style={{ stroke: 'url(#gold-gradient)' }} />
-        <span className="text-xs sm:text-sm">Send Feedback</span>
+        <span className="text-xs sm:text-sm">Give Feedback</span>
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
