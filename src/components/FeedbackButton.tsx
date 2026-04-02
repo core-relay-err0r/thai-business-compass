@@ -84,8 +84,8 @@ export function FeedbackButton() {
           style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
           aria-label="Give Feedback"
         >
-          <span className="text-xs font-medium tracking-wider">Give Feedback</span>
           <MessageSquarePlus className="h-4 w-4 rotate-90" style={{ stroke: 'url(#gold-gradient)' }} />
+          <span className="text-xs font-medium tracking-wider">Give Feedback</span>
         </button>
       )}
 
