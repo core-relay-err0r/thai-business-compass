@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { FeedbackButton } from "@/components/FeedbackButton";
 
 interface LayoutProps {
   children: ReactNode;
