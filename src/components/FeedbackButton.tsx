@@ -11,6 +11,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -20,6 +21,7 @@ export function FeedbackButton() {
   const [pageUrl, setPageUrl] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const isMobile = useIsMobile();
 
   const handleOpen = () => {
     setOpen(true);
@@ -63,14 +65,29 @@ export function FeedbackButton() {
           </linearGradient>
         </defs>
       </svg>
-      <button
-        onClick={handleOpen}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-primary/20 bg-foreground px-4 py-2.5 text-sm font-medium text-background shadow-[0_4px_24px_hsl(var(--primary)/0.15),0_1px_4px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_6px_32px_hsl(var(--primary)/0.25),0_2px_8px_rgba(0,0,0,0.25)] active:scale-[0.97] sm:px-5 sm:py-3"
-        aria-label="Give Feedback"
-      >
-        <MessageSquarePlus className="h-4 w-4 sm:h-5 sm:w-5" style={{ stroke: 'url(#gold-gradient)' }} />
-        <span className="text-xs sm:text-sm">Give Feedback</span>
-      </button>
+
+      {isMobile ? (
+        /* Mobile: compact bottom-right pill */
+        <button
+          onClick={handleOpen}
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-primary/20 bg-foreground px-4 py-2.5 text-sm font-medium text-background shadow-[0_4px_24px_hsl(var(--primary)/0.15),0_1px_4px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_6px_32px_hsl(var(--primary)/0.25),0_2px_8px_rgba(0,0,0,0.25)] active:scale-[0.97]"
+          aria-label="Give Feedback"
+        >
+          <MessageSquarePlus className="h-4 w-4" style={{ stroke: 'url(#gold-gradient)' }} />
+          <span className="text-xs">Feedback</span>
+        </button>
+      ) : (
+        /* Desktop: vertical right-edge tab */
+        <button
+          onClick={handleOpen}
+          className="fixed right-0 top-1/2 z-50 flex items-center gap-2 rounded-l-lg border border-r-0 border-primary/20 bg-foreground px-3 py-4 text-background shadow-[0_4px_24px_hsl(var(--primary)/0.15),0_1px_4px_rgba(0,0,0,0.2)] transition-all duration-200 hover:border-primary/40 hover:shadow-[0_6px_32px_hsl(var(--primary)/0.25),0_2px_8px_rgba(0,0,0,0.25)] hover:pr-4"
+          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', transform: 'translateY(-50%)' }}
+          aria-label="Give Feedback"
+        >
+          <MessageSquarePlus className="h-4 w-4 rotate-90" style={{ stroke: 'url(#gold-gradient)' }} />
+          <span className="text-xs font-medium tracking-wider">Give Feedback</span>
+        </button>
+      )}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md">
