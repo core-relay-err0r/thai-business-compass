@@ -66,10 +66,10 @@ export function FeedbackButton() {
       <button
         onClick={handleOpen}
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-primary/20 bg-foreground px-4 py-2.5 text-sm font-medium text-background shadow-[0_4px_24px_hsl(var(--primary)/0.15),0_1px_4px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_6px_32px_hsl(var(--primary)/0.25),0_2px_8px_rgba(0,0,0,0.25)] active:scale-[0.97] sm:px-5 sm:py-3"
-        aria-label="Ask a question"
+        aria-label="Send Feedback"
       >
         <MessageSquarePlus className="h-4 w-4 sm:h-5 sm:w-5" style={{ stroke: 'url(#gold-gradient)' }} />
-        <span className="text-xs sm:text-sm">Ask a question</span>
+        <span className="text-xs sm:text-sm">Send Feedback</span>
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
