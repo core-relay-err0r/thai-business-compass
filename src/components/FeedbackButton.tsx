@@ -57,9 +57,9 @@ export function FeedbackButton() {
       <svg width="0" height="0" className="absolute">
         <defs>
           <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F6D365" />
-            <stop offset="50%" stopColor="#D4A017" />
-            <stop offset="100%" stopColor="#B8860B" />
+            <stop offset="0%" stopColor="#34D399" />
+            <stop offset="50%" stopColor="#10B981" />
+            <stop offset="100%" stopColor="#059669" />
           </linearGradient>
         </defs>
       </svg>
