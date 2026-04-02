@@ -80,8 +80,8 @@ export function FeedbackButton() {
         /* Desktop: vertical right-edge tab, bottom-right */
         <button
           onClick={handleOpen}
-          className="fixed right-0 bottom-8 z-50 flex items-center gap-2 rounded-r-lg border border-l-0 border-primary/20 bg-foreground px-3 py-4 text-background shadow-[0_4px_24px_hsl(var(--primary)/0.15),0_1px_4px_rgba(0,0,0,0.2)] transition-all duration-200 hover:border-primary/40 hover:shadow-[0_6px_32px_hsl(var(--primary)/0.25),0_2px_8px_rgba(0,0,0,0.25)] hover:pl-4"
-          style={{ writingMode: 'vertical-lr', textOrientation: 'mixed' }}
+          className="fixed right-0 bottom-8 z-50 flex items-center gap-2 rounded-l-lg border border-r-0 border-primary/20 bg-foreground px-3 py-4 text-background shadow-[0_4px_24px_hsl(var(--primary)/0.15),0_1px_4px_rgba(0,0,0,0.2)] transition-all duration-200 hover:border-primary/40 hover:shadow-[0_6px_32px_hsl(var(--primary)/0.25),0_2px_8px_rgba(0,0,0,0.25)] hover:pr-4"
+          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', direction: 'rtl' }}
           aria-label="Give Feedback"
         >
           <MessageSquarePlus className="h-4 w-4 rotate-90" style={{ stroke: 'url(#gold-gradient)' }} />
