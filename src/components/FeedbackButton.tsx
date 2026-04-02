@@ -54,14 +54,14 @@ export function FeedbackButton() {
 
   return (
     <>
-      <Button
+      <button
         onClick={handleOpen}
-        size="icon"
-        className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full shadow-lg"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-xl transition-all hover:scale-105 hover:shadow-2xl active:scale-95"
         aria-label="Send feedback"
       >
         <MessageSquarePlus className="h-5 w-5" />
-      </Button>
+        <span className="hidden sm:inline">Feedback</span>
+      </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md">
