@@ -56,7 +56,7 @@ export function FeedbackButton() {
     <>
       <button
         onClick={handleOpen}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-2xl border border-primary/30 bg-primary/15 px-5 py-3 text-sm font-semibold text-primary shadow-[0_8px_32px_rgba(37,99,235,0.2)] backdrop-blur-xl transition-all hover:scale-105 hover:bg-primary/25 hover:shadow-[0_8px_32px_rgba(37,99,235,0.3)] active:scale-95"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-medium text-foreground shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-all hover:scale-105 hover:bg-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.18)] active:scale-95"
         aria-label="Send feedback"
       >
         <MessageSquarePlus className="h-5 w-5" />
