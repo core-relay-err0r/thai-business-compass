@@ -89,6 +89,7 @@ export interface AccountingInputs {
   auditRequired: "yes" | "no" | "not-sure";
   auditRevenueBand?: AuditRevenueBand;
   rushFee?: boolean;
+  catchupBacklog: "yes" | "no" | "not-sure";
 }
 
 export interface AccountingResult {
@@ -108,6 +109,7 @@ export interface AccountingResult {
   isCustomQuote: boolean;
   rushFee: boolean;
   rushSurcharge: number;
+  catchupBacklog: boolean;
 }
 
 export function calculateAccountingCost(inputs: AccountingInputs): AccountingResult {
@@ -179,8 +181,18 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
     requiredItems.push("Annual audit");
   } else if (inputs.auditRequired === "not-sure") {
     potentialAnnual.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, isFrom: true });
-  } else {
+  } else if (inputs.auditRequired === "no") {
     notNeededItems.push("Annual audit");
+  }
+
+  // Catch-up / backlog
+  if (inputs.catchupBacklog === "yes") {
+    annualAddons.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, required: true, isFrom: true });
+    requiredItems.push("Catch-up / backlog work");
+  } else if (inputs.catchupBacklog === "not-sure") {
+    potentialAnnual.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, isFrom: true });
+  } else {
+    notNeededItems.push("Catch-up / backlog work");
   }
 
   // Calculate totals
@@ -213,6 +225,7 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
     isCustomQuote,
     rushFee: rushActive,
     rushSurcharge,
+    catchupBacklog: inputs.catchupBacklog === "yes",
   };
 }
 
