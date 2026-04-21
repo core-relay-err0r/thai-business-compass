@@ -266,84 +266,79 @@ describe("formatTHB", () => {
   });
 });
 
-  describe("catch-up / backlog (§4.2: from 1,000 USD/year)", () => {
-    it("yes adds $1,000 annual addon with isFrom", () => {
-      const r = calc({ catchupBacklog: "yes" });
-      const item = r.annualAddons.find((a) => a.name.includes("Catch-up"));
-      expect(item).toBeDefined();
-      expect(item!.amount).toBe(1000);
-      expect(item!.isFrom).toBe(true);
-      expect(r.catchupBacklog).toBe(true);
-    });
-
-    it("not-sure adds to potentialAnnual", () => {
-      const r = calc({ catchupBacklog: "not-sure" });
-      const item = r.potentialAnnual.find((a) => a.name.includes("Catch-up"));
-      expect(item).toBeDefined();
-      expect(item!.amount).toBe(1000);
-    });
-
-    it("no adds nothing", () => {
-      const r = calc({ catchupBacklog: "no" });
-      expect(r.annualAddons.find((a) => a.name.includes("Catch-up"))).toBeUndefined();
-      expect(r.catchupBacklog).toBe(false);
-    });
-
-    it("catch-up + year-end both appear when both yes", () => {
-      const r = calc({ yearEndStatements: "yes", catchupBacklog: "yes" });
-      expect(r.annualAddons.find((a) => a.name.includes("Year-end"))).toBeDefined();
-      expect(r.annualAddons.find((a) => a.name.includes("Catch-up"))).toBeDefined();
-      expect(r.totalAnnual).toBe(300 * 12 + 800 + 1000);
-    });
+describe("catch-up / backlog (§4.2: from 1,000 USD/year)", () => {
+  it("yes adds $1,000 annual addon with isFrom", () => {
+    const r = calc({ catchupBacklog: "yes" });
+    const item = r.annualAddons.find((a) => a.name.includes("Catch-up"));
+    expect(item).toBeDefined();
+    expect(item!.amount).toBe(1000);
+    expect(item!.isFrom).toBe(true);
+    expect(r.catchupBacklog).toBe(true);
   });
 
-  describe("monthly formula (§3.2) — matches source exactly", () => {
-    it("300 + VAT + WHT + payroll(1 block) + medium = 900", () => {
-      const r = calc({
-        vatRegistered: "yes",
-        recurringWHT: "yes",
-        employeeCount: 3,
-        payrollNeeded: true,
-        transactionVolume: "medium",
-      });
-      expect(r.totalMonthly).toBe(300 + 100 + 100 + 100 + 200);
-    });
-
-    it("rush: final_monthly_total = monthly_total * 1.30", () => {
-      const r = calc({
-        vatRegistered: "yes",
-        recurringWHT: "yes",
-        employeeCount: 3,
-        payrollNeeded: true,
-        transactionVolume: "medium",
-        rushFee: true,
-      });
-      const base = 300 + 100 + 100 + 100 + 200; // 800
-      expect(r.totalMonthly).toBe(base + Math.round(base * 0.3));
-    });
+  it("not-sure adds to potentialAnnual", () => {
+    const r = calc({ catchupBacklog: "not-sure" });
+    const item = r.potentialAnnual.find((a) => a.name.includes("Catch-up"));
+    expect(item).toBeDefined();
+    expect(item!.amount).toBe(1000);
   });
 
-  describe("full end-to-end scenario with all features", () => {
-    it("VAT + WHT + 11 employees + medium + rush + year-end + catch-up + audit ฿10M-30M", () => {
-      const r = calc({
-        vatRegistered: "yes",
-        recurringWHT: "yes",
-        employeeCount: 11,
-        payrollNeeded: true,
-        transactionVolume: "medium",
-        rushFee: true,
-        yearEndStatements: "yes",
-        catchupBacklog: "yes",
-        auditRequired: "yes",
-        auditRevenueBand: "10m-30m",
-      });
-      // Monthly: 300 + 100(VAT) + 100(WHT) + 300(3 blocks) + 200(medium) = 1000
-      // Rush: 1000 * 0.30 = 300
-      // Monthly total: 1300
-      expect(r.totalMonthly).toBe(1300);
-      // Annual: 1300 * 12 + 800(year-end) + 1000(catch-up) + 3000(audit) = 20,400
-      expect(r.totalAnnual).toBe(1300 * 12 + 800 + 1000 + 3000);
+  it("no adds nothing", () => {
+    const r = calc({ catchupBacklog: "no" });
+    expect(r.annualAddons.find((a) => a.name.includes("Catch-up"))).toBeUndefined();
+    expect(r.catchupBacklog).toBe(false);
+  });
+
+  it("catch-up + year-end both appear when both yes", () => {
+    const r = calc({ yearEndStatements: "yes", catchupBacklog: "yes" });
+    expect(r.annualAddons.find((a) => a.name.includes("Year-end"))).toBeDefined();
+    expect(r.annualAddons.find((a) => a.name.includes("Catch-up"))).toBeDefined();
+    expect(r.totalAnnual).toBe(300 * 12 + 800 + 1000);
+  });
+});
+
+describe("monthly formula (§3.2) — matches source exactly", () => {
+  it("300 + VAT + WHT + payroll(1 block) + medium = 900", () => {
+    const r = calc({
+      vatRegistered: "yes",
+      recurringWHT: "yes",
+      employeeCount: 3,
+      payrollNeeded: true,
+      transactionVolume: "medium",
     });
+    expect(r.totalMonthly).toBe(300 + 100 + 100 + 100 + 200);
+  });
+
+  it("rush: final_monthly_total = monthly_total * 1.30", () => {
+    const r = calc({
+      vatRegistered: "yes",
+      recurringWHT: "yes",
+      employeeCount: 3,
+      payrollNeeded: true,
+      transactionVolume: "medium",
+      rushFee: true,
+    });
+    const base = 300 + 100 + 100 + 100 + 200; // 800
+    expect(r.totalMonthly).toBe(base + Math.round(base * 0.3));
+  });
+});
+
+describe("full end-to-end scenario with all features", () => {
+  it("VAT + WHT + 11 employees + medium + rush + year-end + catch-up + audit ฿10M-30M", () => {
+    const r = calc({
+      vatRegistered: "yes",
+      recurringWHT: "yes",
+      employeeCount: 11,
+      payrollNeeded: true,
+      transactionVolume: "medium",
+      rushFee: true,
+      yearEndStatements: "yes",
+      catchupBacklog: "yes",
+      auditRequired: "yes",
+      auditRevenueBand: "10m-30m",
+    });
+    expect(r.totalMonthly).toBe(1300);
+    expect(r.totalAnnual).toBe(1300 * 12 + 800 + 1000 + 3000);
   });
 });
 
