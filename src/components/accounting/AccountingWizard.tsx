@@ -452,9 +452,9 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
           className="grid gap-3"
         >
           {[
-            { value: "low", label: "Low", description: "Less than 50 transactions/month" },
-            { value: "medium", label: "Medium", description: "50–200 transactions/month" },
-            { value: "high", label: "High", description: "More than 200 transactions/month" },
+            { value: "low", label: "Low", description: "Up to 50 transactions/month" },
+            { value: "medium", label: "Medium", description: "More than 50 transactions/month" },
+            { value: "high", label: "High", description: "Complex scope — custom quote" },
           ].map((option) => (
             <Label
               key={option.value}
@@ -473,17 +473,35 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
 
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-lg font-semibold">International Payments?</h3>
+          <h3 className="text-lg font-semibold">Recurring Withholding Filings (PND3/PND53)?</h3>
+          <Tooltip>
+            <TooltipTrigger>
+              <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              Required when your company makes payments subject to withholding tax.
+            </TooltipContent>
+          </Tooltip>
         </div>
-        <div className="flex items-center space-x-4 p-4 border border-border rounded-lg">
-          <Switch
-            id="intl-payments"
-            checked={inputs.internationalPayments}
-            onCheckedChange={(checked) => setInputs({ ...inputs, internationalPayments: checked })}
-          />
-          <Label htmlFor="intl-payments" className="cursor-pointer">
-            {inputs.internationalPayments ? "Yes, we have international payments" : "No international payments"}
-          </Label>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+            { value: "not-sure", label: "Not sure" },
+          ].map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setInputs({ ...inputs, recurringWHT: option.value as AccountingInputs["recurringWHT"] })}
+              className={`flex items-center justify-center p-4 border rounded-lg cursor-pointer transition-colors min-h-[44px] ${
+                inputs.recurringWHT === option.value
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:bg-accent/50"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
       </div>
     </div>
