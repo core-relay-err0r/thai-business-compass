@@ -231,6 +231,12 @@ export function LiveEstimate() {
                     <span className="font-medium">+{formatUSD(item.amount)}</span>
                   </div>
                 ))}
+                {liveAccountingResult.rushFee && liveAccountingResult.rushSurcharge > 0 && (
+                  <div className="flex justify-between text-sm py-1">
+                    <span className="text-amber-600">Rush surcharge (+30%)</span>
+                    <span className="font-medium text-amber-600">+{formatUSD(liveAccountingResult.rushSurcharge)}</span>
+                  </div>
+                )}
               </div>
 
               {liveAccountingResult.potentialMonthly.length > 0 && (
