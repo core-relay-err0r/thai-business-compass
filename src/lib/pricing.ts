@@ -25,6 +25,18 @@ export const PRICING = {
   AUDIT_ADDON: 1000,
 } as const;
 
+// Audit revenue band pricing (USD)
+export const AUDIT_REVENUE_BANDS = [
+  { id: "under-2m", label: "Under ฿2M", auditFee: 1000 },
+  { id: "2m-5m", label: "฿2M – ฿5M", auditFee: 1500 },
+  { id: "5m-10m", label: "฿5M – ฿10M", auditFee: 2000 },
+  { id: "10m-30m", label: "฿10M – ฿30M", auditFee: 3000 },
+  { id: "30m-100m", label: "฿30M – ฿100M", auditFee: 5000 },
+  { id: "over-100m", label: "Over ฿100M", auditFee: null },
+] as const;
+
+export type AuditRevenueBand = typeof AUDIT_REVENUE_BANDS[number]["id"] | "not-sure";
+
 // Corporate Services - Fixed-fee turnkey (USD)
 export const CORPORATE_PRICING = {
   // Setup & Office
@@ -72,6 +84,7 @@ export interface AccountingInputs {
   recurringWHT: "yes" | "no" | "not-sure";
   yearEndStatements: "yes" | "no" | "not-sure";
   auditRequired: "yes" | "no" | "not-sure";
+  auditRevenueBand?: AuditRevenueBand;
 }
 
 export interface AccountingResult {
@@ -151,7 +164,12 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
 
   // Audit
   if (inputs.auditRequired === "yes") {
-    annualAddons.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, required: true, isFrom: true });
+    const band = inputs.auditRevenueBand && inputs.auditRevenueBand !== "not-sure"
+      ? AUDIT_REVENUE_BANDS.find(b => b.id === inputs.auditRevenueBand)
+      : undefined;
+    const auditFee = band?.auditFee ?? PRICING.AUDIT_ADDON;
+    const isFromAudit = !band || band.auditFee === null;
+    annualAddons.push({ name: "Annual audit", amount: auditFee, required: true, isFrom: isFromAudit });
     requiredItems.push("Annual audit");
   } else if (inputs.auditRequired === "not-sure") {
     potentialAnnual.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, isFrom: true });
