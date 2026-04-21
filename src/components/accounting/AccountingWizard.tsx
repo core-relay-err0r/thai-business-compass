@@ -578,6 +578,56 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
           ))}
         </div>
       </div>
+
+      {/* Revenue band — shown when audit is yes or not-sure */}
+      {(inputs.auditRequired === "yes" || inputs.auditRequired === "not-sure") && (
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <h3 className="text-lg font-semibold">Annual Revenue Band (THB)</h3>
+            <Tooltip>
+              <TooltipTrigger>
+                <HelpCircle className="h-4 w-4 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">
+                Audit fees depend on the company's annual revenue. Select the closest band for a more accurate estimate.
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <RadioGroup
+            value={inputs.auditRevenueBand || "not-sure"}
+            onValueChange={(value) => setInputs({ ...inputs, auditRevenueBand: value as AuditRevenueBand })}
+            className="grid gap-2"
+          >
+            {AUDIT_REVENUE_BANDS.map((band) => (
+              <Label
+                key={band.id}
+                htmlFor={`band-${band.id}`}
+                className="flex items-center justify-between p-3 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5 min-h-[44px]"
+              >
+                <div className="flex items-center space-x-3">
+                  <RadioGroupItem value={band.id} id={`band-${band.id}`} />
+                  <span className="text-sm">{band.label}</span>
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  {band.auditFee ? formatUSD(band.auditFee) : "Custom quote"}
+                </span>
+              </Label>
+            ))}
+            <Label
+              htmlFor="band-not-sure"
+              className="flex items-center justify-between p-3 border border-border rounded-lg cursor-pointer hover:bg-accent/50 transition-colors [&:has(:checked)]:border-primary [&:has(:checked)]:bg-primary/5 min-h-[44px]"
+            >
+              <div className="flex items-center space-x-3">
+                <RadioGroupItem value="not-sure" id="band-not-sure" />
+                <span className="text-sm">Not sure</span>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                From {formatUSD(1000)}
+              </span>
+            </Label>
+          </RadioGroup>
+        </div>
+      )}
     </div>
   );
 }
