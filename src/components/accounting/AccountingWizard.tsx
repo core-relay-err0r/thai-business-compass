@@ -724,6 +724,7 @@ function Step5Summary({ inputs }: StepProps) {
     { label: "Transaction Volume", value: volumeLabels[inputs.transactionVolume || "low"] },
     { label: "Recurring WHT", value: whtLabels[inputs.recurringWHT || "no"] },
     { label: "Year-End Statements", value: yearEndLabels[inputs.yearEndStatements || "yes"] },
+    { label: "Catch-up / Backlog", value: ({ yes: "Yes", no: "No", "not-sure": "Not sure" } as Record<string, string>)[inputs.catchupBacklog || "no"] },
     { label: "Audit Required", value: auditLabels[inputs.auditRequired || "no"] },
     { label: "Rush Handling", value: inputs.rushFee ? "Yes (+30%)" : "No" },
   ];
