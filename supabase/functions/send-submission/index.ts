@@ -257,7 +257,7 @@ function generateEmailHtml(data: SubmissionRequest): string {
           <tr>
             <td style="font-weight: 700; font-size: 16px; color: #1e3a8a;">ESTIMATED FIRST-YEAR TOTAL</td>
             <td style="text-align: right; font-weight: 800; font-size: 18px; color: #1e3a8a;">
-              ${firstYearMin === firstYearMax ? `$${formatPrice(firstYearMin)}` : `$${formatPrice(firstYearMin)}–$${formatPrice(firstYearMax)}`}
+              ${hasFromConsulting ? "From " : ""}$${formatPrice(firstYearTotal)}
             </td>
           </tr>
         </table>
@@ -325,15 +325,13 @@ function generateClientConfirmationHtml(data: SubmissionRequest): string {
   
   // Calculate totals
   const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
-  const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
-  const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+  const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
+  const hasFromConsulting = selectedConsultingServices.some(s => s.isFrom);
   const monthlyFee = accountingResult?.totalMonthly ?? 0;
   const annualFees = accountingResult?.annualAddons?.reduce((sum, a) => sum + a.amount, 0) ?? 0;
   
-  const initialMin = corporateTotal + consultingMin;
-  const initialMax = corporateTotal + consultingMax;
-  const firstYearMin = initialMin + (monthlyFee * 12) + annualFees;
-  const firstYearMax = initialMax + (monthlyFee * 12) + annualFees;
+  const initialTotal = corporateTotal + consultingTotal;
+  const firstYearTotal = initialTotal + (monthlyFee * 12) + annualFees;
 
   // Build services list
   const servicesList: string[] = [];
@@ -374,11 +372,11 @@ function generateClientConfirmationHtml(data: SubmissionRequest): string {
           </table>
         </div>
 
-        ${firstYearMin > 0 ? `
+        ${firstYearTotal > 0 ? `
           <div style="background: linear-gradient(135deg, #dbeafe, #ede9fe); padding: 24px; border-radius: 12px; margin-bottom: 28px; border: 1px solid #c7d2fe; text-align: center;">
             <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Estimated First-Year Total</p>
             <p style="margin: 0; font-size: 28px; font-weight: 800; color: #1e3a8a;">
-              ${firstYearMin === firstYearMax ? `$${formatPrice(firstYearMin)}` : `$${formatPrice(firstYearMin)} – $${formatPrice(firstYearMax)}`}
+              ${hasFromConsulting ? "From " : ""}$${formatPrice(firstYearTotal)}
             </p>
             <p style="margin: 8px 0 0 0; font-size: 12px; color: #6b7280;">Final pricing confirmed after consultation</p>
           </div>
