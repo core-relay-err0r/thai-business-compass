@@ -85,13 +85,19 @@ export function LiveEstimate() {
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Accounting
               </div>
-              <div className="text-lg font-semibold">
-                {formatUSD(liveAccountingResult.totalMonthly)}
-                <span className="text-sm font-normal text-muted-foreground">/mo</span>
-              </div>
-              <div className="text-xs text-muted-foreground">
-                {formatUSD(liveAccountingResult.totalAnnual)}/yr • Recurring
-              </div>
+              {liveAccountingResult.isCustomQuote ? (
+                <div className="text-lg font-semibold text-primary">Custom quote</div>
+              ) : (
+                <>
+                  <div className="text-lg font-semibold">
+                    {formatUSD(liveAccountingResult.totalMonthly)}
+                    <span className="text-sm font-normal text-muted-foreground">/mo</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {liveAccountingResult.annualAddons.some(a => a.isFrom) ? "From " : ""}{formatUSD(liveAccountingResult.totalAnnual)}/yr • Recurring
+                  </div>
+                </>
+              )}
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </div>
@@ -249,7 +255,7 @@ export function LiveEstimate() {
                   {liveAccountingResult.annualAddons.map((item, idx) => (
                     <div key={idx} className="flex justify-between text-sm py-1">
                       <span className="text-muted-foreground">{item.name}</span>
-                      <span className="font-medium">{formatUSD(item.amount)}</span>
+                      <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}</span>
                     </div>
                   ))}
                 </div>
@@ -263,7 +269,7 @@ export function LiveEstimate() {
                   {liveAccountingResult.potentialAnnual.map((item, idx) => (
                     <div key={idx} className="flex justify-between text-sm py-1">
                       <span className="text-muted-foreground">{item.name}</span>
-                      <span className="font-medium">+{formatUSD(item.amount)}</span>
+                      <span className="font-medium">{item.isFrom ? "From +" : "+"}{formatUSD(item.amount)}</span>
                     </div>
                   ))}
                 </div>

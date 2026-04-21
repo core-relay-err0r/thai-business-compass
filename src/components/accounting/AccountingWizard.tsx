@@ -713,31 +713,52 @@ function Step5Results({ result, onAdjust }: Step5Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-border">
         <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
           <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Monthly Cost</div>
-          <div className="text-2xl sm:text-3xl font-bold">
-            {formatUSD(result.totalMonthly)}
-            {result.potentialMonthly.length > 0 && (
-              <span className="text-lg sm:text-xl font-normal text-muted-foreground">
-                –{formatPrice(result.totalMonthlyMax)}
-              </span>
-            )}
-          </div>
-          <div className="text-xs text-muted-foreground mt-1">
-            ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
-          </div>
+          {result.isCustomQuote ? (
+            <div className="text-xl sm:text-2xl font-bold text-primary">
+              Custom quote required
+            </div>
+          ) : (
+            <>
+              <div className="text-2xl sm:text-3xl font-bold">
+                {formatUSD(result.totalMonthly)}
+                {result.potentialMonthly.length > 0 && (
+                  <span className="text-lg sm:text-xl font-normal text-muted-foreground">
+                    –{formatPrice(result.totalMonthlyMax)}
+                  </span>
+                )}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
+              </div>
+            </>
+          )}
         </div>
         <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
           <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Annual Cost</div>
-          <div className="text-2xl sm:text-3xl font-bold">
-            {formatUSD(result.totalAnnual)}
-            {result.potentialAnnual.length > 0 && (
-              <span className="text-lg sm:text-xl font-normal text-muted-foreground">
-                –{formatPrice(result.totalAnnualMax)}
-              </span>
-            )}
-          </div>
-          <div className="text-xs text-muted-foreground mt-1">
-            ≈ ฿{formatPrice(result.totalAnnual * USD_TO_THB)}
-          </div>
+          {result.isCustomQuote ? (
+            <div className="text-xl sm:text-2xl font-bold text-primary">
+              Custom quote required
+            </div>
+          ) : (
+            <>
+              <div className="text-2xl sm:text-3xl font-bold">
+                {result.annualAddons.some(a => a.isFrom) ? "From " : ""}{formatUSD(result.totalAnnual)}
+                {result.potentialAnnual.length > 0 && (
+                  <span className="text-lg sm:text-xl font-normal text-muted-foreground">
+                    –{formatPrice(result.totalAnnualMax)}
+                  </span>
+                )}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                ≈ ฿{formatPrice(result.totalAnnual * USD_TO_THB)}
+              </div>
+            </>
+          )}
+          {result.annualAddons.some(a => a.name === "Annual audit") && (
+            <p className="text-xs text-muted-foreground mt-2">
+              Final audit fee depends on revenue band.
+            </p>
+          )}
         </div>
       </div>
 
