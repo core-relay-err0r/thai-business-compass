@@ -39,6 +39,7 @@ export function AccountingWizard() {
     auditRequired: "no",
     ...accountingInputs,
     rushFee: accountingInputs?.rushFee ?? false,
+    catchupBacklog: accountingInputs?.catchupBacklog ?? "no",
   });
 
   const [liveResult, setLiveResult] = useState(accountingResult);
@@ -60,6 +61,7 @@ export function AccountingWizard() {
         yearEndStatements: "yes",
         auditRequired: "no",
     rushFee: false,
+    catchupBacklog: "no",
       });
       setLiveResult(null);
       setLiveAccountingResult(null);
@@ -578,6 +580,40 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
 
       <div>
         <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-lg font-semibold">Catch-up / Backlog Work Needed?</h3>
+          <Tooltip>
+            <TooltipTrigger>
+              <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              If bookkeeping or filings were not maintained during the year, we need to reconstruct the books before preparing year-end statements.
+            </TooltipContent>
+          </Tooltip>
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { value: "yes", label: "Yes" },
+            { value: "no", label: "No" },
+            { value: "not-sure", label: "Not sure" },
+          ].map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setInputs({ ...inputs, catchupBacklog: option.value as AccountingInputs["catchupBacklog"] })}
+              className={`flex items-center justify-center p-4 border rounded-lg cursor-pointer transition-colors min-h-[44px] ${
+                inputs.catchupBacklog === option.value
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:bg-accent/50"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-4">
           <h3 className="text-lg font-semibold">Annual Audit Required?</h3>
           <Tooltip>
             <TooltipTrigger>
@@ -688,6 +724,7 @@ function Step5Summary({ inputs }: StepProps) {
     { label: "Transaction Volume", value: volumeLabels[inputs.transactionVolume || "low"] },
     { label: "Recurring WHT", value: whtLabels[inputs.recurringWHT || "no"] },
     { label: "Year-End Statements", value: yearEndLabels[inputs.yearEndStatements || "yes"] },
+    { label: "Catch-up / Backlog", value: ({ yes: "Yes", no: "No", "not-sure": "Not sure" } as Record<string, string>)[inputs.catchupBacklog || "no"] },
     { label: "Audit Required", value: auditLabels[inputs.auditRequired || "no"] },
     { label: "Rush Handling", value: inputs.rushFee ? "Yes (+30%)" : "No" },
   ];

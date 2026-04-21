@@ -19,6 +19,7 @@ const BASE_INPUTS: AccountingInputs = {
   recurringWHT: "no",
   yearEndStatements: "yes",
   auditRequired: "no",
+  catchupBacklog: "no",
 };
 
 function calc(overrides: Partial<AccountingInputs> = {}) {
@@ -259,5 +260,29 @@ describe("formatTHB", () => {
   it("converts USD to THB at rate 35", () => {
     expect(formatTHB(100)).toBe("฿3,500");
     expect(formatTHB(300)).toBe("฿10,500");
+  });
+});
+
+describe("catch-up / backlog", () => {
+  it("yes adds $1,000 annual addon with isFrom", () => {
+    const r = calc({ catchupBacklog: "yes" });
+    const item = r.annualAddons.find((a) => a.name.includes("Catch-up"));
+    expect(item).toBeDefined();
+    expect(item!.amount).toBe(1000);
+    expect(item!.isFrom).toBe(true);
+    expect(r.catchupBacklog).toBe(true);
+  });
+
+  it("not-sure adds to potentialAnnual", () => {
+    const r = calc({ catchupBacklog: "not-sure" });
+    const item = r.potentialAnnual.find((a) => a.name.includes("Catch-up"));
+    expect(item).toBeDefined();
+    expect(item!.amount).toBe(1000);
+  });
+
+  it("no adds nothing", () => {
+    const r = calc({ catchupBacklog: "no" });
+    expect(r.annualAddons.find((a) => a.name.includes("Catch-up"))).toBeUndefined();
+    expect(r.catchupBacklog).toBe(false);
   });
 });
