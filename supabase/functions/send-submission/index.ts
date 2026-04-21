@@ -38,7 +38,10 @@ interface SubmissionRequest {
   selectedConsultingServices: Array<{
     id: string;
     name: string;
-    priceRange: { min: number; max: number };
+    price: number;
+    isFrom?: boolean;
+    timeline?: string;
+    note?: string;
   }>;
 }
 
@@ -66,17 +69,15 @@ function generateEmailHtml(data: SubmissionRequest): string {
   
   // Calculate totals for payment summary
   const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
-  const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
-  const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+  const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
+  const hasFromConsulting = selectedConsultingServices.some(s => s.isFrom);
   
   const monthlyFee = accountingResult?.totalMonthly ?? 0;
   const annualFees = accountingResult?.annualAddons?.reduce((sum, a) => sum + a.amount, 0) ?? 0;
   
-  const initialMin = corporateTotal + consultingMin;
-  const initialMax = corporateTotal + consultingMax;
+  const initialTotal = corporateTotal + consultingTotal;
   
-  const firstYearMin = initialMin + (monthlyFee * 12) + annualFees;
-  const firstYearMax = initialMax + (monthlyFee * 12) + annualFees;
+  const firstYearTotal = initialTotal + (monthlyFee * 12) + annualFees;
   
   let servicesHtml = "";
 
@@ -167,12 +168,12 @@ function generateEmailHtml(data: SubmissionRequest): string {
           ${selectedConsultingServices.map(s => `
             <tr>
               <td style="padding: 4px 0; color: #6b7280;">${s.name}</td>
-              <td style="padding: 4px 0; text-align: right; font-weight: 500;">$${formatPrice(s.priceRange.min)}–$${formatPrice(s.priceRange.max)}</td>
+              <td style="padding: 4px 0; text-align: right; font-weight: 500;">${s.isFrom ? "From " : ""}$${formatPrice(s.price)}</td>
             </tr>
           `).join("")}
           <tr style="border-top: 1px solid #e5e7eb;">
             <td style="padding: 8px 0 4px 0; font-weight: 600; color: #1f2937;">Total Range</td>
-            <td style="padding: 8px 0 4px 0; text-align: right; font-weight: 700; color: #6d28d9;">$${formatPrice(consultingMin)}–$${formatPrice(consultingMax)}</td>
+            <td style="padding: 8px 0 4px 0; text-align: right; font-weight: 700; color: #6d28d9;">${hasFromConsulting ? "From " : ""}$${formatPrice(consultingTotal)}</td>
           </tr>
         </table>
       </div>
@@ -189,7 +190,7 @@ function generateEmailHtml(data: SubmissionRequest): string {
     <div style="background: linear-gradient(135deg, #dbeafe, #ede9fe); padding: 24px; border-radius: 12px; margin: 24px 0; border: 1px solid #c7d2fe;">
       <h2 style="margin: 0 0 20px 0; color: #1e3a8a; font-size: 18px;">💵 Payment Summary</h2>
       
-      ${(corporateTotal > 0 || consultingMin > 0) ? `
+      ${(corporateTotal > 0 || consultingTotal > 0) ? `
         <div style="margin-bottom: 20px;">
           <p style="margin: 0 0 8px 0; font-weight: 700; color: #374151; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">Initial Payment</p>
           <p style="margin: 0 0 4px 0; font-size: 12px; color: #6b7280;">Due at start of engagement</p>
@@ -200,16 +201,16 @@ function generateEmailHtml(data: SubmissionRequest): string {
                 <td style="padding: 4px 0; text-align: right; font-weight: 500;">$${formatPrice(corporateTotal)}</td>
               </tr>
             ` : ''}
-            ${consultingMin > 0 ? `
+            ${consultingTotal > 0 ? `
               <tr>
                 <td style="padding: 4px 0; color: #4b5563;">Consulting (indicative)</td>
-                <td style="padding: 4px 0; text-align: right; font-weight: 500;">$${formatPrice(consultingMin)}–$${formatPrice(consultingMax)}</td>
+                <td style="padding: 4px 0; text-align: right; font-weight: 500;">${hasFromConsulting ? "From " : ""}$${formatPrice(consultingTotal)}</td>
               </tr>
             ` : ''}
             <tr style="border-top: 1px solid #a5b4fc;">
               <td style="padding: 8px 0 4px 0; font-weight: 600; color: #1f2937;">Initial Total</td>
               <td style="padding: 8px 0 4px 0; text-align: right; font-weight: 700; color: #1e40af;">
-                ${initialMin === initialMax ? `$${formatPrice(initialMin)}` : `$${formatPrice(initialMin)}–$${formatPrice(initialMax)}`}
+                ${hasFromConsulting ? "From " : ""}$${formatPrice(initialTotal)}
               </td>
             </tr>
           </table>
