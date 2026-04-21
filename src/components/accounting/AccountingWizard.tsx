@@ -593,7 +593,8 @@ function Step5Summary({ inputs }: StepProps) {
   };
   const vatLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
   const purposeLabels: Record<string, string> = { operations: "Operations", visa: "Visa / formal only", "not-sure": "Not sure" };
-  const volumeLabels: Record<string, string> = { low: "Low (<50)", medium: "Medium (50–200)", high: "High (200+)" };
+  const volumeLabels: Record<string, string> = { low: "Low (up to 50)", medium: "Medium (>50)", high: "High (custom quote)" };
+  const whtLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
   const yearEndLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
   const auditLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
 
@@ -604,7 +605,7 @@ function Step5Summary({ inputs }: StepProps) {
     { label: "Employees", value: `${inputs.employeeCount || 0} staff${(inputs.employeeCount || 0) > 0 ? ` (${purposeLabels[inputs.employeePurpose || "operations"]})` : ""}` },
     { label: "Payroll", value: inputs.payrollNeeded ? "Yes" : "No" },
     { label: "Transaction Volume", value: volumeLabels[inputs.transactionVolume || "low"] },
-    { label: "International Payments", value: inputs.internationalPayments ? "Yes" : "No" },
+    { label: "Recurring WHT", value: whtLabels[inputs.recurringWHT || "no"] },
     { label: "Year-End Statements", value: yearEndLabels[inputs.yearEndStatements || "yes"] },
     { label: "Audit Required", value: auditLabels[inputs.auditRequired || "no"] },
   ];
