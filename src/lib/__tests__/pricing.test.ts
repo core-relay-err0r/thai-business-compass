@@ -6,6 +6,9 @@ import {
   PRICING,
   AUDIT_REVENUE_BANDS,
   AccountingInputs,
+  CORPORATE_PRICING,
+  CONSULTING_PRICING,
+  USD_TO_THB,
 } from "../pricing";
 
 const BASE_INPUTS: AccountingInputs = {
@@ -263,7 +266,7 @@ describe("formatTHB", () => {
   });
 });
 
-describe("catch-up / backlog", () => {
+describe("catch-up / backlog (§4.2: from 1,000 USD/year)", () => {
   it("yes adds $1,000 annual addon with isFrom", () => {
     const r = calc({ catchupBacklog: "yes" });
     const item = r.annualAddons.find((a) => a.name.includes("Catch-up"));
@@ -284,5 +287,123 @@ describe("catch-up / backlog", () => {
     const r = calc({ catchupBacklog: "no" });
     expect(r.annualAddons.find((a) => a.name.includes("Catch-up"))).toBeUndefined();
     expect(r.catchupBacklog).toBe(false);
+  });
+
+  it("catch-up + year-end both appear when both yes", () => {
+    const r = calc({ yearEndStatements: "yes", catchupBacklog: "yes" });
+    expect(r.annualAddons.find((a) => a.name.includes("Year-end"))).toBeDefined();
+    expect(r.annualAddons.find((a) => a.name.includes("Catch-up"))).toBeDefined();
+    expect(r.totalAnnual).toBe(300 * 12 + 800 + 1000);
+  });
+});
+
+describe("monthly formula (§3.2) — matches source exactly", () => {
+  it("300 + VAT + WHT + payroll(1 block) + medium = 900", () => {
+    const r = calc({
+      vatRegistered: "yes",
+      recurringWHT: "yes",
+      employeeCount: 3,
+      payrollNeeded: true,
+      transactionVolume: "medium",
+    });
+    expect(r.totalMonthly).toBe(300 + 100 + 100 + 100 + 200);
+  });
+
+  it("rush: final_monthly_total = monthly_total * 1.30", () => {
+    const r = calc({
+      vatRegistered: "yes",
+      recurringWHT: "yes",
+      employeeCount: 3,
+      payrollNeeded: true,
+      transactionVolume: "medium",
+      rushFee: true,
+    });
+    const base = 300 + 100 + 100 + 100 + 200; // 800
+    expect(r.totalMonthly).toBe(base + Math.round(base * 0.3));
+  });
+});
+
+describe("full end-to-end scenario with all features", () => {
+  it("VAT + WHT + 11 employees + medium + rush + year-end + catch-up + audit ฿10M-30M", () => {
+    const r = calc({
+      vatRegistered: "yes",
+      recurringWHT: "yes",
+      employeeCount: 11,
+      payrollNeeded: true,
+      transactionVolume: "medium",
+      rushFee: true,
+      yearEndStatements: "yes",
+      catchupBacklog: "yes",
+      auditRequired: "yes",
+      auditRevenueBand: "10m-30m",
+    });
+    expect(r.totalMonthly).toBe(1300);
+    expect(r.totalAnnual).toBe(1300 * 12 + 800 + 1000 + 3000);
+  });
+});
+
+describe("constants match pricing policy source (.md)", () => {
+  describe("§3.1 Monthly accounting constants", () => {
+    it("base bookkeeping = 300 USD", () => expect(PRICING.BASE_ACCOUNTING).toBe(300));
+    it("VAT addon = 100 USD", () => expect(PRICING.VAT_ADDON).toBe(100));
+    it("recurring WHT addon = 100 USD", () => expect(PRICING.RECURRING_WHT_ADDON).toBe(100));
+    it("payroll block = 100 USD per 5 employees", () => {
+      expect(PRICING.PAYROLL_BLOCK).toBe(100);
+      expect(PRICING.PAYROLL_BLOCK_SIZE).toBe(5);
+    });
+    it("medium volume surcharge = 200 USD", () => expect(PRICING.TX_MEDIUM_ADDON).toBe(200));
+    it("rush fee = 30%", () => expect(PRICING.RUSH_FEE_PERCENT).toBe(30));
+  });
+
+  describe("§4 Annual accounting constants", () => {
+    it("year-end statements from 800 USD", () => expect(PRICING.YEAR_END_STATEMENTS).toBe(800));
+    it("catch-up/backlog from 1,000 USD", () => expect(PRICING.CATCHUP_BACKLOG).toBe(1000));
+    it("audit from 1,000 USD", () => expect(PRICING.AUDIT_ADDON).toBe(1000));
+  });
+
+  describe("§5 Corporate services constants", () => {
+    it("incorporation = 2,000 USD", () => expect(CORPORATE_PRICING.INCORPORATION).toBe(2000));
+    it("registered office from 2,000 USD/yr", () => expect(CORPORATE_PRICING.REGISTERED_OFFICE).toBe(2000));
+    it("virtual office = 1,000 USD/yr", () => expect(CORPORATE_PRICING.VIRTUAL_OFFICE_ASSISTANCE).toBe(1000));
+    it("company review = 1,000 USD", () => expect(CORPORATE_PRICING.COMPANY_REVIEW).toBe(1000));
+    it("review financial addon = 500 USD", () => expect(CORPORATE_PRICING.COMPANY_REVIEW_FINANCIAL).toBe(500));
+    it("review English addon = 500 USD", () => expect(CORPORATE_PRICING.COMPANY_REVIEW_ENGLISH).toBe(500));
+    it("review financial+English addon = 1,000 USD", () => expect(CORPORATE_PRICING.COMPANY_REVIEW_FINANCIAL_ENGLISH).toBe(1000));
+    it("structural change = 800 USD", () => expect(CORPORATE_PRICING.STRUCTURAL_CHANGE).toBe(800));
+    it("corporate documents from 300 USD", () => expect(CORPORATE_PRICING.CORPORATE_DOCUMENTS).toBe(300));
+    it("certified translation from 300 USD", () => expect(CORPORATE_PRICING.CERTIFIED_TRANSLATION).toBe(300));
+    it("notarized translation from 500 USD", () => expect(CORPORATE_PRICING.NOTARIZED_TRANSLATION).toBe(500));
+    it("full legalization from 2,000 USD", () => expect(CORPORATE_PRICING.LEGALIZATION).toBe(2000));
+    it("tax residency certificate = 400 USD", () => expect(CORPORATE_PRICING.TAX_RESIDENCY).toBe(400));
+    it("MOFA + consulate legalization = 400 USD", () => expect(CORPORATE_PRICING.MOFA_CONSULATE_LEGALIZATION).toBe(400));
+  });
+
+  describe("§6 Consulting services constants", () => {
+    it("reduce costs from 2,000 USD", () => {
+      expect(CONSULTING_PRICING.REDUCE_COSTS.price).toBe(2000);
+      expect(CONSULTING_PRICING.REDUCE_COSTS.isFrom).toBe(true);
+    });
+    it("new market entry = 5,000 USD", () => {
+      expect(CONSULTING_PRICING.NEW_MARKET.price).toBe(5000);
+      expect(CONSULTING_PRICING.NEW_MARKET.isFrom).toBe(false);
+    });
+    it("due diligence from 2,000 USD", () => {
+      expect(CONSULTING_PRICING.DUE_DILIGENCE.price).toBe(2000);
+      expect(CONSULTING_PRICING.DUE_DILIGENCE.isFrom).toBe(true);
+    });
+    it("structure & strategy = 3,000 USD", () => {
+      expect(CONSULTING_PRICING.STRUCTURE_STRATEGY.price).toBe(3000);
+      expect(CONSULTING_PRICING.STRUCTURE_STRATEGY.isFrom).toBe(false);
+    });
+    it("bank & compliance urgent = 500 USD", () => {
+      expect(CONSULTING_PRICING.BANK_COMPLIANCE.price).toBe(500);
+      expect(CONSULTING_PRICING.BANK_COMPLIANCE.isFrom).toBe(false);
+    });
+  });
+
+  describe("§1 Currency rules", () => {
+    it("primary currency is USD (THB conversion rate exists)", () => {
+      expect(USD_TO_THB).toBe(35);
+    });
   });
 });
