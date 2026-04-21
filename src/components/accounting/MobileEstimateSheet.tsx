@@ -128,7 +128,9 @@ export function MobileEstimateSheet() {
               </div>
               <div className="flex justify-between pt-2 mt-2 border-t border-border/50">
                 <span className="text-sm font-medium">Annual Total</span>
-                <span className="font-semibold">{formatUSD(liveAccountingResult.totalAnnual)}/yr</span>
+                <span className="font-semibold">
+                  {liveAccountingResult.annualAddons.some(a => a.isFrom) ? "From " : ""}{formatUSD(liveAccountingResult.totalAnnual)}/yr
+                </span>
               </div>
             </div>
           )}
