@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { AccountingInputs, calculateAccountingCost, formatUSD, USD_TO_THB, formatPrice } from "@/lib/pricing";
+import { AccountingInputs, calculateAccountingCost, formatUSD, USD_TO_THB, formatPrice, AUDIT_REVENUE_BANDS, AuditRevenueBand } from "@/lib/pricing";
 
 const STEPS = [
   { id: 0, title: "Intent" },
