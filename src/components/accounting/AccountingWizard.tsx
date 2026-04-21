@@ -39,6 +39,7 @@ export function AccountingWizard() {
     auditRequired: "no",
     ...accountingInputs,
     rushFee: accountingInputs?.rushFee ?? false,
+    catchupBacklog: accountingInputs?.catchupBacklog ?? "no",
   });
 
   const [liveResult, setLiveResult] = useState(accountingResult);

@@ -19,6 +19,7 @@ const BASE_INPUTS: AccountingInputs = {
   recurringWHT: "no",
   yearEndStatements: "yes",
   auditRequired: "no",
+  catchupBacklog: "no",
 };
 
 function calc(overrides: Partial<AccountingInputs> = {}) {
