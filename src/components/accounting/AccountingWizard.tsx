@@ -689,6 +689,7 @@ function Step5Summary({ inputs }: StepProps) {
     { label: "Recurring WHT", value: whtLabels[inputs.recurringWHT || "no"] },
     { label: "Year-End Statements", value: yearEndLabels[inputs.yearEndStatements || "yes"] },
     { label: "Audit Required", value: auditLabels[inputs.auditRequired || "no"] },
+    { label: "Rush Handling", value: inputs.rushFee ? "Yes (+30%)" : "No" },
   ];
 
   // Add revenue band if audit is yes or not-sure
