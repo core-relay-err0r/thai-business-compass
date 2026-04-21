@@ -34,7 +34,7 @@ export function AccountingWizard() {
     employeePurpose: "operations",
     payrollNeeded: false,
     transactionVolume: "low",
-    internationalPayments: false,
+    recurringWHT: "no",
     yearEndStatements: "yes",
     auditRequired: "no",
     ...accountingInputs,
@@ -55,7 +55,7 @@ export function AccountingWizard() {
         employeePurpose: "operations",
         payrollNeeded: false,
         transactionVolume: "low",
-        internationalPayments: false,
+        recurringWHT: "no",
         yearEndStatements: "yes",
         auditRequired: "no",
       });
