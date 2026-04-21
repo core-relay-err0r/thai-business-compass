@@ -38,6 +38,7 @@ export function AccountingWizard() {
     yearEndStatements: "yes",
     auditRequired: "no",
     ...accountingInputs,
+    rushFee: accountingInputs?.rushFee ?? false,
   });
 
   const [liveResult, setLiveResult] = useState(accountingResult);
@@ -58,6 +59,7 @@ export function AccountingWizard() {
         recurringWHT: "no",
         yearEndStatements: "yes",
         auditRequired: "no",
+    rushFee: false,
       });
       setLiveResult(null);
       setLiveAccountingResult(null);
