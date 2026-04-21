@@ -255,7 +255,7 @@ export function LiveEstimate() {
                   {liveAccountingResult.annualAddons.map((item, idx) => (
                     <div key={idx} className="flex justify-between text-sm py-1">
                       <span className="text-muted-foreground">{item.name}</span>
-                      <span className="font-medium">{formatUSD(item.amount)}</span>
+                      <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}</span>
                     </div>
                   ))}
                 </div>
@@ -269,7 +269,7 @@ export function LiveEstimate() {
                   {liveAccountingResult.potentialAnnual.map((item, idx) => (
                     <div key={idx} className="flex justify-between text-sm py-1">
                       <span className="text-muted-foreground">{item.name}</span>
-                      <span className="font-medium">+{formatUSD(item.amount)}</span>
+                      <span className="font-medium">{item.isFrom ? "From +" : "+"}{formatUSD(item.amount)}</span>
                     </div>
                   ))}
                 </div>
