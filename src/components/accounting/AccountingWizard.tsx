@@ -660,6 +660,14 @@ function Step5Summary({ inputs }: StepProps) {
     { label: "Audit Required", value: auditLabels[inputs.auditRequired || "no"] },
   ];
 
+  // Add revenue band if audit is yes or not-sure
+  if (inputs.auditRequired === "yes" || inputs.auditRequired === "not-sure") {
+    const bandLabel = inputs.auditRevenueBand && inputs.auditRevenueBand !== "not-sure"
+      ? AUDIT_REVENUE_BANDS.find(b => b.id === inputs.auditRevenueBand)?.label || "Not sure"
+      : "Not sure";
+    summaryItems.push({ label: "Audit Revenue Band", value: bandLabel });
+  }
+
   return (
     <div className="space-y-6">
       <div className="text-center pb-4 border-b border-border">
