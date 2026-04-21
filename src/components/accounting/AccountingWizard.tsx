@@ -38,6 +38,7 @@ export function AccountingWizard() {
     yearEndStatements: "yes",
     auditRequired: "no",
     ...accountingInputs,
+    rushFee: accountingInputs?.rushFee ?? false,
   });
 
   const [liveResult, setLiveResult] = useState(accountingResult);
@@ -58,6 +59,7 @@ export function AccountingWizard() {
         recurringWHT: "no",
         yearEndStatements: "yes",
         auditRequired: "no",
+    rushFee: false,
       });
       setLiveResult(null);
       setLiveAccountingResult(null);
@@ -504,6 +506,35 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
           ))}
         </div>
       </div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-lg font-semibold">Rush / Urgent Handling?</h3>
+          <Tooltip>
+            <TooltipTrigger>
+              <HelpCircle className="h-4 w-4 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              A 30% surcharge applies when priority handling is required due to late submission, urgent deadline, or incomplete documents.
+            </TooltipContent>
+          </Tooltip>
+        </div>
+        <div className="flex items-center space-x-4 p-4 border border-border rounded-lg">
+          <Switch
+            id="rushFee"
+            checked={inputs.rushFee ?? false}
+            onCheckedChange={(checked) => setInputs({ ...inputs, rushFee: checked })}
+          />
+          <Label htmlFor="rushFee" className="cursor-pointer">
+            {inputs.rushFee ? "Yes, I need urgent handling (+30%)" : "No rush needed"}
+          </Label>
+        </div>
+        {inputs.rushFee && (
+          <p className="text-xs text-amber-600 mt-2">
+            A 30% surcharge will be applied to your monthly recurring fees.
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -658,6 +689,7 @@ function Step5Summary({ inputs }: StepProps) {
     { label: "Recurring WHT", value: whtLabels[inputs.recurringWHT || "no"] },
     { label: "Year-End Statements", value: yearEndLabels[inputs.yearEndStatements || "yes"] },
     { label: "Audit Required", value: auditLabels[inputs.auditRequired || "no"] },
+    { label: "Rush Handling", value: inputs.rushFee ? "Yes (+30%)" : "No" },
   ];
 
   // Add revenue band if audit is yes or not-sure

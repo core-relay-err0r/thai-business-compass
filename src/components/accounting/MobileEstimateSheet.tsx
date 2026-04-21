@@ -119,6 +119,12 @@ export function MobileEstimateSheet() {
                     <span className="font-medium">+{formatUSD(item.amount)}/mo</span>
                   </div>
                 ))}
+                {liveAccountingResult.rushFee && liveAccountingResult.rushSurcharge > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-amber-600">Rush surcharge (+30%)</span>
+                    <span className="font-medium text-amber-600">+{formatUSD(liveAccountingResult.rushSurcharge)}/mo</span>
+                  </div>
+                )}
                 {liveAccountingResult.annualAddons.map((item, idx) => (
                   <div key={idx} className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{item.name}</span>
