@@ -18,7 +18,10 @@ export const PRICING = {
   // Transaction complexity
   TX_MEDIUM_ADDON: 200, // >50 transactions/month
   // High volume = custom quote (no fixed constant)
-  
+
+  // Rush fee multiplier (30%)
+  RUSH_FEE_PERCENT: 30,
+
   // Annual fees (USD) — displayed as "From X"
   YEAR_END_STATEMENTS: 800,
   CATCHUP_BACKLOG: 1000,
@@ -85,6 +88,7 @@ export interface AccountingInputs {
   yearEndStatements: "yes" | "no" | "not-sure";
   auditRequired: "yes" | "no" | "not-sure";
   auditRevenueBand?: AuditRevenueBand;
+  rushFee?: boolean;
 }
 
 export interface AccountingResult {
@@ -102,6 +106,8 @@ export interface AccountingResult {
   recommendedItems: string[];
   notNeededItems: string[];
   isCustomQuote: boolean;
+  rushFee: boolean;
+  rushSurcharge: number;
 }
 
 export function calculateAccountingCost(inputs: AccountingInputs): AccountingResult {
@@ -186,6 +192,10 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
   const totalPotentialMonthly = potentialMonthly.reduce((sum, p) => sum + p.amount, 0);
   const totalPotentialAnnual = potentialAnnual.reduce((sum, p) => sum + p.amount, 0);
 
+  const baseMonthlyTotal = monthlyBase + totalMonthlyAddons;
+  const rushActive = inputs.rushFee === true;
+  const rushSurcharge = rushActive ? Math.round(baseMonthlyTotal * PRICING.RUSH_FEE_PERCENT / 100) : 0;
+
   return {
     monthlyBase,
     monthlyAddons,
@@ -193,14 +203,16 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
     annualAddons,
     potentialMonthly,
     potentialAnnual,
-    totalMonthly: monthlyBase + totalMonthlyAddons,
-    totalMonthlyMax: monthlyBase + totalMonthlyAddons + totalPotentialMonthly,
-    totalAnnual: (monthlyBase + totalMonthlyAddons) * 12 + totalAnnualAddons,
-    totalAnnualMax: (monthlyBase + totalMonthlyAddons + totalPotentialMonthly) * 12 + totalAnnualAddons + totalPotentialAnnual,
+    totalMonthly: baseMonthlyTotal + rushSurcharge,
+    totalMonthlyMax: baseMonthlyTotal + rushSurcharge + totalPotentialMonthly,
+    totalAnnual: (baseMonthlyTotal + rushSurcharge) * 12 + totalAnnualAddons,
+    totalAnnualMax: (baseMonthlyTotal + rushSurcharge + totalPotentialMonthly) * 12 + totalAnnualAddons + totalPotentialAnnual,
     requiredItems,
     recommendedItems,
     notNeededItems,
     isCustomQuote,
+    rushFee: rushActive,
+    rushSurcharge,
   };
 }
 
