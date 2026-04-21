@@ -194,6 +194,42 @@ describe("calculateAccountingCost", () => {
     });
   });
 
+  describe("rush fee (+30%)", () => {
+    it("adds 30% surcharge to base monthly total", () => {
+      const r = calc({ rushFee: true });
+      // 300 base * 0.30 = 90 surcharge
+      expect(r.rushFee).toBe(true);
+      expect(r.rushSurcharge).toBe(90);
+      expect(r.totalMonthly).toBe(390);
+    });
+
+    it("applies 30% to base + all monthly addons", () => {
+      const r = calc({ vatRegistered: "yes", recurringWHT: "yes", rushFee: true });
+      // (300 + 100 + 100) * 0.30 = 150
+      expect(r.rushSurcharge).toBe(150);
+      expect(r.totalMonthly).toBe(500 + 150);
+    });
+
+    it("rush surcharge propagates to annual total", () => {
+      const r = calc({ rushFee: true });
+      // (300 + 90) * 12 + 800 year-end
+      expect(r.totalAnnual).toBe(390 * 12 + 800);
+    });
+
+    it("no surcharge when rushFee is false", () => {
+      const r = calc({ rushFee: false });
+      expect(r.rushFee).toBe(false);
+      expect(r.rushSurcharge).toBe(0);
+      expect(r.totalMonthly).toBe(300);
+    });
+
+    it("no surcharge when rushFee is undefined", () => {
+      const r = calc();
+      expect(r.rushFee).toBe(false);
+      expect(r.rushSurcharge).toBe(0);
+    });
+  });
+
   describe("year-end statements", () => {
     it("not-sure puts it in potential annual", () => {
       const r = calc({ yearEndStatements: "not-sure" });
