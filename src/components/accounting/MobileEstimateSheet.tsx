@@ -122,7 +122,7 @@ export function MobileEstimateSheet() {
                 {liveAccountingResult.annualAddons.map((item, idx) => (
                   <div key={idx} className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{item.name}</span>
-                    <span className="font-medium">{formatUSD(item.amount)}/yr</span>
+                    <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/yr</span>
                   </div>
                 ))}
               </div>
