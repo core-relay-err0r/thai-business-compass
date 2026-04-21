@@ -15,19 +15,16 @@ interface RegisteredOfficePopupProps {
 export interface RegisteredOfficeOptions {
   type: "new" | "change";
   virtualAssistance: boolean;
-  physicalAssistance: boolean;
   totalPrice: number;
 }
 
 export function RegisteredOfficePopup({ open, onOpenChange, onConfirm }: RegisteredOfficePopupProps) {
   const [type, setType] = useState<"new" | "change">("new");
   const [virtualAssistance, setVirtualAssistance] = useState(false);
-  const [physicalAssistance, setPhysicalAssistance] = useState(false);
 
   const calculateTotal = () => {
     let total = CORPORATE_PRICING.REGISTERED_OFFICE;
     if (virtualAssistance) total += CORPORATE_PRICING.VIRTUAL_OFFICE_ASSISTANCE;
-    if (physicalAssistance) total += CORPORATE_PRICING.PHYSICAL_OFFICE_ASSISTANCE;
     return total;
   };
 
@@ -35,7 +32,6 @@ export function RegisteredOfficePopup({ open, onOpenChange, onConfirm }: Registe
     onConfirm({
       type,
       virtualAssistance,
-      physicalAssistance,
       totalPrice: calculateTotal(),
     });
     onOpenChange(false);
@@ -97,22 +93,7 @@ export function RegisteredOfficePopup({ open, onOpenChange, onConfirm }: Registe
                   </Label>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {formatUSD(CORPORATE_PRICING.VIRTUAL_OFFICE_ASSISTANCE)}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="physical"
-                    checked={physicalAssistance}
-                    onCheckedChange={(checked) => setPhysicalAssistance(checked as boolean)}
-                  />
-                  <Label htmlFor="physical" className="text-sm cursor-pointer">
-                    Physical office selection assistance
-                  </Label>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  from {formatUSD(CORPORATE_PRICING.PHYSICAL_OFFICE_ASSISTANCE)}
+                  {formatUSD(CORPORATE_PRICING.VIRTUAL_OFFICE_ASSISTANCE)}/year
                 </span>
               </div>
             </div>
@@ -126,7 +107,8 @@ export function RegisteredOfficePopup({ open, onOpenChange, onConfirm }: Registe
           {/* Footer */}
           <div className="flex items-center justify-between pt-4 border-t border-border">
             <div>
-              <span className="text-xl font-semibold">{formatUSD(calculateTotal())}</span>
+              <span className="text-xs text-muted-foreground">From</span>
+              <div className="text-xl font-semibold">{formatUSD(calculateTotal())}/year</div>
             </div>
             <Button onClick={handleConfirm}>
               <Check className="mr-2 h-4 w-4" />

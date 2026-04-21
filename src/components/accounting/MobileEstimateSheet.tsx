@@ -19,8 +19,8 @@ export function MobileEstimateSheet() {
 
   // Calculate totals
   const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
-  const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
-  const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+  const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
+  const hasFromConsulting = selectedConsultingServices.some((s) => s.isFrom);
 
   const hasAnything = 
     selectedCorporateServices.length > 0 || 
@@ -32,7 +32,7 @@ export function MobileEstimateSheet() {
     selectedConsultingServices.length + 
     (liveAccountingResult ? 1 : 0);
 
-  const grandTotal = corporateTotal + (liveAccountingResult?.totalAnnual || 0) + Math.round((consultingMin + consultingMax) / 2);
+  const grandTotal = corporateTotal + (liveAccountingResult?.totalAnnual || 0) + consultingTotal;
 
   if (!hasAnything) {
     return null;
@@ -144,15 +144,15 @@ export function MobileEstimateSheet() {
                   <div key={service.id} className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{service.name}</span>
                     <span className="font-medium">
-                      {formatUSD(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
+                      {service.isFrom ? "From " : ""}{formatUSD(service.price)}
                     </span>
                   </div>
                 ))}
               </div>
               <div className="flex justify-between pt-2 mt-2 border-t border-border/50">
-                <span className="text-sm font-medium">Estimate Range</span>
+                <span className="text-sm font-medium">Subtotal</span>
                 <span className="font-semibold">
-                  {formatUSD(consultingMin)}–{formatPrice(consultingMax)}
+                  {hasFromConsulting ? "From " : ""}{formatUSD(consultingTotal)}
                 </span>
               </div>
             </div>

@@ -4,42 +4,42 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingDown, Globe, Search, GitBranch, Building, Check, ArrowRight, ShoppingCart, Clock } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { CONSULTING_PRICING, formatPrice } from "@/lib/pricing";
+import { CONSULTING_PRICING, formatPrice, USD_TO_THB } from "@/lib/pricing";
 
 const SERVICES = [
   {
     id: "reduce-costs",
     icon: TrendingDown,
     title: "Reduce Costs",
-    priceRange: CONSULTING_PRICING.REDUCE_COSTS,
+    pricing: CONSULTING_PRICING.REDUCE_COSTS,
     description: "Identify opportunities to reduce operational and tax costs.",
   },
   {
     id: "new-market",
     icon: Globe,
     title: "Enter a New Market",
-    priceRange: CONSULTING_PRICING.NEW_MARKET,
+    pricing: CONSULTING_PRICING.NEW_MARKET,
     description: "Evaluate and plan market entry strategy for Thailand or ASEAN.",
   },
   {
     id: "due-diligence",
     icon: Search,
     title: "Due Diligence / Risk Check",
-    priceRange: CONSULTING_PRICING.DUE_DILIGENCE,
+    pricing: CONSULTING_PRICING.DUE_DILIGENCE,
     description: "Comprehensive review of a target company or potential partner.",
   },
   {
     id: "structure-strategy",
     icon: GitBranch,
     title: "Business Structure Strategy",
-    priceRange: CONSULTING_PRICING.STRUCTURE_STRATEGY,
+    pricing: CONSULTING_PRICING.STRUCTURE_STRATEGY,
     description: "Optimize your corporate structure for growth, tax, or liability.",
   },
   {
     id: "bank-compliance",
     icon: Building,
     title: "Bank & Compliance Readiness",
-    priceRange: CONSULTING_PRICING.BANK_COMPLIANCE,
+    pricing: CONSULTING_PRICING.BANK_COMPLIANCE,
     description: "Prepare for bank account opening or compliance requirements.",
   },
 ];
@@ -57,8 +57,10 @@ export function ConsultingServices() {
       addConsultingService({
         id: service.id,
         name: service.title,
-        priceRange: { min: service.priceRange.min, max: service.priceRange.max },
-        timeline: service.priceRange.timeline,
+        price: service.pricing.price,
+        isFrom: service.pricing.isFrom,
+        timeline: service.pricing.timeline,
+        note: "note" in service.pricing ? (service.pricing as any).note : undefined,
       });
     }
   };
@@ -100,18 +102,24 @@ export function ConsultingServices() {
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl sm:text-2xl font-semibold tracking-tight">
-                      ${formatPrice(service.priceRange.min)}–${formatPrice(service.priceRange.max)}
+                      {service.pricing.isFrom ? "From " : ""}${formatPrice(service.pricing.price)}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground/70">
-                    ≈ ฿{formatPrice(service.priceRange.minTHB)}–฿{formatPrice(service.priceRange.maxTHB)}
+                    ≈ {service.pricing.isFrom ? "From " : ""}฿{formatPrice(service.pricing.price * USD_TO_THB)}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Clock className="h-4 w-4" />
-                  {service.priceRange.timeline}
+                  {service.pricing.timeline}
                 </div>
+
+                {"note" in service.pricing && (
+                  <p className="text-xs text-muted-foreground/70 italic">
+                    {(service.pricing as any).note}
+                  </p>
+                )}
 
                 <Button
                   variant={selected ? "secondary" : "outline"}

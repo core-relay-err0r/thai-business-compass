@@ -298,14 +298,14 @@ export default function Submit() {
                             <div key={service.id} className="flex justify-between text-sm">
                               <span className="text-primary">{service.name}</span>
                               <span className="font-medium">
-                                ${formatPrice(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
+                                {service.isFrom ? "From " : ""}${formatPrice(service.price)}
                               </span>
                             </div>
                           ))}
                           <div className="flex justify-between text-sm pt-3 border-t border-border/50">
                             <span>Total</span>
                             <span className="font-medium">
-                              ${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0))}–{formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0))}
+                              {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
                             </span>
                           </div>
                         </div>
@@ -350,9 +350,9 @@ export default function Submit() {
                       )}
                       {hasConsultingData && (
                         <div className="flex justify-between text-sm">
-                          <span>Consulting (indicative)</span>
+                          <span>Consulting</span>
                           <span className="font-medium">
-                            ${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0))}–{formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0))}
+                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
                           </span>
                         </div>
                       )}
@@ -360,12 +360,9 @@ export default function Submit() {
                         <div className="flex justify-between text-sm pt-2 border-t border-border/50">
                           <span className="font-medium">Initial Total</span>
                           <span className="font-medium">
-                            ${formatPrice(
+                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(
                               selectedCorporateServices.reduce((sum, s) => sum + s.price, 0) +
-                              selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0)
-                            )}–{formatPrice(
-                              selectedCorporateServices.reduce((sum, s) => sum + s.price, 0) +
-                              selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0)
+                              selectedConsultingServices.reduce((sum, s) => sum + s.price, 0)
                             )}
                           </span>
                         </div>
@@ -416,23 +413,18 @@ export default function Submit() {
                   <div className="pt-4">
                     {(() => {
                       const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
-                      const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
-                      const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+                      const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
+                      const hasFromItems = selectedConsultingServices.some(s => s.isFrom);
                       const monthlyFee = accountingResult?.totalMonthly ?? 0;
                       const annualFees = accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
 
-                      const firstYearMin = corporateTotal + consultingMin + (monthlyFee * 12) + annualFees;
-                      const firstYearMax = corporateTotal + consultingMax + (monthlyFee * 12) + annualFees;
-
-                      const hasRange = consultingMax > consultingMin;
+                      const firstYearTotal = corporateTotal + consultingTotal + (monthlyFee * 12) + annualFees;
 
                       return (
                         <div className="flex justify-between font-medium text-base">
                           <span>Estimated First-Year Total</span>
                           <span>
-                            {hasRange
-                              ? `$${formatPrice(firstYearMin)}–${formatPrice(firstYearMax)}`
-                              : `$${formatPrice(firstYearMin)}`}
+                            {hasFromItems ? "From " : ""}${formatPrice(firstYearTotal)}
                           </span>
                         </div>
                       );

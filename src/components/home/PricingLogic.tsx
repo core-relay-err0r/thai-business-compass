@@ -19,32 +19,28 @@ export function PricingLogic() {
               <h3 className="font-semibold text-lg mb-4">Monthly Accounting</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span>Base accounting fee</span>
+                  <span>Base bookkeeping (up to 50 txns)</span>
                   <span className="font-medium">{formatUSD(PRICING.BASE_ACCOUNTING)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ VAT reporting (if registered)</span>
+                  <span>+ VAT reporting (PP.30)</span>
                   <span>+{formatUSD(PRICING.VAT_ADDON)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ Payroll base</span>
-                  <span>+{formatUSD(PRICING.PAYROLL_BASE)}/month</span>
+                  <span>+ Recurring WHT (PND3/PND53)</span>
+                  <span>+{formatUSD(PRICING.RECURRING_WHT_ADDON)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ Per employee</span>
-                  <span>+{formatUSD(PRICING.PAYROLL_PER_EMPLOYEE)}/employee/month</span>
+                  <span>+ Payroll & social security (per block of 5)</span>
+                  <span>+{formatUSD(PRICING.PAYROLL_BLOCK)}/block/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ Medium transaction volume</span>
+                  <span>+ Medium volume (&gt;50 txns)</span>
                   <span>+{formatUSD(PRICING.TX_MEDIUM_ADDON)}/month</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ High transaction volume</span>
-                  <span>+{formatUSD(PRICING.TX_HIGH_ADDON)}/month</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ International payments</span>
-                  <span>+{formatUSD(PRICING.INTL_PAYMENTS_ADDON)}/month</span>
+                  <span>+ High volume / complex scope</span>
+                  <span>Custom quote</span>
                 </div>
               </div>
             </div>
@@ -55,18 +51,22 @@ export function PricingLogic() {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span>Year-end financial statements</span>
-                  <span className="font-medium">{formatUSD(PRICING.YEAR_END_STATEMENTS)}/year</span>
+                  <span className="font-medium">From {formatUSD(PRICING.YEAR_END_STATEMENTS)}/year</span>
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>Catch-up / backlog work</span>
+                  <span>From {formatUSD(PRICING.CATCHUP_BACKLOG)}/year</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>+ Annual audit (if required)</span>
-                  <span>+{formatUSD(PRICING.AUDIT_ADDON)}/year</span>
+                  <span>From +{formatUSD(PRICING.AUDIT_ADDON)}/year</span>
                 </div>
               </div>
             </div>
 
             {/* Corporate */}
             <div className="bg-muted/30 rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-4">Corporate Services (One-time, USD)</h3>
+              <h3 className="font-semibold text-lg mb-4">Corporate Services (Turnkey, USD)</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span>Company incorporation</span>
@@ -74,7 +74,7 @@ export function PricingLogic() {
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Registered office</span>
-                  <span>{formatUSD(CORPORATE_PRICING.REGISTERED_OFFICE)}</span>
+                  <span>From {formatUSD(CORPORATE_PRICING.REGISTERED_OFFICE)}/year</span>
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>Structural change (directors/shareholders)</span>

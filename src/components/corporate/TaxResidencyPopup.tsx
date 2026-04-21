@@ -13,26 +13,22 @@ interface TaxResidencyPopupProps {
 }
 
 export interface TaxResidencyOptions {
-  mfaLegalization: boolean;
-  embassyLegalization: boolean;
+  mofaLegalization: boolean;
   totalPrice: number;
 }
 
 export function TaxResidencyPopup({ open, onOpenChange, onConfirm }: TaxResidencyPopupProps) {
-  const [mfaLegalization, setMfaLegalization] = useState(false);
-  const [embassyLegalization, setEmbassyLegalization] = useState(false);
+  const [mofaLegalization, setMofaLegalization] = useState(false);
 
   const calculateTotal = () => {
     let total = CORPORATE_PRICING.TAX_RESIDENCY;
-    if (mfaLegalization) total += CORPORATE_PRICING.MFA_LEGALIZATION;
-    if (embassyLegalization) total += CORPORATE_PRICING.EMBASSY_LEGALIZATION;
+    if (mofaLegalization) total += CORPORATE_PRICING.MOFA_CONSULATE_LEGALIZATION;
     return total;
   };
 
   const handleConfirm = () => {
     onConfirm({
-      mfaLegalization,
-      embassyLegalization,
+      mofaLegalization,
       totalPrice: calculateTotal(),
     });
     onOpenChange(false);
@@ -55,38 +51,23 @@ export function TaxResidencyPopup({ open, onOpenChange, onConfirm }: TaxResidenc
             Official tax residency confirmation.
           </p>
 
-          {/* Legalization options */}
+          {/* Legalization option */}
           <div className="space-y-3">
-            <p className="text-sm font-medium">Legalization options:</p>
+            <p className="text-sm font-medium">Legalization option:</p>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <Checkbox
-                    id="mfa"
-                    checked={mfaLegalization}
-                    onCheckedChange={(checked) => setMfaLegalization(checked as boolean)}
+                    id="mofa"
+                    checked={mofaLegalization}
+                    onCheckedChange={(checked) => setMofaLegalization(checked as boolean)}
                   />
-                  <Label htmlFor="mfa" className="text-sm cursor-pointer">
-                    MFA (Thailand) legalization
+                  <Label htmlFor="mofa" className="text-sm cursor-pointer">
+                    MOFA + consulate legalization
                   </Label>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  +{formatUSD(CORPORATE_PRICING.MFA_LEGALIZATION)}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="embassy"
-                    checked={embassyLegalization}
-                    onCheckedChange={(checked) => setEmbassyLegalization(checked as boolean)}
-                  />
-                  <Label htmlFor="embassy" className="text-sm cursor-pointer">
-                    Foreign embassy legalization (Bangkok)
-                  </Label>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  +{formatUSD(CORPORATE_PRICING.EMBASSY_LEGALIZATION)}
+                  +{formatUSD(CORPORATE_PRICING.MOFA_CONSULATE_LEGALIZATION)}
                 </span>
               </div>
             </div>

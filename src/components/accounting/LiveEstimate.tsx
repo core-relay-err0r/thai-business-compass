@@ -26,8 +26,8 @@ export function LiveEstimate() {
   // Calculate totals
   const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
   
-  const consultingMin = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
-  const consultingMax = selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+  const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
+  const hasFromConsulting = selectedConsultingServices.some((s) => s.isFrom);
 
   const hasAnything = 
     selectedCorporateServices.length > 0 || 
@@ -110,10 +110,10 @@ export function LiveEstimate() {
                 Consulting
               </div>
               <div className="text-lg font-semibold">
-                {formatUSD(consultingMin)}–{formatPrice(consultingMax)}
+                {hasFromConsulting ? "From " : ""}{formatUSD(consultingTotal)}
               </div>
               <div className="text-xs text-muted-foreground">
-                {selectedConsultingServices.length} task{selectedConsultingServices.length !== 1 ? "s" : ""} • Estimate range
+                {selectedConsultingServices.length} task{selectedConsultingServices.length !== 1 ? "s" : ""}
               </div>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
@@ -141,17 +141,17 @@ export function LiveEstimate() {
         {selectedConsultingServices.length > 0 && (
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Consulting</span>
-            <span className="font-medium">{formatUSD(consultingMin)}–{formatPrice(consultingMax)}</span>
+            <span className="font-medium">{hasFromConsulting ? "From " : ""}{formatUSD(consultingTotal)}</span>
           </div>
         )}
         <div className="flex justify-between pt-2 border-t border-border/50">
           <span className="font-semibold">Est. Total</span>
           <div className="text-right">
             <div className="font-bold text-lg">
-              {formatUSD(corporateTotal + (liveAccountingResult?.totalAnnual || 0) + Math.round((consultingMin + consultingMax) / 2))}
+              {hasFromConsulting ? "From " : ""}{formatUSD(corporateTotal + (liveAccountingResult?.totalAnnual || 0) + consultingTotal)}
             </div>
             <div className="text-xs text-muted-foreground">
-              ≈ ฿{formatPrice((corporateTotal + (liveAccountingResult?.totalAnnual || 0) + Math.round((consultingMin + consultingMax) / 2)) * USD_TO_THB)}
+              ≈ ฿{formatPrice((corporateTotal + (liveAccountingResult?.totalAnnual || 0) + consultingTotal) * USD_TO_THB)}
             </div>
           </div>
         </div>
@@ -307,18 +307,18 @@ export function LiveEstimate() {
               <div key={service.id} className="flex justify-between text-sm py-2 border-b border-border/50 last:border-0">
                 <span className="text-muted-foreground">{service.name}</span>
                 <span className="font-medium">
-                  {formatUSD(service.priceRange.min)}–{formatPrice(service.priceRange.max)}
+                  {service.isFrom ? "From " : ""}{formatUSD(service.price)}
                 </span>
               </div>
             ))}
             <div className="flex justify-between pt-3 border-t border-border">
-              <span className="font-medium">Total Range</span>
+              <span className="font-medium">Total</span>
               <div className="text-right">
                 <div className="font-semibold">
-                  {formatUSD(consultingMin)}–{formatPrice(consultingMax)}
+                  {hasFromConsulting ? "From " : ""}{formatUSD(consultingTotal)}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  ≈ ฿{formatPrice(consultingMin * USD_TO_THB)}–{formatPrice(consultingMax * USD_TO_THB)}
+                  ≈ ฿{formatPrice(consultingTotal * USD_TO_THB)}
                 </div>
               </div>
             </div>

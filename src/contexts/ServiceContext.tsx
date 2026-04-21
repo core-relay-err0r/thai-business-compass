@@ -10,8 +10,10 @@ export interface CorporateService {
 export interface ConsultingService {
   id: string;
   name: string;
-  priceRange: { min: number; max: number };
+  price: number;
+  isFrom: boolean;
   timeline: string;
+  note?: string;
 }
 
 interface ServiceState {
@@ -200,11 +202,12 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       if (hasConsultingData) {
         lines.push("\n💼 Consulting Services");
         state.selectedConsultingServices.forEach((s) => {
-          lines.push(`   • ${s.name}: $${s.priceRange.min.toLocaleString()}–$${s.priceRange.max.toLocaleString()}`);
+          const prefix = s.isFrom ? "From " : "";
+          lines.push(`   • ${s.name}: ${prefix}$${s.price.toLocaleString()}`);
         });
-        const consultingMin = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
-        const consultingMax = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
-        lines.push(`   Total: $${consultingMin.toLocaleString()}–$${consultingMax.toLocaleString()}`);
+        const consultingTotal = state.selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
+        const hasFromItems = state.selectedConsultingServices.some((s) => s.isFrom);
+        lines.push(`   Total: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
       }
 
       // Payment Summary
@@ -213,8 +216,8 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       lines.push("─".repeat(40));
 
       const corporateTotal = state.selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
-      const consultingMin = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.min, 0);
-      const consultingMax = state.selectedConsultingServices.reduce((sum, s) => sum + s.priceRange.max, 0);
+      const consultingTotal = state.selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
+      const hasFromItems = state.selectedConsultingServices.some((s) => s.isFrom);
       const monthlyFee = state.accountingResult?.totalMonthly ?? 0;
       const annualFees = state.accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
 
@@ -225,12 +228,11 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
           lines.push(`   Corporate Services: $${corporateTotal.toLocaleString()}`);
         }
         if (hasConsultingData) {
-          lines.push(`   Consulting (indicative): $${consultingMin.toLocaleString()}–$${consultingMax.toLocaleString()}`);
+          lines.push(`   Consulting: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
         }
         if (hasCorporateData && hasConsultingData) {
-          const initialMin = corporateTotal + consultingMin;
-          const initialMax = corporateTotal + consultingMax;
-          lines.push(`   Initial Total: $${initialMin.toLocaleString()}–$${initialMax.toLocaleString()}`);
+          const initialTotal = corporateTotal + consultingTotal;
+          lines.push(`   Initial Total: ${hasFromItems ? "From " : ""}$${initialTotal.toLocaleString()}`);
         }
       }
 
@@ -251,16 +253,10 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       }
 
       // Grand Total
-      const firstYearMin = corporateTotal + consultingMin + (monthlyFee * 12) + annualFees;
-      const firstYearMax = corporateTotal + consultingMax + (monthlyFee * 12) + annualFees;
-      const hasRange = consultingMax > consultingMin;
+      const firstYearTotal = corporateTotal + consultingTotal + (monthlyFee * 12) + annualFees;
 
       lines.push("\n" + "═".repeat(40));
-      if (hasRange) {
-        lines.push(`ESTIMATED FIRST-YEAR TOTAL: $${firstYearMin.toLocaleString()}–$${firstYearMax.toLocaleString()}`);
-      } else {
-        lines.push(`ESTIMATED FIRST-YEAR TOTAL: $${firstYearMin.toLocaleString()}`);
-      }
+      lines.push(`ESTIMATED FIRST-YEAR TOTAL: ${hasFromItems ? "From " : ""}$${firstYearTotal.toLocaleString()}`);
       lines.push("═".repeat(40));
       lines.push("\nNote: Final pricing confirmed after initial consultation.");
       if (hasConsultingData) {

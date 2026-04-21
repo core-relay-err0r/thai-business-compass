@@ -2,61 +2,62 @@
 
 // Monthly fees (USD)
 export const PRICING = {
-  // Base accounting fee
-  BASE_ACCOUNTING: 170, // ~6,000 THB
+  // Base accounting fee (up to 50 transactions/month)
+  BASE_ACCOUNTING: 300,
   
-  // VAT addon (if VAT registered)
-  VAT_ADDON: 70, // ~2,500 THB
+  // VAT addon (PP.30)
+  VAT_ADDON: 100,
   
-  // Payroll
-  PAYROLL_BASE: 45, // ~1,500 THB
-  PAYROLL_PER_EMPLOYEE: 7, // ~250 THB
+  // Recurring withholding filings (PND3/PND53)
+  RECURRING_WHT_ADDON: 100,
+  
+  // Payroll (block model)
+  PAYROLL_BLOCK: 100, // per block of up to 5 employees
+  PAYROLL_BLOCK_SIZE: 5,
   
   // Transaction complexity
-  TX_MEDIUM_ADDON: 45, // ~1,500 THB
-  TX_HIGH_ADDON: 100, // ~3,500 THB
+  TX_MEDIUM_ADDON: 200, // >50 transactions/month
+  // High volume = custom quote (no fixed constant)
   
-  // International payments
-  INTL_PAYMENTS_ADDON: 35, // ~1,200 THB
-  
-  // Annual fees (USD)
-  YEAR_END_STATEMENTS: 350, // ~12,000 THB
-  AUDIT_ADDON: 700, // ~25,000 THB
+  // Annual fees (USD) — displayed as "From X"
+  YEAR_END_STATEMENTS: 800,
+  CATCHUP_BACKLOG: 1000,
+  AUDIT_ADDON: 1000,
 } as const;
 
-// Corporate Services - One-time fees (USD)
+// Corporate Services - Fixed-fee turnkey (USD)
 export const CORPORATE_PRICING = {
-  // Starting a New Company
-  INCORPORATION: 1500,
-  REGISTERED_OFFICE: 300,
-  VIRTUAL_OFFICE_ASSISTANCE: 300,
-  PHYSICAL_OFFICE_ASSISTANCE: 1000,
+  // Setup & Office
+  INCORPORATION: 2000,
+  REGISTERED_OFFICE: 2000, // per year, displayed as "From"
+  VIRTUAL_OFFICE_ASSISTANCE: 1000, // per year
   
-  // Existing Company Services
-  COMPANY_REVIEW: 500,
+  // Reviews & Changes
+  COMPANY_REVIEW: 1000,
   COMPANY_REVIEW_FINANCIAL: 500,
   COMPANY_REVIEW_ENGLISH: 500,
   COMPANY_REVIEW_FINANCIAL_ENGLISH: 1000,
-  STRUCTURAL_CHANGE: 500,
-  CORPORATE_DOCUMENTS: 300,
-  CERTIFIED_TRANSLATION: 300,
-  NOTARIZED_TRANSLATION: 500,
-  LEGALIZATION: 2000,
-  TAX_RESIDENCY: 300,
-  MFA_LEGALIZATION: 400,
-  EMBASSY_LEGALIZATION: 400,
+  STRUCTURAL_CHANGE: 800,
+  
+  // Documents & Legalization
+  CORPORATE_DOCUMENTS: 300, // displayed as "From"
+  CERTIFIED_TRANSLATION: 300, // displayed as "From"
+  NOTARIZED_TRANSLATION: 500, // displayed as "From"
+  LEGALIZATION: 2000, // full package, displayed as "From"
+  TAX_RESIDENCY: 400,
+  MOFA_CONSULATE_LEGALIZATION: 400,
 } as const;
 
 // Approximate THB conversion rate (for reference display)
 export const USD_TO_THB = 35;
 
-// Consulting price ranges (USD)
+// Consulting services (USD)
 export const CONSULTING_PRICING = {
-  REDUCE_COSTS: { min: 800, max: 2200, minTHB: 30000, maxTHB: 80000, timeline: "5–10 working days" },
-  NEW_MARKET: { min: 1400, max: 3300, minTHB: 50000, maxTHB: 120000, timeline: "7–14 working days" },
-  DUE_DILIGENCE: { min: 1100, max: 2800, minTHB: 40000, maxTHB: 100000, timeline: "5–10 working days" },
-  STRUCTURE_STRATEGY: { min: 1000, max: 2500, minTHB: 35000, maxTHB: 90000, timeline: "3–7 working days" },
-  BANK_COMPLIANCE: { min: 700, max: 1700, minTHB: 25000, maxTHB: 60000, timeline: "3–5 working days" },
+  REDUCE_COSTS: { price: 2000, isFrom: true, timeline: "5–10 working days" },
+  NEW_MARKET: { price: 5000, isFrom: false, timeline: "7–14 working days" },
+  DUE_DILIGENCE: { price: 2000, isFrom: true, timeline: "5–30 working days" },
+  STRUCTURE_STRATEGY: { price: 3000, isFrom: false, timeline: "3–7 working days" },
+  BANK_COMPLIANCE: { price: 500, isFrom: false, timeline: "1 working day", note: "For urgent stuck payment issues. Complex situations quoted separately." },
 } as const;
 
 // Calculate accounting cost based on user inputs
@@ -68,7 +69,7 @@ export interface AccountingInputs {
   employeePurpose: "operations" | "visa" | "not-sure";
   payrollNeeded: boolean;
   transactionVolume: "low" | "medium" | "high";
-  internationalPayments: boolean;
+  recurringWHT: "yes" | "no" | "not-sure";
   yearEndStatements: "yes" | "no" | "not-sure";
   auditRequired: "yes" | "no" | "not-sure";
 }
@@ -77,9 +78,9 @@ export interface AccountingResult {
   monthlyBase: number;
   monthlyAddons: { name: string; amount: number; required: boolean }[];
   annualBase: number;
-  annualAddons: { name: string; amount: number; required: boolean }[];
+  annualAddons: { name: string; amount: number; required: boolean; isFrom?: boolean }[];
   potentialMonthly: { name: string; amount: number }[];
-  potentialAnnual: { name: string; amount: number }[];
+  potentialAnnual: { name: string; amount: number; isFrom?: boolean }[];
   totalMonthly: number;
   totalMonthlyMax: number;
   totalAnnual: number;
@@ -87,31 +88,44 @@ export interface AccountingResult {
   requiredItems: string[];
   recommendedItems: string[];
   notNeededItems: string[];
+  isCustomQuote: boolean;
 }
 
 export function calculateAccountingCost(inputs: AccountingInputs): AccountingResult {
   const monthlyAddons: { name: string; amount: number; required: boolean }[] = [];
-  const annualAddons: { name: string; amount: number; required: boolean }[] = [];
+  const annualAddons: { name: string; amount: number; required: boolean; isFrom?: boolean }[] = [];
   const potentialMonthly: { name: string; amount: number }[] = [];
-  const potentialAnnual: { name: string; amount: number }[] = [];
+  const potentialAnnual: { name: string; amount: number; isFrom?: boolean }[] = [];
   const requiredItems: string[] = ["Monthly bookkeeping", "Tax filings"];
   const recommendedItems: string[] = [];
   const notNeededItems: string[] = [];
+  let isCustomQuote = false;
 
   // VAT
   if (inputs.vatRegistered === "yes") {
-    monthlyAddons.push({ name: "VAT reporting", amount: PRICING.VAT_ADDON, required: true });
+    monthlyAddons.push({ name: "VAT reporting (PP.30)", amount: PRICING.VAT_ADDON, required: true });
     requiredItems.push("VAT reporting & filings");
   } else if (inputs.vatRegistered === "not-sure") {
-    potentialMonthly.push({ name: "VAT reporting", amount: PRICING.VAT_ADDON });
+    potentialMonthly.push({ name: "VAT reporting (PP.30)", amount: PRICING.VAT_ADDON });
   } else {
     notNeededItems.push("VAT reporting");
   }
 
-  // Payroll
+  // Recurring WHT
+  if (inputs.recurringWHT === "yes") {
+    monthlyAddons.push({ name: "Recurring WHT (PND3/PND53)", amount: PRICING.RECURRING_WHT_ADDON, required: true });
+    requiredItems.push("Withholding tax filings");
+  } else if (inputs.recurringWHT === "not-sure") {
+    potentialMonthly.push({ name: "Recurring WHT (PND3/PND53)", amount: PRICING.RECURRING_WHT_ADDON });
+  } else {
+    notNeededItems.push("Recurring WHT filings");
+  }
+
+  // Payroll (block model)
   if (inputs.payrollNeeded && inputs.employeeCount > 0) {
-    const payrollCost = PRICING.PAYROLL_BASE + (inputs.employeeCount * PRICING.PAYROLL_PER_EMPLOYEE);
-    monthlyAddons.push({ name: `Payroll (${inputs.employeeCount} employees)`, amount: payrollCost, required: true });
+    const blocks = Math.ceil(inputs.employeeCount / PRICING.PAYROLL_BLOCK_SIZE);
+    const payrollCost = blocks * PRICING.PAYROLL_BLOCK;
+    monthlyAddons.push({ name: `Payroll & social security (${inputs.employeeCount} employees)`, amount: payrollCost, required: true });
     requiredItems.push("Payroll processing", "Social security filings");
   } else if (inputs.employeeCount > 0) {
     recommendedItems.push("Payroll processing");
@@ -121,35 +135,26 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
 
   // Transaction complexity
   if (inputs.transactionVolume === "medium") {
-    monthlyAddons.push({ name: "Medium transaction volume", amount: PRICING.TX_MEDIUM_ADDON, required: false });
+    monthlyAddons.push({ name: "Medium volume surcharge", amount: PRICING.TX_MEDIUM_ADDON, required: false });
     recommendedItems.push("Enhanced reconciliation");
   } else if (inputs.transactionVolume === "high") {
-    monthlyAddons.push({ name: "High transaction volume", amount: PRICING.TX_HIGH_ADDON, required: false });
-    requiredItems.push("Advanced reconciliation");
-  }
-
-  // International payments
-  if (inputs.internationalPayments) {
-    monthlyAddons.push({ name: "International payments handling", amount: PRICING.INTL_PAYMENTS_ADDON, required: false });
-    recommendedItems.push("FX transaction tracking");
-  } else {
-    notNeededItems.push("International payment handling");
+    isCustomQuote = true;
   }
 
   // Year-end statements
   if (inputs.yearEndStatements === "yes") {
-    annualAddons.push({ name: "Annual financial statements", amount: PRICING.YEAR_END_STATEMENTS, required: true });
+    annualAddons.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, required: true, isFrom: true });
     requiredItems.push("Annual financial statements");
   } else if (inputs.yearEndStatements === "not-sure") {
-    potentialAnnual.push({ name: "Annual financial statements", amount: PRICING.YEAR_END_STATEMENTS });
+    potentialAnnual.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, isFrom: true });
   }
 
   // Audit
   if (inputs.auditRequired === "yes") {
-    annualAddons.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, required: true });
+    annualAddons.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, required: true, isFrom: true });
     requiredItems.push("Annual audit");
   } else if (inputs.auditRequired === "not-sure") {
-    potentialAnnual.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON });
+    potentialAnnual.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, isFrom: true });
   } else {
     notNeededItems.push("Annual audit");
   }
@@ -177,6 +182,7 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
     requiredItems,
     recommendedItems,
     notNeededItems,
+    isCustomQuote,
   };
 }
 
