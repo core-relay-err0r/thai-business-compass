@@ -30,7 +30,7 @@ const modules = [
 
 export function ModuleCards() {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-muted/30">
+    <section className="py-8 sm:py-12 md:py-20 bg-muted/30">
       <AnimatedSection className="container px-4 sm:px-6">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">What do you need?</h2>

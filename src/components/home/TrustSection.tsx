@@ -3,7 +3,7 @@ import { AnimatedSection } from "@/components/ui/animated-section";
 
 export function TrustSection() {
   return (
-    <section className="py-12 sm:py-16 md:py-20">
+    <section className="py-8 sm:py-12 md:py-20">
       <AnimatedSection className="container px-4 sm:px-6">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">

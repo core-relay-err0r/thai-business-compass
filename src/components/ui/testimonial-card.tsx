@@ -129,7 +129,7 @@ export const ClientsSection = ({
   className,
 }: ClientsSectionProps) => {
   return (
-    <section className={cn("py-16 md:py-24", className)}>
+    <section className={cn("py-8 sm:py-16 md:py-24", className)}>
       <div className="container px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left Column: Sticky Content */}

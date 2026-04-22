@@ -24,7 +24,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-12 sm:py-16 md:py-20 bg-muted/30">
+    <section id="how-it-works" className="py-8 sm:py-12 md:py-20 bg-muted/30">
       <AnimatedSection className="container px-4 sm:px-6">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">How it works</h2>
