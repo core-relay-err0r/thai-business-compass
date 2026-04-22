@@ -126,22 +126,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
     if (typeof ref === 'function') ref(node);
     else if (ref) ref.current = node;
     (heroRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background overflow-hidden", className)} style={{ minHeight: 'calc(100vh - var(--header-height, 4rem))', height: 'calc(100vh - var(--header-height, 4rem))' }} {...props}>
-        {/* Mobile Background Image */}
-        {slides && slides.length > 0 && <motion.div 
-          className="lg:hidden absolute inset-0 z-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: hasAnimated ? 1 : 0 }}
-          transition={{ duration: 0.8 }}
-        >
-            <img src={slides[0].image} alt="" className="w-full h-full object-cover opacity-15" />
-            <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
-          </motion.div>}
+  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background overflow-hidden lg:min-h-[calc(100vh-var(--header-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem))]", className)} {...props}>
         
         {/* Left Side: Content */}
-        <motion.div className="w-full lg:w-[60%] flex flex-col justify-center p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 py-12 sm:py-16 lg:py-24 xl:py-28" variants={containerVariants} initial="hidden" animate="visible">
+        <motion.div className="w-full lg:w-[60%] flex flex-col justify-center px-4 py-6 sm:px-8 sm:py-10 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 lg:py-24 xl:py-28" variants={containerVariants} initial="hidden" animate="visible">
           {/* Top Section: Logo & Main Content */}
-          <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:gap-14 lg:my-auto">
+            <div className="flex flex-col gap-4 sm:gap-6 md:gap-10 lg:gap-14 lg:my-auto">
             {logo && <motion.div variants={itemVariants} className="flex items-center gap-2 sm:gap-3">
                 {logo.url && <img src={logo.url} alt={logo.alt || "Logo"} className="h-8 sm:h-10 w-auto" />}
                 <div className="flex flex-col">
@@ -161,7 +151,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
               opacity: 0
             }} transition={{
               duration: 0.6
-            }} className="relative aspect-[16/10]">
+            }} className="relative aspect-[16/9]">
                     <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-full object-cover" />
                     {/* Gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
@@ -184,8 +174,8 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 </div>
               </motion.div>}
 
-            <div className="flex flex-col gap-4 sm:gap-6 md:gap-8 max-w-2xl lg:py-12 xl:py-16">
-              <motion.h1 variants={itemVariants} className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]">
+            <div className="flex flex-col gap-3 sm:gap-5 md:gap-8 max-w-2xl lg:py-12 xl:py-16">
+              <motion.h1 variants={itemVariants} className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]">
                 {title}
               </motion.h1>
               

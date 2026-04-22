@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export function BottomCTA() {
   return (
-    <section className="py-16 sm:py-20 md:py-24 relative overflow-hidden">
+    <section className="py-8 sm:py-16 md:py-24 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/10" />
       
