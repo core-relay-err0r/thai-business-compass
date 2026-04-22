@@ -126,10 +126,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
     if (typeof ref === 'function') ref(node);
     else if (ref) ref.current = node;
     (heroRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background overflow-hidden", className)} style={{ minHeight: undefined }} {...props}>
-        {/* Force full viewport on desktop only */}
-        <style>{`.hero-desktop-height { min-height: auto; } @media (min-width: 1024px) { .hero-desktop-height { min-height: calc(100vh - var(--header-height, 4rem)); height: calc(100vh - var(--header-height, 4rem)); } }`}</style>
-        <script dangerouslySetInnerHTML={{ __html: '' }} ref={(el) => { if (el) el.parentElement?.classList.add('hero-desktop-height'); }} />
+  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background overflow-hidden lg:min-h-[calc(100vh-var(--header-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem))]", className)} {...props}>
         
         {/* Left Side: Content */}
         <motion.div className="w-full lg:w-[60%] flex flex-col justify-center px-4 py-6 sm:px-8 sm:py-10 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 lg:py-24 xl:py-28" variants={containerVariants} initial="hidden" animate="visible">
