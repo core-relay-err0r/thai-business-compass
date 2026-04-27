@@ -148,8 +148,8 @@ export function AccountingWizard() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="h-[400px] sm:h-[450px] p-0 flex flex-col">
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
+      <CardContent className="p-0 flex flex-col">
+        <div className="px-4 sm:px-6 py-4">
           {currentStep === 0 && (
             <Step0Intent inputs={localInputs} setInputs={setLocalInputs} />
           )}
