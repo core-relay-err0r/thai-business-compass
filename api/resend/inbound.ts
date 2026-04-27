@@ -6,7 +6,8 @@
 // Required Vercel env vars:
 //   - RESEND_API_KEY    Your Resend API key
 //   - FORWARD_TO        Destination email address (e.g. you@gmail.com)
-//   - FORWARD_FROM      (optional) Verified sender, defaults to "info@pnd50.com"
+//   - FORWARD_FROM      (optional) Verified sender, defaults to "forwarder@pnd50.com"
+//                       MUST be different from the inbound address to avoid loops.
 
 import { Resend } from "resend";
 
@@ -34,7 +35,7 @@ export default async function handler(req: any, res: any) {
 
     const apiKey = process.env.RESEND_API_KEY;
     const forwardTo = process.env.FORWARD_TO;
-    const forwardFrom = process.env.FORWARD_FROM || "info@pnd50.com";
+    const forwardFrom = process.env.FORWARD_FROM || "forwarder@pnd50.com";
 
     if (!apiKey) {
       console.error("[resend-inbound] RESEND_API_KEY is not set");
@@ -52,10 +53,26 @@ export default async function handler(req: any, res: any) {
     const toAddr = Array.isArray(email.to) ? email.to.join(", ") : (email.to || "(unknown recipient)");
     const bodyText = email.text || email.html || "No body";
 
+    // Loop protection: if the email is from our own domain or our forwarder address,
+    // do not forward — it's almost certainly a forwarded copy bouncing back.
+    const fromLower = String(fromAddr).toLowerCase();
+    const forwardFromLower = forwardFrom.toLowerCase();
+    if (
+      fromLower.includes(forwardFromLower) ||
+      fromLower.includes("info@pnd50.com") ||
+      fromLower.includes("@pnd50.com")
+    ) {
+      console.warn("[resend-inbound] loop detected, skipping forward. from:", fromAddr);
+      return res.status(200).json({ received: true, forwarded: false, reason: "loop-protection" });
+    }
+
+    // Avoid stacking "[Forwarded from ...]" prefixes on the subject.
+    const cleanSubject = subject.replace(/^(\s*\[Forwarded from [^\]]+\]\s*)+/i, "");
+
     const { data, error } = await resend.emails.send({
       from: forwardFrom,
       to: forwardTo,
-      subject: `[Forwarded from info@pnd50.com] ${subject}`,
+      subject: `[Forwarded from info@pnd50.com] ${cleanSubject}`,
       text: `From: ${fromAddr}\nTo: ${toAddr}\nSubject: ${subject}\n\n${bodyText}`,
     });
 
