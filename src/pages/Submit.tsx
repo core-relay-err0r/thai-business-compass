@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,21 +31,31 @@ export default function Submit() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Simple built-in math CAPTCHA (no external service required)
-  const generateCaptcha = () => ({
-    a: Math.floor(Math.random() * 9) + 1,
-    b: Math.floor(Math.random() * 9) + 1,
-  });
-  const [captcha, setCaptcha] = useState(generateCaptcha);
+  // Server-issued, signed math CAPTCHA — verified server-side before sending email.
+  const [captcha, setCaptcha] = useState<{ a: number; b: number; token: string } | null>(null);
   const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const [captchaLoading, setCaptchaLoading] = useState(false);
   const captchaValid = useMemo(
-    () => parseInt(captchaAnswer, 10) === captcha.a + captcha.b,
+    () => !!captcha && parseInt(captchaAnswer, 10) === captcha.a + captcha.b,
     [captchaAnswer, captcha]
   );
-  const refreshCaptcha = useCallback(() => {
-    setCaptcha(generateCaptcha());
+  const refreshCaptcha = useCallback(async () => {
+    setCaptchaLoading(true);
     setCaptchaAnswer("");
+    try {
+      const { data, error } = await supabase.functions.invoke("captcha-challenge", {
+        method: "GET",
+      });
+      if (error) throw error;
+      setCaptcha(data as { a: number; b: number; token: string });
+    } catch (err) {
+      console.error("Failed to load captcha:", err);
+      toast.error("Could not load verification challenge. Refresh to try again.");
+    } finally {
+      setCaptchaLoading(false);
+    }
   }, []);
+  useEffect(() => { refreshCaptcha(); }, [refreshCaptcha]);
 
   const hasAccountingData = !!accountingResult;
   const hasCorporateData = selectedCorporateServices.length > 0;
@@ -62,7 +72,7 @@ export default function Submit() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!captchaValid) {
+    if (!captchaValid || !captcha) {
       toast.error("Please solve the CAPTCHA correctly.");
       return;
     }
@@ -75,6 +85,8 @@ export default function Submit() {
       accountingResult,
       selectedCorporateServices,
       selectedConsultingServices,
+      captchaToken: captcha.token,
+      captchaAnswer: parseInt(captchaAnswer, 10),
     };
 
     try {
@@ -546,7 +558,7 @@ export default function Submit() {
                 <div className="flex items-end gap-3 flex-wrap">
                   <div className="space-y-1.5 sm:space-y-2">
                     <Label htmlFor="captcha" className="text-sm">
-                      What is {captcha.a} + {captcha.b}? *
+                      What is {captcha ? `${captcha.a} + ${captcha.b}` : "…"}? *
                     </Label>
                     <Input
                       id="captcha"
@@ -556,6 +568,7 @@ export default function Submit() {
                       value={captchaAnswer}
                       onChange={(e) => setCaptchaAnswer(e.target.value.replace(/\D/g, ""))}
                       required
+                      disabled={!captcha || captchaLoading}
                       className="min-h-[44px] w-32"
                       aria-invalid={captchaAnswer.length > 0 && !captchaValid}
                     />
@@ -565,6 +578,7 @@ export default function Submit() {
                     variant="outline"
                     size="sm"
                     onClick={refreshCaptcha}
+                    disabled={captchaLoading}
                     className="min-h-[44px]"
                   >
                     New question
