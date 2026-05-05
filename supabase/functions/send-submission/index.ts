@@ -536,6 +536,27 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const data: SubmissionRequest = await req.json();
 
+    // Best-effort rate limit per IP (soft barrier against repeated bot attempts)
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("cf-connecting-ip") ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+    const rl = await checkRateLimit(ip);
+    if (!rl.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again shortly." }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": String(rl.retryAfter ?? 60),
+            ...corsHeaders,
+          },
+        },
+      );
+    }
+
     // Server-verified CAPTCHA — required for all submissions
     const captchaToken = (data as any).captchaToken;
     const captchaAnswer = (data as any).captchaAnswer;
