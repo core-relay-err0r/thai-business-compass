@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,22 @@ export default function Submit() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // Simple built-in math CAPTCHA (no external service required)
+  const generateCaptcha = () => ({
+    a: Math.floor(Math.random() * 9) + 1,
+    b: Math.floor(Math.random() * 9) + 1,
+  });
+  const [captcha, setCaptcha] = useState(generateCaptcha);
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const captchaValid = useMemo(
+    () => parseInt(captchaAnswer, 10) === captcha.a + captcha.b,
+    [captchaAnswer, captcha]
+  );
+  const refreshCaptcha = useCallback(() => {
+    setCaptcha(generateCaptcha());
+    setCaptchaAnswer("");
+  }, []);
+
   const hasAccountingData = !!accountingResult;
   const hasCorporateData = selectedCorporateServices.length > 0;
   const hasConsultingData = selectedConsultingServices.length > 0;
@@ -46,6 +62,10 @@ export default function Submit() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captchaValid) {
+      toast.error("Please solve the CAPTCHA correctly.");
+      return;
+    }
     setIsSubmitting(true);
 
     try {
@@ -70,6 +90,7 @@ export default function Submit() {
     } catch (error: any) {
       console.error("Submission error:", error);
       toast.error(error.message || "Failed to submit request. Please try again.");
+      refreshCaptcha();
     } finally {
       setIsSubmitting(false);
     }
@@ -483,13 +504,55 @@ export default function Submit() {
               </Card>
             )}
 
+            {/* CAPTCHA */}
+            <Card>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Verification</CardTitle>
+                <CardDescription className="text-sm">
+                  Quick check to confirm you're human.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <div className="flex items-end gap-3 flex-wrap">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="captcha" className="text-sm">
+                      What is {captcha.a} + {captcha.b}? *
+                    </Label>
+                    <Input
+                      id="captcha"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={captchaAnswer}
+                      onChange={(e) => setCaptchaAnswer(e.target.value.replace(/\D/g, ""))}
+                      required
+                      className="min-h-[44px] w-32"
+                      aria-invalid={captchaAnswer.length > 0 && !captchaValid}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={refreshCaptcha}
+                    className="min-h-[44px]"
+                  >
+                    New question
+                  </Button>
+                </div>
+                {captchaAnswer.length > 0 && !captchaValid && (
+                  <p className="text-xs text-destructive mt-2">Incorrect answer, please try again.</p>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Submit */}
             <div className="flex justify-center sm:justify-end">
               <Button
                 type="submit"
                 size="lg"
                 className="w-full sm:w-auto min-h-[44px]"
-                disabled={!contactInfo.name || !contactInfo.email || !contactInfo.phone || !companyInfo.companyName || isSubmitting}
+                disabled={!contactInfo.name || !contactInfo.email || !contactInfo.phone || !companyInfo.companyName || !captchaValid || isSubmitting}
               >
                 {isSubmitting ? (
                   <>
