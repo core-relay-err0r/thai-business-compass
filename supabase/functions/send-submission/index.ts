@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -9,6 +10,68 @@ const corsHeaders = {
 };
 
 const CAPTCHA_SECRET = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "fallback-dev-secret";
+
+// Best-effort rate limit: max attempts per IP per window.
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+
+const supabaseAdmin = createClient(
+  Deno.env.get("SUPABASE_URL") ?? "",
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+  { auth: { persistSession: false } },
+);
+
+async function hashIp(ip: string): Promise<string> {
+  const data = new TextEncoder().encode(ip + "|" + CAPTCHA_SECRET);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Best-effort per-IP rate limit. Returns true if the request is allowed.
+ * On any unexpected error, fails open (returns true) so legitimate users
+ * are never blocked by infrastructure issues.
+ */
+async function checkRateLimit(ip: string): Promise<{ allowed: boolean; retryAfter?: number }> {
+  try {
+    const ipHash = await hashIp(ip);
+    const now = new Date();
+    const windowCutoff = new Date(now.getTime() - RATE_LIMIT_WINDOW_MS);
+
+    const { data: existing } = await supabaseAdmin
+      .from("submission_rate_limits")
+      .select("attempts, window_start")
+      .eq("ip_hash", ipHash)
+      .maybeSingle();
+
+    if (!existing || new Date(existing.window_start) < windowCutoff) {
+      // New window
+      await supabaseAdmin.from("submission_rate_limits").upsert({
+        ip_hash: ipHash,
+        attempts: 1,
+        window_start: now.toISOString(),
+        updated_at: now.toISOString(),
+      });
+      return { allowed: true };
+    }
+
+    if (existing.attempts >= RATE_LIMIT_MAX) {
+      const retryAfter = Math.ceil(
+        (new Date(existing.window_start).getTime() + RATE_LIMIT_WINDOW_MS - now.getTime()) / 1000,
+      );
+      return { allowed: false, retryAfter: Math.max(retryAfter, 1) };
+    }
+
+    await supabaseAdmin
+      .from("submission_rate_limits")
+      .update({ attempts: existing.attempts + 1, updated_at: now.toISOString() })
+      .eq("ip_hash", ipHash);
+    return { allowed: true };
+  } catch (err) {
+    console.error("[rate-limit] error, failing open:", err);
+    return { allowed: true };
+  }
+}
 
 async function verifyCaptcha(token: string, answer: number): Promise<boolean> {
   if (!token || typeof token !== "string" || !token.includes(".")) return false;
@@ -472,6 +535,27 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const data: SubmissionRequest = await req.json();
+
+    // Best-effort rate limit per IP (soft barrier against repeated bot attempts)
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("cf-connecting-ip") ||
+      req.headers.get("x-real-ip") ||
+      "unknown";
+    const rl = await checkRateLimit(ip);
+    if (!rl.allowed) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again shortly." }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": String(rl.retryAfter ?? 60),
+            ...corsHeaders,
+          },
+        },
+      );
+    }
 
     // Server-verified CAPTCHA — required for all submissions
     const captchaToken = (data as any).captchaToken;

@@ -59,6 +59,27 @@ export type Database = {
         }
         Relationships: []
       }
+      submission_rate_limits: {
+        Row: {
+          attempts: number
+          ip_hash: string
+          updated_at: string
+          window_start: string
+        }
+        Insert: {
+          attempts?: number
+          ip_hash: string
+          updated_at?: string
+          window_start?: string
+        }
+        Update: {
+          attempts?: number
+          ip_hash?: string
+          updated_at?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
