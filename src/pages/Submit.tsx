@@ -504,6 +504,48 @@ export default function Submit() {
               </Card>
             )}
 
+            {/* CAPTCHA */}
+            <Card>
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-lg sm:text-xl">Verification</CardTitle>
+                <CardDescription className="text-sm">
+                  Quick check to confirm you're human.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <div className="flex items-end gap-3 flex-wrap">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="captcha" className="text-sm">
+                      What is {captcha.a} + {captcha.b}? *
+                    </Label>
+                    <Input
+                      id="captcha"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={captchaAnswer}
+                      onChange={(e) => setCaptchaAnswer(e.target.value.replace(/\D/g, ""))}
+                      required
+                      className="min-h-[44px] w-32"
+                      aria-invalid={captchaAnswer.length > 0 && !captchaValid}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={refreshCaptcha}
+                    className="min-h-[44px]"
+                  >
+                    New question
+                  </Button>
+                </div>
+                {captchaAnswer.length > 0 && !captchaValid && (
+                  <p className="text-xs text-destructive mt-2">Incorrect answer, please try again.</p>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Submit */}
             <div className="flex justify-center sm:justify-end">
               <Button
