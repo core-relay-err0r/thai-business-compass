@@ -68,23 +68,53 @@ export default function Submit() {
     }
     setIsSubmitting(true);
 
-    try {
-      const { data, error } = await supabase.functions.invoke("send-submission", {
-        body: {
-          contactInfo,
-          companyInfo,
-          notes,
-          accountingResult,
-          selectedCorporateServices,
-          selectedConsultingServices,
-        },
-      });
+    const payload = {
+      contactInfo,
+      companyInfo,
+      notes,
+      accountingResult,
+      selectedCorporateServices,
+      selectedConsultingServices,
+    };
 
-      if (error) {
-        throw error;
+    try {
+      // Try the Vercel-protected endpoint first (BotID verification).
+      // Falls back to direct Supabase invoke for non-Vercel environments
+      // (e.g. Lovable preview) where /api/submit isn't deployed.
+      let usedFallback = false;
+      let res: Response | null = null;
+      try {
+        res = await fetch("/api/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        usedFallback = true;
       }
 
-      console.log("Submission sent successfully:", data);
+      if (res && res.status === 403) {
+        throw new Error("Request blocked. Please try again.");
+      }
+
+      if (!res || res.status === 404 || res.status === 405) {
+        usedFallback = true;
+      }
+
+      if (usedFallback) {
+        const { data, error } = await supabase.functions.invoke("send-submission", {
+          body: payload,
+        });
+        if (error) throw error;
+        console.log("Submission sent (fallback):", data);
+      } else {
+        if (!res!.ok) {
+          const errBody = await res!.text();
+          throw new Error(errBody || "Failed to submit");
+        }
+        console.log("Submission sent via /api/submit");
+      }
+
       setIsSubmitted(true);
       toast.success("Request submitted successfully!");
     } catch (error: any) {
