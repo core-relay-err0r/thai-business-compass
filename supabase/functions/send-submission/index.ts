@@ -8,6 +8,31 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+const CAPTCHA_SECRET = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "fallback-dev-secret";
+
+async function verifyCaptcha(token: string, answer: number): Promise<boolean> {
+  if (!token || typeof token !== "string" || !token.includes(".")) return false;
+  const [payload, sig] = token.split(".");
+  try {
+    const key = await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(CAPTCHA_SECRET),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"],
+    );
+    const expected = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
+    const expectedB64 = btoa(String.fromCharCode(...new Uint8Array(expected)));
+    if (expectedB64 !== sig) return false;
+    const { sum, exp } = JSON.parse(atob(payload));
+    if (typeof sum !== "number" || typeof exp !== "number") return false;
+    if (Date.now() > exp) return false;
+    return Number(answer) === sum;
+  } catch {
+    return false;
+  }
+}
+
 interface SubmissionRequest {
   contactInfo: {
     name: string;
@@ -447,6 +472,17 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const data: SubmissionRequest = await req.json();
+
+    // Server-verified CAPTCHA — required for all submissions
+    const captchaToken = (data as any).captchaToken;
+    const captchaAnswer = (data as any).captchaAnswer;
+    const captchaOk = await verifyCaptcha(String(captchaToken ?? ""), Number(captchaAnswer));
+    if (!captchaOk) {
+      return new Response(JSON.stringify({ error: "Captcha verification failed" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
 
     // Sanitize and truncate user inputs
     if (data.contactInfo) {
