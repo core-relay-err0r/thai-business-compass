@@ -7,6 +7,7 @@ export function setupBotId() {
   initBotId({
     protect: [
       { path: "/api/submit", method: "POST" },
+      { path: "/api/botid-test", method: "POST" },
     ],
   });
 }
