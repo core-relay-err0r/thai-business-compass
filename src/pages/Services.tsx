@@ -6,6 +6,7 @@ import { AccountingWizard } from "@/components/accounting/AccountingWizard";
 import { LiveEstimate } from "@/components/accounting/LiveEstimate";
 import { MobileEstimateSheet } from "@/components/accounting/MobileEstimateSheet";
 import { ConsultingServices } from "@/components/consulting/ConsultingServices";
+import { AIRecommender } from "@/components/services/AIRecommender";
 import { Building2, Calculator, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -159,6 +160,9 @@ export default function Services() {
 
       <section className="py-8 sm:py-10 md:py-16">
         <div className="container px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto mb-8 sm:mb-10">
+            <AIRecommender />
+          </div>
           <div className="flex gap-8 lg:gap-12 max-w-7xl mx-auto">
             {/* Sticky Sidebar - Desktop Only */}
             <div className="hidden lg:block w-72 xl:w-80 flex-shrink-0">

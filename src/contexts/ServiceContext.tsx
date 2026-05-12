@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useState, ReactNode } from "react";
-import { AccountingInputs, AccountingResult } from "@/lib/pricing";
+import { AccountingInputs, AccountingResult, calculateAccountingCost } from "@/lib/pricing";
 
 export interface CorporateService {
   id: string;
@@ -14,6 +14,15 @@ export interface ConsultingService {
   isFrom: boolean;
   timeline: string;
   note?: string;
+}
+
+export interface AIRecommendation {
+  summary: string;
+  corporateServices: CorporateService[];
+  accountingInputs: Partial<AccountingInputs> | null;
+  consultingServices: ConsultingService[];
+  notes: string[];
+  confidence: "high" | "medium" | "low";
 }
 
 interface ServiceState {
@@ -57,6 +66,7 @@ interface ServiceContextType extends ServiceState {
   setNotes: (notes: string) => void;
   clearAll: () => void;
   generateSummary: () => string;
+  applyRecommendation: (rec: AIRecommendation) => void;
 }
 
 const initialState: ServiceState = {
@@ -151,6 +161,38 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
   const clearAll = () => {
     setState(initialState);
+  };
+
+  const applyRecommendation = (rec: AIRecommendation) => {
+    setState((prev) => {
+      const next: ServiceState = {
+        ...prev,
+        selectedCorporateServices: rec.corporateServices,
+        selectedConsultingServices: rec.consultingServices,
+      };
+      if (rec.accountingInputs) {
+        const merged = {
+          accountingIntent: "full",
+          revenueRange: "5k-50k",
+          vatRegistered: "no",
+          employeeCount: 0,
+          employeePurpose: "operations",
+          payrollNeeded: false,
+          transactionVolume: "low",
+          recurringWHT: "no",
+          yearEndStatements: "yes",
+          auditRequired: "no",
+          catchupBacklog: "no",
+          rushFee: false,
+          ...rec.accountingInputs,
+        } as AccountingInputs;
+        const result = calculateAccountingCost(merged);
+        next.accountingInputs = merged;
+        next.accountingResult = result;
+        next.liveAccountingResult = result;
+      }
+      return next;
+    });
   };
 
   const generateSummary = (): string => {
@@ -293,6 +335,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         setNotes,
         clearAll,
         generateSummary,
+        applyRecommendation,
       }}
     >
       {children}
