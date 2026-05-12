@@ -889,8 +889,8 @@ function Step5Results({ result, onAdjust }: Step5Props) {
         </div>
       </div>
 
-      <p className="text-xs sm:text-sm text-muted-foreground text-center">
-        This is an estimate based on standard Thai requirements.
+      <p className="text-xs sm:text-sm text-muted-foreground text-center text-red-600 border-0 bg-red-50">
+        **This is an estimate based on standard Thai requirements.**
       </p>
 
       <div className="flex justify-center">
