@@ -1,4 +1,4 @@
-import { generateText, Output } from "npm:ai";
+import { generateText } from "npm:ai";
 import { z } from "npm:zod";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { createLovableAiGatewayProvider } from "../_shared/ai-gateway.ts";
@@ -152,18 +152,52 @@ Deno.serve(async (req) => {
 - VAT registered: ${parsed.data.vatRegistered}
 - Goal: ${parsed.data.goal}
 
-Return your recommendation following the schema.`;
+Return ONLY a single valid JSON object (no markdown, no prose, no code fences) with this exact shape:
+{
+  "summary": "2-3 sentences",
+  "corporateServiceIds": ["..."],
+  "accountingInputs": {
+    "accountingIntent": "full" | "year-end-only",
+    "revenueRange": "0-5k" | "5k-50k" | "50k-100k" | "100k-1m" | "1m+",
+    "vatRegistered": "yes" | "no" | "not-sure",
+    "employeeCount": number,
+    "payrollNeeded": boolean,
+    "transactionVolume": "low" | "medium" | "high",
+    "recurringWHT": "yes" | "no" | "not-sure",
+    "yearEndStatements": "yes" | "no" | "not-sure",
+    "auditRequired": "yes" | "no" | "not-sure"
+  } | null,
+  "consultingServiceIds": ["..."],
+  "notes": ["..."],
+  "confidence": "high" | "medium" | "low"
+}`;
 
   try {
     const gateway = createLovableAiGatewayProvider(apiKey);
     const model = gateway("google/gemini-3-flash-preview");
 
-    const { experimental_output: output } = await generateText({
+    const { text } = await generateText({
       model,
       system: SYSTEM_PROMPT,
       prompt: userPrompt,
-      experimental_output: Output.object({ schema: RecommendationSchema }),
     });
+
+    // Strip code fences if present and parse JSON
+    const cleaned = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+    let raw: unknown;
+    try { raw = JSON.parse(cleaned); }
+    catch {
+      // try to extract first {...} block
+      const match = cleaned.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error("AI did not return valid JSON");
+      raw = JSON.parse(match[0]);
+    }
+    const validated = RecommendationSchema.safeParse(raw);
+    if (!validated.success) {
+      console.error("Schema validation failed:", validated.error.flatten());
+      throw new Error("AI returned an unexpected response shape");
+    }
+    const output = validated.data;
 
     // Map IDs to full service objects
     const corporateServices = output.corporateServiceIds
