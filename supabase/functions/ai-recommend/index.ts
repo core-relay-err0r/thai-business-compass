@@ -46,6 +46,8 @@ const RecommendationSchema = z.object({
   consultingServiceIds: z.array(z.string()),
   notes: z.array(z.string()).max(6),
   confidence: z.enum(["high", "medium", "low"]),
+  keyDrivers: z.array(z.string()).max(6).optional().default([]),
+  assumptions: z.array(z.string()).max(6).optional().default([]),
 });
 
 const SYSTEM_PROMPT = `You are PND50's friendly Thailand corporate-services advisor.
@@ -75,6 +77,14 @@ Rules:
 - Keep notes brief (max 6), each one actionable.
 - summary is 2–3 plain-English sentences explaining their situation and what's recommended. No marketing fluff.
 - confidence: "high" if catalog clearly fits, "medium" if some assumptions, "low" if user goal is unclear or out-of-scope.`;
+
+// Appended guidance for explainability fields
+const SYSTEM_PROMPT_EXPLAIN = `${SYSTEM_PROMPT}
+
+Explainability:
+- keyDrivers: 2–4 short bullets naming the SPECIFIC user answers that drove the recommendation (e.g. "Foreign-owned + new company → incorporation", "Revenue 100k–1m/mo → VAT mandatory"). Reference the actual inputs.
+- assumptions: 1–4 short bullets stating things you ASSUMED because the user didn't say (e.g. "Assumed annual audit needed (default for Thai Co.)", "Assumed payroll because employees > 0"). If you assumed nothing, return an empty array.
+- Keep each bullet under 90 characters, plain English, no marketing fluff.`;
 
 function getClientIp(req: Request): string {
   return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
@@ -178,7 +188,7 @@ Return ONLY a single valid JSON object (no markdown, no prose, no code fences) w
 
     const { text } = await generateText({
       model,
-      system: SYSTEM_PROMPT,
+      system: SYSTEM_PROMPT_EXPLAIN,
       prompt: userPrompt,
     });
 
@@ -218,6 +228,8 @@ Return ONLY a single valid JSON object (no markdown, no prose, no code fences) w
         accountingInputs: output.accountingInputs,
         notes: output.notes,
         confidence: output.confidence,
+        keyDrivers: output.keyDrivers ?? [],
+        assumptions: output.assumptions ?? [],
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
