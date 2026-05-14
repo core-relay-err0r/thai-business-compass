@@ -38,6 +38,27 @@ const REVENUE_OPTIONS: { value: FormState["revenueRange"]; label: string }[] = [
   { value: "1m+", label: "Over $1,000,000" },
 ];
 
+const STAGE_LABELS: Record<FormState["businessStage"], string> = {
+  new: "New / setting up",
+  existing: "Existing Thai Co.",
+  planning: "Just planning",
+};
+const FOREIGN_LABELS: Record<FormState["foreignOwned"], string> = {
+  yes: "Yes",
+  no: "No",
+  partial: "Partial",
+};
+const VAT_LABELS: Record<FormState["vatRegistered"], string> = {
+  yes: "Yes",
+  no: "No",
+  "not-sure": "Not sure",
+};
+const CONFIDENCE_BLURB: Record<"high" | "medium" | "low", string> = {
+  high: "Your answers map cleanly to our standard service catalog.",
+  medium: "A few details required reasonable assumptions — review them below.",
+  low: "Your situation is unusual or some answers were unclear. Get in touch to refine.",
+};
+
 export function AIRecommender() {
   const navigate = useNavigate();
   const { applyRecommendation } = useServices();
