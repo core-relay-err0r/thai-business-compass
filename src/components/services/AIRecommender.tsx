@@ -308,16 +308,103 @@ export function AIRecommender() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="font-semibold text-base">Your recommendation</h3>
-                      <span className={cn(
-                        "text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium",
-                        result.confidence === "high" && "bg-green-100 text-green-700",
-                        result.confidence === "medium" && "bg-amber-100 text-amber-700",
-                        result.confidence === "low" && "bg-muted text-muted-foreground",
-                      )}>
-                        {result.confidence} confidence
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setExplainOpen((v) => !v)}
+                        aria-expanded={explainOpen}
+                        className={cn(
+                          "group inline-flex items-center gap-1 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-medium transition-colors",
+                          result.confidence === "high" && "bg-green-100 text-green-700 hover:bg-green-200",
+                          result.confidence === "medium" && "bg-amber-100 text-amber-700 hover:bg-amber-200",
+                          result.confidence === "low" && "bg-muted text-muted-foreground hover:bg-accent",
+                        )}
+                        title="See why"
+                      >
+                        <span>{result.confidence} confidence</span>
+                        <Info className="w-3 h-3 opacity-70" />
+                        {explainOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                      </button>
                     </div>
                     <p className="text-sm text-foreground leading-relaxed">{result.summary}</p>
+
+                    {explainOpen && (
+                      <div className="mt-3 p-4 rounded-lg border border-border bg-card/60 space-y-4 text-sm">
+                        <p className="text-muted-foreground">{CONFIDENCE_BLURB[result.confidence]}</p>
+
+                        {submittedForm && (
+                          <div>
+                            <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2">
+                              Your answers
+                            </div>
+                            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5">
+                              <div className="flex justify-between gap-3">
+                                <dt className="text-muted-foreground">Stage</dt>
+                                <dd className="font-medium text-right">{STAGE_LABELS[submittedForm.businessStage]}</dd>
+                              </div>
+                              <div className="flex justify-between gap-3">
+                                <dt className="text-muted-foreground">Foreign-owned</dt>
+                                <dd className="font-medium text-right">{FOREIGN_LABELS[submittedForm.foreignOwned]}</dd>
+                              </div>
+                              <div className="flex justify-between gap-3">
+                                <dt className="text-muted-foreground">Revenue</dt>
+                                <dd className="font-medium text-right">
+                                  {REVENUE_OPTIONS.find((r) => r.value === submittedForm.revenueRange)?.label}
+                                </dd>
+                              </div>
+                              <div className="flex justify-between gap-3">
+                                <dt className="text-muted-foreground">Employees</dt>
+                                <dd className="font-medium text-right">{submittedForm.employeeCount}</dd>
+                              </div>
+                              <div className="flex justify-between gap-3">
+                                <dt className="text-muted-foreground">VAT registered</dt>
+                                <dd className="font-medium text-right">{VAT_LABELS[submittedForm.vatRegistered]}</dd>
+                              </div>
+                            </dl>
+                            {submittedForm.goal && (
+                              <div className="mt-2 pt-2 border-t border-border/60">
+                                <div className="text-muted-foreground text-xs mb-1">Goal</div>
+                                <p className="italic text-foreground/90">"{submittedForm.goal}"</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {result.keyDrivers && result.keyDrivers.length > 0 && (
+                          <div>
+                            <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2">
+                              What drove this recommendation
+                            </div>
+                            <ul className="space-y-1">
+                              {result.keyDrivers.map((d, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
+                                  <span>{d}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {result.assumptions && result.assumptions.length > 0 && (
+                          <div>
+                            <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2">
+                              Assumptions made
+                            </div>
+                            <ul className="space-y-1">
+                              {result.assumptions.map((a, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                  <Info className="w-3.5 h-3.5 text-amber-600 mt-0.5 shrink-0" />
+                                  <span>{a}</span>
+                                </li>
+                              ))}
+                            </ul>
+                            <p className="text-xs text-muted-foreground mt-2">
+                              You can adjust any of these in the calculator after applying.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 
