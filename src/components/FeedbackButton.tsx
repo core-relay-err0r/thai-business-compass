@@ -36,7 +36,7 @@ export function FeedbackButton() {
     setStatus("sending");
     try {
       const { data, error } = await supabase.functions.invoke(
-        "send-feedback-to-telegram",
+        "send-feedback-email",
         {
           body: {
             feedback: feedback.trim(),
