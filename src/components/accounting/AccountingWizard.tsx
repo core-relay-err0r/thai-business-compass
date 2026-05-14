@@ -853,10 +853,29 @@ function Step5Results({ result, onAdjust }: Step5Props) {
                     –{formatPrice(result.totalMonthlyMax)}
                   </span>
                 )}
+                <span className="text-base sm:text-lg font-normal text-muted-foreground">/mo</span>
               </div>
               <div className="text-xs text-muted-foreground mt-1">
                 ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
               </div>
+              {result.annualAddons.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-border/60">
+                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
+                    Billed annually when due
+                  </div>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    Charged once per year, separate from your monthly fee.
+                  </div>
+                  <ul className="space-y-1">
+                    {result.annualAddons.map((a, idx) => (
+                      <li key={idx} className="flex justify-between text-xs sm:text-sm">
+                        <span className="text-muted-foreground">{a.name}</span>
+                        <span className="font-medium">{a.isFrom ? "From " : ""}{formatUSD(a.amount)}/yr</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </>
           )}
         </div>
