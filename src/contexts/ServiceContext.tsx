@@ -23,6 +23,8 @@ export interface AIRecommendation {
   consultingServices: ConsultingService[];
   notes: string[];
   confidence: "high" | "medium" | "low";
+  keyDrivers?: string[];
+  assumptions?: string[];
 }
 
 interface ServiceState {
