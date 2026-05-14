@@ -29,6 +29,17 @@ export function LiveEstimate() {
   const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
   const hasFromConsulting = selectedConsultingServices.some((s) => s.isFrom);
 
+  // Accounting display helpers
+  const annualAddonsTotal = liveAccountingResult
+    ? liveAccountingResult.annualAddons.reduce((sum, a) => sum + a.amount, 0)
+    : 0;
+  const annualAddonsHasFrom = liveAccountingResult
+    ? liveAccountingResult.annualAddons.some((a) => a.isFrom)
+    : false;
+  const monthlyRecurringYearly = liveAccountingResult
+    ? liveAccountingResult.totalMonthly * 12
+    : 0;
+
   const hasAnything = 
     selectedCorporateServices.length > 0 || 
     selectedConsultingServices.length > 0 || 
@@ -93,8 +104,13 @@ export function LiveEstimate() {
                     {formatUSD(liveAccountingResult.totalMonthly)}
                     <span className="text-sm font-normal text-muted-foreground">/mo</span>
                   </div>
+                  {annualAddonsTotal > 0 && (
+                    <div className="text-xs text-muted-foreground">
+                      + {annualAddonsHasFrom ? "from " : ""}{formatUSD(annualAddonsTotal)} billed annually
+                    </div>
+                  )}
                   <div className="text-xs text-muted-foreground">
-                    {liveAccountingResult.annualAddons.some(a => a.isFrom) ? "From " : ""}{formatUSD(liveAccountingResult.totalAnnual)}/yr • Recurring
+                    {annualAddonsHasFrom ? "From " : ""}{formatUSD(liveAccountingResult.totalAnnual)}/yr total
                   </div>
                 </>
               )}
@@ -139,10 +155,18 @@ export function LiveEstimate() {
           </div>
         )}
         {liveAccountingResult && (
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Annual</span>
-            <span className="font-medium">{formatUSD(liveAccountingResult.totalAnnual)}</span>
-          </div>
+          <>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Accounting (monthly × 12)</span>
+              <span className="font-medium">{formatUSD(monthlyRecurringYearly)}</span>
+            </div>
+            {annualAddonsTotal > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Billed annually when due</span>
+                <span className="font-medium">{annualAddonsHasFrom ? "From " : ""}{formatUSD(annualAddonsTotal)}</span>
+              </div>
+            )}
+          </>
         )}
         {selectedConsultingServices.length > 0 && (
           <div className="flex justify-between text-sm">
@@ -256,14 +280,21 @@ export function LiveEstimate() {
               {liveAccountingResult.annualAddons.length > 0 && (
                 <div>
                   <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                    Annual Fees
+                    Billed annually when due
+                  </div>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    These are one-off invoices charged once per year, separate from your monthly fee.
                   </div>
                   {liveAccountingResult.annualAddons.map((item, idx) => (
                     <div key={idx} className="flex justify-between text-sm py-1">
                       <span className="text-muted-foreground">{item.name}</span>
-                      <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}</span>
+                      <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/yr</span>
                     </div>
                   ))}
+                  <div className="flex justify-between text-sm pt-2 mt-1 border-t border-border/50">
+                    <span className="font-medium">Annual subtotal</span>
+                    <span className="font-semibold">{annualAddonsHasFrom ? "From " : ""}{formatUSD(annualAddonsTotal)}/yr</span>
+                  </div>
                 </div>
               )}
 
@@ -298,6 +329,11 @@ export function LiveEstimate() {
                     )}
                     <span className="text-muted-foreground text-sm">/yr</span>
                   </div>
+                  {annualAddonsTotal > 0 && (
+                    <div className="text-xs text-muted-foreground">
+                      = {formatUSD(liveAccountingResult.totalMonthly)}/mo × 12 + {annualAddonsHasFrom ? "from " : ""}{formatUSD(annualAddonsTotal)} annual
+                    </div>
+                  )}
                   <div className="text-xs text-muted-foreground">
                     ≈ ฿{formatPrice(liveAccountingResult.totalAnnual * USD_TO_THB)}/yr
                   </div>
