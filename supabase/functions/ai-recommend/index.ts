@@ -179,7 +179,9 @@ Return ONLY a single valid JSON object (no markdown, no prose, no code fences) w
   } | null,
   "consultingServiceIds": ["..."],
   "notes": ["..."],
-  "confidence": "high" | "medium" | "low"
+  "confidence": "high" | "medium" | "low",
+  "keyDrivers": ["short bullet referencing user answers"],
+  "assumptions": ["short bullet stating each assumption made"]
 }`;
 
   try {
