@@ -125,13 +125,31 @@ export function MobileEstimateSheet() {
                     <span className="font-medium text-amber-600">+{formatUSD(liveAccountingResult.rushSurcharge)}/mo</span>
                   </div>
                 )}
-                {liveAccountingResult.annualAddons.map((item, idx) => (
-                  <div key={idx} className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{item.name}</span>
-                    <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/yr</span>
-                  </div>
-                ))}
+                <div className="flex justify-between pt-2 mt-1 border-t border-border/50 text-sm">
+                  <span className="font-medium">Monthly total</span>
+                  <span className="font-semibold">{formatUSD(liveAccountingResult.totalMonthly)}/mo</span>
+                </div>
               </div>
+
+              {liveAccountingResult.annualAddons.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-border">
+                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
+                    Billed annually when due
+                  </div>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    Charged once per year, separate from your monthly fee.
+                  </div>
+                  <div className="space-y-2">
+                    {liveAccountingResult.annualAddons.map((item, idx) => (
+                      <div key={idx} className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">{item.name}</span>
+                        <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/yr</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="flex justify-between pt-2 mt-2 border-t border-border/50">
                 <span className="text-sm font-medium">Annual Total</span>
                 <span className="font-semibold">
