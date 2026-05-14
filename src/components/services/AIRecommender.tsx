@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sparkles, Loader2, ChevronDown, ChevronUp, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import { Sparkles, Loader2, ChevronDown, ChevronUp, ArrowRight, CheckCircle2, AlertCircle, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -45,6 +45,8 @@ export function AIRecommender() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<FormState>(initialForm);
   const [result, setResult] = useState<AIRecommendation | null>(null);
+  const [submittedForm, setSubmittedForm] = useState<FormState | null>(null);
+  const [explainOpen, setExplainOpen] = useState(false);
 
   const handleSubmit = async () => {
     if (form.goal.trim().length < 3) {
@@ -58,6 +60,8 @@ export function AIRecommender() {
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
       setResult(data as AIRecommendation);
+      setSubmittedForm(form);
+      setExplainOpen(false);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Something went wrong";
       toast({ title: "AI recommendation failed", description: msg, variant: "destructive" });
