@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const resend = new Resend(RESEND_API_KEY);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -20,14 +21,58 @@ function escapeHtml(text: string): string {
 }
 
 Deno.serve(async (req) => {
+  const reqId = crypto.randomUUID().slice(0, 8);
+  const startedAt = Date.now();
+  const log = (...args: unknown[]) => console.log(`[feedback ${reqId}]`, ...args);
+  const errLog = (...args: unknown[]) => console.error(`[feedback ${reqId}]`, ...args);
+
+  log("incoming", {
+    method: req.method,
+    url: req.url,
+    origin: req.headers.get("origin"),
+    referer: req.headers.get("referer"),
+    userAgent: req.headers.get("user-agent"),
+    contentType: req.headers.get("content-type"),
+    contentLength: req.headers.get("content-length"),
+    hasAuth: !!req.headers.get("authorization"),
+    hasApiKey: !!req.headers.get("apikey"),
+  });
+
   if (req.method === "OPTIONS") {
+    log("preflight OPTIONS");
     return new Response(null, { headers: corsHeaders });
   }
 
+  if (!RESEND_API_KEY) {
+    errLog("RESEND_API_KEY env var is missing");
+    return new Response(JSON.stringify({ error: "Email service not configured" }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
-    const { feedback, pageUrl, timestamp } = await req.json();
+    let body: any;
+    try {
+      body = await req.json();
+    } catch (parseErr: any) {
+      errLog("failed to parse JSON body:", parseErr?.message || parseErr);
+      return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { feedback, pageUrl, timestamp } = body || {};
+    log("payload received", {
+      feedbackType: typeof feedback,
+      feedbackLength: typeof feedback === "string" ? feedback.length : null,
+      pageUrl,
+      timestamp,
+    });
 
     if (!feedback || typeof feedback !== "string" || feedback.trim().length === 0) {
+      log("validation failed: empty feedback");
       return new Response(JSON.stringify({ error: "Feedback is required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -35,6 +80,7 @@ Deno.serve(async (req) => {
     }
 
     if (feedback.length > 5000) {
+      log("validation failed: feedback too long", feedback.length);
       return new Response(JSON.stringify({ error: "Feedback must be under 5000 characters" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -64,21 +110,43 @@ Deno.serve(async (req) => {
       </html>
     `;
 
-    const response = await resend.emails.send({
-      from: "PND50 Feedback <noreply@pnd50.com>",
-      to: ["info@pnd50.com", "sebastian@avenkara.ai"],
-      subject: "New Feedback from PND50 website",
-      html,
+    const from = "PND50 Feedback <noreply@pnd50.com>";
+    const to = ["info@pnd50.com", "sebastian@avenkara.ai"];
+    const subject = "New Feedback from PND50 website";
+
+    log("calling Resend.emails.send", { from, to, subject, htmlBytes: html.length });
+    const sendStart = Date.now();
+
+    const response = await resend.emails.send({ from, to, subject, html });
+    const sendMs = Date.now() - sendStart;
+
+    log("Resend response", {
+      ms: sendMs,
+      data: response?.data ?? null,
+      error: response?.error ?? null,
     });
 
-    console.log("Feedback email sent:", response);
+    if (response?.error) {
+      errLog("Resend returned error", response.error);
+      return new Response(
+        JSON.stringify({ error: "Email provider error", details: response.error }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
-    return new Response(JSON.stringify({ success: true }), {
+    log("done OK", { totalMs: Date.now() - startedAt, messageId: response?.data?.id });
+
+    return new Response(JSON.stringify({ success: true, id: response?.data?.id }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: any) {
-    console.error("Error sending feedback email:", error);
+    errLog("unhandled exception", {
+      name: error?.name,
+      message: error?.message,
+      stack: error?.stack,
+      totalMs: Date.now() - startedAt,
+    });
     return new Response(JSON.stringify({ error: error?.message || "Internal server error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
