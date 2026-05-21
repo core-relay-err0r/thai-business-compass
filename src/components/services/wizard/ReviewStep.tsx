@@ -1,6 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, RotateCcw, ChevronDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Send, RotateCcw, ChevronDown, Loader2, Check, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { Block, Totals } from "./useEstimate";
 import { formatThbFromUsd, formatUsd } from "./data";
 
@@ -39,6 +46,42 @@ export function ReviewStep({ blocks, totals, fxRate, onReset, estimateText }: Pr
   const hasFrom = blocks.some((b) => b.enabled && b.from);
   const customItems = totals.dueNow.customItems;
 
+  // Contact form state
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [preferredContact, setPreferredContact] = useState<"email" | "phone" | "whatsapp">("email");
+  const [companyName, setCompanyName] = useState("");
+  const [registrationNumber, setRegistrationNumber] = useState("");
+  const [industry, setIndustry] = useState("");
+
+  // Captcha
+  const [captcha, setCaptcha] = useState<{ a: number; b: number; token: string } | null>(null);
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const [captchaLoading, setCaptchaLoading] = useState(false);
+  const captchaValid = useMemo(
+    () => !!captcha && parseInt(captchaAnswer, 10) === captcha.a + captcha.b,
+    [captchaAnswer, captcha],
+  );
+  const refreshCaptcha = useCallback(async () => {
+    setCaptchaLoading(true);
+    setCaptchaAnswer("");
+    try {
+      const { data, error } = await supabase.functions.invoke("captcha-challenge", { method: "GET" });
+      if (error) throw error;
+      setCaptcha(data as { a: number; b: number; token: string });
+    } catch (err) {
+      console.error("Failed to load captcha:", err);
+      toast.error("Could not load verification. Refresh to try again.");
+    } finally {
+      setCaptchaLoading(false);
+    }
+  }, []);
+  useEffect(() => { refreshCaptcha(); }, [refreshCaptcha]);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
   let alert: { kind: "info" | "warn"; msg: string };
   if (customItems.length > 0) {
     alert = { kind: "warn", msg: `Some items need manual pricing: ${customItems.join(", ")}. Send the request so the scope can be confirmed.` };
@@ -56,8 +99,56 @@ export function ReviewStep({ blocks, totals, fxRate, onReset, estimateText }: Pr
     return b.customItems.length > 0 ? "Manual review required" : empty;
   };
 
-  const handleProceed = () => {
-    navigate("/submit", { state: { prefillNote: estimateText } });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!captchaValid || !captcha) {
+      toast.error("Please solve the verification correctly.");
+      return;
+    }
+    setSubmitting(true);
+    const payload = {
+      contactInfo: { name, email, phone, preferredContact },
+      companyInfo: { companyName, registrationNumber, industry },
+      notes: estimateText,
+      selectedCorporateServices: [],
+      selectedConsultingServices: [],
+      captchaToken: captcha.token,
+      captchaAnswer: parseInt(captchaAnswer, 10),
+    };
+    try {
+      let res: Response | null = null;
+      let useFallback = false;
+      try {
+        res = await fetch("/api/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch { useFallback = true; }
+      if (res && res.status === 403) throw new Error("Request blocked. Please try again.");
+      if (!res || res.status === 404 || res.status === 405) useFallback = true;
+      if (useFallback) {
+        const { error } = await supabase.functions.invoke("send-submission", { body: payload });
+        if (error) throw error;
+      } else if (!res!.ok) {
+        const errBody = await res!.text();
+        throw new Error(errBody || "Failed to submit");
+      }
+      setSubmitted(true);
+      toast.success("Request submitted successfully!");
+    } catch (err: any) {
+      console.error("Submission error:", err);
+      toast.error(err?.message || "Failed to submit request. Please try again.");
+      refreshCaptcha();
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleSuccessClose = () => {
+    setSubmitted(false);
+    onReset();
+    navigate("/");
   };
 
   return (
@@ -90,11 +181,98 @@ export function ReviewStep({ blocks, totals, fxRate, onReset, estimateText }: Pr
         {alert.msg}
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        <Button size="lg" onClick={handleProceed}>
-          Proceed to request <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
+      <form onSubmit={handleSubmit} className="space-y-6 rounded-lg border border-border p-5 sm:p-6 bg-card">
+        <div>
+          <h3 className="text-lg font-semibold">Your details</h3>
+          <p className="text-sm text-muted-foreground mt-1">We'll email this estimate and the breakdown to our team and reply within 1 business day.</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="rv-name">Full name *</Label>
+            <Input id="rv-name" required value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="rv-email">Email *</Label>
+            <Input id="rv-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="rv-phone">Phone *</Label>
+            <Input id="rv-phone" type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="rv-company">Company name *</Label>
+            <Input id="rv-company" required value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="rv-reg">Registration number (optional)</Label>
+            <Input id="rv-reg" value={registrationNumber} onChange={(e) => setRegistrationNumber(e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="rv-industry">Industry (optional)</Label>
+            <Input id="rv-industry" value={industry} onChange={(e) => setIndustry(e.target.value)} />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Preferred contact method</Label>
+          <RadioGroup
+            value={preferredContact}
+            onValueChange={(v) => setPreferredContact(v as "email" | "phone" | "whatsapp")}
+            className="flex flex-wrap gap-4"
+          >
+            {[{ v: "email", l: "Email" }, { v: "phone", l: "Phone" }, { v: "whatsapp", l: "WhatsApp" }].map((o) => (
+              <Label key={o.v} htmlFor={`rv-pc-${o.v}`} className="flex items-center gap-2 cursor-pointer">
+                <RadioGroupItem value={o.v} id={`rv-pc-${o.v}`} />
+                <span className="text-sm">{o.l}</span>
+              </Label>
+            ))}
+          </RadioGroup>
+        </div>
+
+        <div className="space-y-2 rounded-md border border-border bg-muted/30 p-4">
+          <Label htmlFor="rv-captcha">
+            Verification: what is {captcha ? `${captcha.a} + ${captcha.b}` : "…"}? *
+          </Label>
+          <div className="flex gap-2">
+            <Input
+              id="rv-captcha"
+              inputMode="numeric"
+              required
+              value={captchaAnswer}
+              onChange={(e) => setCaptchaAnswer(e.target.value)}
+              className="max-w-[140px]"
+              disabled={captchaLoading || !captcha}
+            />
+            <Button type="button" variant="outline" size="icon" onClick={refreshCaptcha} disabled={captchaLoading} title="Refresh">
+              <RefreshCw className={`w-4 h-4 ${captchaLoading ? "animate-spin" : ""}`} />
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          <Button type="submit" size="lg" disabled={submitting || !captchaValid}>
+            {submitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending…</> : <><Send className="w-4 h-4 mr-2" /> Submit request</>}
+          </Button>
+        </div>
+      </form>
+
+      <Dialog open={submitted} onOpenChange={(open) => { if (!open) handleSuccessClose(); }}>
+        <DialogContent>
+          <DialogHeader>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mx-auto mb-3">
+              <Check className="h-6 w-6 text-primary" />
+            </div>
+            <DialogTitle className="text-center">Request submitted</DialogTitle>
+            <DialogDescription className="text-center">
+              Thank you. We've received your estimate and will reply with next steps within 1 business day.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button onClick={handleSuccessClose}>Back to home</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <details className="rounded-lg border border-border">
         <summary className="flex items-center justify-between px-4 py-3 cursor-pointer text-sm font-medium">
