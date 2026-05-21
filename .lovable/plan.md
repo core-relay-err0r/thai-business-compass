@@ -1,99 +1,55 @@
-## AI Smart Recommender for /services
+## Goal
 
-A one-shot AI assistant at the top of the /services page. The user answers a short form about their business; AI returns a tailored recommendation and can act on the page (pre-fill the Accounting Calculator, select corporate services, scroll to a section, or pre-fill the /submit form).
+Replace the current /services page with the uploaded reference's 4-step wizard:
+**Monthly accounting → Year-end & audit → Company services → Review**, adopting its pricing constants (audit bands, $300 base monthly + $100/50 txns, $100/50 VAT, $100/50 WHT, $100 per 5 employees payroll, etc.) as the new source of truth in `src/lib/pricing.ts`.
 
-### User flow
+The wizard lives on /services and replaces the existing 3-section layout (CorporateServices / AccountingWizard / ConsultingServices). Review step shows totals + estimate detail + CTA to /submit (no in-page checkout, per project rules).
 
-1. New "Not sure where to start? Get an AI recommendation" card appears above the three sections on /services.
-2. User clicks → modal/inline panel opens with a short form:
-   - Business stage (new company / existing Thai Co. / planning to set up)
-   - Foreign-owned? (yes/no/partial)
-   - Monthly revenue range (reuse pricing.ts ranges)
-   - Employees (slider 0–30)
-   - VAT registered (yes/no/not sure)
-   - Main goal (free text, 1–2 sentences: "what are you trying to achieve?")
-3. Submit → loading state → AI returns:
-   - **Plain-English summary** of their situation and what they need
-   - **Recommended Corporate services** (list with reasons)
-   - **Recommended Accounting setup** (mapped to AccountingInputs)
-   - **Recommended Consulting topics** (if any)
-   - Three action buttons:
-     - "Apply to calculator" → pre-fills Accounting Wizard inputs + selects corporate services in ServiceContext, scrolls to Live Estimate
-     - "Refine answers" → reopens form with values
-     - "Proceed to request" → navigates to /submit with the recommendation pre-filled in the message
-
-### Why "Explain + recommend + act"
-
-The AI doesn't replace the wizard — it bootstraps it. After applying, the user can still tweak the calculator manually. This stays consistent with the project's self-discovery goal (no checkout, no sales pitch).
-
-### Architecture
-
-```text
-/services page
-   └── AIRecommender (new component)
-         ├── form (controlled state)
-         ├── calls supabase.functions.invoke("ai-recommend")
-         └── on result → render structured cards + action buttons
-                          └── ServiceContext.applyRecommendation(rec)
-```
-
-### Backend (Supabase Edge Function: `ai-recommend`)
-
-- Uses Lovable AI Gateway via Vercel AI SDK (`google/gemini-3-flash-preview`)
-- Validates input with Zod
-- Reuses CAPTCHA + rate limiting pattern from existing `send-submission` function (basic IP throttle to prevent abuse)
-- Uses **structured output** (`Output.object` + Zod schema) so the response is typed JSON, not free-form text
-- System prompt embeds:
-  - PND50 service catalog (corporate services list, accounting service rules, consulting topics) — built from `src/lib/pricing.ts` constants exported to a shared JSON
-  - Thai compliance basics (VAT thresholds, audit requirements, payroll/SSO rules)
-  - Hard rules: no pricing promises, no legal advice, always recommend "Get in touch" for edge cases (per copywriting memory)
-
-### Structured response schema
-
-```ts
-{
-  summary: string,                      // 2–3 sentence plain-English explanation
-  corporateServices: string[],          // service IDs from pricing.ts
-  accountingInputs: {                   // mirrors AccountingInputs partial
-    accountingIntent, revenueRange, vatRegistered,
-    employeeCount, payrollNeeded, transactionVolume,
-    yearEndStatements, auditRequired, ...
-  },
-  consultingTopics: string[],           // topic IDs
-  notes: string[],                      // bullet caveats / things to discuss
-  confidence: "high" | "medium" | "low"
-}
-```
-
-### Frontend wiring
-
-- New file: `src/components/services/AIRecommender.tsx`
-- New context method on `ServiceContext`:
-  - `applyRecommendation(rec)` → sets `accountingInputs`, calls `calculateAccountingCost`, sets selected corporate + consulting services
-- Add component at top of `Services.tsx` above the 3-column layout, with subtle CTA styling (matches premium dark-on-light system)
-- Mobile: same flow, opens in a Sheet
-- Loading: shimmer on result cards
-- Errors: surface 429 (rate limit) and 402 (credits) clearly with retry/contact fallbacks
-
-### Files to touch
+## Files
 
 | File | Change |
 |---|---|
-| `supabase/functions/ai-recommend/index.ts` | New edge function, Zod validation, AI SDK + Lovable Gateway, structured Output |
-| `supabase/functions/_shared/ai-gateway.ts` | New shared provider helper |
-| `supabase/functions/_shared/catalog.ts` | New: catalog snapshot fed into system prompt |
-| `src/components/services/AIRecommender.tsx` | New main component (form + result + actions) |
-| `src/contexts/ServiceContext.tsx` | Add `applyRecommendation` method |
-| `src/pages/Services.tsx` | Mount `<AIRecommender />` above sections |
-| `src/lib/pricing.ts` | Export catalog metadata for the shared catalog file (no logic changes) |
+| `src/lib/pricing.ts` | Rewrite constants: AUDIT_BANDS, CORPORATE_SERVICES, OFFICE_PRICES, DOCUMENT_SERVICES, CONSULTING_SERVICES, VAT_RATE=0.07, monthly band fn, transactionFee fn, payroll fn. Export helpers `vatOf`, `totalWithVat`, `priceImpactText`. Keep AccountingInputs shape extended with new fields. |
+| `src/contexts/ServiceContext.tsx` | Replace state with the reference's input model: monthly (transactions, employees, vatReporting+vatTxns, wht+whtTxns, rush), annual (fiscalYears, revenueBand, catchUp, backlogYears), corporate (map of booleans + office contract enums + taxResidenceQuantity), consulting (map). Provide `calculateAll()` returning monthly/annual/oneTime/yearly blocks and grand totals. Drop the old applyRecommendation if it depends on removed fields (adapt to new shape). |
+| `src/pages/Services.tsx` | New layout: top header (title + FX rate), stepper nav (Monthly / Year-end / Company / Review), one panel visible at a time, prev/next/skip controls, sticky LiveEstimate. |
+| `src/components/services/steps/MonthlyStep.tsx` | NEW — fields & live notes per reference |
+| `src/components/services/steps/AnnualStep.tsx` | NEW |
+| `src/components/services/steps/CompanyStep.tsx` | NEW (Setup & office, Review & changes, Documents & legalization, Advisory) |
+| `src/components/services/steps/ReviewStep.tsx` | NEW — totals cards, details accordion, "Proceed to request" → /submit prefilled |
+| `src/components/services/PriceBadge.tsx` | NEW — shared "+$X before VAT / +$Y incl. VAT" badge |
+| `src/components/accounting/AccountingWizard.tsx` | Delete (replaced by stepped layout) |
+| `src/components/accounting/LiveEstimate.tsx` | Refactor to consume new context shape, keep sticky panel + mobile sheet |
+| `src/components/corporate/CorporateServices.tsx`, `ConsultingServices.tsx` | Delete (folded into CompanyStep) |
+| `src/components/services/AIRecommender.tsx` | Keep, but rewire `applyRecommendation` to new context shape |
+| `src/pages/Submit.tsx` | Accept prefilled `estimate` text via location.state and show it in the message |
 
-### Out of scope (not in this plan)
+## UX rules (from project memory)
 
-- Multi-turn chat (we agreed on one-shot recommender)
-- Saving recommendations to database / user accounts
-- Voice input
-- Email of the recommendation (could add later by routing through `send-submission`)
+- "Get in touch" / "Proceed to request" — never "Contact us" / "Checkout".
+- Dark-on-light premium, brand blue accent, ample whitespace, semantic tokens only.
+- Mobile: stepper collapses to dots, LiveEstimate via MobileEstimateSheet.
+- One H1 ("Services & estimate"), keep SEO head.
 
-### Open question for implementation
+## Structure
 
-Should the AI recommender be **always visible** at the top of /services, or **collapsed by default** behind a "Get an AI recommendation" button? Default plan: collapsed by default to keep the page calm; one click expands it. You can change this when I implement.
+```text
+/services
+  ├── header (title, FX input)
+  ├── Stepper (1 Monthly · 2 Year-end · 3 Company · 4 Review)
+  ├── <main grid>
+  │     ├── Step panel (one of Monthly/Annual/Company/Review)
+  │     └── Sticky LiveEstimate (desktop) / Sheet trigger (mobile)
+  └── Step controls (Back · Status · Skip · Next)
+```
+
+## Out of scope
+
+- Copy-to-clipboard estimate (Review CTA goes straight to /submit instead — aligns with "no checkout" rule).
+- Email quote button inside wizard (Submit form already handles that).
+- AIRecommender layout rework (kept above stepper, untouched visually).
+- Touching telegram/feedback/clarity code.
+
+## Risks
+
+- ServiceContext shape change ripples into AIRecommender and any code reading old fields — must update both in same pass to keep build green.
+- LiveEstimate currently couples tightly to old wizard; needs rewrite against new selectors.
