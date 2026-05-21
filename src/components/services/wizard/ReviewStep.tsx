@@ -256,7 +256,7 @@ export function ReviewStep({ blocks, totals, fxRate, onReset, estimateText }: Pr
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" size="lg" disabled={submitting || !captchaValid}>
+          <Button type="submit" size="lg" disabled={submitting}>
             {submitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending…</> : <><Send className="w-4 h-4 mr-2" /> Submit request</>}
           </Button>
         </div>
