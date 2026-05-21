@@ -60,22 +60,20 @@ export function ServicesWizard() {
         </div>
       </header>
 
-      {/* Stepper */}
+      {/* Stepper (display only) */}
       <nav aria-label="Wizard steps" className="grid grid-cols-4 gap-2 sm:gap-3">
         {STEPS.map((s, i) => {
           const active = i === step;
           const complete = i < step;
           return (
-            <button
+            <div
               key={s.id}
-              type="button"
-              onClick={() => goto(i)}
               aria-current={active ? "step" : undefined}
               className={cn(
-                "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-left transition-colors min-h-[52px]",
+                "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-left min-h-[52px] select-none",
                 active ? "border-primary bg-primary/5 text-foreground"
-                  : complete ? "border-border bg-muted/30 text-muted-foreground hover:text-foreground"
-                  : "border-border bg-card text-muted-foreground hover:text-foreground"
+                  : complete ? "border-border bg-muted/30 text-muted-foreground"
+                  : "border-border bg-card text-muted-foreground"
               )}
             >
               <span className={cn(
@@ -89,12 +87,12 @@ export function ServicesWizard() {
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-medium truncate">{s.title}</div>
               </div>
-            </button>
+            </div>
           );
         })}
       </nav>
 
-      <p className="text-xs text-muted-foreground -mt-4">Go step by step, or jump to any section. The estimate updates live.</p>
+      <p className="text-xs text-muted-foreground -mt-4">Go step by step. The estimate updates live.</p>
 
       {/* Layout */}
       <div className="grid lg:grid-cols-[1fr_320px] gap-8">
