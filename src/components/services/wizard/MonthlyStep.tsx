@@ -117,13 +117,19 @@ export function OptionRow({
   checked, onChange, title, desc, badge,
 }: { checked: boolean; onChange: (v: boolean) => void; title: string; desc?: string; badge?: React.ReactNode }) {
   return (
-    <label className="flex items-start gap-3 rounded-lg border border-border bg-card px-4 py-3 cursor-pointer hover:border-primary/40 transition-colors">
-      <Checkbox checked={checked} onCheckedChange={(v) => onChange(!!v)} className="mt-1" />
-      <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm">{title}</div>
-        {desc && <div className="text-xs text-muted-foreground mt-0.5">{desc}</div>}
+    <label className="flex flex-col rounded-lg border border-border bg-card px-4 py-3 cursor-pointer hover:border-primary/40 transition-colors">
+      <div className="flex items-start gap-3">
+        <Checkbox checked={checked} onCheckedChange={(v) => onChange(!!v)} className="mt-1" />
+        <div className="flex-1 min-w-0">
+          <div className="font-medium text-sm">{title}</div>
+          {desc && <div className="text-xs text-muted-foreground mt-0.5">{desc}</div>}
+        </div>
       </div>
-      {badge && <div className="shrink-0">{badge}</div>}
+      {badge && (
+        <div className="mt-3 pt-3 border-t border-border/60 flex justify-end">
+          {badge}
+        </div>
+      )}
     </label>
   );
 }
