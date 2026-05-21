@@ -105,6 +105,11 @@ export function ReviewStep({ blocks, totals, fxRate, onReset, estimateText }: Pr
       toast.error("Please solve the verification correctly.");
       return;
     }
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!emailOk) {
+      toast.error("Please enter a valid email address (e.g. you@example.com).");
+      return;
+    }
     setSubmitting(true);
     const payload = {
       contactInfo: { name, email, phone, preferredContact },
