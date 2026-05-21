@@ -119,11 +119,11 @@ export function OptionRow({
   return (
     <label className="flex items-start gap-3 rounded-lg border border-border bg-card px-4 py-3 cursor-pointer hover:border-primary/40 transition-colors">
       <Checkbox checked={checked} onCheckedChange={(v) => onChange(!!v)} className="mt-1" />
-      <div className="flex-1 min-w-0 space-y-1">
-        {badge && <div className="flex justify-end">{badge}</div>}
-        <div className="font-medium text-sm break-words">{title}</div>
-        {desc && <div className="text-xs text-muted-foreground">{desc}</div>}
+      <div className="flex-1 min-w-0">
+        <div className="font-medium text-sm">{title}</div>
+        {desc && <div className="text-xs text-muted-foreground mt-0.5">{desc}</div>}
       </div>
+      {badge && <div className="shrink-0">{badge}</div>}
     </label>
   );
 }
