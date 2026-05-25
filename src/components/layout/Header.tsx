@@ -2,31 +2,15 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { Calculator, Building2, MessageSquare, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
+const CALCULATOR_URL = "https://calculator.pnd50.com";
 export function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isStartModalOpen, setIsStartModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const serviceLinks = [{
-    href: "/services#corporate",
-    label: "Corporate",
-    description: "One-time corporate services",
-    icon: Building2
-  }, {
-    href: "/services#accounting",
-    label: "Accounting",
-    description: "Calculate monthly + yearly cost",
-    icon: Calculator
-  }, {
-    href: "/services#consulting",
-    label: "Consulting",
-    description: "Business problem solving",
-    icon: MessageSquare
-  }];
   const startOptions = [{
     href: "/services#corporate",
     icon: Building2,
@@ -43,21 +27,6 @@ export function Header() {
     title: "Consulting",
     description: "Business problem solving"
   }];
-  const isServiceActive = location.pathname === "/services" || location.pathname.startsWith("/services");
-  const handleServiceClick = (href: string, e: React.MouseEvent) => {
-    const hash = href.split("#")[1];
-    if (hash && location.pathname === "/services") {
-      e.preventDefault();
-      // Use setTimeout to allow the dropdown to close first
-      setTimeout(() => {
-        const element = document.getElementById(hash);
-        element?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }, 100);
-    }
-  };
   return <>
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 sm:h-16 items-center justify-between">
@@ -80,34 +49,15 @@ export function Header() {
                 Blog
               </Link>
 
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger className={cn("text-sm font-medium bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent data-[active]:bg-transparent h-auto p-0", isServiceActive ? "text-foreground" : "text-muted-foreground")}>
-                      <Link to="/services" className="hover:text-foreground transition-colors" onClick={e => e.stopPropagation()}>
-                        Our Services
-                      </Link>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid w-[280px] gap-1 p-2">
-                        {serviceLinks.map(link => <li key={link.href}>
-                            <NavigationMenuLink asChild>
-                              <Link to={link.href} onClick={e => handleServiceClick(link.href, e)} className={cn("flex items-start gap-3 select-none rounded-md p-3 leading-none no-underline outline-none transition-all duration-200 hover:bg-foreground hover:text-background hover:translate-x-1 focus:bg-foreground focus:text-background [&:hover_p]:text-background/70", location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" && "bg-foreground text-background")}>
-                                <link.icon className="h-5 w-5 mt-0.5 shrink-0" />
-                                <div>
-                                  <div className="text-sm font-medium leading-none">{link.label}</div>
-                                  <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
-                                    {link.description}
-                                  </p>
-                                </div>
-                              </Link>
-                            </NavigationMenuLink>
-                          </li>)}
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
+              <a
+                href={CALCULATOR_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <Calculator className="h-4 w-4" />
+                Cost Calculator
+              </a>
             </nav>
           </div>
 
@@ -128,13 +78,16 @@ export function Header() {
             <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.pathname === "/contact" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
               Contact
             </Link>
-            <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pt-3 pb-2 px-2">
-              Our Services
-            </div>
-            {serviceLinks.map(link => <Link key={link.href} to={link.href} onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-4 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.hash === `#${link.href.split("#")[1]}` && location.pathname === "/services" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
-                <link.icon className="h-4 w-4 mr-3" />
-                {link.label}
-              </Link>)}
+            <a
+              href={CALCULATOR_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center"
+            >
+              <Calculator className="h-4 w-4 mr-3" />
+              Cost Calculator
+            </a>
             <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/40">
               <Link to="/submit" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="outline" size="default" className="w-full min-h-[44px]">

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
@@ -42,17 +41,17 @@ export function BottomCTA() {
       <AnimatedSection className="container relative z-10 px-4 sm:px-6">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-foreground">
-            Ready to get started?
+            Not sure what services you need?
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
-            Understand your requirements and get transparent pricing in minutes.
+            Use our cost estimate tool to understand monthly accounting, year-end audit, company changes, documents, and advisory costs before requesting a final quote.
           </p>
-          <Link to="/services">
+          <a href="https://calculator.pnd50.com" target="_blank" rel="noopener noreferrer">
             <Button size="lg" className="group neumorphic-button min-h-[44px]">
-              See what applies to you
+              Open Cost Calculator
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-          </Link>
+          </a>
         </div>
       </AnimatedSection>
     </section>
