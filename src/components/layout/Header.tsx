@@ -51,8 +51,6 @@ export function Header() {
 
               <a
                 href={CALCULATOR_URL}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 <Calculator className="h-4 w-4" />
@@ -80,8 +78,6 @@ export function Header() {
             </Link>
             <a
               href={CALCULATOR_URL}
-              target="_blank"
-              rel="noopener noreferrer"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center"
             >

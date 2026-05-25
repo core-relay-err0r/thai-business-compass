@@ -77,7 +77,7 @@ export default function About() {
                 navigate Thai accounting, corporate tax, and compliance.
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}>
-                <a href="https://calculator.pnd50.com" target="_blank" rel="noopener noreferrer" className="inline-block mt-8 sm:mt-10">
+                <a href="https://calculator.pnd50.com" className="inline-block mt-8 sm:mt-10">
                   <Button size="lg" className="neumorphic-button group min-h-[56px] text-lg px-8">
                     Open Cost Calculator
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -188,7 +188,7 @@ export default function About() {
             Discover what your business needs with our interactive tools, or get in touch directly.
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-            <a href="https://calculator.pnd50.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://calculator.pnd50.com">
               <Button size="lg" className="min-h-[44px] w-full sm:w-auto">
                 Open Cost Calculator
                 <ArrowRight className="ml-2 h-4 w-4" />
