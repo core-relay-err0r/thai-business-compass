@@ -188,12 +188,12 @@ export default function About() {
             Discover what your business needs with our interactive tools, or get in touch directly.
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-            <Link to="/services">
+            <a href="https://calculator.pnd50.com" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="min-h-[44px] w-full sm:w-auto">
-                See what applies to you
+                Open Cost Calculator
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-            </Link>
+            </a>
             <Link to="/contact">
               <Button variant="outline" size="lg" className="min-h-[44px] w-full sm:w-auto">
                 Get in touch
