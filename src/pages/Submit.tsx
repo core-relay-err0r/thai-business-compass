@@ -1,5 +1,4 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,17 +26,6 @@ export default function Submit() {
     generateSummary,
     clearAll,
   } = useServices();
-
-  const location = useLocation();
-
-  // Prefill notes with estimate text passed from /services wizard
-  useEffect(() => {
-    const prefill = (location.state as { prefillNote?: string } | null)?.prefillNote;
-    if (prefill && !notes) {
-      setNotes(prefill);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state]);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
