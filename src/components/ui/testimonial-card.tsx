@@ -31,6 +31,8 @@ export interface ClientsSectionProps {
   testimonials: Testimonial[];
   primaryActionLabel: string;
   secondaryActionLabel: string;
+  primaryActionHref?: string;
+  secondaryActionHref?: string;
   className?: string;
 }
 
@@ -126,6 +128,8 @@ export const ClientsSection = ({
   testimonials,
   primaryActionLabel,
   secondaryActionLabel,
+  primaryActionHref = "#",
+  secondaryActionHref = "#",
   className,
 }: ClientsSectionProps) => {
   return (
@@ -153,10 +157,24 @@ export const ClientsSection = ({
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button variant="outline" size="lg">
-                {secondaryActionLabel}
+              <Button asChild variant="outline" size="lg">
+                <a
+                  href={secondaryActionHref}
+                  target={secondaryActionHref.startsWith("http") ? "_blank" : undefined}
+                  rel={secondaryActionHref.startsWith("http") ? "noopener noreferrer" : undefined}
+                >
+                  {secondaryActionLabel}
+                </a>
               </Button>
-              <Button size="lg">{primaryActionLabel}</Button>
+              <Button asChild size="lg">
+                <a
+                  href={primaryActionHref}
+                  target={primaryActionHref.startsWith("http") ? "_blank" : undefined}
+                  rel={primaryActionHref.startsWith("http") ? "noopener noreferrer" : undefined}
+                >
+                  {primaryActionLabel}
+                </a>
+              </Button>
             </div>
           </div>
 
