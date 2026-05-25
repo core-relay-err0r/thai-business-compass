@@ -152,13 +152,15 @@ export default function Blog() {
               Our English-speaking team is ready to help you navigate Thai accounting and compliance.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link 
-                to="/services"
+              <a
+                href="https://calculator.pnd50.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
-                See what applies to you
+                Open Cost Calculator
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
               <Link 
                 to="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-border bg-background text-foreground rounded-lg font-medium hover:border-foreground/30 transition-colors"
