@@ -46,7 +46,7 @@ export function BottomCTA() {
           <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
             Use our cost estimate tool to understand monthly accounting, year-end audit, company changes, documents, and advisory costs before requesting a final quote.
           </p>
-          <a href="https://calculator.pnd50.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://calculator.pnd50.com">
             <Button size="lg" className="group neumorphic-button min-h-[44px]">
               Open Cost Calculator
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

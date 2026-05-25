@@ -158,22 +158,10 @@ export const ClientsSection = ({
 
             <div className="flex flex-wrap gap-3">
               <Button asChild variant="outline" size="lg">
-                <a
-                  href={secondaryActionHref}
-                  target={secondaryActionHref.startsWith("http") ? "_blank" : undefined}
-                  rel={secondaryActionHref.startsWith("http") ? "noopener noreferrer" : undefined}
-                >
-                  {secondaryActionLabel}
-                </a>
+                <a href={secondaryActionHref}>{secondaryActionLabel}</a>
               </Button>
               <Button asChild size="lg">
-                <a
-                  href={primaryActionHref}
-                  target={primaryActionHref.startsWith("http") ? "_blank" : undefined}
-                  rel={primaryActionHref.startsWith("http") ? "noopener noreferrer" : undefined}
-                >
-                  {primaryActionLabel}
-                </a>
+                <a href={primaryActionHref}>{primaryActionLabel}</a>
               </Button>
             </div>
           </div>

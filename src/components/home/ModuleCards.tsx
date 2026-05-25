@@ -65,7 +65,7 @@ export function ModuleCards() {
                   ))}
                 </ul>
                 <div className="mt-auto">
-                  <a href={module.href} target="_blank" rel="noopener noreferrer">
+                  <a href={module.href}>
                     <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px]">
                       {module.cta}
                       <ArrowRight className="ml-2 h-4 w-4" />

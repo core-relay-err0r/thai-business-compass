@@ -154,8 +154,6 @@ export default function Blog() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
                 href="https://calculator.pnd50.com"
-                target="_blank"
-                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
                 Open Cost Calculator
