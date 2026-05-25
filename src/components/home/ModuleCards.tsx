@@ -1,26 +1,30 @@
-import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calculator, Building2, MessageSquare, ArrowRight } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
+const CALCULATOR_URL = "https://calculator.pnd50.com";
+
 const modules = [
   {
-    href: "/corporate",
+    href: CALCULATOR_URL,
+    cta: "Estimate setup cost",
     icon: Building2,
     title: "Corporate Services",
     description: "Choose the event (incorporation, director change, share transfer). Get scope + one-time price.",
     features: ["Company registration Thailand", "Director changes", "Share transfers", "Business setup Thailand"],
   },
   {
-    href: "/accounting",
+    href: CALCULATOR_URL,
+    cta: "Check monthly cost",
     icon: Calculator,
     title: "Accounting",
     description: "Calculate monthly + yearly cost while learning what's required.",
     features: ["Monthly bookkeeping", "Corporate tax filing", "VAT reporting", "Payroll services Thailand"],
   },
   {
-    href: "/consulting",
+    href: CALCULATOR_URL,
+    cta: "Check advisory options",
     icon: MessageSquare,
     title: "Consulting",
     description: "Choose the business problem. Get expected outcomes + price range.",
@@ -61,12 +65,12 @@ export function ModuleCards() {
                   ))}
                 </ul>
                 <div className="mt-auto">
-                  <Link to={module.href}>
+                  <a href={module.href} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px]">
-                      Get started
+                      {module.cta}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
-                  </Link>
+                  </a>
                 </div>
               </CardContent>
             </Card>
