@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { ClientsSection, type Stat, type Testimonial } from "@/components/ui/testimonial-card";
 import yuryAvatar from "@/assets/testimonials/yury.jpg";
 import annaAvatar from "@/assets/testimonials/anna.jpg";
@@ -46,7 +45,9 @@ export function Testimonials() {
       stats={stats}
       testimonials={testimonials}
       primaryActionLabel="Get in Touch"
-      secondaryActionLabel="Our Services"
+      primaryActionHref="/contact"
+      secondaryActionLabel="Cost Calculator"
+      secondaryActionHref="https://calculator.pnd50.com"
       className="bg-muted/30 border-y border-border/40"
     />
   );
