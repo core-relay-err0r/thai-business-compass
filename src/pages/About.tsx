@@ -77,12 +77,12 @@ export default function About() {
                 navigate Thai accounting, corporate tax, and compliance.
               </motion.p>
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}>
-                <Link to="/services" className="inline-block mt-8 sm:mt-10">
+                <a href="https://calculator.pnd50.com" target="_blank" rel="noopener noreferrer" className="inline-block mt-8 sm:mt-10">
                   <Button size="lg" className="neumorphic-button group min-h-[56px] text-lg px-8">
-                    See what applies to you
+                    Open Cost Calculator
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Button>
-                </Link>
+                </a>
               </motion.div>
 
               {/* Mobile Stats Preview */}
