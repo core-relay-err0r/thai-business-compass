@@ -33,7 +33,7 @@ export function HeroSection() {
           href: "https://calculator.pnd50.com"
         }} 
         secondaryAction={{
-          text: "Schedule Consultation",
+          text: "Contact us",
           href: "/contact"
         }} 
         tagline="Understand first. Decide later. No pressure." 
