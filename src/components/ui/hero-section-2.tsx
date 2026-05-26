@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { PhoneCall } from 'lucide-react';
 
 // Icon component for contact details
 const InfoIcon = ({
@@ -189,10 +190,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 </a>
                 {secondaryAction && <a href={secondaryAction.href} className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm font-medium rounded-lg border border-border bg-background transition-colors group min-h-[44px]">
                     {secondaryAction.text}
-                    <svg className="w-4 h-4 opacity-0 -ml-4 transition-all group-hover:opacity-100 group-hover:ml-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
+                    <PhoneCall className="w-4 h-4 opacity-0 -ml-4 transition-all group-hover:opacity-100 group-hover:ml-0" />
                   </a>}
               </motion.div>
 
