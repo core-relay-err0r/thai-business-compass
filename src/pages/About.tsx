@@ -191,7 +191,6 @@ export default function About() {
             <a href="https://calculator.pnd50.com">
               <Button size="lg" className="min-h-[44px] w-full sm:w-auto">
                 Open Cost Calculator
-                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </a>
             <Link to="/contact">
