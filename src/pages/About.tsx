@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { Award, Users, ThumbsUp, MessageCircle, ShieldCheck, Heart, ArrowRight, ChevronDown } from "lucide-react";
+import { Award, Users, ThumbsUp, MessageCircle, ShieldCheck, Heart, ArrowRight, ChevronDown, PhoneCall } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 import aboutHeroBuilding from "@/assets/about-hero-building.jpg";
 import companyLogo from "@/assets/company-logo.png";
@@ -80,7 +80,7 @@ export default function About() {
                 <Link to="/contact" className="inline-block mt-8 sm:mt-10">
                   <Button size="lg" className="neumorphic-button group min-h-[56px] text-lg px-8">
                     Contact Us
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    <PhoneCall className="ml-2 h-5 w-5 transition-transform group-hover:scale-110" />
                   </Button>
                 </Link>
               </motion.div>
