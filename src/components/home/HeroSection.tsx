@@ -29,7 +29,7 @@ export function HeroSection() {
         </>} 
         subtitle="An interactive way for foreign founders to understand their company setup, accounting, corporate actions, and advisory scope — with clear structure and transparent cost." 
         callToAction={{
-          text: "Estimate Accounting Cost",
+          text: "Estimate Cost",
           href: "https://calculator.pnd50.com"
         }} 
         secondaryAction={{
