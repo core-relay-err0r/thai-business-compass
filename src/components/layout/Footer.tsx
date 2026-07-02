@@ -111,8 +111,9 @@ export function Footer() {
       <div className="border-t border-slate-800">
         <div className="container py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-            <p className="text-xs sm:text-sm text-slate-500 text-center sm:text-left">
-              © {currentYear} PND50. All rights reserved.
+            <p className="w-full max-w-full break-words text-xs sm:text-sm text-slate-500 text-center sm:text-left leading-relaxed">
+              <span>© {currentYear} PND50 Co., Ltd. All rights reserved.</span>{" "}
+              <span className="block sm:inline">Inspired by Burakorn TM. Powered by Avenkara TM.</span>
             </p>
             <div className="flex items-center justify-center sm:justify-end gap-4 sm:gap-6">
               <Link
