@@ -27,13 +27,16 @@ export function AnimatedRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
         <Route path="/corporate" element={<Navigate to="/services#corporate" replace />} />
+        <Route path="/corporate-services" element={<Navigate to="/services#corporate" replace />} />
         <Route path="/accounting" element={<Navigate to="/services#accounting" replace />} />
+        <Route path="/cost-calculator" element={<Navigate to="/services#accounting" replace />} />
         <Route path="/consulting" element={<Navigate to="/services#consulting" replace />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/submit" element={<Submit />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/tos" element={<Terms />} />
+        <Route path="/terms" element={<Navigate to="/tos" replace />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="*" element={<NotFound />} />

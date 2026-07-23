@@ -226,9 +226,15 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
       // Accounting
       if (hasAccountingData) {
-        lines.push("\n📊 Accounting Services");
-        lines.push(`   Monthly: $${state.accountingResult!.totalMonthly.toLocaleString()}`);
-        lines.push(`   Annual: $${state.accountingResult!.totalAnnual.toLocaleString()}`);
+        lines.push("\nACCOUNTING SERVICES");
+        if (state.accountingResult!.isCustomQuote) {
+          lines.push("   Price: Custom quote required");
+        } else {
+          if (state.accountingResult!.monthlyBase > 0) {
+            lines.push(`   Monthly recurring: $${state.accountingResult!.totalMonthly.toLocaleString()}`);
+          }
+          lines.push(`   Estimated first year: $${state.accountingResult!.totalAnnual.toLocaleString()}`);
+        }
         lines.push(`   Required: ${state.accountingResult!.requiredItems.join(", ")}`);
       }
 
@@ -281,7 +287,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       }
 
       // Monthly Recurring
-      if (hasAccountingData) {
+      if (hasAccountingData && state.accountingResult!.monthlyBase > 0 && !state.accountingResult!.isCustomQuote) {
         lines.push("\nMONTHLY RECURRING");
         lines.push(`   Accounting Services: $${monthlyFee.toLocaleString()}/month`);
         lines.push(`   First Year (12 months): $${(monthlyFee * 12).toLocaleString()}`);
@@ -300,7 +306,11 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       const firstYearTotal = corporateTotal + consultingTotal + (monthlyFee * 12) + annualFees;
 
       lines.push("\n" + "═".repeat(40));
-      lines.push(`ESTIMATED FIRST-YEAR TOTAL: ${hasFromItems ? "From " : ""}$${firstYearTotal.toLocaleString()}`);
+      lines.push(
+        state.accountingResult?.isCustomQuote
+          ? "ESTIMATED FIRST-YEAR TOTAL: Custom quote required"
+          : `ESTIMATED FIRST-YEAR TOTAL: ${hasFromItems || state.accountingResult?.annualAddons.some((a) => a.isFrom) ? "From " : ""}$${firstYearTotal.toLocaleString()}`
+      );
       lines.push("═".repeat(40));
       lines.push("\nNote: Final pricing confirmed after initial consultation.");
       if (hasConsultingData) {

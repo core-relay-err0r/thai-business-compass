@@ -70,7 +70,9 @@ export function MobileEstimateSheet() {
             <span className="font-medium">View Estimate</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-semibold">{formatUSD(grandTotal)}</span>
+            <span className="font-semibold">
+              {liveAccountingResult?.isCustomQuote ? "Quote required" : formatUSD(grandTotal)}
+            </span>
             <ChevronUp className="w-4 h-4" />
           </div>
         </button>
@@ -108,11 +110,25 @@ export function MobileEstimateSheet() {
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Accounting Services
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Base accounting</span>
-                  <span className="font-medium">{formatUSD(liveAccountingResult.monthlyBase)}/mo</span>
+              {liveAccountingResult.isCustomQuote ? (
+                <div className="rounded-lg bg-primary/5 p-3">
+                  <div className="font-semibold text-primary">Custom quote required</div>
+                  <p className="mt-1 text-xs text-muted-foreground">We will confirm the accounting price after reviewing the scope.</p>
                 </div>
+              ) : (
+              <>
+              <div className="space-y-2">
+                {liveAccountingResult.monthlyBase > 0 ? (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Base accounting</span>
+                    <span className="font-medium">{formatUSD(liveAccountingResult.monthlyBase)}/mo</span>
+                  </div>
+                ) : (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Monthly recurring</span>
+                    <span className="font-medium">None</span>
+                  </div>
+                )}
                 {liveAccountingResult.monthlyAddons.map((item, idx) => (
                   <div key={idx} className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{item.name}</span>
@@ -151,11 +167,13 @@ export function MobileEstimateSheet() {
               )}
 
               <div className="flex justify-between pt-2 mt-2 border-t border-border/50">
-                <span className="text-sm font-medium">Annual Total</span>
+                <span className="text-sm font-medium">First-year accounting</span>
                 <span className="font-semibold">
-                  {liveAccountingResult.annualAddons.some(a => a.isFrom) ? "From " : ""}{formatUSD(liveAccountingResult.totalAnnual)}/yr
+                  {liveAccountingResult.annualAddons.some(a => a.isFrom) ? "From " : ""}{formatUSD(liveAccountingResult.totalAnnual)}
                 </span>
               </div>
+              </>
+              )}
             </div>
           )}
 
@@ -191,10 +209,18 @@ export function MobileEstimateSheet() {
           <div className="flex justify-between items-end">
             <div>
               <div className="text-xs text-muted-foreground">Estimated Total</div>
-              <div className="text-2xl font-bold">{formatUSD(grandTotal)}</div>
-              <div className="text-xs text-muted-foreground">
-                ≈ ฿{formatPrice(grandTotal * USD_TO_THB)}
-              </div>
+              {liveAccountingResult?.isCustomQuote ? (
+                <div className="text-2xl font-bold text-primary">Quote required</div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">
+                    {hasFromConsulting || liveAccountingResult?.annualAddons.some((a) => a.isFrom) ? "From " : ""}{formatUSD(grandTotal)}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    ≈ ฿{formatPrice(grandTotal * USD_TO_THB)}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 

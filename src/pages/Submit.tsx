@@ -311,16 +311,24 @@ export default function Submit() {
                           <Calculator className="h-4 w-4 text-primary" />
                           <span className="font-medium">Accounting Services</span>
                         </div>
-                        <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-2">
-                          <div>
-                            <span className="text-primary">Monthly:</span>{" "}
-                            <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}</span>
+                        {accountingResult!.isCustomQuote ? (
+                          <div className="mb-2 text-sm font-medium text-primary">Custom quote required</div>
+                        ) : (
+                          <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-2">
+                            {accountingResult!.monthlyBase > 0 && (
+                              <div>
+                                <span className="text-primary">Monthly:</span>{" "}
+                                <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}</span>
+                              </div>
+                            )}
+                            <div>
+                              <span className="text-primary">First year:</span>{" "}
+                              <span className="font-medium">
+                                {accountingResult!.annualAddons.some((a) => a.isFrom) ? "From " : ""}${formatPrice(accountingResult!.totalAnnual)}
+                              </span>
+                            </div>
                           </div>
-                          <div>
-                            <span className="text-primary">Annual:</span>{" "}
-                            <span className="font-medium">${formatPrice(accountingResult!.totalAnnual)}</span>
-                          </div>
-                        </div>
+                        )}
                         <div className="text-xs text-muted-foreground">
                           Required: {accountingResult!.requiredItems.join(", ")}
                         </div>
@@ -434,7 +442,7 @@ export default function Submit() {
                   )}
 
                   {/* Monthly Recurring Section */}
-                  {hasAccountingData && (
+                  {hasAccountingData && accountingResult!.monthlyBase > 0 && !accountingResult!.isCustomQuote && (
                     <div className={`space-y-2 py-4 border-b border-border ${!(hasCorporateData || hasConsultingData) ? 'pt-0' : ''}`}>
                       <h4 className="text-xs uppercase tracking-wide text-muted-foreground font-medium">
                         Monthly Recurring
@@ -460,7 +468,9 @@ export default function Submit() {
                       {accountingResult!.annualAddons.map((addon, index) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span>{addon.name}</span>
-                          <span className="font-medium">${formatPrice(addon.amount)}</span>
+                          <span className="font-medium">
+                            {addon.amount === 0 ? "Custom quote" : `${addon.isFrom ? "From " : ""}$${formatPrice(addon.amount)}`}
+                          </span>
                         </div>
                       ))}
                       <div className="flex justify-between text-sm pt-2 border-t border-border/50">
@@ -477,17 +487,17 @@ export default function Submit() {
                     {(() => {
                       const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
                       const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
-                      const hasFromItems = selectedConsultingServices.some(s => s.isFrom);
+                      const hasFromItems = selectedConsultingServices.some(s => s.isFrom) || accountingResult?.annualAddons.some((a) => a.isFrom);
                       const monthlyFee = accountingResult?.totalMonthly ?? 0;
                       const annualFees = accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
 
                       const firstYearTotal = corporateTotal + consultingTotal + (monthlyFee * 12) + annualFees;
 
                       return (
-                        <div className="flex justify-between font-medium text-base">
+                        <div className="flex justify-between gap-4 font-medium text-base">
                           <span>Estimated First-Year Total</span>
-                          <span>
-                            {hasFromItems ? "From " : ""}${formatPrice(firstYearTotal)}
+                          <span className="text-right">
+                            {accountingResult?.isCustomQuote ? "Quote required" : `${hasFromItems ? "From " : ""}$${formatPrice(firstYearTotal)}`}
                           </span>
                         </div>
                       );

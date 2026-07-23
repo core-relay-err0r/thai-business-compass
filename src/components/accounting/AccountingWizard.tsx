@@ -86,7 +86,9 @@ export function AccountingWizard() {
 
   const handleNext = () => {
     setAccountingInputs(localInputs);
-    if (currentStep < 5) {
+    if (currentStep === 0 && localInputs.accountingIntent === "year-end-only") {
+      setCurrentStep(4);
+    } else if (currentStep < 5) {
       setCurrentStep((prev) => prev + 1);
     }
   };
@@ -98,7 +100,11 @@ export function AccountingWizard() {
         setLiveResult(null);
         setLiveAccountingResult(null);
       }
-      setCurrentStep((prev) => prev - 1);
+      if (currentStep === 4 && localInputs.accountingIntent === "year-end-only") {
+        setCurrentStep(0);
+      } else {
+        setCurrentStep((prev) => prev - 1);
+      }
     }
   };
 
@@ -109,8 +115,8 @@ export function AccountingWizard() {
     setLiveResult(result);
     setLiveAccountingResult(result);
     toast({
-      title: "✅ Estimate saved!",
-      description: "Your accounting estimate has been added to the calculator on the left.",
+      title: "Estimate saved",
+      description: "Your accounting estimate is now included in the service summary.",
       duration: 4000,
     });
   };
@@ -846,18 +852,27 @@ function Step5Results({ result, onAdjust }: Step5Props) {
             </div>
           ) : (
             <>
-              <div className="text-2xl sm:text-3xl font-bold">
-                {formatUSD(result.totalMonthly)}
-                {result.potentialMonthly.length > 0 && (
-                  <span className="text-lg sm:text-xl font-normal text-muted-foreground">
-                    –{formatPrice(result.totalMonthlyMax)}
-                  </span>
-                )}
-                <span className="text-base sm:text-lg font-normal text-muted-foreground">/mo</span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
-              </div>
+              {result.monthlyBase === 0 ? (
+                <>
+                  <div className="text-xl sm:text-2xl font-bold">No monthly fee</div>
+                  <div className="text-xs text-muted-foreground mt-1">Year-end work is billed annually.</div>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl sm:text-3xl font-bold">
+                    {formatUSD(result.totalMonthly)}
+                    {result.potentialMonthly.length > 0 && (
+                      <span className="text-lg sm:text-xl font-normal text-muted-foreground">
+                        –{formatPrice(result.totalMonthlyMax)}
+                      </span>
+                    )}
+                    <span className="text-base sm:text-lg font-normal text-muted-foreground">/mo</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
+                  </div>
+                </>
+              )}
               {result.annualAddons.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-border/60">
                   <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
@@ -908,8 +923,8 @@ function Step5Results({ result, onAdjust }: Step5Props) {
         </div>
       </div>
 
-      <p className="text-xs sm:text-sm text-muted-foreground text-center text-red-600 border-0 bg-red-50">
-        **This is an estimate based on standard Thai requirements.**
+      <p className="rounded-lg border border-border bg-muted/30 p-3 text-center text-xs text-muted-foreground sm:text-sm">
+        This is an estimate based on standard Thai requirements. Final pricing is confirmed after scope review.
       </p>
 
       <div className="flex justify-center">

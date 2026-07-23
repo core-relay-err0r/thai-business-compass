@@ -117,48 +117,49 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
   const annualAddons: { name: string; amount: number; required: boolean; isFrom?: boolean }[] = [];
   const potentialMonthly: { name: string; amount: number }[] = [];
   const potentialAnnual: { name: string; amount: number; isFrom?: boolean }[] = [];
-  const requiredItems: string[] = ["Monthly bookkeeping", "Tax filings"];
+  const isMonthlyEngagement = inputs.accountingIntent === "full";
+  const requiredItems: string[] = isMonthlyEngagement ? ["Monthly bookkeeping", "Tax filings"] : [];
   const recommendedItems: string[] = [];
   const notNeededItems: string[] = [];
   let isCustomQuote = false;
 
-  // VAT
-  if (inputs.vatRegistered === "yes") {
+  // Monthly obligations only apply to a full accounting engagement.
+  if (isMonthlyEngagement && inputs.vatRegistered === "yes") {
     monthlyAddons.push({ name: "VAT reporting (PP.30)", amount: PRICING.VAT_ADDON, required: true });
     requiredItems.push("VAT reporting & filings");
-  } else if (inputs.vatRegistered === "not-sure") {
+  } else if (isMonthlyEngagement && inputs.vatRegistered === "not-sure") {
     potentialMonthly.push({ name: "VAT reporting (PP.30)", amount: PRICING.VAT_ADDON });
-  } else {
+  } else if (isMonthlyEngagement) {
     notNeededItems.push("VAT reporting");
   }
 
   // Recurring WHT
-  if (inputs.recurringWHT === "yes") {
+  if (isMonthlyEngagement && inputs.recurringWHT === "yes") {
     monthlyAddons.push({ name: "Recurring WHT (PND3/PND53)", amount: PRICING.RECURRING_WHT_ADDON, required: true });
     requiredItems.push("Withholding tax filings");
-  } else if (inputs.recurringWHT === "not-sure") {
+  } else if (isMonthlyEngagement && inputs.recurringWHT === "not-sure") {
     potentialMonthly.push({ name: "Recurring WHT (PND3/PND53)", amount: PRICING.RECURRING_WHT_ADDON });
-  } else {
+  } else if (isMonthlyEngagement) {
     notNeededItems.push("Recurring WHT filings");
   }
 
   // Payroll (block model)
-  if (inputs.payrollNeeded && inputs.employeeCount > 0) {
+  if (isMonthlyEngagement && inputs.payrollNeeded && inputs.employeeCount > 0) {
     const blocks = Math.ceil(inputs.employeeCount / PRICING.PAYROLL_BLOCK_SIZE);
     const payrollCost = blocks * PRICING.PAYROLL_BLOCK;
     monthlyAddons.push({ name: `Payroll & social security (${inputs.employeeCount} employees)`, amount: payrollCost, required: true });
     requiredItems.push("Payroll processing", "Social security filings");
-  } else if (inputs.employeeCount > 0) {
+  } else if (isMonthlyEngagement && inputs.employeeCount > 0) {
     recommendedItems.push("Payroll processing");
-  } else {
+  } else if (isMonthlyEngagement) {
     notNeededItems.push("Payroll processing");
   }
 
   // Transaction complexity
-  if (inputs.transactionVolume === "medium") {
+  if (isMonthlyEngagement && inputs.transactionVolume === "medium") {
     monthlyAddons.push({ name: "Medium volume surcharge", amount: PRICING.TX_MEDIUM_ADDON, required: false });
     recommendedItems.push("Enhanced reconciliation");
-  } else if (inputs.transactionVolume === "high") {
+  } else if (isMonthlyEngagement && inputs.transactionVolume === "high") {
     isCustomQuote = true;
   }
 
@@ -175,8 +176,9 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
     const band = inputs.auditRevenueBand && inputs.auditRevenueBand !== "not-sure"
       ? AUDIT_REVENUE_BANDS.find(b => b.id === inputs.auditRevenueBand)
       : undefined;
-    const auditFee = band?.auditFee ?? PRICING.AUDIT_ADDON;
-    const isFromAudit = !band || band.auditFee === null;
+    const auditFee = band?.auditFee ?? (band ? 0 : PRICING.AUDIT_ADDON);
+    const isFromAudit = !band;
+    if (band?.auditFee === null) isCustomQuote = true;
     annualAddons.push({ name: "Annual audit", amount: auditFee, required: true, isFrom: isFromAudit });
     requiredItems.push("Annual audit");
   } else if (inputs.auditRequired === "not-sure") {
@@ -196,7 +198,7 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
   }
 
   // Calculate totals
-  const monthlyBase = PRICING.BASE_ACCOUNTING;
+  const monthlyBase = isMonthlyEngagement ? PRICING.BASE_ACCOUNTING : 0;
   const annualBase = 0;
   
   const totalMonthlyAddons = monthlyAddons.reduce((sum, addon) => sum + addon.amount, 0);

@@ -162,11 +162,12 @@ describe("calculateAccountingCost", () => {
       expect(audit?.amount).toBe(expected);
     });
 
-    it("over-100m band uses fallback fee with isFrom flag", () => {
+    it("over-100m band requires a custom quote without a misleading fallback", () => {
       const r = calc({ auditRequired: "yes", auditRevenueBand: "over-100m" });
       const audit = r.annualAddons.find((a) => a.name.includes("audit"));
-      expect(audit?.amount).toBe(PRICING.AUDIT_ADDON);
-      expect(audit?.isFrom).toBe(true);
+      expect(audit?.amount).toBe(0);
+      expect(audit?.isFrom).toBe(false);
+      expect(r.isCustomQuote).toBe(true);
     });
 
     it("not-sure audit goes to potential", () => {
@@ -235,6 +236,25 @@ describe("calculateAccountingCost", () => {
   });
 
   describe("year-end statements", () => {
+    it("year-end-only excludes every monthly charge and keeps annual work", () => {
+      const r = calc({
+        accountingIntent: "year-end-only",
+        vatRegistered: "yes",
+        recurringWHT: "yes",
+        employeeCount: 8,
+        payrollNeeded: true,
+        transactionVolume: "high",
+        rushFee: true,
+      });
+      expect(r.monthlyBase).toBe(0);
+      expect(r.monthlyAddons).toHaveLength(0);
+      expect(r.totalMonthly).toBe(0);
+      expect(r.rushSurcharge).toBe(0);
+      expect(r.totalAnnual).toBe(PRICING.YEAR_END_STATEMENTS);
+      expect(r.isCustomQuote).toBe(false);
+      expect(r.requiredItems).not.toContain("Monthly bookkeeping");
+    });
+
     it("not-sure puts it in potential annual", () => {
       const r = calc({ yearEndStatements: "not-sure" });
       expect(r.annualAddons.find((a) => a.name.includes("Year-end"))).toBeUndefined();
