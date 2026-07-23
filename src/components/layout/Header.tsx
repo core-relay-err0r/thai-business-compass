@@ -20,8 +20,8 @@ export function Header() {
   ];
 
   const navLink = (path: string) => cn(
-    "flex min-h-[44px] items-center border-b-2 border-transparent text-sm font-medium transition-colors hover:border-foreground",
-    (location.pathname === path || (path === "/blog" && location.pathname.startsWith("/blog/"))) && "border-foreground"
+    "flex min-h-[44px] items-center border-b-2 border-transparent text-sm font-medium transition-colors hover:border-primary hover:text-primary",
+    (location.pathname === path || (path === "/blog" && location.pathname.startsWith("/blog/"))) && "border-primary text-primary"
   );
 
   const closeMobile = () => setIsMobileMenuOpen(false);
@@ -31,8 +31,8 @@ export function Header() {
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="container flex h-14 items-center justify-between px-4 sm:h-16 sm:px-6">
           <Link to="/" className="flex items-center gap-2" aria-label="PND50 home">
-            <img src={logo} alt="" className="size-7 grayscale sm:size-8" />
-            <span className="text-lg font-semibold tracking-tight">PND50</span>
+            <img src={logo} alt="" className="size-8 sm:size-9" />
+            <span className="text-xl font-semibold tracking-tight">PND50</span>
             <span className="hidden border-l border-border pl-3 text-[10px] uppercase tracking-[0.14em] text-muted-foreground lg:inline">Thailand business compass</span>
           </Link>
 

@@ -24,7 +24,7 @@ export function HeroSection() {
       <h1 className="sr-only">PND50 - Thai Accounting Firm in Bangkok, Thailand | Accountant for Foreigners</h1>
       <HeroSectionUI 
         title={<>
-          Understand what your business needs in Thailand, before you commit.
+          Understand what your business needs in Thailand, <span className="text-primary">before you commit.</span>
         </>} 
         subtitle="An interactive way for foreign founders to understand their company setup, accounting, corporate actions, and advisory scope — with clear structure and transparent cost." 
         callToAction={{

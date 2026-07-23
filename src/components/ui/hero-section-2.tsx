@@ -47,17 +47,17 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
   return (
     <section ref={ref} className={cn("border-b border-border bg-background", className)} {...props}>
       <div className="container px-4 sm:px-6">
-        <div className="flex min-h-[calc(100vh-var(--header-height))] flex-col py-8 sm:py-12 lg:min-h-[760px] lg:py-0">
+        <div className="flex min-h-[calc(100vh-var(--header-height))] flex-col py-8 sm:py-10 lg:min-h-[680px] lg:py-0">
           <div className="flex items-center justify-between border-b border-border pb-4 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground lg:pt-6">
             <span>Thai business advisory</span>
             <span className="hidden sm:inline">Accounting · Tax · Corporate</span>
           </div>
 
           <div className="grid flex-1 items-stretch lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="flex flex-col justify-between border-border py-10 lg:border-r lg:py-16 lg:pr-14 xl:pr-20">
-              <div className="flex max-w-4xl flex-col gap-8">
-                <p className="font-serif text-lg text-muted-foreground">Clarity before commitment.</p>
-                <h1 className="text-balance font-serif text-4xl font-medium leading-[1.03] tracking-[-0.04em] sm:text-6xl lg:text-7xl xl:text-[5.5rem]">
+            <div className="flex flex-col justify-between border-border py-8 lg:border-r lg:py-10 lg:pr-12 xl:pr-16">
+              <div className="flex max-w-4xl flex-col gap-6">
+                <p className="font-serif text-lg text-primary">Clarity before commitment.</p>
+                <h1 className="text-balance font-serif text-4xl font-medium leading-[1.04] tracking-[-0.035em] sm:text-5xl lg:text-6xl xl:text-[4.75rem]">
                   {title}
                 </h1>
                 <p className="max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -84,14 +84,14 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
               )}
             </div>
 
-            <div className="flex flex-col gap-6 py-10 lg:justify-between lg:py-16 lg:pl-14 xl:pl-20">
+            <div className="flex flex-col gap-6 py-8 lg:justify-between lg:py-10 lg:pl-12 xl:pl-16">
               {image && (
                 <figure className="flex flex-col gap-3">
-                  <div className="aspect-[4/3] overflow-hidden border border-border bg-secondary">
+                  <div className="aspect-[16/10] overflow-hidden border border-border bg-secondary">
                     <img
                       src={image.image}
                       alt={image.title}
-                      className="size-full object-cover grayscale"
+                      className="size-full object-cover saturate-[0.65]"
                       loading="eager"
                     />
                   </div>
