@@ -122,8 +122,8 @@ export default function Terms() {
             {/* Introduction */}
             <div className="bg-muted/30 rounded-lg p-6 mb-10 border">
               <p className="text-muted-foreground leading-relaxed">
-                These Terms of Service govern your use of PND50's accounting, corporate, and consulting 
-                services. By engaging our services, you agree to comply with and be bound by these terms.
+                These Terms of Service govern your use of PND50&apos;s accounting, corporate, and consulting
+                services. By engaging us, you agree to be bound by these terms.
               </p>
             </div>
 

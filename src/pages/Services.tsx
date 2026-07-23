@@ -60,7 +60,7 @@ type ActiveSection = "corporate" | "accounting" | "consulting";
 const sectionData = {
   corporate: {
     icon: Building2,
-    title: "Corporate Services",
+    title: "Corporate services",
     description: "One-time corporate actions for starting or managing a Thai company.",
   },
   accounting: {
@@ -70,7 +70,7 @@ const sectionData = {
   },
   consulting: {
     icon: MessageSquare,
-    title: "Business Consulting",
+    title: "Business consulting",
     description: "Choose the business question, not a consulting package.",
   },
 };
@@ -214,7 +214,7 @@ export default function Services() {
                 <div className="lg:hidden mb-6 sm:mb-8">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2">
                     <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                    <h2 className="text-lg sm:text-xl font-semibold">Corporate Services</h2>
+                    <h2 className="text-lg sm:text-xl font-semibold">Corporate services</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
                     One-time corporate actions for starting or managing a Thai company.
@@ -242,7 +242,7 @@ export default function Services() {
                 <div className="lg:hidden mb-6 sm:mb-8">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2">
                     <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                    <h2 className="text-lg sm:text-xl font-semibold">Business Consulting</h2>
+                    <h2 className="text-lg sm:text-xl font-semibold">Business consulting</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
                     Choose the business question, not a consulting package.

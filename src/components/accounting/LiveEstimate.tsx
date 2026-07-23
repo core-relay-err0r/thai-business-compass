@@ -106,7 +106,7 @@ export function LiveEstimate() {
                   {liveAccountingResult.monthlyBase > 0 ? (
                     <div className="text-lg font-semibold">
                       {formatUSD(liveAccountingResult.totalMonthly)}
-                      <span className="text-sm font-normal text-muted-foreground">/mo</span>
+                      <span className="text-sm font-normal text-muted-foreground">/month</span>
                     </div>
                   ) : (
                     <div className="text-sm font-medium">No monthly recurring fee</div>
@@ -191,7 +191,7 @@ export function LiveEstimate() {
           </div>
         )}
         <div className="flex justify-between pt-2 border-t border-border/50">
-          <span className="font-semibold">Est. Total</span>
+          <span className="font-semibold">First-year estimate</span>
           <div className="text-right">
             {liveAccountingResult?.isCustomQuote ? (
               <div className="font-bold text-lg text-primary">Quote required</div>
@@ -233,7 +233,7 @@ export function LiveEstimate() {
       <Dialog open={openDetail === "corporate"} onOpenChange={(open) => !open && setOpenDetail(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Corporate Services</DialogTitle>
+            <DialogTitle>Corporate services</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
             {selectedCorporateServices.map((service) => (
@@ -259,7 +259,7 @@ export function LiveEstimate() {
       <Dialog open={openDetail === "accounting"} onOpenChange={(open) => !open && setOpenDetail(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Accounting Services</DialogTitle>
+            <DialogTitle>Accounting</DialogTitle>
           </DialogHeader>
           {liveAccountingResult && (
             <div className="space-y-4">
@@ -305,17 +305,17 @@ export function LiveEstimate() {
                     Billed annually when due
                   </div>
                   <div className="text-xs text-muted-foreground mb-2">
-                    These are one-off invoices charged once per year, separate from your monthly fee.
+                    These services are invoiced once per year, separately from the monthly fee.
                   </div>
                   {liveAccountingResult.annualAddons.map((item, idx) => (
                     <div key={idx} className="flex justify-between text-sm py-1">
                       <span className="text-muted-foreground">{item.name}</span>
-                      <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/yr</span>
+                      <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/year</span>
                     </div>
                   ))}
                   <div className="flex justify-between text-sm pt-2 mt-1 border-t border-border/50">
                     <span className="font-medium">Annual subtotal</span>
-                    <span className="font-semibold">{annualAddonsHasFrom ? "From " : ""}{formatUSD(annualAddonsTotal)}/yr</span>
+                    <span className="font-semibold">{annualAddonsHasFrom ? "From " : ""}{formatUSD(annualAddonsTotal)}/year</span>
                   </div>
                 </div>
               )}
@@ -342,22 +342,22 @@ export function LiveEstimate() {
                     {liveAccountingResult.potentialMonthly.length > 0 && (
                       <span className="text-muted-foreground">–{formatPrice(liveAccountingResult.totalMonthlyMax)}</span>
                     )}
-                    <span className="text-muted-foreground text-sm">/mo</span>
+                    <span className="text-muted-foreground text-sm">/month</span>
                   </div>
                   <div>
                     <span className="font-semibold">{formatUSD(liveAccountingResult.totalAnnual)}</span>
                     {liveAccountingResult.potentialAnnual.length > 0 && (
                       <span className="text-muted-foreground">–{formatPrice(liveAccountingResult.totalAnnualMax)}</span>
                     )}
-                    <span className="text-muted-foreground text-sm">/yr</span>
+                    <span className="text-muted-foreground text-sm">/year</span>
                   </div>
                   {annualAddonsTotal > 0 && (
                     <div className="text-xs text-muted-foreground">
-                      = {formatUSD(liveAccountingResult.totalMonthly)}/mo × 12 + {annualAddonsHasFrom ? "from " : ""}{formatUSD(annualAddonsTotal)} annual
+                      = {formatUSD(liveAccountingResult.totalMonthly)}/month × 12 + {annualAddonsHasFrom ? "from " : ""}{formatUSD(annualAddonsTotal)} annual
                     </div>
                   )}
                   <div className="text-xs text-muted-foreground">
-                    ≈ ฿{formatPrice(liveAccountingResult.totalAnnual * USD_TO_THB)}/yr
+                    ≈ ฿{formatPrice(liveAccountingResult.totalAnnual * USD_TO_THB)}/year
                   </div>
                 </div>
               </div>
@@ -370,7 +370,7 @@ export function LiveEstimate() {
       <Dialog open={openDetail === "consulting"} onOpenChange={(open) => !open && setOpenDetail(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Consulting Services</DialogTitle>
+            <DialogTitle>Business consulting</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
             {selectedConsultingServices.map((service) => (

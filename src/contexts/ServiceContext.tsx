@@ -226,7 +226,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
       // Accounting
       if (hasAccountingData) {
-        lines.push("\nACCOUNTING SERVICES");
+        lines.push("\nACCOUNTING");
         if (state.accountingResult!.isCustomQuote) {
           lines.push("   Price: Custom quote required");
         } else {
@@ -240,7 +240,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
       // Corporate
       if (hasCorporateData) {
-        lines.push("\n🏢 Corporate Services");
+        lines.push("\nCORPORATE SERVICES");
         state.selectedCorporateServices.forEach((s) => {
           lines.push(`   • ${s.name}: $${s.price.toLocaleString()}`);
         });
@@ -250,7 +250,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
       // Consulting
       if (hasConsultingData) {
-        lines.push("\n💼 Consulting Services");
+        lines.push("\nBUSINESS CONSULTING");
         state.selectedConsultingServices.forEach((s) => {
           const prefix = s.isFrom ? "From " : "";
           lines.push(`   • ${s.name}: ${prefix}$${s.price.toLocaleString()}`);
@@ -260,9 +260,9 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         lines.push(`   Total: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
       }
 
-      // Payment Summary
+      // Cost summary
       lines.push("\n" + "─".repeat(40));
-      lines.push("PAYMENT SUMMARY");
+      lines.push("COST SUMMARY");
       lines.push("─".repeat(40));
 
       const corporateTotal = state.selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
@@ -299,7 +299,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         state.accountingResult!.annualAddons.forEach((addon) => {
           lines.push(`   ${addon.name}: $${addon.amount.toLocaleString()}`);
         });
-        lines.push(`   Annual Total: $${annualFees.toLocaleString()}`);
+        lines.push(`   Annual fees subtotal: $${annualFees.toLocaleString()}`);
       }
 
       // Grand Total
@@ -308,8 +308,8 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       lines.push("\n" + "═".repeat(40));
       lines.push(
         state.accountingResult?.isCustomQuote
-          ? "ESTIMATED FIRST-YEAR TOTAL: Custom quote required"
-          : `ESTIMATED FIRST-YEAR TOTAL: ${hasFromItems || state.accountingResult?.annualAddons.some((a) => a.isFrom) ? "From " : ""}$${firstYearTotal.toLocaleString()}`
+          ? "FIRST-YEAR ESTIMATE: Custom quote required"
+          : `FIRST-YEAR ESTIMATE: ${hasFromItems || state.accountingResult?.annualAddons.some((a) => a.isFrom) ? "From " : ""}$${firstYearTotal.toLocaleString()}`
       );
       lines.push("═".repeat(40));
       lines.push("\nNote: Final pricing confirmed after initial consultation.");

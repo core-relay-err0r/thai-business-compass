@@ -67,7 +67,7 @@ export function MobileEstimateSheet() {
                 {itemCount}
               </span>
             </div>
-            <span className="font-medium">View Estimate</span>
+            <span className="font-medium">View estimate</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="font-semibold">
@@ -79,7 +79,7 @@ export function MobileEstimateSheet() {
       </SheetTrigger>
       <SheetContent side="bottom" className="h-[85vh] rounded-t-2xl px-4 pb-8">
         <SheetHeader className="pb-4 border-b border-border">
-          <SheetTitle className="text-left">Your Estimate</SheetTitle>
+          <SheetTitle className="text-left">Your estimate</SheetTitle>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto py-4 space-y-4">
@@ -87,7 +87,7 @@ export function MobileEstimateSheet() {
           {selectedCorporateServices.length > 0 && (
             <div className="p-4 rounded-lg border border-border bg-card">
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                Corporate Services
+                Corporate services
               </div>
               <div className="space-y-2">
                 {selectedCorporateServices.map((service) => (
@@ -108,7 +108,7 @@ export function MobileEstimateSheet() {
           {liveAccountingResult && (
             <div className="p-4 rounded-lg border border-border bg-card">
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                Accounting Services
+                Accounting
               </div>
               {liveAccountingResult.isCustomQuote ? (
                 <div className="rounded-lg bg-primary/5 p-3">
@@ -121,7 +121,7 @@ export function MobileEstimateSheet() {
                 {liveAccountingResult.monthlyBase > 0 ? (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Base accounting</span>
-                    <span className="font-medium">{formatUSD(liveAccountingResult.monthlyBase)}/mo</span>
+                    <span className="font-medium">{formatUSD(liveAccountingResult.monthlyBase)}/month</span>
                   </div>
                 ) : (
                   <div className="flex justify-between text-sm">
@@ -132,18 +132,18 @@ export function MobileEstimateSheet() {
                 {liveAccountingResult.monthlyAddons.map((item, idx) => (
                   <div key={idx} className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{item.name}</span>
-                    <span className="font-medium">+{formatUSD(item.amount)}/mo</span>
+                    <span className="font-medium">+{formatUSD(item.amount)}/month</span>
                   </div>
                 ))}
                 {liveAccountingResult.rushFee && liveAccountingResult.rushSurcharge > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-amber-600">Rush surcharge (+30%)</span>
-                    <span className="font-medium text-amber-600">+{formatUSD(liveAccountingResult.rushSurcharge)}/mo</span>
+                    <span className="font-medium text-amber-600">+{formatUSD(liveAccountingResult.rushSurcharge)}/month</span>
                   </div>
                 )}
                 <div className="flex justify-between pt-2 mt-1 border-t border-border/50 text-sm">
                   <span className="font-medium">Monthly total</span>
-                  <span className="font-semibold">{formatUSD(liveAccountingResult.totalMonthly)}/mo</span>
+                  <span className="font-semibold">{formatUSD(liveAccountingResult.totalMonthly)}/month</span>
                 </div>
               </div>
 
@@ -159,7 +159,7 @@ export function MobileEstimateSheet() {
                     {liveAccountingResult.annualAddons.map((item, idx) => (
                       <div key={idx} className="flex justify-between text-sm">
                         <span className="text-muted-foreground">{item.name}</span>
-                        <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/yr</span>
+                        <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/year</span>
                       </div>
                     ))}
                   </div>
@@ -181,7 +181,7 @@ export function MobileEstimateSheet() {
           {selectedConsultingServices.length > 0 && (
             <div className="p-4 rounded-lg border border-border bg-card">
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                Consulting Services
+                Business consulting
               </div>
               <div className="space-y-2">
                 {selectedConsultingServices.map((service) => (

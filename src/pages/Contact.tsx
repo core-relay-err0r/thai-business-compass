@@ -79,7 +79,7 @@ export default function Contact() {
       <LocalBusinessSchema />
       <InternalPageHeader
         eyebrow="Contact"
-        meta="Bangkok · Response within 24h"
+        meta="Bangkok · Response within 24 hours"
         title={<>Let&apos;s talk about <span className="text-primary">your business.</span></>}
         description="Have questions about Thai accounting or compliance? Our English-speaking team will help you identify the clearest next step."
       />
@@ -120,8 +120,8 @@ export default function Contact() {
               </div>
               <div className="flex gap-3 sm:gap-4">
                 <div className="flex-1 p-3 sm:p-4 rounded-xl bg-background border border-border/50 shadow-sm">
-                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">24h</div>
-                  <div className="text-xs text-muted-foreground">Email Response</div>
+                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">24 hours</div>
+                  <div className="text-xs text-muted-foreground">Email response</div>
                 </div>
                 <div className="flex-1 p-3 sm:p-4 rounded-xl bg-background border border-border/50 shadow-sm">
                   <div className="text-xl sm:text-2xl font-bold text-primary mb-1">1h</div>

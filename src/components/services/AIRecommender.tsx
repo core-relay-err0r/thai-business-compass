@@ -95,8 +95,8 @@ export function AIRecommender() {
     if (!result) return;
     applyRecommendation(result);
     toast({
-      title: "✨ Applied to your estimate",
-      description: "Calculator and selected services have been pre-filled. You can fine-tune anything below.",
+      title: "Applied to your estimate",
+      description: "We prefilled the calculator and selected services. You can adjust them below.",
       duration: 5000,
     });
     // Scroll to live estimate / accounting section
@@ -123,7 +123,7 @@ export function AIRecommender() {
             <div>
               <h2 className="text-base sm:text-lg font-semibold">Not sure where to start?</h2>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Get an AI recommendation tailored to your business in under a minute.
+                Answer a few questions to get a tailored service recommendation.
               </p>
             </div>
           </div>

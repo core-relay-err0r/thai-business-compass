@@ -845,7 +845,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-border">
         <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
-          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Monthly Cost</div>
+          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Monthly estimate</div>
           {result.isCustomQuote ? (
             <div className="text-xl sm:text-2xl font-bold text-primary">
               Custom quote required
@@ -866,7 +866,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
                         –{formatPrice(result.totalMonthlyMax)}
                       </span>
                     )}
-                    <span className="text-base sm:text-lg font-normal text-muted-foreground">/mo</span>
+                    <span className="text-base sm:text-lg font-normal text-muted-foreground">/month</span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
                     ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
@@ -885,7 +885,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
                     {result.annualAddons.map((a, idx) => (
                       <li key={idx} className="flex justify-between text-xs sm:text-sm">
                         <span className="text-muted-foreground">{a.name}</span>
-                        <span className="font-medium">{a.isFrom ? "From " : ""}{formatUSD(a.amount)}/yr</span>
+                        <span className="font-medium">{a.isFrom ? "From " : ""}{formatUSD(a.amount)}/year</span>
                       </li>
                     ))}
                   </ul>
@@ -895,7 +895,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
           )}
         </div>
         <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
-          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Annual Cost</div>
+          <div className="text-xs sm:text-sm text-muted-foreground mb-1">First-year estimate</div>
           {result.isCustomQuote ? (
             <div className="text-xl sm:text-2xl font-bold text-primary">
               Custom quote required

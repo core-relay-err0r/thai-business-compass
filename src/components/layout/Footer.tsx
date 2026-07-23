@@ -5,9 +5,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   const servicesLinks = [
-    { label: "Corporate Services", href: "/services#corporate" },
+    { label: "Corporate services", href: "/services#corporate" },
     { label: "Accounting", href: "/services#accounting" },
-    { label: "Consulting", href: "/services#consulting" },
+    { label: "Business consulting", href: "/services#consulting" },
   ];
 
   const companyLinks = [

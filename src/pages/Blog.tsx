@@ -149,7 +149,7 @@ export default function Blog() {
                 href="https://calculator.pnd50.com"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
-                Open Cost Calculator
+                Estimate your costs
                 <ArrowRight className="w-4 h-4" />
               </a>
               <Link 

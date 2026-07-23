@@ -309,7 +309,7 @@ export default function Submit() {
                       <div className="pb-5 sm:pb-6">
                         <div className="flex items-center gap-2 mb-3">
                           <Calculator className="h-4 w-4 text-primary" />
-                          <span className="font-medium">Accounting Services</span>
+                          <span className="font-medium">Accounting</span>
                         </div>
                         {accountingResult!.isCustomQuote ? (
                           <div className="mb-2 text-sm font-medium text-primary">Custom quote required</div>
@@ -339,7 +339,7 @@ export default function Submit() {
                       <div className={`${hasAccountingData ? "pt-5 sm:pt-6" : ""} ${hasConsultingData ? "pb-5 sm:pb-6" : ""}`}>
                         <div className="flex items-center gap-2 mb-3">
                           <Building2 className="h-4 w-4 text-primary" />
-                          <span className="font-medium">Corporate Services</span>
+                          <span className="font-medium">Corporate services</span>
                         </div>
                         <div className="space-y-2">
                           {selectedCorporateServices.map((service) => (
@@ -362,7 +362,7 @@ export default function Submit() {
                       <div className={`${hasAccountingData || hasCorporateData ? "pt-5 sm:pt-6" : ""}`}>
                         <div className="flex items-center gap-2 mb-3">
                           <MessageSquare className="h-4 w-4 text-primary" />
-                          <span className="font-medium">Consulting Services</span>
+                          <span className="font-medium">Business consulting</span>
                         </div>
                         <div className="space-y-2">
                           {selectedConsultingServices.map((service) => (
@@ -396,12 +396,12 @@ export default function Submit() {
               </CardContent>
             </Card>
 
-            {/* Payment Summary */}
+            {/* Cost summary */}
             {hasAnySelection && (
               <Card className="bg-muted/30 border-primary/10">
                 <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-lg sm:text-xl">Payment Summary</CardTitle>
-                  <CardDescription className="text-sm">How you'll pay for these services</CardDescription>
+                  <CardTitle className="text-lg sm:text-xl">Cost summary</CardTitle>
+                  <CardDescription className="text-sm">When each service is invoiced</CardDescription>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 pt-0 space-y-0">
                   {/* Initial Payment Section */}
@@ -413,7 +413,7 @@ export default function Submit() {
                       <p className="text-xs text-muted-foreground">Due at engagement start</p>
                       {hasCorporateData && (
                         <div className="flex justify-between text-sm">
-                          <span>Corporate Services</span>
+                          <span>Corporate services</span>
                           <span className="font-medium">
                             ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
                           </span>
@@ -448,7 +448,7 @@ export default function Submit() {
                         Monthly Recurring
                       </h4>
                       <div className="flex justify-between text-sm">
-                        <span>Accounting Services</span>
+                        <span>Accounting</span>
                         <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}/month</span>
                       </div>
                       <div className="flex justify-between text-sm text-muted-foreground">
@@ -474,7 +474,7 @@ export default function Submit() {
                         </div>
                       ))}
                       <div className="flex justify-between text-sm pt-2 border-t border-border/50">
-                        <span className="font-medium">Annual Total</span>
+                        <span className="font-medium">Annual fees subtotal</span>
                         <span className="font-medium">
                           ${formatPrice(accountingResult!.annualAddons.reduce((sum, a) => sum + a.amount, 0))}
                         </span>
@@ -495,7 +495,7 @@ export default function Submit() {
 
                       return (
                         <div className="flex justify-between gap-4 font-medium text-base">
-                          <span>Estimated First-Year Total</span>
+                          <span>First-year estimate</span>
                           <span className="text-right">
                             {accountingResult?.isCustomQuote ? "Quote required" : `${hasFromItems ? "From " : ""}$${formatPrice(firstYearTotal)}`}
                           </span>
@@ -616,7 +616,7 @@ export default function Submit() {
                 ) : (
                   <>
                     <Send className="mr-2 h-4 w-4" />
-                    Submit Request
+                    Send request
                   </>
                 )}
               </Button>
