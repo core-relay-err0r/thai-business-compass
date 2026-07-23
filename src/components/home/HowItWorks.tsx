@@ -12,7 +12,7 @@ const steps = [
     icon: FileSearch,
     number: "02",
     title: "Get your scope + pricing",
-    description: "See exactly what's required, what's recommended, and what you don't need. With clear pricing.",
+    description: "See what the calculator includes from your answers, what may apply, and which items need scope confirmation.",
   },
   {
     icon: Send,

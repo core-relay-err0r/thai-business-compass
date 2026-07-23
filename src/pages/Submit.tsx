@@ -330,7 +330,7 @@ export default function Submit() {
                           </div>
                         )}
                         <div className="text-xs text-muted-foreground">
-                          Required: {accountingResult!.requiredItems.join(", ")}
+                          Included from your answers: {accountingResult!.requiredItems.join(", ")}
                         </div>
                       </div>
                     )}
@@ -512,8 +512,8 @@ export default function Submit() {
 
                   {/* Disclaimer */}
                   <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
-                    Estimates based on your inputs. Final pricing confirmed after initial consultation.
-                    {hasConsultingData && " Business consulting fees are scoped to the specific requirements."}
+                    Planning estimates are based on your inputs and do not determine legal or tax obligations. Final scope, third-party fees, authority-dependent timing, and pricing are confirmed after record review.
+                    {hasConsultingData && " Business consulting fees cover the stated deliverable; regulated opinions, searches, filings, and implementation are separately scoped."}
                   </p>
                 </CardContent>
               </Card>

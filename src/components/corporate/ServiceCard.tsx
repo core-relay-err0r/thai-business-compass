@@ -74,7 +74,7 @@ export function ServiceCard({
 
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <Clock className="h-3.5 w-3.5" />
-          <span>{timeline}</span>
+          <span>Estimated delivery: {timeline}</span>
         </div>
 
         <Button

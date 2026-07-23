@@ -16,42 +16,42 @@ import { FAQSchema, ServiceSchema } from "@/components/seo/StructuredData";
 const servicesList = [
   {
     name: "Company Registration Thailand",
-    description: "Full support for registering a Thai Limited Company, including BOI applications and work permit processing.",
+    description: "Scope and filing support for a standard Thai limited company. BOI, licensing, visa, and work-permit matters are assessed and quoted separately when relevant.",
   },
   {
     name: "Monthly Bookkeeping",
-    description: "Comprehensive bookkeeping services including transaction recording, bank reconciliation, and financial reporting.",
+    description: "Monthly transaction recording and reconciliation, with filing and reporting scope based on the company’s registrations and activity.",
   },
   {
     name: "Corporate Tax Filing",
-    description: "PND50 and PND51 corporate income tax filing, VAT returns, and withholding tax compliance.",
+    description: "Preparation and filing support for applicable corporate income tax, VAT, and withholding tax returns based on the company’s facts and registrations.",
   },
   {
     name: "Payroll Services Thailand",
-    description: "Full payroll processing including salary calculations, social security contributions, and tax withholding.",
+    description: "Payroll calculations and support for applicable social security and payroll withholding filings, scoped to the employee data supplied.",
   },
   {
     name: "Business consulting",
-    description: "Strategic advisory on tax optimization, visa requirements, and corporate restructuring for foreign businesses.",
+    description: "Decision support for cost, market entry, commercial risk, and corporate structure. Regulated legal, immigration, and investment-promotion work is separately scoped.",
   },
 ];
 
 const serviceFAQs = [
   {
     question: "What accounting services does PND50 offer in Thailand?",
-    answer: "PND50 offers comprehensive accounting services including monthly bookkeeping, corporate tax filing (PND50, PND51), VAT returns, payroll processing, social security contributions, and financial statement preparation for foreign-owned businesses in Thailand.",
+    answer: "PND50 covers monthly bookkeeping, corporate income tax filing (PND50, PND51), VAT returns, payroll and social security filings, and annual financial statement preparation for foreign-owned businesses in Thailand. The exact services depend on your registrations and activity and are confirmed in the engagement scope.",
   },
   {
     question: "How much does accounting cost in Thailand?",
-    answer: "Accounting fees in Thailand vary based on transaction volume and complexity. PND50 offers transparent pricing starting from ฿5,000/month for basic bookkeeping, with customized quotes based on your specific business needs.",
+    answer: "Accounting fees in Thailand vary with transaction volume, registrations, and complexity. PND50 uses transparent pricing that starts from ฿5,000/month for basic bookkeeping; final fees are confirmed by quote after reviewing your specific business needs.",
   },
   {
     question: "Do I need a Thai accountant if I'm a foreign company?",
-    answer: "Yes, all companies registered in Thailand must maintain proper accounting records and file taxes in Thai. PND50 specializes in helping foreign-owned businesses with English-speaking accountants who understand international business practices.",
+    answer: "Thai-registered companies are generally subject to Thai bookkeeping, financial-statement, and tax-filing obligations. The exact returns and supporting work depend on the entity, registrations, transactions, and filing period. PND50 works in English while preparing the Thai compliance records and filings within the agreed scope.",
   },
   {
     question: "What is the corporate tax rate in Thailand?",
-    answer: "The standard corporate tax rate in Thailand is 20%. Small and medium enterprises may qualify for reduced rates. PND50 helps optimize your tax position while ensuring full compliance with Thai Revenue Department requirements.",
+    answer: "Thailand’s standard corporate income tax rate is currently 20% of net profit. Certain qualifying SMEs and promoted activities may be subject to different rates or incentives. The applicable treatment depends on current law and the company’s facts; PND50 prepares filings and identifies issues within the agreed engagement scope.",
   },
 ];
 

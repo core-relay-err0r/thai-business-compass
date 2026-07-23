@@ -48,7 +48,7 @@ export function TaxResidencyPopup({ open, onOpenChange, onConfirm }: TaxResidenc
 
         <div className="space-y-6">
           <p className="text-sm text-muted-foreground">
-            Official tax residency confirmation.
+            Preparation and submission support for a Thai tax residency certificate request. Issuance, timing, and treaty treatment depend on the Revenue Department and the applicant&apos;s records and facts.
           </p>
 
           {/* Legalization option */}

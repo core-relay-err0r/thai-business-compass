@@ -242,7 +242,7 @@ function Step0Intent({ inputs, setInputs }: StepProps) {
             <span className="font-semibold text-base sm:text-lg">Full accounting support</span>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Monthly accounting, payroll, taxes, and year-end filings.
+            Monthly bookkeeping plus the payroll, tax returns, and year-end work indicated by your answers.
           </p>
         </button>
 
@@ -259,7 +259,7 @@ function Step0Intent({ inputs, setInputs }: StepProps) {
             <span className="font-semibold text-base sm:text-lg">Year-end only</span>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Annual financial statements and audit support if required.
+            Preparation of annual financial statements, with independent audit and backlog work added if applicable.
           </p>
         </button>
       </div>
@@ -412,7 +412,7 @@ function Step2Team({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              Payroll includes salary records and social security filings.
+              Payroll covers salary calculations and support for applicable payroll withholding and social security filings, based on the employee data supplied.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -452,7 +452,7 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              More transactions means more reconciliation work. Low: &lt;50, Medium: 50-200, High: 200+
+              More transactions generally require more recording and reconciliation work. Up to 50 uses the base band; higher or more complex volumes may require an adjusted or custom quote.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -489,7 +489,7 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              Required when your company makes payments subject to withholding tax.
+              These filings may apply when the company makes payments subject to Thai withholding tax; the form and rate depend on the payment and recipient.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -552,7 +552,7 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
     <div className="space-y-8">
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-lg font-semibold">Annual Financial Statements Required?</h3>
+          <h3 className="text-lg font-semibold">Include Annual Financial Statements?</h3>
           <Tooltip>
             <TooltipTrigger>
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
@@ -620,7 +620,7 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
 
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-lg font-semibold">Annual Audit Required?</h3>
+          <h3 className="text-lg font-semibold">Include an Annual Audit Estimate?</h3>
           <Tooltip>
             <TooltipTrigger>
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
@@ -779,7 +779,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
         <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <h4 className="font-semibold text-sm sm:text-base">What is required</h4>
+            <h4 className="font-semibold text-sm sm:text-base">Included based on your answers</h4>
           </div>
           <ul className="space-y-2">
             {result.requiredItems.map((item) => (
@@ -924,7 +924,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
       </div>
 
       <p className="rounded-lg border border-border bg-muted/30 p-3 text-center text-xs text-muted-foreground sm:text-sm">
-        This is an estimate based on standard Thai requirements. Final pricing is confirmed after scope review.
+        This planning estimate is not a legal or tax determination. Applicable filings, deadlines, audit scope, and final pricing are confirmed after reviewing the entity, registrations, transactions, records, and filing period.
       </p>
 
       <div className="flex justify-center">

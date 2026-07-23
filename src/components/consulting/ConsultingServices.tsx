@@ -12,35 +12,35 @@ const SERVICES = [
     icon: TrendingDown,
     title: "Reduce Costs",
     pricing: CONSULTING_PRICING.REDUCE_COSTS,
-    description: "Identify opportunities to reduce operational and tax costs.",
+    description: "Review the selected cost base and deliver a prioritized action list, with assumptions, owners, and implementation trade-offs.",
   },
   {
     id: "new-market",
     icon: Globe,
     title: "Enter a New Market",
     pricing: CONSULTING_PRICING.NEW_MARKET,
-    description: "Evaluate and plan market entry strategy for Thailand or ASEAN.",
+    description: "Test a Thailand or ASEAN entry case across customer, channel, operating model, and key execution risks.",
   },
   {
     id: "due-diligence",
     icon: Search,
     title: "Due Diligence / Risk Check",
     pricing: CONSULTING_PRICING.DUE_DILIGENCE,
-    description: "Comprehensive review of a target company or potential partner.",
+    description: "Run a scoped commercial and document-based risk check on a target or partner, then flag issues for specialist review.",
   },
   {
     id: "structure-strategy",
     icon: GitBranch,
     title: "Business Structure Strategy",
     pricing: CONSULTING_PRICING.STRUCTURE_STRATEGY,
-    description: "Optimize your corporate structure for growth, tax, or liability.",
+    description: "Compare practical structure options for growth, tax, and liability objectives, with legal and tax conclusions referred where required.",
   },
   {
     id: "bank-compliance",
     icon: Building,
     title: "Bank & Compliance Readiness",
     pricing: CONSULTING_PRICING.BANK_COMPLIANCE,
-    description: "Prepare for bank account opening or compliance requirements.",
+    description: "Review the requested bank or payment-provider documents, identify gaps, and prepare a response pack for submission.",
   },
 ];
 
@@ -67,6 +67,9 @@ export function ConsultingServices() {
 
   return (
     <>
+      <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
+        Fees cover the stated advisory scope and deliverable. Third-party searches, regulated opinions, filings, and implementation work are confirmed separately.
+      </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {SERVICES.map((service) => {
           const Icon = service.icon;
@@ -112,7 +115,7 @@ export function ConsultingServices() {
 
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Clock className="h-4 w-4" />
-                  {service.pricing.timeline}
+                  Estimated delivery: {service.pricing.timeline}
                 </div>
 
                 {"note" in service.pricing && (

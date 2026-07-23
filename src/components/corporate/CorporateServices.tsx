@@ -28,8 +28,8 @@ const STARTING_SERVICES: ServiceDefinition[] = [
     id: "incorporation",
     icon: Building2,
     title: "Company Incorporation",
-    description: "Standard Thai Co., Ltd. structure (most common setup).",
-    contextLine: "Most companies start simple and adapt later if needed.",
+    description: "Prepare and file a standard Thai Co., Ltd. incorporation based on the agreed shareholder, director, capital, and activity details.",
+    contextLine: "Licences, BOI promotion, visas, work permits, and non-standard ownership structures are assessed separately.",
     price: CORPORATE_PRICING.INCORPORATION,
     priceTHB: CORPORATE_PRICING.INCORPORATION * 35,
     timeline: "Up to 1 week",
@@ -39,8 +39,8 @@ const STARTING_SERVICES: ServiceDefinition[] = [
     id: "registered-office",
     icon: MapPin,
     title: "Registered Office",
-    description: "Official registered address of the company.",
-    contextLine: "Required to register or operate a company in Thailand.",
+    description: "Coordinate a registered-address filing for a new company or an existing company’s address change.",
+    contextLine: "Address availability and any landlord or authority documents are confirmed before filing.",
     price: CORPORATE_PRICING.REGISTERED_OFFICE,
     priceTHB: CORPORATE_PRICING.REGISTERED_OFFICE * 35,
     timeline: "1–2 weeks",
@@ -53,8 +53,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     id: "company-review",
     icon: FileSearch,
     title: "Company Review / Cleanup",
-    description: "Reviewing current company status and registrations.",
-    contextLine: "This service provides clarity, not corrections.",
+    description: "Check available corporate records and selected registrations, then identify gaps that need follow-up.",
+    contextLine: "The base review reports findings; corrections, filings, and legal opinions are quoted separately.",
     price: CORPORATE_PRICING.COMPANY_REVIEW,
     priceTHB: CORPORATE_PRICING.COMPANY_REVIEW * 35,
     timeline: "1–4 weeks",
@@ -64,8 +64,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     id: "structural-change",
     icon: Users,
     title: "Structural Change",
-    description: "Changing directors, shareholders, or share ownership.",
-    contextLine: "Used when control or ownership changes.",
+    description: "Prepare the agreed corporate resolutions and filings for a director, shareholder, or share-ownership change.",
+    contextLine: "Final scope depends on the change, supporting documents, and any restricted-business implications.",
     price: CORPORATE_PRICING.STRUCTURAL_CHANGE,
     priceTHB: CORPORATE_PRICING.STRUCTURAL_CHANGE * 35,
     timeline: "3–5 working days",
@@ -75,8 +75,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     id: "corporate-documents",
     icon: FileText,
     title: "Corporate Documents",
-    description: "Requesting official company documents.",
-    contextLine: "Used for banks, authorities, or legal procedures.",
+    description: "Obtain the agreed current company documents, with translation or legalization added when needed.",
+    contextLine: "Document type, issuing authority, destination, and certification level are confirmed first.",
     price: CORPORATE_PRICING.CORPORATE_DOCUMENTS,
     priceTHB: CORPORATE_PRICING.CORPORATE_DOCUMENTS * 35,
     timeline: "From 1 working day",
@@ -86,8 +86,8 @@ const EXISTING_SERVICES: ServiceDefinition[] = [
     id: "tax-residency",
     icon: ScrollText,
     title: "Tax Residency Certificate",
-    description: "Official tax residency confirmation.",
-    contextLine: "Required for tax treaty benefits or foreign compliance.",
+    description: "Prepare and submit a Thai tax residency certificate request with the available supporting records.",
+    contextLine: "Issuance and treaty eligibility depend on the Revenue Department, the period, and the applicant’s facts.",
     price: CORPORATE_PRICING.TAX_RESIDENCY,
     priceTHB: CORPORATE_PRICING.TAX_RESIDENCY * 35,
     timeline: "Up to 30 days",
@@ -214,7 +214,7 @@ export function CorporateServicesContent() {
             <span>Starting a New Company</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Foundation services for registering and establishing your Thai Co., Ltd.
+            Defined filing support for a standard Thai Co., Ltd. Prices cover the stated scope; authority fees, eligibility checks, and non-standard work may be additional.
           </p>
         </div>
         

@@ -326,6 +326,9 @@ export function AIRecommender() {
                       </button>
                     </div>
                     <p className="text-sm text-foreground leading-relaxed">{result.summary}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      This is a planning recommendation, not a legal, tax, immigration, or eligibility determination. Confirm the final scope against your records and current requirements.
+                    </p>
 
                     {explainOpen && (
                       <div className="mt-3 p-4 rounded-lg border border-border bg-card/60 space-y-4 text-sm">

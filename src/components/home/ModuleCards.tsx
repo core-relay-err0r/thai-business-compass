@@ -8,7 +8,7 @@ const primaryServices = [
     index: "01",
     eyebrow: "Stop compliance debt",
     title: "Accounting that closes the gaps",
-    description: "Know what must be filed, when it is due, and what it costs before small omissions become expensive cleanup.",
+    description: "Map recurring bookkeeping and likely filings from your current setup, then confirm deadlines and scope before omissions become expensive cleanup.",
     features: ["Monthly bookkeeping", "Corporate tax filing", "VAT reporting", "Payroll services Thailand"],
     cta: "Check monthly cost",
   },
@@ -64,7 +64,7 @@ export function ModuleCards() {
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Secondary advisory</p>
           <div>
             <h3 className="font-serif text-xl font-medium">Consulting for decisions that fall outside routine compliance.</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Market entry, due diligence, restructuring, business advisory, and tax planning in Thailand.</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Scoped market-entry, commercial diligence, cost, and structure analysis, with regulated conclusions referred when needed.</p>
           </div>
           <a href={CALCULATOR_URL} className="inline-flex min-h-[44px] items-center gap-3 text-sm font-medium underline underline-offset-4">
             Check advisory options <ArrowUpRight aria-hidden="true" />
