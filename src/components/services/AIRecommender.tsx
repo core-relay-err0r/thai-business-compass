@@ -435,7 +435,7 @@ export function AIRecommender() {
                     )}
                   </div>
                   <div className="p-4 rounded-lg bg-card border border-border">
-                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Consulting</div>
+                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Business consulting</div>
                     {result.consultingServices.length > 0 ? (
                       <ul className="space-y-1.5">
                         {result.consultingServices.map((s) => (

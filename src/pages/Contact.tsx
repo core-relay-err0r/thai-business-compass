@@ -44,7 +44,7 @@ export default function Contact() {
 
       if (error) throw error;
 
-      toast.success("Message sent! We'll get back to you within 24 hours.");
+      toast.success("Message sent. Our team will review your enquiry.");
       setFormData({
         fullName: "",
         email: "",
@@ -72,14 +72,14 @@ export default function Contact() {
     <Layout>
       <SEOHead
         title="Contact PND50 | Thai Accounting & Tax Services | Bangkok"
-        description="Contact PND50 for Thai accounting, corporate tax, and business advisory services. Office in EmQuartier, Bangkok. English-speaking team responds within 24 hours."
+        description="Contact PND50 for Thai accounting, corporate tax, and business advisory services. Speak with our English-speaking team in EmQuartier, Bangkok."
         path="/contact"
         keywords="contact PND50, Bangkok accountant contact, Thai accounting firm contact, EmQuartier accountant, accountant Bangkok"
       />
       <LocalBusinessSchema />
       <InternalPageHeader
         eyebrow="Contact"
-        meta="Bangkok · Response within 24 hours"
+        meta="Bangkok · English-speaking team"
         title={<>Let&apos;s talk about <span className="text-primary">your business.</span></>}
         description="Have questions about Thai accounting or compliance? Our English-speaking team will help you identify the clearest next step."
       />
@@ -114,18 +114,18 @@ export default function Contact() {
                   <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm sm:text-base">Quick Response</h3>
-                  <p className="text-xs sm:text-sm text-muted-foreground">We reply within 24 hours</p>
+                  <h3 className="font-semibold text-sm sm:text-base">Direct support</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Choose the channel that suits you</p>
                 </div>
               </div>
               <div className="flex gap-3 sm:gap-4">
                 <div className="flex-1 p-3 sm:p-4 rounded-xl bg-background border border-border/50 shadow-sm">
-                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">24 hours</div>
-                  <div className="text-xs text-muted-foreground">Email response</div>
+                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">Email</div>
+                  <div className="text-xs text-muted-foreground">Business enquiries</div>
                 </div>
                 <div className="flex-1 p-3 sm:p-4 rounded-xl bg-background border border-border/50 shadow-sm">
-                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">1h</div>
-                  <div className="text-xs text-muted-foreground">WhatsApp Reply</div>
+                  <div className="text-xl sm:text-2xl font-bold text-primary mb-1">WhatsApp</div>
+                  <div className="text-xs text-muted-foreground">Message our team</div>
                 </div>
               </div>
             </div>

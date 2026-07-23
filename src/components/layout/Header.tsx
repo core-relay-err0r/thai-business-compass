@@ -16,7 +16,7 @@ export function Header() {
   const startOptions = [
     { href: "/services#accounting", icon: Calculator, title: "Accounting & Tax", description: "Recurring monthly and annual compliance" },
     { href: "/services#corporate", icon: Building2, title: "Corporate", description: "One-time company services" },
-    { href: "/services#consulting", icon: MessageSquare, title: "Consulting", description: "Business problem solving" },
+    { href: "/services#consulting", icon: MessageSquare, title: "Business consulting", description: "Business problem solving" },
   ];
 
   const navLink = (path: string) => cn(

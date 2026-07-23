@@ -116,36 +116,36 @@ export function MobileEstimateSheet() {
                   <p className="mt-1 text-xs text-muted-foreground">We will confirm the accounting price after reviewing the scope.</p>
                 </div>
               ) : (
-              <>
-              <div className="space-y-2">
-                {liveAccountingResult.monthlyBase > 0 ? (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Base accounting</span>
-                    <span className="font-medium">{formatUSD(liveAccountingResult.monthlyBase)}/month</span>
+                <div className="space-y-2">
+                  {liveAccountingResult.monthlyBase > 0 ? (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Base accounting</span>
+                      <span className="font-medium">{formatUSD(liveAccountingResult.monthlyBase)}/month</span>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Monthly recurring</span>
+                      <span className="font-medium">None</span>
+                    </div>
+                  )}
+                  {liveAccountingResult.monthlyAddons.map((item, idx) => (
+                    <div key={idx} className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{item.name}</span>
+                      <span className="font-medium">+{formatUSD(item.amount)}/month</span>
+                    </div>
+                  ))}
+                  {liveAccountingResult.rushFee && liveAccountingResult.rushSurcharge > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-amber-600">Rush surcharge (+30%)</span>
+                      <span className="font-medium text-amber-600">+{formatUSD(liveAccountingResult.rushSurcharge)}/month</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between pt-2 mt-1 border-t border-border/50 text-sm">
+                    <span className="font-medium">Monthly total</span>
+                    <span className="font-semibold">{formatUSD(liveAccountingResult.totalMonthly)}/month</span>
                   </div>
-                ) : (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Monthly recurring</span>
-                    <span className="font-medium">None</span>
-                  </div>
-                )}
-                {liveAccountingResult.monthlyAddons.map((item, idx) => (
-                  <div key={idx} className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{item.name}</span>
-                    <span className="font-medium">+{formatUSD(item.amount)}/month</span>
-                  </div>
-                ))}
-                {liveAccountingResult.rushFee && liveAccountingResult.rushSurcharge > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-amber-600">Rush surcharge (+30%)</span>
-                    <span className="font-medium text-amber-600">+{formatUSD(liveAccountingResult.rushSurcharge)}/month</span>
-                  </div>
-                )}
-                <div className="flex justify-between pt-2 mt-1 border-t border-border/50 text-sm">
-                  <span className="font-medium">Monthly total</span>
-                  <span className="font-semibold">{formatUSD(liveAccountingResult.totalMonthly)}/month</span>
                 </div>
-              </div>
+              )}
 
               {liveAccountingResult.annualAddons.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-border">
@@ -153,27 +153,33 @@ export function MobileEstimateSheet() {
                     Billed annually when due
                   </div>
                   <div className="text-xs text-muted-foreground mb-2">
-                    Charged once per year, separate from your monthly fee.
+                    Known fees are shown separately from any custom quote.
                   </div>
                   <div className="space-y-2">
                     {liveAccountingResult.annualAddons.map((item, idx) => (
-                      <div key={idx} className="flex justify-between text-sm">
+                      <div key={idx} className="flex justify-between gap-3 text-sm">
                         <span className="text-muted-foreground">{item.name}</span>
-                        <span className="font-medium">{item.isFrom ? "From " : ""}{formatUSD(item.amount)}/year</span>
+                        <span className="font-medium text-right">
+                          {item.amount === 0 ? "Custom quote" : `${item.isFrom ? "From " : ""}${formatUSD(item.amount)}/year`}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              <div className="flex justify-between pt-2 mt-2 border-t border-border/50">
-                <span className="text-sm font-medium">First-year accounting</span>
-                <span className="font-semibold">
-                  {liveAccountingResult.annualAddons.some(a => a.isFrom) ? "From " : ""}{formatUSD(liveAccountingResult.totalAnnual)}
+              <div className="flex justify-between gap-3 pt-2 mt-2 border-t border-border/50">
+                <span className="text-sm font-medium">
+                  {liveAccountingResult.isCustomQuote ? "Known first-year fees" : "First-year accounting"}
+                </span>
+                <span className="font-semibold text-right">
+                  {liveAccountingResult.isCustomQuote
+                    ? liveAccountingResult.annualAddons.some((item) => item.amount > 0)
+                      ? formatUSD(liveAccountingResult.annualAddons.reduce((sum, item) => sum + item.amount, 0))
+                      : "Quote required"
+                    : `${liveAccountingResult.annualAddons.some((item) => item.isFrom) ? "From " : ""}${formatUSD(liveAccountingResult.totalAnnual)}`}
                 </span>
               </div>
-              </>
-              )}
             </div>
           )}
 

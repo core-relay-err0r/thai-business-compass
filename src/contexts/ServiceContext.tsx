@@ -278,7 +278,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
           lines.push(`   Corporate Services: $${corporateTotal.toLocaleString()}`);
         }
         if (hasConsultingData) {
-          lines.push(`   Consulting: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
+          lines.push(`   Business consulting: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
         }
         if (hasCorporateData && hasConsultingData) {
           const initialTotal = corporateTotal + consultingTotal;
@@ -297,9 +297,14 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       if (hasAccountingData && state.accountingResult!.annualAddons.length > 0) {
         lines.push("\nANNUAL FEES (due at year-end)");
         state.accountingResult!.annualAddons.forEach((addon) => {
-          lines.push(`   ${addon.name}: $${addon.amount.toLocaleString()}`);
+          lines.push(`   ${addon.name}: ${addon.amount === 0 ? "Custom quote" : `$${addon.amount.toLocaleString()}`}`);
         });
-        lines.push(`   Annual fees subtotal: $${annualFees.toLocaleString()}`);
+        const hasQuotedAnnualFee = state.accountingResult!.annualAddons.some((addon) => addon.amount === 0);
+        lines.push(
+          state.accountingResult!.annualAddons.every((addon) => addon.amount === 0)
+            ? "   Known annual fees subtotal: Quote required"
+            : `   ${hasQuotedAnnualFee ? "Known annual fees subtotal" : "Annual fees subtotal"}: $${annualFees.toLocaleString()}`
+        );
       }
 
       // Grand Total
@@ -314,7 +319,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       lines.push("═".repeat(40));
       lines.push("\nNote: Final pricing confirmed after initial consultation.");
       if (hasConsultingData) {
-        lines.push("Consulting fees scoped based on specific requirements.");
+        lines.push("Business consulting fees are scoped to the specific requirements.");
       }
     }
 

@@ -31,7 +31,7 @@ const servicesList = [
     description: "Full payroll processing including salary calculations, social security contributions, and tax withholding.",
   },
   {
-    name: "Business Consulting",
+    name: "Business consulting",
     description: "Strategic advisory on tax optimization, visa requirements, and corporate restructuring for foreign businesses.",
   },
 ];

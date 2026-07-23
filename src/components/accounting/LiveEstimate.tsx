@@ -136,7 +136,7 @@ export function LiveEstimate() {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                Consulting
+                Business consulting
               </div>
               <div className="text-lg font-semibold">
                 {hasFromConsulting ? "From " : ""}{formatUSD(consultingTotal)}
@@ -186,7 +186,7 @@ export function LiveEstimate() {
         )}
         {selectedConsultingServices.length > 0 && (
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Consulting</span>
+            <span className="text-muted-foreground">Business consulting</span>
             <span className="font-medium">{hasFromConsulting ? "From " : ""}{formatUSD(consultingTotal)}</span>
           </div>
         )}

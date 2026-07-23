@@ -421,7 +421,7 @@ export default function Submit() {
                       )}
                       {hasConsultingData && (
                         <div className="flex justify-between text-sm">
-                          <span>Consulting</span>
+                          <span>Business consulting</span>
                           <span className="font-medium">
                             {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
                           </span>
@@ -473,10 +473,16 @@ export default function Submit() {
                           </span>
                         </div>
                       ))}
-                      <div className="flex justify-between text-sm pt-2 border-t border-border/50">
-                        <span className="font-medium">Annual fees subtotal</span>
+                      <div className="flex justify-between gap-4 text-sm pt-2 border-t border-border/50">
                         <span className="font-medium">
-                          ${formatPrice(accountingResult!.annualAddons.reduce((sum, a) => sum + a.amount, 0))}
+                          {accountingResult!.annualAddons.some((addon) => addon.amount === 0)
+                            ? "Known annual fees subtotal"
+                            : "Annual fees subtotal"}
+                        </span>
+                        <span className="font-medium text-right">
+                          {accountingResult!.annualAddons.every((addon) => addon.amount === 0)
+                            ? "Quote required"
+                            : `$${formatPrice(accountingResult!.annualAddons.reduce((sum, addon) => sum + addon.amount, 0))}`}
                         </span>
                       </div>
                     </div>
@@ -507,7 +513,7 @@ export default function Submit() {
                   {/* Disclaimer */}
                   <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
                     Estimates based on your inputs. Final pricing confirmed after initial consultation.
-                    {hasConsultingData && " Consulting fees scoped based on specific requirements."}
+                    {hasConsultingData && " Business consulting fees are scoped to the specific requirements."}
                   </p>
                 </CardContent>
               </Card>

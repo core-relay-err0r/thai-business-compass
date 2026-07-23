@@ -14,7 +14,7 @@ export function HeroSection() {
     description: "Monthly bookkeeping, tax filings, and financial compliance handled for you."
   }, {
     image: heroConsulting,
-    title: "Consulting",
+    title: "Business consulting",
     description: "Strategic advisory for business challenges, restructuring, and market entry."
   }];
 
