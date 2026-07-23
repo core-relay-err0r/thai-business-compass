@@ -1,81 +1,75 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calculator, Building2, MessageSquare, ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
 const CALCULATOR_URL = "https://calculator.pnd50.com";
 
-const modules = [
+const primaryServices = [
   {
-    href: CALCULATOR_URL,
-    cta: "Estimate setup cost",
-    icon: Building2,
-    title: "Corporate Services",
-    description: "Choose the event (incorporation, director change, share transfer). Get scope + one-time price.",
-    features: ["Company registration Thailand", "Director changes", "Share transfers", "Business setup Thailand"],
-  },
-  {
-    href: CALCULATOR_URL,
-    cta: "Check monthly cost",
-    icon: Calculator,
-    title: "Accounting",
-    description: "Calculate monthly + yearly cost while learning what's required.",
+    index: "01",
+    eyebrow: "Recurring statutory work",
+    title: "Accounting & Tax",
+    description: "Know the monthly and annual obligations your Thai company must meet, and what it costs to keep them in order.",
     features: ["Monthly bookkeeping", "Corporate tax filing", "VAT reporting", "Payroll services Thailand"],
+    cta: "Check monthly cost",
   },
   {
-    href: CALCULATOR_URL,
-    cta: "Check advisory options",
-    icon: MessageSquare,
-    title: "Consulting",
-    description: "Choose the business problem. Get expected outcomes + price range.",
-    features: ["Business advisory", "Market entry", "Due diligence", "Tax planning Thailand"],
+    index: "02",
+    eyebrow: "One-time company actions",
+    title: "Corporate Setup & Compliance",
+    description: "Define the scope and price of incorporation, registration, and structural changes before the work begins.",
+    features: ["Company registration Thailand", "Director changes", "Share transfers", "Business setup Thailand"],
+    cta: "Estimate setup cost",
   },
 ];
 
 export function ModuleCards() {
   return (
-    <section className="py-8 sm:py-12 md:py-20 bg-muted/30">
+    <section className="border-b border-border bg-secondary py-16 sm:py-20 lg:py-28">
       <AnimatedSection className="container px-4 sm:px-6">
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">What do you need?</h2>
-          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
-            Choose your starting point. Each module guides you through the scope and shows you the cost.
-          </p>
+        <div className="grid gap-8 border-b border-border pb-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Start with the work</p>
+          <div className="flex flex-col gap-4">
+            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">Two kinds of obligations. One clear starting point.</h2>
+            <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Separate recurring statutory work from one-time corporate actions, then review scope and expected cost.
+            </p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
-          {modules.map((module) => (
-            <Card key={module.href} className="relative group hover:shadow-lg transition-shadow flex flex-col h-full">
-              <CardHeader className="p-4 sm:p-6">
-                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-primary/10 mb-3 sm:mb-4">
-                  <module.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg sm:text-xl">{module.title}</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">
-                  {module.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0 flex flex-col flex-1">
-                <ul className="text-xs sm:text-sm text-muted-foreground space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
-                  {module.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary/60" />
-                      {feature}
-                    </li>
+        <div className="grid lg:grid-cols-2">
+          {primaryServices.map((service, index) => (
+            <article key={service.title} className={`flex flex-col border-border py-10 lg:py-14 ${index === 0 ? "lg:border-r lg:pr-12" : "border-t lg:border-t-0 lg:pl-12"}`}>
+              <div className="flex items-start justify-between gap-6">
+                <span className="font-serif text-4xl text-muted-foreground/50">{service.index}</span>
+                <span className="text-right text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{service.eyebrow}</span>
+              </div>
+              <div className="mt-12 flex flex-1 flex-col gap-6">
+                <h3 className="font-serif text-3xl font-medium tracking-tight sm:text-4xl">{service.title}</h3>
+                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{service.description}</p>
+                <ul className="grid gap-0 border-t border-border sm:grid-cols-2">
+                  {service.features.map((feature) => (
+                    <li key={feature} className="border-b border-border py-3 text-sm">{feature}</li>
                   ))}
                 </ul>
-                <div className="mt-auto">
-                  <a href={module.href}>
-                    <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px]">
-                      {module.cta}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
+                <a href={CALCULATOR_URL} className="mt-auto inline-flex min-h-[44px] items-center justify-between border border-foreground px-5 py-3 text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground">
+                  {service.cta}
+                  <ArrowUpRight aria-hidden="true" />
+                </a>
+              </div>
+            </article>
           ))}
         </div>
+
+        <aside className="grid gap-6 border-t border-border pt-8 md:grid-cols-[0.35fr_1fr_auto] md:items-center">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Secondary advisory</p>
+          <div>
+            <h3 className="font-serif text-xl font-medium">Consulting for decisions that fall outside routine compliance.</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Market entry, due diligence, restructuring, business advisory, and tax planning in Thailand.</p>
+          </div>
+          <a href={CALCULATOR_URL} className="inline-flex min-h-[44px] items-center gap-3 text-sm font-medium underline underline-offset-4">
+            Check advisory options <ArrowUpRight aria-hidden="true" />
+          </a>
+        </aside>
       </AnimatedSection>
     </section>
   );
