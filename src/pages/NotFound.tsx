@@ -1,24 +1,30 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
-const NotFound = () => {
+import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
+
+export default function NotFound() {
   const location = useLocation();
 
-  useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-muted-foreground">Oops! Page not found</p>
-        <a href="/" className="text-primary underline hover:text-primary/90">
-          Return to Home
-        </a>
-      </div>
-    </div>
+    <Layout>
+      <main className="border-b border-border">
+        <div className="container px-4 sm:px-6">
+          <div className="grid min-h-[70vh] border-x border-border lg:grid-cols-[0.65fr_1.35fr]">
+            <div className="flex flex-col justify-between border-b border-border p-6 sm:p-10 lg:border-b-0 lg:border-r">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Error 404</p>
+              <p className="mt-16 break-all text-sm text-muted-foreground lg:mt-0">{location.pathname}</p>
+            </div>
+            <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-16">
+              <p className="font-serif text-7xl font-medium tracking-[-0.06em] text-primary sm:text-9xl">404</p>
+              <h1 className="mt-6 text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">This page is not in our records.</h1>
+              <p className="mt-5 max-w-lg leading-relaxed text-muted-foreground">The address may have changed, or the page may no longer be available. Return to the homepage to continue.</p>
+              <Link to="/" className="mt-8 w-fit"><Button size="lg"><ArrowLeft className="mr-2 h-4 w-4" />Return home</Button></Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    </Layout>
   );
-};
-
-export default NotFound;
+}

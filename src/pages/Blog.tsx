@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,24 +41,12 @@ export default function Blog() {
         ]}
       />
 
-      {/* Hero Section */}
-      <section className="py-12 sm:py-16 md:py-20 border-b border-border">
-        <div className="container px-4 sm:px-6">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-4">
-              <BookOpen className="w-3 h-3 mr-1.5" />
-              Insights
-            </Badge>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              Thai Accounting & Tax Insights
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Expert guidance on corporate tax filing, compliance, and business operations 
-              for foreign companies in Thailand.
-            </p>
-          </div>
-        </div>
-      </section>
+      <InternalPageHeader
+        eyebrow="Insights"
+        meta="Guides · Tax · Compliance"
+        title={<>Thai accounting and <span className="text-primary">tax insights.</span></>}
+        description="Clear guidance on corporate tax, compliance, and business operations for foreign companies in Thailand."
+      />
 
       {/* Blog Posts Grid */}
       <section className="py-12 sm:py-16 md:py-20">
@@ -90,6 +79,10 @@ export default function Blog() {
                             src={post.featured_image}
                             alt={`${post.title} - Thai accounting insights by PND50`}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            decoding="async"
+                            width="720"
+                            height="405"
                           />
                         </div>
                       ) : (

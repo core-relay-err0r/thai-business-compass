@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
 import { AccountingWizard } from "@/components/accounting/AccountingWizard";
 import { LiveEstimate } from "@/components/accounting/LiveEstimate";
@@ -144,19 +145,12 @@ export default function Services() {
       />
       <FAQSchema items={serviceFAQs} />
       <ServiceSchema services={servicesList} />
-      {/* Section Head Block */}
-      <section className="py-8 sm:py-10 md:py-16 border-b border-border">
-        <div className="container px-4 sm:px-6">
-          <div className="max-w-2xl mx-auto text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-3 sm:mb-4">
-              Everything you need to operate in Thailand.
-            </h1>
-            <p className="text-base sm:text-lg text-muted-foreground">
-              Accounting services Thailand, corporate tax filing, payroll, and business consulting — tailored for foreign companies.
-            </p>
-          </div>
-        </div>
-      </section>
+      <InternalPageHeader
+        eyebrow="Services"
+        meta="Corporate · Accounting · Advisory"
+        title={<>Everything you need to <span className="text-primary">operate in Thailand.</span></>}
+        description="Corporate services, accounting, tax filing, payroll, and practical business advice for foreign-owned companies."
+      />
 
       <section className="py-8 sm:py-10 md:py-16">
         <div className="container px-4 sm:px-6">

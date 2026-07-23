@@ -1,109 +1,43 @@
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
-import { PageTransition } from "./PageTransition";
-import Home from "@/pages/Home";
-import Services from "@/pages/Services";
-import Contact from "@/pages/Contact";
-import About from "@/pages/About";
-import Submit from "@/pages/Submit";
-import Privacy from "@/pages/Privacy";
-import Terms from "@/pages/Terms";
-import Blog from "@/pages/Blog";
-import BlogPost from "@/pages/BlogPost";
-import NotFound from "@/pages/NotFound";
+import { lazy, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+
+const Home = lazy(() => import("@/pages/Home"));
+const Services = lazy(() => import("@/pages/Services"));
+const Contact = lazy(() => import("@/pages/Contact"));
+const About = lazy(() => import("@/pages/About"));
+const Submit = lazy(() => import("@/pages/Submit"));
+const Privacy = lazy(() => import("@/pages/Privacy"));
+const Terms = lazy(() => import("@/pages/Terms"));
+const Blog = lazy(() => import("@/pages/Blog"));
+const BlogPost = lazy(() => import("@/pages/BlogPost"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+
+function RouteFallback() {
+  return (
+    <div className="container flex min-h-[55vh] items-center px-4 sm:px-6" role="status" aria-live="polite">
+      <p className="text-sm text-muted-foreground">Loading page…</p>
+    </div>
+  );
+}
 
 export function AnimatedRoutes() {
-  const location = useLocation();
-
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route
-          path="/"
-          element={
-            <PageTransition>
-              <Home />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/services"
-          element={
-            <PageTransition>
-              <Services />
-            </PageTransition>
-          }
-        />
-        {/* Redirect old routes to unified services page */}
+    <Suspense fallback={<RouteFallback />}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/services" element={<Services />} />
         <Route path="/corporate" element={<Navigate to="/services#corporate" replace />} />
         <Route path="/accounting" element={<Navigate to="/services#accounting" replace />} />
         <Route path="/consulting" element={<Navigate to="/services#consulting" replace />} />
-        <Route
-          path="/contact"
-          element={
-            <PageTransition>
-              <Contact />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/about"
-          element={
-            <PageTransition>
-              <About />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/submit"
-          element={
-            <PageTransition>
-              <Submit />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/privacy"
-          element={
-            <PageTransition>
-              <Privacy />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/tos"
-          element={
-            <PageTransition>
-              <Terms />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/blog"
-          element={
-            <PageTransition>
-              <Blog />
-            </PageTransition>
-          }
-        />
-        <Route
-          path="/blog/:slug"
-          element={
-            <PageTransition>
-              <BlogPost />
-            </PageTransition>
-          }
-        />
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-        <Route
-          path="*"
-          element={
-            <PageTransition>
-              <NotFound />
-            </PageTransition>
-          }
-        />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/submit" element={<Submit />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/tos" element={<Terms />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-    </AnimatePresence>
+    </Suspense>
   );
 }

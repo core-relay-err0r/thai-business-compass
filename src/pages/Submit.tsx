@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -173,15 +174,14 @@ export default function Submit() {
 
   return (
     <Layout>
-      <section className="py-8 sm:py-12 md:py-20">
+      <InternalPageHeader
+        eyebrow="Request"
+        meta="Review · Verify · Submit"
+        title={<>Tell us what your <span className="text-primary">business needs.</span></>}
+        description="Review your selections and provide your contact details. Our team will respond with the relevant next steps."
+      />
+      <section className="py-10 sm:py-14 md:py-16">
         <div className="container px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto mb-8 sm:mb-12 text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Submit Request</h1>
-            <p className="text-base sm:text-lg text-muted-foreground">
-              Review your selections and provide your contact details.
-            </p>
-          </div>
-
           <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
             {/* Contact Info */}
             <Card>

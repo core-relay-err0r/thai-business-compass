@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -76,21 +77,22 @@ export default function Contact() {
         keywords="contact PND50, Bangkok accountant contact, Thai accounting firm contact, EmQuartier accountant, accountant Bangkok"
       />
       <LocalBusinessSchema />
-      <div className="py-8 sm:py-12 md:py-20">
+      <InternalPageHeader
+        eyebrow="Contact"
+        meta="Bangkok · Response within 24h"
+        title={<>Let&apos;s talk about <span className="text-primary">your business.</span></>}
+        description="Have questions about Thai accounting or compliance? Our English-speaking team will help you identify the clearest next step."
+      />
+      <div className="py-10 sm:py-14 md:py-16">
         <div className="container px-4 sm:px-6">
           {/* Hero Section - Two Column */}
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 sm:gap-8 lg:gap-16 mb-12 sm:mb-16">
             {/* Left - Title */}
             <div className="max-w-lg">
-              <p className="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wider mb-3 sm:mb-4">
-                Contact
-              </p>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
-                Let's talk about<br />
-                <span className="text-primary">your business</span>
-              </h1>
-              <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
-                Have questions about Thai accounting or compliance? We're here to help you navigate with confidence.
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Direct contact</p>
+              <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight">Speak with our Bangkok team.</h2>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                Choose the channel that works for you. We keep communication direct and practical.
               </p>
               <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 sm:gap-4 text-sm">
                 <a href="tel:+6620172949" className="flex items-center gap-2 hover:text-primary transition-colors min-h-[44px] sm:min-h-0">
