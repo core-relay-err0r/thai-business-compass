@@ -52,7 +52,7 @@ export default function About() {
     }]} />
       <OrganizationSchema />
       {/* Hero Section */}
-      <section className="min-h-[calc(100vh-4rem)] flex items-center relative overflow-hidden py-16 sm:py-20 lg:py-0">
+      <section className="flex items-center relative overflow-hidden py-16 sm:py-20 lg:py-24">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
         
