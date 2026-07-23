@@ -20,10 +20,10 @@ export function TrustSection() {
       <AnimatedSection className="container px-4 sm:px-6">
         <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
           <div className="flex flex-col gap-6">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Our mandate</p>
-            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">Defined scope is part of good advice.</h2>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">A useful line in the sand</p>
+            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">If the structure cannot survive scrutiny, we will not sell it.</h2>
             <p className="max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-              PND50 specializes in Thai corporate accounting and tax services for foreign-owned companies. We work in English and remain explicit about where our responsibility begins and ends.
+              PND50 handles Thai corporate accounting and tax for foreign-owned companies. We work in English, define our responsibility clearly, and say no to arrangements that create more risk than value.
             </p>
           </div>
 

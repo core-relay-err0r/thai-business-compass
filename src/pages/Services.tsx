@@ -61,17 +61,17 @@ const sectionData = {
   corporate: {
     icon: Building2,
     title: "Corporate services",
-    description: "One-time corporate actions for starting or managing a Thai company.",
+    description: "Set up or change the company without leaving legal and documentary loose ends.",
   },
   accounting: {
     icon: Calculator,
     title: "Accounting Calculator",
-    description: "Understand your accounting setup before committing.",
+    description: "Expose recurring filings, records, payroll, and year-end work before committing.",
   },
   consulting: {
     icon: MessageSquare,
     title: "Business consulting",
-    description: "Choose the business question, not a consulting package.",
+    description: "Pressure-test the business decision, not a generic consulting package.",
   },
 };
 
@@ -146,10 +146,10 @@ export default function Services() {
       <FAQSchema items={serviceFAQs} />
       <ServiceSchema services={servicesList} />
       <InternalPageHeader
-        eyebrow="Services"
+        eyebrow="Map the exposure"
         meta="Corporate · Accounting · Advisory"
-        title={<>Everything you need to <span className="text-primary">operate in Thailand.</span></>}
-        description="Corporate services, accounting, tax filing, payroll, and practical business advice for foreign-owned companies."
+        title={<>Do not buy a package. <span className="text-primary">Diagnose the work.</span></>}
+        description="Build the scope around your actual company, filings, people, and plans. See known fees immediately; use a custom quote only where complexity makes one necessary."
       />
 
       <section className="py-8 sm:py-10 md:py-16">
@@ -217,7 +217,7 @@ export default function Services() {
                     <h2 className="text-lg sm:text-xl font-semibold">Corporate services</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    One-time corporate actions for starting or managing a Thai company.
+                    Set up or change the company without leaving legal and documentary loose ends.
                   </p>
                 </div>
                 <CorporateServicesContent />
@@ -231,7 +231,7 @@ export default function Services() {
                     <h2 className="text-lg sm:text-xl font-semibold">Accounting Calculator</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    Understand your accounting setup before committing.
+                    Expose recurring filings, records, payroll, and year-end work before committing.
                   </p>
                 </div>
                 <AccountingWizard />
@@ -245,7 +245,7 @@ export default function Services() {
                     <h2 className="text-lg sm:text-xl font-semibold">Business consulting</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    Choose the business question, not a consulting package.
+                    Pressure-test the business decision, not a generic consulting package.
                   </p>
                 </div>
                 <ConsultingServices />

@@ -39,9 +39,9 @@ const testimonials: Testimonial[] = [
 export function Testimonials() {
   return (
     <ClientsSection
-      tagLabel="Client Testimonials"
-      title="Trusted by businesses across Thailand"
-      description="Hear from the companies we've helped navigate Thai compliance with confidence."
+      tagLabel="Evidence, not promises"
+      title="What competent execution sounds like"
+      description="Clients describe the things that matter when the work is statutory: clarity, accuracy, speed, and control."
       stats={stats}
       testimonials={testimonials}
       primaryActionLabel="Get in Touch"

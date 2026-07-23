@@ -78,10 +78,10 @@ export default function Contact() {
       />
       <LocalBusinessSchema />
       <InternalPageHeader
-        eyebrow="Contact"
+        eyebrow="Bring us the difficult question"
         meta="Bangkok · English-speaking team"
-        title={<>Let&apos;s talk about <span className="text-primary">your business.</span></>}
-        description="Have questions about Thai accounting or compliance? Our English-speaking team will help you identify the clearest next step."
+        title={<>Vague advice is expensive. <span className="text-primary">Ask directly.</span></>}
+        description="Tell us what is changing, overdue, unclear, or at risk. Our English-speaking team will identify the most useful next step — even if it is not a service we sell."
       />
       <div className="py-10 sm:py-14 md:py-16">
         <div className="container px-4 sm:px-6">
@@ -90,9 +90,9 @@ export default function Contact() {
             {/* Left - Title */}
             <div className="max-w-lg">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Direct contact</p>
-              <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight">Speak with our Bangkok team.</h2>
+              <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight">Skip the polished brief. Tell us where it hurts.</h2>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                Choose the channel that works for you. We keep communication direct and practical.
+                Choose the channel that works for you. A deadline, broken process, unclear structure, or difficult decision is enough to start.
               </p>
               <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 sm:gap-4 text-sm">
                 <a href="tel:+6620172949" className="flex items-center gap-2 hover:text-primary transition-colors min-h-[44px] sm:min-h-0">

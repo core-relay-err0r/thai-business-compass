@@ -29,7 +29,7 @@ export function HowItWorks() {
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">How it works</h2>
           <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
-            From questions to quote in minutes. No calls required.
+            Replace vague conversations with a scope you can inspect, question, and act on.
           </p>
         </div>
 

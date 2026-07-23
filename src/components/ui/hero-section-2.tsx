@@ -56,8 +56,11 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
           <div className="grid flex-1 items-stretch lg:grid-cols-[1.15fr_0.85fr]">
             <div className="flex flex-col justify-between border-border py-8 lg:border-r lg:py-10 lg:pr-12 xl:pr-16">
               <div className="flex max-w-4xl flex-col gap-6">
-                <p className="font-serif text-lg text-primary">Clarity before commitment.</p>
-                <h1 className="text-balance font-serif text-4xl font-medium leading-[1.04] tracking-[-0.035em] sm:text-5xl lg:text-6xl xl:text-[4.75rem]">
+                <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+                  <span className="h-px w-10 bg-primary" aria-hidden="true" />
+                  Control the risk before it controls the business
+                </div>
+                <h1 className="text-balance font-serif text-5xl font-medium leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
                   {title}
                 </h1>
                 <p className="max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -78,9 +81,10 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
               </div>
 
               {tagline && (
-                <p className="mt-12 border-l border-foreground pl-4 text-sm leading-relaxed text-muted-foreground">
-                  {tagline}
-                </p>
+                <div className="mt-12 grid border-y border-foreground sm:grid-cols-[auto_1fr]">
+                  <span className="bg-foreground px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-background">Our position</span>
+                  <p className="px-4 py-3 text-sm leading-relaxed text-foreground">{tagline}</p>
+                </div>
               )}
             </div>
 

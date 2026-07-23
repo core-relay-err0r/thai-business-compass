@@ -148,9 +148,9 @@ export default function Submit() {
               <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-primary/10 mx-auto mb-4 sm:mb-6">
                 <Check className="h-7 w-7 sm:h-8 sm:w-8 text-primary" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Request Submitted</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">The guessing stops here.</h1>
               <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
-                Thank you for your submission. We'll review your request and reply with next steps within 1 business day.
+                Your brief is with our team. We will review the scope and reply with concrete next steps within 1 business day.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <Button
@@ -175,10 +175,10 @@ export default function Submit() {
   return (
     <Layout>
       <InternalPageHeader
-        eyebrow="Request"
+        eyebrow="Turn assumptions into a brief"
         meta="Review · Verify · Submit"
-        title={<>Tell us what your <span className="text-primary">business needs.</span></>}
-        description="Review your selections and provide your contact details. Our team will respond with the relevant next steps."
+        title={<>Give us the facts. <span className="text-primary">We will challenge the gaps.</span></>}
+        description="Review the scope, add the context we cannot infer, and send one structured request. Our team will respond with relevant next steps — not a generic sales pitch."
       />
       <section className="py-10 sm:py-14 md:py-16">
         <div className="container px-4 sm:px-6">

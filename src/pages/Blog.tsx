@@ -42,10 +42,10 @@ export default function Blog() {
       />
 
       <InternalPageHeader
-        eyebrow="Insights"
+        eyebrow="Useful before it becomes urgent"
         meta="Guides · Tax · Compliance"
-        title={<>Thai accounting and <span className="text-primary">tax insights.</span></>}
-        description="Clear guidance on corporate tax, compliance, and business operations for foreign companies in Thailand."
+        title={<>The rules are dry. <span className="text-primary">The consequences are not.</span></>}
+        description="Plain-English guidance on Thai tax, compliance, and corporate decisions — written to help foreign companies act before a routine issue becomes an expensive one."
       />
 
       {/* Blog Posts Grid */}
@@ -139,7 +139,7 @@ export default function Blog() {
         <div className="container px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-              Need help with your Thai taxes?
+              Reading is useful. Knowing your exposure is better.
             </h2>
             <p className="text-muted-foreground mb-6">
               Our English-speaking team is ready to help you navigate Thai accounting and compliance.

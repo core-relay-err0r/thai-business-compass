@@ -35,8 +35,8 @@ export default function About() {
       <InternalPageHeader
         eyebrow="About PND50"
         meta="Bangkok · Thailand"
-        title={<>Local knowledge.<br /><span className="text-primary">Global standards.</span></>}
-        description="We help foreign-owned businesses understand and meet their Thai accounting, tax, and corporate obligations—with direct advice and no unnecessary complexity."
+        title={<>You do not need more paperwork.<br /><span className="text-primary">You need control.</span></>}
+        description="We help foreign-owned businesses see what matters, meet Thai obligations, and make defensible decisions without hiding behind jargon or unnecessary complexity."
       />
 
       <section className="border-b border-border">
@@ -57,7 +57,7 @@ export default function About() {
           <InternalSectionLabel index="01">Our role</InternalSectionLabel>
           <div className="grid gap-10 pt-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
             <h2 className="max-w-xl text-balance font-serif text-3xl font-medium leading-tight tracking-tight sm:text-4xl">
-              Accounting should create clarity, not more administration.
+              Good accounting does not record confusion. It removes it.
             </h2>
             <div className="grid gap-px border border-border bg-border sm:grid-cols-3">
               {principles.map(([title, description], index) => (
@@ -77,7 +77,7 @@ export default function About() {
           <div className="grid lg:grid-cols-2">
             <div className="py-12 sm:py-16 lg:pr-14">
               <InternalSectionLabel index="02">How we work</InternalSectionLabel>
-              <h2 className="mt-8 text-balance font-serif text-3xl font-medium tracking-tight sm:text-4xl">A team that stays close to the work.</h2>
+              <h2 className="mt-8 text-balance font-serif text-3xl font-medium tracking-tight sm:text-4xl">Senior attention where mistakes become expensive.</h2>
               <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">
                 Your questions are handled by people who understand both Thai requirements and international business expectations. We combine human judgement with reliable systems so you always know where things stand.
               </p>

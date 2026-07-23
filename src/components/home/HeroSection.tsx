@@ -24,18 +24,18 @@ export function HeroSection() {
       <h1 className="sr-only">PND50 - Thai Accounting Firm in Bangkok, Thailand | Accountant for Foreigners</h1>
       <HeroSectionUI 
         title={<>
-          Understand what your business needs in Thailand, <span className="text-primary">before you commit.</span>
+          Thailand rewards prepared businesses. <span className="text-primary">Not expensive mistakes.</span>
         </>} 
-        subtitle="An interactive way for foreign founders to understand their company setup, accounting, corporate actions, and advisory scope — with clear structure and transparent cost." 
+        subtitle="See the compliance, corporate work, and likely cost behind your next move — before a missed filing, weak structure, or vague quote turns into a bigger problem."
         callToAction={{
-          text: "Estimate Cost",
+          text: "Expose the real cost",
           href: "https://calculator.pnd50.com"
         }} 
         secondaryAction={{
-          text: "Contact us",
+          text: "Challenge us with your case",
           href: "/contact"
         }} 
-        tagline="Understand first. Decide later. No pressure." 
+        tagline="No mystery packages. No grey-area structures. No pressure to buy what you do not need."
         slides={slides} 
         contactInfo={{
           website: "info@pnd50.com",

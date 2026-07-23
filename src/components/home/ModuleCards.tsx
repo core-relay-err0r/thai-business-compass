@@ -6,17 +6,17 @@ const CALCULATOR_URL = "https://calculator.pnd50.com";
 const primaryServices = [
   {
     index: "01",
-    eyebrow: "Recurring statutory work",
-    title: "Accounting & Tax",
-    description: "Know the monthly and annual obligations your Thai company must meet, and what it costs to keep them in order.",
+    eyebrow: "Stop compliance debt",
+    title: "Accounting that closes the gaps",
+    description: "Know what must be filed, when it is due, and what it costs before small omissions become expensive cleanup.",
     features: ["Monthly bookkeeping", "Corporate tax filing", "VAT reporting", "Payroll services Thailand"],
     cta: "Check monthly cost",
   },
   {
     index: "02",
-    eyebrow: "One-time company actions",
-    title: "Corporate Setup & Compliance",
-    description: "Define the scope and price of incorporation, registration, and structural changes before the work begins.",
+    eyebrow: "Build it correctly once",
+    title: "Corporate work without loose ends",
+    description: "Define the structure, documents, and price of incorporation or company changes before anyone starts filing paperwork.",
     features: ["Company registration Thailand", "Director changes", "Share transfers", "Business setup Thailand"],
     cta: "Estimate setup cost",
   },
@@ -27,11 +27,11 @@ export function ModuleCards() {
     <section className="border-b border-border bg-secondary py-16 sm:py-20 lg:py-28">
       <AnimatedSection className="container px-4 sm:px-6">
         <div className="grid gap-8 border-b border-border pb-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Start with the work</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Choose your exposure</p>
           <div className="flex flex-col gap-4">
-            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">Two kinds of obligations. One clear starting point.</h2>
+            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">The work is predictable. The consequences of ignoring it are not.</h2>
             <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Separate recurring statutory work from one-time corporate actions, then review scope and expected cost.
+              Separate recurring compliance from one-time corporate actions. See the scope, challenge the assumptions, then decide.
             </p>
           </div>
         </div>
