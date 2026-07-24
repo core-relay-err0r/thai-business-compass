@@ -8,6 +8,16 @@ interface ArticleSchemaProps {
   image?: string;
   datePublished: string;
   dateModified?: string;
+  author: {
+    type: "Person" | "Organization";
+    name: string;
+    role?: string | null;
+  };
+  reviewer?: {
+    name: string;
+    role?: string | null;
+  };
+  citations?: string[];
 }
 
 export function ArticleSchema({
@@ -17,23 +27,49 @@ export function ArticleSchema({
   image,
   datePublished,
   dateModified,
+  author,
+  reviewer,
+  citations = [],
 }: ArticleSchemaProps) {
+  const organizationId = "https://pnd50.com/#organization";
   const schema = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${url}#article`,
     headline: title,
-    description: description,
+    description,
     image: image || "https://pnd50.com/favicon.png",
-    datePublished: datePublished,
+    datePublished,
     dateModified: dateModified || datePublished,
-    author: {
-      "@type": "Organization",
-      name: "PND50",
-      url: "https://pnd50.com",
-    },
+    author: author.type === "Person"
+      ? {
+          "@type": "Person",
+          "@id": `${url}#author`,
+          name: author.name,
+          ...(author.role ? { jobTitle: author.role } : {}),
+        }
+      : {
+          "@type": "Organization",
+          "@id": organizationId,
+          name: author.name,
+          url: "https://pnd50.com",
+        },
+    ...(reviewer
+      ? {
+          reviewedBy: {
+            "@type": "Person",
+            "@id": `${url}#reviewer`,
+            name: reviewer.name,
+            ...(reviewer.role ? { jobTitle: reviewer.role } : {}),
+          },
+        }
+      : {}),
+    ...(citations.length > 0 ? { citation: citations } : {}),
     publisher: {
       "@type": "Organization",
+      "@id": organizationId,
       name: "PND50",
+      url: "https://pnd50.com",
       logo: {
         "@type": "ImageObject",
         url: "https://pnd50.com/favicon.png",

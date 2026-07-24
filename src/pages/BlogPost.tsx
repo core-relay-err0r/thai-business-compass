@@ -3,13 +3,14 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, ArrowLeft, ArrowRight, BookOpen, Clock } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight, BookOpen, Clock, ExternalLink, ShieldCheck, UserRound } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { BreadcrumbSchema, ArticleSchema } from "@/components/seo/StructuredData";
 import { format } from "date-fns";
 import { useEffect } from "react";
+import { getArticleAuthor, normalizeBlogSources } from "@/lib/blog";
 
 const SITE_URL = "https://pnd50.com";
 
@@ -209,6 +210,9 @@ export default function BlogPost() {
   }
 
   const readingTime = getReadingTime(post.content);
+  const sources = normalizeBlogSources(post.sources);
+  const author = getArticleAuthor(post);
+  const modifiedDate = post.reviewed_at || post.updated_at;
 
   return (
     <Layout>
@@ -232,7 +236,10 @@ export default function BlogPost() {
         url={`https://pnd50.com/blog/${post.slug}`}
         image={toAbsoluteUrl(post.featured_image)}
         datePublished={post.published_at || post.created_at}
-        dateModified={post.updated_at}
+        dateModified={modifiedDate}
+        author={author}
+        reviewer={post.reviewer_name ? { name: post.reviewer_name, role: post.reviewer_role } : undefined}
+        citations={sources.map((source) => source.url)}
       />
 
       {/* Article Header */}
@@ -266,13 +273,37 @@ export default function BlogPost() {
                 {post.published_at && (
                   <div className="flex items-center gap-1.5">
                     <Calendar className="w-4 h-4" />
-                    {format(new Date(post.published_at), "MMMM d, yyyy")}
+                    Published {format(new Date(post.published_at), "MMMM d, yyyy")}
                   </div>
                 )}
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
                   {readingTime} min read
                 </div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 border-l-2 border-primary pl-4 text-sm sm:flex-row sm:flex-wrap sm:gap-x-6">
+                <div className="flex items-start gap-2">
+                  <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                  <p>
+                    <span className="text-muted-foreground">Written by </span>
+                    <span className="font-medium text-foreground">{author.name}</span>
+                    {author.role && <span className="text-muted-foreground"> · {author.role}</span>}
+                  </p>
+                </div>
+                {post.reviewer_name && (
+                  <div className="flex items-start gap-2">
+                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                    <p>
+                      <span className="text-muted-foreground">Reviewed by </span>
+                      <span className="font-medium text-foreground">{post.reviewer_name}</span>
+                      {post.reviewer_role && <span className="text-muted-foreground"> · {post.reviewer_role}</span>}
+                      {post.reviewed_at && (
+                        <span className="text-muted-foreground"> · {format(new Date(post.reviewed_at), "MMMM d, yyyy")}</span>
+                      )}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -293,6 +324,17 @@ export default function BlogPost() {
           </div>
         )}
 
+        {post.key_takeaway && (
+          <aside className="container px-4 pt-8 sm:px-6 sm:pt-12" aria-labelledby="key-takeaway-heading">
+            <div className="mx-auto max-w-3xl border border-border bg-muted/30 p-5 sm:p-6">
+              <p id="key-takeaway-heading" className="mb-2 text-xs font-semibold uppercase tracking-wider text-primary">
+                Key takeaway
+              </p>
+              <p className="text-base leading-relaxed text-foreground sm:text-lg">{post.key_takeaway}</p>
+            </div>
+          </aside>
+        )}
+
         {/* Article Content */}
         <div className="py-8 sm:py-12">
           <div className="container px-4 sm:px-6">
@@ -301,6 +343,39 @@ export default function BlogPost() {
             </div>
           </div>
         </div>
+
+        {sources.length > 0 && (
+          <section className="border-t border-border py-10 sm:py-12" aria-labelledby="article-sources-heading">
+            <div className="container px-4 sm:px-6">
+              <div className="mx-auto max-w-3xl">
+                <div className="mb-5 flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <h2 id="article-sources-heading" className="text-xl font-semibold sm:text-2xl">Sources</h2>
+                </div>
+                <ol className="flex flex-col gap-3">
+                  {sources.map((source, index) => (
+                    <li key={`${source.url}-${index}`} className="border-l-2 border-border pl-4 text-sm leading-relaxed">
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-start gap-1.5 font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+                      >
+                        <span>{source.title}</span>
+                        <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                      </a>
+                      <p className="mt-1 text-muted-foreground">
+                        {source.publisher}
+                        {source.published_at && ` · Published ${source.published_at}`}
+                        {source.accessed_at && ` · Accessed ${source.accessed_at}`}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* CTA Section */}
         <footer className="py-12 sm:py-16 bg-muted/30 border-t border-border">
