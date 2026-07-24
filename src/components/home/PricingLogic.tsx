@@ -16,7 +16,7 @@ export function PricingLogic() {
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Understand the quote</p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Indicative prices below are shown in USD. Final scope and fees are confirmed after reviewing the company facts.
+              Indicative prices are shown in Thai baht using a simple fixed rate of ฿33 per US dollar. Final scope and fees are confirmed after reviewing the company facts.
             </p>
           </div>
           <div>

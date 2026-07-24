@@ -290,11 +290,11 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
           className="grid gap-2 sm:gap-3"
         >
           {[
-            { value: "0-5k", label: "Up to ฿170,000" },
-            { value: "5k-50k", label: "฿170,000 – ฿1.7M" },
-            { value: "50k-100k", label: "฿1.7M – ฿3.4M" },
-            { value: "100k-1m", label: "฿3.4M – ฿33.8M" },
-            { value: "1m+", label: "Over ฿33.8M" },
+            { value: "0-5k", label: "Up to ฿165,000" },
+            { value: "5k-50k", label: "฿165,000 – ฿1.65M" },
+            { value: "50k-100k", label: "฿1.65M – ฿3.3M" },
+            { value: "100k-1m", label: "฿3.3M – ฿33M" },
+            { value: "1m+", label: "Over ฿33M" },
           ].map((option) => (
             <Label
               key={option.value}
@@ -708,11 +708,11 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
 function Step5Summary({ inputs }: StepProps) {
   const intentLabel = inputs.accountingIntent === "full" ? "Full accounting support" : "Year-end only";
   const revenueLabels: Record<string, string> = {
-    "0-5k": "Up to ฿170,000",
-    "5k-50k": "฿170,000 – ฿1.7M",
-    "50k-100k": "฿1.7M – ฿3.4M",
-    "100k-1m": "฿3.4M – ฿33.8M",
-    "1m+": "Over ฿33.8M",
+    "0-5k": "Up to ฿165,000",
+    "5k-50k": "฿165,000 – ฿1.65M",
+    "50k-100k": "฿1.65M – ฿3.3M",
+    "100k-1m": "฿3.3M – ฿33M",
+    "1m+": "Over ฿33M",
   };
   const vatLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
   const purposeLabels: Record<string, string> = { operations: "Operations", visa: "Visa / formal only", "not-sure": "Not sure" };

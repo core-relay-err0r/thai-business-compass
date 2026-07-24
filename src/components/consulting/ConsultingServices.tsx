@@ -60,7 +60,7 @@ export function ConsultingServices() {
         price: service.pricing.price,
         isFrom: service.pricing.isFrom,
         timeline: service.pricing.timeline,
-        note: "note" in service.pricing ? (service.pricing as any).note : undefined,
+        note: "note" in service.pricing ? service.pricing.note : undefined,
       });
     }
   };
@@ -117,7 +117,7 @@ export function ConsultingServices() {
 
                 {"note" in service.pricing && (
                   <p className="text-xs text-muted-foreground/70 italic">
-                    {(service.pricing as any).note}
+                    {service.pricing.note}
                   </p>
                 )}
 

@@ -63,10 +63,9 @@ export const CORPORATE_PRICING = {
   MOFA_CONSULATE_LEGALIZATION: 400,
 } as const;
 
-// Bank of Thailand interbank weighted-average reference rate, 24 July 2026.
+// Simple fixed commercial conversion used consistently across the site.
 // Legacy price constants remain USD-denominated internally; every public price is rendered in THB.
-export const USD_TO_THB = 33.804;
-export const CURRENCY_RATE_DATE = "24 July 2026";
+export const USD_TO_THB = 33;
 
 // Consulting services (USD)
 export const CONSULTING_PRICING = {

@@ -272,11 +272,11 @@ describe("calculateAccountingCost", () => {
 });
 
 describe("public currency formatting", () => {
-  it("renders legacy USD-denominated values as THB at the fixed BOT reference rate", () => {
-    expect(formatUSD(1000)).toBe("฿33,804");
-    expect(formatUSD(300)).toBe("฿10,141");
-    expect(formatUSD(13600)).toBe("฿459,734");
-    expect(formatTHB(100)).toBe("฿3,380");
+  it("renders legacy USD-denominated values as THB at the fixed site rate", () => {
+    expect(formatUSD(1000)).toBe("฿33,000");
+    expect(formatUSD(300)).toBe("฿9,900");
+    expect(formatUSD(13600)).toBe("฿448,800");
+    expect(formatTHB(100)).toBe("฿3,300");
   });
 });
 
@@ -416,8 +416,8 @@ describe("constants match pricing policy source (.md)", () => {
   });
 
   describe("§1 Currency rules", () => {
-    it("uses the fixed 24 July 2026 BOT reference rate for public THB display", () => {
-      expect(USD_TO_THB).toBe(33.804);
+    it("uses the simple fixed site rate for public THB display", () => {
+      expect(USD_TO_THB).toBe(33);
     });
   });
 });

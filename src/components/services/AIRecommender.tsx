@@ -31,11 +31,11 @@ const initialForm: FormState = {
 };
 
 const REVENUE_OPTIONS: { value: FormState["revenueRange"]; label: string }[] = [
-  { value: "0-5k", label: "Up to ฿170,000" },
-  { value: "5k-50k", label: "฿170,000 – ฿1.7M" },
-  { value: "50k-100k", label: "฿1.7M – ฿3.4M" },
-  { value: "100k-1m", label: "฿3.4M – ฿33.8M" },
-  { value: "1m+", label: "Over ฿33.8M" },
+  { value: "0-5k", label: "Up to ฿165,000" },
+  { value: "5k-50k", label: "฿165,000 – ฿1.65M" },
+  { value: "50k-100k", label: "฿1.65M – ฿3.3M" },
+  { value: "100k-1m", label: "฿3.3M – ฿33M" },
+  { value: "1m+", label: "Over ฿33M" },
 ];
 
 const STAGE_LABELS: Record<FormState["businessStage"], string> = {
