@@ -165,6 +165,11 @@ export function MobileEstimateSheet() {
                       </div>
                     ))}
                   </div>
+                  {liveAccountingResult.monthlyBase === 0 && (
+                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                      Preparation starts at 30% of the audit fee. Complex or high-volume transactions, inventory, incomplete records, or extensive reconciliation may increase the quote.
+                    </p>
+                  )}
                 </div>
               )}
 

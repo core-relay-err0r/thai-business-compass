@@ -16,7 +16,7 @@ export function PricingLogic() {
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Understand the quote</p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Indicative prices are shown in Thai baht using a simple fixed rate of ฿33 per US dollar. Final scope and fees are confirmed after reviewing the company facts.
+              Prices are shown in US dollars with an approximate Thai-baht reference at ฿33 per dollar. Final scope and fees are confirmed after reviewing the company facts and records.
             </p>
           </div>
           <div>
@@ -53,12 +53,13 @@ export function PricingLogic() {
 
           <article className="border-b border-border py-8 lg:border-b-0 lg:border-r lg:px-8">
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">Year end</p>
-            <h3 className="mt-3 font-serif text-2xl font-medium">Annual and cleanup work</h3>
+            <h3 className="mt-3 font-serif text-2xl font-medium">Annual closing without monthly bookkeeping</h3>
+            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">Annual closing = accounting preparation + independent audit.</p>
             <dl className="mt-6 flex flex-col gap-4 text-sm">
-              <PriceRow label="Year-end financial statements" value={`From ${formatUSD(PRICING.YEAR_END_STATEMENTS)}`} strong />
-              <PriceRow label="Catch-up or backlog work" value={`From ${formatUSD(PRICING.CATCHUP_BACKLOG)}`} />
-              <PriceRow label="Annual audit, when applicable" value={`From +${formatUSD(PRICING.AUDIT_ADDON)}`} />
-              <PriceRow label="Complex or high-volume scope" value="Custom quote" />
+              <PriceRow label="1. Reconstruct accounting and prepare financial statements" value="From 30% of audit fee" strong />
+              <PriceRow label="2. Independent annual audit" value={`From ${formatUSD(PRICING.AUDIT_ADDON)}`} />
+              <PriceRow label="Complete annual closing" value={`From ${formatUSD(PRICING.AUDIT_ADDON * 1.3)}`} strong />
+              <PriceRow label="High volume, inventory, incomplete or complex records" value="Higher quote after review" />
             </dl>
           </article>
 

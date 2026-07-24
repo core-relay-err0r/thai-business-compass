@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useServices } from "@/contexts/ServiceContext";
-import { formatPrice } from "@/lib/pricing";
+import { formatUSD } from "@/lib/pricing";
 import { Check, Copy, Send, Calculator, Building2, MessageSquare, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -318,13 +318,13 @@ export default function Submit() {
                             {accountingResult!.monthlyBase > 0 && (
                               <div>
                                 <span className="text-primary">Monthly:</span>{" "}
-                                <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}</span>
+                                <span className="font-medium">{formatUSD(accountingResult!.totalMonthly)}</span>
                               </div>
                             )}
                             <div>
                               <span className="text-primary">First year:</span>{" "}
                               <span className="font-medium">
-                                {accountingResult!.annualAddons.some((a) => a.isFrom) ? "From " : ""}${formatPrice(accountingResult!.totalAnnual)}
+                                {accountingResult!.annualAddons.some((a) => a.isFrom) ? "From " : ""}{formatUSD(accountingResult!.totalAnnual)}
                               </span>
                             </div>
                           </div>
@@ -345,13 +345,13 @@ export default function Submit() {
                           {selectedCorporateServices.map((service) => (
                             <div key={service.id} className="flex justify-between text-sm">
                               <span className="text-primary">{service.name}</span>
-                              <span className="font-medium">${formatPrice(service.price)}</span>
+                              <span className="font-medium">{formatUSD(service.price)}</span>
                             </div>
                           ))}
                           <div className="flex justify-between text-sm pt-3 border-t border-border/50">
                             <span>Total</span>
                             <span className="font-medium">
-                              ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
+                              {formatUSD(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
                             </span>
                           </div>
                         </div>
@@ -369,14 +369,14 @@ export default function Submit() {
                             <div key={service.id} className="flex justify-between text-sm">
                               <span className="text-primary">{service.name}</span>
                               <span className="font-medium">
-                                {service.isFrom ? "From " : ""}${formatPrice(service.price)}
+                                {service.isFrom ? "From " : ""}{formatUSD(service.price)}
                               </span>
                             </div>
                           ))}
                           <div className="flex justify-between text-sm pt-3 border-t border-border/50">
                             <span>Total</span>
                             <span className="font-medium">
-                              {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
+                              {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}{formatUSD(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
                             </span>
                           </div>
                         </div>
@@ -415,7 +415,7 @@ export default function Submit() {
                         <div className="flex justify-between text-sm">
                           <span>Corporate services</span>
                           <span className="font-medium">
-                            ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
+                            {formatUSD(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
                           </span>
                         </div>
                       )}
@@ -423,7 +423,7 @@ export default function Submit() {
                         <div className="flex justify-between text-sm">
                           <span>Business consulting</span>
                           <span className="font-medium">
-                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
+                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}{formatUSD(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
                           </span>
                         </div>
                       )}
@@ -431,7 +431,7 @@ export default function Submit() {
                         <div className="flex justify-between text-sm pt-2 border-t border-border/50">
                           <span className="font-medium">Initial Total</span>
                           <span className="font-medium">
-                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(
+                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}{formatUSD(
                               selectedCorporateServices.reduce((sum, s) => sum + s.price, 0) +
                               selectedConsultingServices.reduce((sum, s) => sum + s.price, 0)
                             )}
@@ -449,11 +449,11 @@ export default function Submit() {
                       </h4>
                       <div className="flex justify-between text-sm">
                         <span>Accounting</span>
-                        <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}/month</span>
+                        <span className="font-medium">{formatUSD(accountingResult!.totalMonthly)}/month</span>
                       </div>
                       <div className="flex justify-between text-sm text-muted-foreground">
                         <span>First year (12 months)</span>
-                        <span>${formatPrice(accountingResult!.totalMonthly * 12)}</span>
+                        <span>{formatUSD(accountingResult!.totalMonthly * 12)}</span>
                       </div>
                     </div>
                   )}
@@ -469,7 +469,7 @@ export default function Submit() {
                         <div key={index} className="flex justify-between text-sm">
                           <span>{addon.name}</span>
                           <span className="font-medium">
-                            {addon.amount === 0 ? "Custom quote" : `${addon.isFrom ? "From " : ""}$${formatPrice(addon.amount)}`}
+                            {addon.amount === 0 ? "Custom quote" : `${addon.isFrom ? "From " : ""}${formatUSD(addon.amount)}`}
                           </span>
                         </div>
                       ))}
@@ -477,12 +477,12 @@ export default function Submit() {
                         <span className="font-medium">
                           {accountingResult!.annualAddons.some((addon) => addon.amount === 0)
                             ? "Known annual fees subtotal"
-                            : "Annual fees subtotal"}
+                            : accountingResult!.monthlyBase === 0 ? "Complete annual closing" : "Annual fees subtotal"}
                         </span>
                         <span className="font-medium text-right">
                           {accountingResult!.annualAddons.every((addon) => addon.amount === 0)
                             ? "Quote required"
-                            : `$${formatPrice(accountingResult!.annualAddons.reduce((sum, addon) => sum + addon.amount, 0))}`}
+                            : `${formatUSD(accountingResult!.annualAddons.reduce((sum, addon) => sum + addon.amount, 0))}`}
                         </span>
                       </div>
                     </div>
@@ -503,7 +503,7 @@ export default function Submit() {
                         <div className="flex justify-between gap-4 font-medium text-base">
                           <span>First-year estimate</span>
                           <span className="text-right">
-                            {accountingResult?.isCustomQuote ? "Quote required" : `${hasFromItems ? "From " : ""}$${formatPrice(firstYearTotal)}`}
+                            {accountingResult?.isCustomQuote ? "Quote required" : `${hasFromItems ? "From " : ""}${formatUSD(firstYearTotal)}`}
                           </span>
                         </div>
                       );

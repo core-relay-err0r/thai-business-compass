@@ -310,9 +310,14 @@ export function LiveEstimate() {
                     </div>
                   ))}
                   <div className="flex justify-between text-sm pt-2 mt-1 border-t border-border/50">
-                    <span className="font-medium">Annual subtotal</span>
+                    <span className="font-medium">{liveAccountingResult.monthlyBase === 0 ? "Complete annual closing" : "Annual subtotal"}</span>
                     <span className="font-semibold">{annualAddonsHasFrom ? "From " : ""}{formatUSD(annualAddonsTotal)}/year</span>
                   </div>
+                  {liveAccountingResult.monthlyBase === 0 && (
+                    <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                      The 30% accounting component is a baseline. Transaction volume and complexity, inventory, incomplete records, multiple accounts, and extensive reconciliation may increase the final quote.
+                    </p>
+                  )}
                 </div>
               )}
 

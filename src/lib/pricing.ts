@@ -25,18 +25,23 @@ export const PRICING = {
   // Annual fees (USD) — displayed as "From X"
   YEAR_END_STATEMENTS: 800,
   CATCHUP_BACKLOG: 1000,
-  AUDIT_ADDON: 1000,
+  AUDIT_ADDON: 2000,
+  ANNUAL_PREPARATION_PERCENT: 30,
 } as const;
 
 // Audit revenue band pricing (USD)
 export const AUDIT_REVENUE_BANDS = [
-  { id: "under-2m", label: "Under ฿2M", auditFee: 1000 },
-  { id: "2m-5m", label: "฿2M – ฿5M", auditFee: 1500 },
-  { id: "5m-10m", label: "฿5M – ฿10M", auditFee: 2000 },
-  { id: "10m-30m", label: "฿10M – ฿30M", auditFee: 3000 },
-  { id: "30m-100m", label: "฿30M – ฿100M", auditFee: 5000 },
+  { id: "under-2m", label: "Under ฿2M", auditFee: 2000 },
+  { id: "2m-5m", label: "฿2M – ฿5M", auditFee: 3000 },
+  { id: "5m-10m", label: "฿5M – ฿10M", auditFee: 4000 },
+  { id: "10m-30m", label: "฿10M – ฿30M", auditFee: 6000 },
+  { id: "30m-100m", label: "฿30M – ฿100M", auditFee: 10000 },
   { id: "over-100m", label: "Over ฿100M", auditFee: null },
 ] as const;
+
+export function calculateAnnualPreparationFee(auditFee: number): number {
+  return Math.round(auditFee * PRICING.ANNUAL_PREPARATION_PERCENT / 100);
+}
 
 export type AuditRevenueBand = typeof AUDIT_REVENUE_BANDS[number]["id"] | "not-sure";
 
@@ -164,38 +169,57 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
     isCustomQuote = true;
   }
 
-  // Year-end statements
-  if (inputs.yearEndStatements === "yes") {
-    annualAddons.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, required: true, isFrom: true });
-    requiredItems.push("Annual financial statements");
-  } else if (inputs.yearEndStatements === "not-sure") {
-    potentialAnnual.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, isFrom: true });
-  }
-
-  // Audit
-  if (inputs.auditRequired === "yes") {
+  if (!isMonthlyEngagement) {
     const band = inputs.auditRevenueBand && inputs.auditRevenueBand !== "not-sure"
-      ? AUDIT_REVENUE_BANDS.find(b => b.id === inputs.auditRevenueBand)
+      ? AUDIT_REVENUE_BANDS.find((item) => item.id === inputs.auditRevenueBand)
       : undefined;
     const auditFee = band?.auditFee ?? (band ? 0 : PRICING.AUDIT_ADDON);
-    const isFromAudit = !band;
-    if (band?.auditFee === null) isCustomQuote = true;
-    annualAddons.push({ name: "Annual audit", amount: auditFee, required: true, isFrom: isFromAudit });
-    requiredItems.push("Annual audit");
-  } else if (inputs.auditRequired === "not-sure") {
-    potentialAnnual.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, isFrom: true });
-  } else if (inputs.auditRequired === "no") {
-    notNeededItems.push("Annual audit");
-  }
 
-  // Catch-up / backlog
-  if (inputs.catchupBacklog === "yes") {
-    annualAddons.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, required: true, isFrom: true });
-    requiredItems.push("Catch-up / backlog work");
-  } else if (inputs.catchupBacklog === "not-sure") {
-    potentialAnnual.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, isFrom: true });
+    if (band?.auditFee === null) {
+      isCustomQuote = true;
+      annualAddons.push({ name: "Accounting reconstruction & financial statements", amount: 0, required: true });
+      annualAddons.push({ name: "Independent annual audit", amount: 0, required: true });
+    } else {
+      annualAddons.push({
+        name: "Accounting reconstruction & financial statements",
+        amount: calculateAnnualPreparationFee(auditFee),
+        required: true,
+        isFrom: true,
+      });
+      annualAddons.push({ name: "Independent annual audit", amount: auditFee, required: true, isFrom: !band });
+    }
+    requiredItems.push("Accounting reconstruction & financial statements", "Independent annual audit");
   } else {
-    notNeededItems.push("Catch-up / backlog work");
+    // Existing monthly clients only need the annual services selected below; no reconstruction is added.
+    if (inputs.yearEndStatements === "yes") {
+      annualAddons.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, required: true, isFrom: true });
+      requiredItems.push("Annual financial statements");
+    } else if (inputs.yearEndStatements === "not-sure") {
+      potentialAnnual.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, isFrom: true });
+    }
+
+    if (inputs.auditRequired === "yes") {
+      const band = inputs.auditRevenueBand && inputs.auditRevenueBand !== "not-sure"
+        ? AUDIT_REVENUE_BANDS.find((item) => item.id === inputs.auditRevenueBand)
+        : undefined;
+      const auditFee = band?.auditFee ?? (band ? 0 : PRICING.AUDIT_ADDON);
+      if (band?.auditFee === null) isCustomQuote = true;
+      annualAddons.push({ name: "Independent annual audit", amount: auditFee, required: true, isFrom: !band });
+      requiredItems.push("Independent annual audit");
+    } else if (inputs.auditRequired === "not-sure") {
+      potentialAnnual.push({ name: "Independent annual audit", amount: PRICING.AUDIT_ADDON, isFrom: true });
+    } else {
+      notNeededItems.push("Independent annual audit");
+    }
+
+    if (inputs.catchupBacklog === "yes") {
+      annualAddons.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, required: true, isFrom: true });
+      requiredItems.push("Catch-up / backlog work");
+    } else if (inputs.catchupBacklog === "not-sure") {
+      potentialAnnual.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, isFrom: true });
+    } else {
+      notNeededItems.push("Catch-up / backlog work");
+    }
   }
 
   // Calculate totals
@@ -244,5 +268,6 @@ export function formatTHB(amountInUSD: number): string {
   return `฿${formatPrice(Math.round(amountInUSD * USD_TO_THB))}`;
 }
 
-/** @deprecated Public pricing is THB-only. Kept as an internal compatibility alias. */
-export const formatUSD = formatTHB;
+export function formatUSD(amountInUSD: number): string {
+  return `$${formatPrice(amountInUSD)} (approx. ${formatTHB(amountInUSD)})`;
+}

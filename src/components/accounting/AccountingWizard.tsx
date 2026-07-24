@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { AccountingInputs, calculateAccountingCost, formatUSD, formatPrice, AUDIT_REVENUE_BANDS, AuditRevenueBand } from "@/lib/pricing";
+import { AccountingInputs, calculateAccountingCost, calculateAnnualPreparationFee, formatUSD, formatPrice, AUDIT_REVENUE_BANDS, AuditRevenueBand } from "@/lib/pricing";
 
 const STEPS = [
   { id: 0, title: "Intent" },
@@ -247,7 +247,13 @@ function Step0Intent({ inputs, setInputs }: StepProps) {
         </button>
 
         <button
-          onClick={() => setInputs({ ...inputs, accountingIntent: "year-end-only" })}
+          onClick={() => setInputs({
+            ...inputs,
+            accountingIntent: "year-end-only",
+            yearEndStatements: "yes",
+            catchupBacklog: "yes",
+            auditRequired: "yes",
+          })}
           className={`p-4 sm:p-6 rounded-lg border-2 text-left transition-all min-h-[100px] ${
             inputs.accountingIntent === "year-end-only"
               ? "border-primary bg-primary/5"
@@ -256,10 +262,10 @@ function Step0Intent({ inputs, setInputs }: StepProps) {
         >
           <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
             <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-            <span className="font-semibold text-base sm:text-lg">Year-end only</span>
+            <span className="font-semibold text-base sm:text-lg">Annual closing without monthly bookkeeping</span>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Preparation of annual financial statements, with independent audit and backlog work added if applicable.
+            One complete package: reconstruct the year&apos;s accounting and financial statements, then audit the prepared accounts.
           </p>
         </button>
       </div>
@@ -548,8 +554,25 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
 }
 
 function Step4YearEnd({ inputs, setInputs }: StepProps) {
+  const isAnnualClosing = inputs.accountingIntent === "year-end-only";
+
   return (
     <div className="space-y-8">
+      {isAnnualClosing && (
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 sm:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Complete annual closing</p>
+          <h3 className="mt-2 text-lg font-semibold">Two required parts, shown separately</h3>
+          <ol className="mt-4 flex flex-col gap-3 text-sm">
+            <li><strong>1. Accounting reconstruction &amp; financial statements</strong><br /><span className="text-muted-foreground">From 30% of the audit fee. We collect invoices and records, enter the year&apos;s transactions, reconcile accounts, rebuild missing monthly books, and prepare the annual statements.</span></li>
+            <li><strong>2. Independent annual audit</strong><br /><span className="text-muted-foreground">The prepared financial statements are audited. The fee follows the annual-revenue band below.</span></li>
+          </ol>
+          <p className="mt-4 border-t border-primary/20 pt-4 text-sm font-semibold">Annual closing = accounting preparation + independent audit</p>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">30% is the baseline. High transaction volume or complexity, inventory and warehouse accounting, incomplete records, foreign-currency activity, multiple accounts, or extensive reconciliation may require a higher quote after record review.</p>
+        </div>
+      )}
+
+      {!isAnnualClosing && (
+        <>
       <div>
         <div className="flex items-center gap-2 mb-4">
           <h3 className="text-lg font-semibold">Include Annual Financial Statements?</h3>
@@ -651,9 +674,11 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
           ))}
         </div>
       </div>
+        </>
+      )}
 
-      {/* Revenue band — shown when audit is yes or not-sure */}
-      {(inputs.auditRequired === "yes" || inputs.auditRequired === "not-sure") && (
+      {/* Revenue band — always required for annual closing, optional in monthly service */}
+      {(isAnnualClosing || inputs.auditRequired === "yes" || inputs.auditRequired === "not-sure") && (
         <div>
           <div className="flex items-center gap-2 mb-4">
             <h3 className="text-lg font-semibold">Annual Revenue Band (THB)</h3>
@@ -681,8 +706,12 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
                   <RadioGroupItem value={band.id} id={`band-${band.id}`} />
                   <span className="text-sm">{band.label}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {band.auditFee ? formatUSD(band.auditFee) : "Custom quote"}
+                <span className="max-w-[58%] text-right text-xs text-muted-foreground">
+                  {band.auditFee
+                    ? isAnnualClosing
+                      ? `Audit ${formatUSD(band.auditFee)} · closing from ${formatUSD(band.auditFee + calculateAnnualPreparationFee(band.auditFee))}`
+                      : formatUSD(band.auditFee)
+                    : "Custom quote"}
                 </span>
               </Label>
             ))}
@@ -695,7 +724,7 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
                 <span className="text-sm">Not sure</span>
               </div>
               <span className="text-sm text-muted-foreground">
-                From {formatUSD(1000)}
+                {isAnnualClosing ? `Closing from ${formatUSD(2600)}` : `Audit from ${formatUSD(2000)}`}
               </span>
             </Label>
           </RadioGroup>

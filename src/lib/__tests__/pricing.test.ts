@@ -144,18 +144,18 @@ describe("calculateAccountingCost", () => {
   });
 
   describe("audit with revenue bands", () => {
-    it("defaults to $1,000 when no band specified", () => {
+    it("defaults to $2,000 when no band specified", () => {
       const r = calc({ auditRequired: "yes" });
       const audit = r.annualAddons.find((a) => a.name.includes("audit"));
-      expect(audit?.amount).toBe(1000);
+      expect(audit?.amount).toBe(2000);
     });
 
     it.each([
-      ["under-2m", 1000],
-      ["2m-5m", 1500],
-      ["5m-10m", 2000],
-      ["10m-30m", 3000],
-      ["30m-100m", 5000],
+      ["under-2m", 2000],
+      ["2m-5m", 3000],
+      ["5m-10m", 4000],
+      ["10m-30m", 6000],
+      ["30m-100m", 10000],
     ] as const)("revenue band %s → $%i audit fee", (band, expected) => {
       const r = calc({ auditRequired: "yes", auditRevenueBand: band });
       const audit = r.annualAddons.find((a) => a.name.includes("audit"));
@@ -193,8 +193,8 @@ describe("calculateAccountingCost", () => {
 
       // Monthly: 300 base + 100 VAT + 100 WHT + 200 payroll (2 blocks) + 200 medium = 900
       expect(r.totalMonthly).toBe(900);
-      // Annual: 900 × 12 + 800 year-end + 2000 audit = 13,600
-      expect(r.totalAnnual).toBe(900 * 12 + 800 + 2000);
+      // Annual: 900 × 12 + 800 year-end + 4000 audit = 15,600
+      expect(r.totalAnnual).toBe(900 * 12 + 800 + 4000);
       expect(r.isCustomQuote).toBe(false);
     });
   });
@@ -250,7 +250,11 @@ describe("calculateAccountingCost", () => {
       expect(r.monthlyAddons).toHaveLength(0);
       expect(r.totalMonthly).toBe(0);
       expect(r.rushSurcharge).toBe(0);
-      expect(r.totalAnnual).toBe(PRICING.YEAR_END_STATEMENTS);
+      expect(r.totalAnnual).toBe(2600);
+      expect(r.annualAddons).toEqual([
+        expect.objectContaining({ name: expect.stringContaining("reconstruction"), amount: 600, isFrom: true }),
+        expect.objectContaining({ name: expect.stringContaining("audit"), amount: 2000 }),
+      ]);
       expect(r.isCustomQuote).toBe(false);
       expect(r.requiredItems).not.toContain("Monthly bookkeeping");
     });
@@ -273,9 +277,9 @@ describe("calculateAccountingCost", () => {
 
 describe("public currency formatting", () => {
   it("renders legacy USD-denominated values as THB at the fixed site rate", () => {
-    expect(formatUSD(1000)).toBe("฿33,000");
-    expect(formatUSD(300)).toBe("฿9,900");
-    expect(formatUSD(13600)).toBe("฿448,800");
+    expect(formatUSD(1000)).toBe("$1,000 (approx. ฿33,000)");
+    expect(formatUSD(300)).toBe("$300 (approx. ฿9,900)");
+    expect(formatUSD(13600)).toBe("$13,600 (approx. ฿448,800)");
     expect(formatTHB(100)).toBe("฿3,300");
   });
 });
@@ -352,7 +356,7 @@ describe("full end-to-end scenario with all features", () => {
       auditRevenueBand: "10m-30m",
     });
     expect(r.totalMonthly).toBe(1300);
-    expect(r.totalAnnual).toBe(1300 * 12 + 800 + 1000 + 3000);
+    expect(r.totalAnnual).toBe(1300 * 12 + 800 + 1000 + 6000);
   });
 });
 
@@ -372,7 +376,7 @@ describe("constants match pricing policy source (.md)", () => {
   describe("§4 Annual accounting constants", () => {
     it("year-end statements from 800 USD", () => expect(PRICING.YEAR_END_STATEMENTS).toBe(800));
     it("catch-up/backlog from 1,000 USD", () => expect(PRICING.CATCHUP_BACKLOG).toBe(1000));
-    it("audit from 1,000 USD", () => expect(PRICING.AUDIT_ADDON).toBe(1000));
+    it("audit from 2,000 USD", () => expect(PRICING.AUDIT_ADDON).toBe(2000));
   });
 
   describe("§5 Corporate services constants", () => {
