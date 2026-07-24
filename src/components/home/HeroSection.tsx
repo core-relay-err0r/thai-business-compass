@@ -1,44 +1,32 @@
 import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
-import heroCorporate from "@/assets/hero-corporate.jpg";
-import heroAccounting from "@/assets/hero-accounting.jpg";
-import heroConsulting from "@/assets/hero-consulting.jpg";
+import heroStrategyThailand from "@/assets/hero-strategy-thailand.png";
 
 export function HeroSection() {
   const slides = [{
-    image: heroCorporate,
-    title: "Corporate",
-    description: "Company setup, registration, and structural changes for your Thai business."
-  }, {
-    image: heroAccounting,
-    title: "Accounting",
-    description: "Monthly bookkeeping, tax filings, and financial compliance handled for you."
-  }, {
-    image: heroConsulting,
-    title: "Business consulting",
-    description: "Strategic advisory for business challenges, restructuring, and market entry."
+    image: heroStrategyThailand,
+    title: "Your business is not a package",
+    description: "Bring the ambition, constraint, or problem. We will turn it into a clear path through Thailand."
   }];
 
   return (
     <HeroSectionUI
-        title={<>
-          You understand your business needs. <span className="text-primary">We know how to solve them in Thailand.</span>
-        </>} 
-        subtitle="Start with the problem, not a service package. We will clarify what your business actually needs, find the right strategy, and tell you what you can safely leave out."
-        callToAction={{
-          text: "Let’s discuss your situation",
-          href: "/submit"
-        }} 
-        secondaryAction={{
-          text: "Map my needs first",
-          href: "#diagnosis"
-        }} 
-        tagline="A useful conversation should define both what you need and what you do not."
-        slides={slides} 
-        contactInfo={{
-          website: "info@pnd50.com",
-          phone: "+66 84 356 3805",
-          address: "Bangkok, Thailand"
-        }} 
-      />
+      title={<>You know the <span className="text-primary">need.</span><br />We design the move.</>}
+      subtitle="Start with the business reality—not a catalogue. We clarify what matters, challenge what does not, and build the most useful route forward in Thailand."
+      callToAction={{
+        text: "Put the situation on the table",
+        href: "/submit"
+      }}
+      secondaryAction={{
+        text: "Map it in six questions",
+        href: "#diagnosis"
+      }}
+      tagline="If it does not solve the need, it does not belong in the scope."
+      slides={slides}
+      contactInfo={{
+        website: "info@pnd50.com",
+        phone: "+66 84 356 3805",
+        address: "Bangkok, Thailand"
+      }}
+    />
   );
 }

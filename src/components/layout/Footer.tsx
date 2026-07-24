@@ -20,7 +20,7 @@ export function Footer() {
     <footer className="bg-slate-900 text-slate-300 relative overflow-hidden">
       {/* Background Watermark - Hidden on mobile */}
       <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none overflow-hidden">
-        <span className="hidden md:block text-[10rem] lg:text-[15rem] xl:text-[20rem] font-bold text-slate-800/30 tracking-tight -mr-5 lg:-mr-10">
+        <span className="hidden max-w-full md:block text-[10rem] lg:text-[15rem] xl:text-[20rem] font-bold text-slate-800/30 tracking-tight">
           PND50
         </span>
       </div>

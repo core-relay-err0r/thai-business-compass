@@ -82,8 +82,8 @@ export function PricingLogic() {
 function PriceRow({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
   return (
     <div className="flex items-start justify-between gap-4 border-t border-border pt-4 first:border-t-0 first:pt-0">
-      <dt className="max-w-[65%] leading-relaxed text-muted-foreground">{label}</dt>
-      <dd className={`shrink-0 text-right ${strong ? "font-semibold text-foreground" : "text-muted-foreground"}`}>{value}</dd>
+      <dt className="min-w-0 max-w-[65%] leading-relaxed text-muted-foreground">{label}</dt>
+      <dd className={`min-w-0 max-w-[45%] break-words text-right ${strong ? "font-semibold text-foreground" : "text-muted-foreground"}`}>{value}</dd>
     </div>
   );
 }

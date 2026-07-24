@@ -22,15 +22,17 @@ export default function Home() {
       />
       <LocalBusinessSchema />
       <OrganizationSchema />
-      <HeroSection />
-      <GuidedDiagnosis />
-      <HowItWorks />
-      <ModuleCards />
-      <FitGuide />
-      <TrustSection />
-      <Testimonials />
-      <PricingLogic />
-      <BottomCTA />
+      <main className="home-editorial">
+        <HeroSection />
+        <GuidedDiagnosis />
+        <HowItWorks />
+        <ModuleCards />
+        <FitGuide />
+        <TrustSection />
+        <Testimonials />
+        <PricingLogic />
+        <BottomCTA />
+      </main>
     </Layout>
   );
 }
