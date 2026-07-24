@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServices } from "@/contexts/ServiceContext";
-import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
+import { formatUSD, formatPrice } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronRight, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -200,9 +200,7 @@ export function LiveEstimate() {
                 <div className="font-bold text-lg">
                   {hasFromConsulting || annualAddonsHasFrom ? "From " : ""}{formatUSD(corporateTotal + (liveAccountingResult?.totalAnnual || 0) + consultingTotal)}
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  ≈ ฿{formatPrice((corporateTotal + (liveAccountingResult?.totalAnnual || 0) + consultingTotal) * USD_TO_THB)}
-                </div>
+
               </>
             )}
           </div>
@@ -246,9 +244,7 @@ export function LiveEstimate() {
               <span className="font-medium">Total</span>
               <div className="text-right">
                 <div className="font-semibold">{formatUSD(corporateTotal)}</div>
-                <div className="text-xs text-muted-foreground">
-                  ≈ ฿{formatPrice(corporateTotal * USD_TO_THB)}
-                </div>
+
               </div>
             </div>
           </div>
@@ -356,9 +352,7 @@ export function LiveEstimate() {
                       = {formatUSD(liveAccountingResult.totalMonthly)}/month × 12 + {annualAddonsHasFrom ? "from " : ""}{formatUSD(annualAddonsTotal)} annual
                     </div>
                   )}
-                  <div className="text-xs text-muted-foreground">
-                    ≈ ฿{formatPrice(liveAccountingResult.totalAnnual * USD_TO_THB)}/year
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -387,9 +381,7 @@ export function LiveEstimate() {
                 <div className="font-semibold">
                   {hasFromConsulting ? "From " : ""}{formatUSD(consultingTotal)}
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  ≈ ฿{formatPrice(consultingTotal * USD_TO_THB)}
-                </div>
+
               </div>
             </div>
           </div>

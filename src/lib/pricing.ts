@@ -63,8 +63,10 @@ export const CORPORATE_PRICING = {
   MOFA_CONSULATE_LEGALIZATION: 400,
 } as const;
 
-// Approximate THB conversion rate (for reference display)
-export const USD_TO_THB = 35;
+// Bank of Thailand interbank weighted-average reference rate, 24 July 2026.
+// Legacy price constants remain USD-denominated internally; every public price is rendered in THB.
+export const USD_TO_THB = 33.804;
+export const CURRENCY_RATE_DATE = "24 July 2026";
 
 // Consulting services (USD)
 export const CONSULTING_PRICING = {
@@ -239,10 +241,9 @@ export function formatPrice(amount: number): string {
   }).format(amount);
 }
 
-export function formatUSD(amount: number): string {
-  return `$${formatPrice(amount)}`;
+export function formatTHB(amountInUSD: number): string {
+  return `฿${formatPrice(Math.round(amountInUSD * USD_TO_THB))}`;
 }
 
-export function formatTHB(amount: number): string {
-  return `฿${formatPrice(Math.round(amount * USD_TO_THB))}`;
-}
+/** @deprecated Public pricing is THB-only. Kept as an internal compatibility alias. */
+export const formatUSD = formatTHB;

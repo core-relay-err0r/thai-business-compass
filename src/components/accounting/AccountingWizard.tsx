@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { AccountingInputs, calculateAccountingCost, formatUSD, USD_TO_THB, formatPrice, AUDIT_REVENUE_BANDS, AuditRevenueBand } from "@/lib/pricing";
+import { AccountingInputs, calculateAccountingCost, formatUSD, formatPrice, AUDIT_REVENUE_BANDS, AuditRevenueBand } from "@/lib/pricing";
 
 const STEPS = [
   { id: 0, title: "Intent" },
@@ -283,18 +283,18 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
       </div>
 
       <div>
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Monthly Revenue Range (USD)</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Monthly Revenue Range (THB)</h3>
         <RadioGroup
           value={inputs.revenueRange}
           onValueChange={(value) => setInputs({ ...inputs, revenueRange: value as AccountingInputs["revenueRange"] })}
           className="grid gap-2 sm:gap-3"
         >
           {[
-            { value: "0-5k", label: "Up to $5,000" },
-            { value: "5k-50k", label: "$5,000 – $50,000" },
-            { value: "50k-100k", label: "$50,000 – $100,000" },
-            { value: "100k-1m", label: "$100,000 – $1,000,000" },
-            { value: "1m+", label: "Over $1,000,000" },
+            { value: "0-5k", label: "Up to ฿170,000" },
+            { value: "5k-50k", label: "฿170,000 – ฿1.7M" },
+            { value: "50k-100k", label: "฿1.7M – ฿3.4M" },
+            { value: "100k-1m", label: "฿3.4M – ฿33.8M" },
+            { value: "1m+", label: "Over ฿33.8M" },
           ].map((option) => (
             <Label
               key={option.value}
@@ -708,11 +708,11 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
 function Step5Summary({ inputs }: StepProps) {
   const intentLabel = inputs.accountingIntent === "full" ? "Full accounting support" : "Year-end only";
   const revenueLabels: Record<string, string> = {
-    "0-5k": "Up to $5,000",
-    "5k-50k": "$5,000 – $50,000",
-    "50k-100k": "$50,000 – $100,000",
-    "100k-1m": "$100,000 – $1,000,000",
-    "1m+": "Over $1,000,000",
+    "0-5k": "Up to ฿170,000",
+    "5k-50k": "฿170,000 – ฿1.7M",
+    "50k-100k": "฿1.7M – ฿3.4M",
+    "100k-1m": "฿3.4M – ฿33.8M",
+    "1m+": "Over ฿33.8M",
   };
   const vatLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
   const purposeLabels: Record<string, string> = { operations: "Operations", visa: "Visa / formal only", "not-sure": "Not sure" };
@@ -868,9 +868,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
                     )}
                     <span className="text-base sm:text-lg font-normal text-muted-foreground">/month</span>
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
-                  </div>
+
                 </>
               )}
               {result.annualAddons.length > 0 && (
@@ -910,9 +908,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
                   </span>
                 )}
               </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                ≈ ฿{formatPrice(result.totalAnnual * USD_TO_THB)}
-              </div>
+
             </>
           )}
           {result.annualAddons.some(a => a.name === "Annual audit") && (

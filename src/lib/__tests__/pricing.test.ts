@@ -271,18 +271,12 @@ describe("calculateAccountingCost", () => {
   });
 });
 
-describe("formatUSD", () => {
-  it("formats with dollar sign and comma separators", () => {
-    expect(formatUSD(1000)).toBe("$1,000");
-    expect(formatUSD(300)).toBe("$300");
-    expect(formatUSD(13600)).toBe("$13,600");
-  });
-});
-
-describe("formatTHB", () => {
-  it("converts USD to THB at rate 35", () => {
-    expect(formatTHB(100)).toBe("฿3,500");
-    expect(formatTHB(300)).toBe("฿10,500");
+describe("public currency formatting", () => {
+  it("renders legacy USD-denominated values as THB at the fixed BOT reference rate", () => {
+    expect(formatUSD(1000)).toBe("฿33,804");
+    expect(formatUSD(300)).toBe("฿10,141");
+    expect(formatUSD(13600)).toBe("฿459,734");
+    expect(formatTHB(100)).toBe("฿3,380");
   });
 });
 
@@ -422,8 +416,8 @@ describe("constants match pricing policy source (.md)", () => {
   });
 
   describe("§1 Currency rules", () => {
-    it("primary currency is USD (THB conversion rate exists)", () => {
-      expect(USD_TO_THB).toBe(35);
+    it("uses the fixed 24 July 2026 BOT reference rate for public THB display", () => {
+      expect(USD_TO_THB).toBe(33.804);
     });
   });
 });

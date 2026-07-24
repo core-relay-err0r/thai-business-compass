@@ -31,11 +31,11 @@ const initialForm: FormState = {
 };
 
 const REVENUE_OPTIONS: { value: FormState["revenueRange"]; label: string }[] = [
-  { value: "0-5k", label: "Up to $5,000" },
-  { value: "5k-50k", label: "$5,000 – $50,000" },
-  { value: "50k-100k", label: "$50,000 – $100,000" },
-  { value: "100k-1m", label: "$100,000 – $1,000,000" },
-  { value: "1m+", label: "Over $1,000,000" },
+  { value: "0-5k", label: "Up to ฿170,000" },
+  { value: "5k-50k", label: "฿170,000 – ฿1.7M" },
+  { value: "50k-100k", label: "฿1.7M – ฿3.4M" },
+  { value: "100k-1m", label: "฿3.4M – ฿33.8M" },
+  { value: "1m+", label: "Over ฿33.8M" },
 ];
 
 const STAGE_LABELS: Record<FormState["businessStage"], string> = {
@@ -205,7 +205,7 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
 
                   {/* Revenue */}
                   <div className="md:col-span-2">
-                    <Label className="text-sm font-medium mb-2 block">Monthly revenue (USD)</Label>
+                    <Label className="text-sm font-medium mb-2 block">Monthly revenue (THB)</Label>
                     <RadioGroup
                       value={form.revenueRange}
                       onValueChange={(v) => setForm({ ...form, revenueRange: v as FormState["revenueRange"] })}

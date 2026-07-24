@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useServices } from "@/contexts/ServiceContext";
-import { formatUSD, formatPrice, USD_TO_THB } from "@/lib/pricing";
+import { formatUSD } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ArrowRight, ChevronUp, Trash2, ShoppingBag } from "lucide-react";
@@ -222,9 +222,7 @@ export function MobileEstimateSheet() {
                   <div className="text-2xl font-bold">
                     {hasFromConsulting || liveAccountingResult?.annualAddons.some((a) => a.isFrom) ? "From " : ""}{formatUSD(grandTotal)}
                   </div>
-                  <div className="text-xs text-muted-foreground">
-                    ≈ ฿{formatPrice(grandTotal * USD_TO_THB)}
-                  </div>
+
                 </>
               )}
             </div>

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingDown, Globe, Search, GitBranch, Building, Check, ArrowRight, ShoppingCart, Clock } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { CONSULTING_PRICING, formatPrice, USD_TO_THB } from "@/lib/pricing";
+import { CONSULTING_PRICING, formatTHB } from "@/lib/pricing";
 
 const SERVICES = [
   {
@@ -105,12 +105,9 @@ export function ConsultingServices() {
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl sm:text-2xl font-semibold tracking-tight">
-                      {service.pricing.isFrom ? "From " : ""}${formatPrice(service.pricing.price)}
+                      {service.pricing.isFrom ? "From " : ""}{formatTHB(service.pricing.price)}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground/70">
-                    ≈ {service.pricing.isFrom ? "From " : ""}฿{formatPrice(service.pricing.price * USD_TO_THB)}
-                  </p>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
