@@ -26,10 +26,10 @@ export default function Home() {
       <GuidedDiagnosis />
       <HowItWorks />
       <ModuleCards />
-      <PricingLogic />
       <FitGuide />
       <TrustSection />
       <Testimonials />
+      <PricingLogic />
       <BottomCTA />
     </Layout>
   );

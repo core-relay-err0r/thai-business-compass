@@ -130,9 +130,9 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-semibold">Not sure where to start?</h2>
+              <h2 className="text-base sm:text-lg font-semibold">Start with your situation, not a service list</h2>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Answer a few questions to get a tailored service recommendation.
+                Map your needs before we discuss the most practical strategy together.
               </p>
             </div>
           </div>
@@ -299,7 +299,7 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4 mr-2" />
-                        Get my recommendation
+                        Map my needs
                       </>
                     )}
                   </Button>

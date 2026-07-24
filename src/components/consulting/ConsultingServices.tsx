@@ -67,9 +67,12 @@ export function ConsultingServices() {
 
   return (
     <>
-      <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
-        Fees cover the stated advisory scope and deliverable. Third-party searches, regulated opinions, filings, and implementation work are confirmed separately.
-      </p>
+      <div className="mb-6 border-l-2 border-primary pl-4">
+        <p className="text-sm font-medium text-foreground">Bring the problem, not a preselected package.</p>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          These are examples of how we can structure the work. We will first clarify the decision you need to make, then confirm the useful scope and remove anything that does not serve it. Indicative fees and timelines remain below as planning references.
+        </p>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {SERVICES.map((service) => {
           const Icon = service.icon;
@@ -102,17 +105,16 @@ export function ConsultingServices() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0 space-y-3 sm:space-y-4">
-                <div className="space-y-1">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl sm:text-2xl font-semibold tracking-tight">
-                      {service.pricing.isFrom ? "From " : ""}{formatUSD(service.pricing.price)}
-                    </span>
-                  </div>
+                <div className="border-t border-border pt-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Indicative planning fee</p>
+                  <p className="mt-1 text-sm font-medium text-muted-foreground">
+                    {service.pricing.isFrom ? "From " : ""}{formatUSD(service.pricing.price)}
+                  </p>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Clock className="h-4 w-4" />
-                  Estimated delivery: {service.pricing.timeline}
+                  Indicative delivery: {service.pricing.timeline}
                 </div>
 
                 {"note" in service.pricing && (
@@ -132,10 +134,10 @@ export function ConsultingServices() {
                   {selected ? (
                     <>
                       <Check className="mr-2 h-4 w-4" />
-                      Added to request
+                      Added for discussion
                     </>
                   ) : (
-                    "Add to request"
+                    "Discuss this need"
                   )}
                 </Button>
               </CardContent>

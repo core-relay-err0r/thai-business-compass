@@ -63,7 +63,7 @@ export function FitGuide() {
 
         <div className="mt-8 flex justify-end">
           <Link to="/services" className="inline-flex min-h-[44px] items-center gap-3 text-sm font-medium underline underline-offset-4">
-            Compare the scope in the calculator <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            Explore possible solutions and planning tools <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
       </AnimatedSection>

@@ -21,18 +21,18 @@ export function HeroSection() {
   return (
     <HeroSectionUI
         title={<>
-          Thailand rewards prepared businesses. <span className="text-primary">Not expensive mistakes.</span>
+          You understand your business needs. <span className="text-primary">We know how to solve them in Thailand.</span>
         </>} 
-        subtitle="See the compliance, corporate work, and likely cost behind your next move — before a missed filing, weak structure, or vague quote turns into a bigger problem."
+        subtitle="Start with the problem, not a service package. We will clarify what your business actually needs, find the right strategy, and tell you what you can safely leave out."
         callToAction={{
-          text: "Find what I actually need",
-          href: "#diagnosis"
+          text: "Let’s discuss your situation",
+          href: "/submit"
         }} 
         secondaryAction={{
-          text: "I already know my scope",
-          href: "/services"
+          text: "Map my needs first",
+          href: "#diagnosis"
         }} 
-        tagline="No mystery packages. No grey-area structures. No pressure to buy what you do not need."
+        tagline="A useful conversation should define both what you need and what you do not."
         slides={slides} 
         contactInfo={{
           website: "info@pnd50.com",

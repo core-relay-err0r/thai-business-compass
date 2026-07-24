@@ -11,14 +11,14 @@ const steps = [
   {
     icon: FileSearch,
     number: "02",
-    title: "Get your scope + pricing",
-    description: "See what the calculator includes from your answers, what may apply, and which items need scope confirmation.",
+    title: "Discuss the right approach",
+    description: "We review the facts, challenge assumptions, and separate essential work from optional or unnecessary services.",
   },
   {
     icon: Send,
     number: "03",
-    title: "Submit a structured request",
-    description: "Your answers auto-fill the request form. Review and submit. We reply with next steps.",
+    title: "Agree a focused plan",
+    description: "Only after the need is clear do we confirm the scope, responsibilities, next steps, and relevant pricing.",
   },
 ];
 
@@ -29,7 +29,7 @@ export function HowItWorks() {
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">How it works</h2>
           <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
-            Replace vague conversations with a scope you can inspect, question, and act on.
+            Bring the business need. We will turn it into a practical strategy and a scope you can question before committing.
           </p>
         </div>
 

@@ -14,17 +14,17 @@ export function PricingLogic() {
       <AnimatedSection className="container px-4 sm:px-6">
         <div className="grid gap-8 border-b border-border pb-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Understand the quote</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Optional planning reference</p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
               Prices are shown in US dollars with an approximate Thai-baht reference at ฿33 per dollar. Final scope and fees are confirmed after reviewing the company facts and records.
             </p>
           </div>
           <div>
             <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">
-              Price should follow the work—not the confidence of the salesperson.
+              When you are ready, use pricing to plan—not to diagnose the problem.
             </h2>
             <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Use these four drivers to compare quotes. If a provider cannot explain how each one changes the fee, the headline price is not yet comparable.
+              These figures are a secondary reference after the scope is understood. Use the four drivers to see why a fee may change; we will confirm the work before asking you to commit.
             </p>
           </div>
         </div>

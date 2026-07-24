@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
@@ -8,7 +8,7 @@ import { LiveEstimate } from "@/components/accounting/LiveEstimate";
 import { MobileEstimateSheet } from "@/components/accounting/MobileEstimateSheet";
 import { ConsultingServices } from "@/components/consulting/ConsultingServices";
 import { AIRecommender } from "@/components/services/AIRecommender";
-import { Building2, Calculator, MessageSquare } from "lucide-react";
+import { ArrowRight, Building2, Calculator, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { FAQSchema, ServiceSchema } from "@/components/seo/StructuredData";
@@ -61,17 +61,17 @@ const sectionData = {
   corporate: {
     icon: Building2,
     title: "Corporate services",
-    description: "Set up or change the company without leaving legal and documentary loose ends.",
+    description: "Possible solutions when the need involves setup, ownership, governance, or company records.",
   },
   accounting: {
     icon: Calculator,
-    title: "Accounting Calculator",
-    description: "Expose recurring filings, records, payroll, and year-end work before committing.",
+    title: "Accounting scope & calculator",
+    description: "Explore likely compliance work and estimate cost after the accounting need is understood.",
   },
   consulting: {
     icon: MessageSquare,
     title: "Business consulting",
-    description: "Pressure-test the business decision, not a generic consulting package.",
+    description: "Decision support shaped around the problem, expected outcome, and practical trade-offs.",
   },
 };
 
@@ -146,16 +146,32 @@ export default function Services() {
       <FAQSchema items={serviceFAQs} />
       <ServiceSchema services={servicesList} />
       <InternalPageHeader
-        eyebrow="Map the exposure"
-        meta="Corporate · Accounting · Advisory"
-        title={<>Do not buy a package. <span className="text-primary">Diagnose the work.</span></>}
-        description="Build the scope around your actual company, filings, people, and plans. See known fees immediately; use a custom quote only where complexity makes one necessary."
+        eyebrow="Start with the business need"
+        meta="Diagnosis · Strategy · Focused execution"
+        title={<>Describe the problem. <span className="text-primary">We will find the right approach.</span></>}
+        description="You understand what your business is trying to achieve. We understand how to solve it in Thailand. Let’s define what is necessary, what is optional, and what you do not need before discussing services or fees."
       />
 
       <section className="py-8 sm:py-10 md:py-16">
         <div className="container px-4 sm:px-6">
-          <div className="max-w-7xl mx-auto mb-8 sm:mb-10">
-            <AIRecommender />
+          <div className="mx-auto mb-8 max-w-7xl border-b border-border pb-8 sm:mb-10 sm:pb-10">
+            <div className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-3xl">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Two ways to begin</p>
+                <h2 className="mt-3 text-balance font-serif text-2xl font-medium sm:text-3xl">Tell us the situation directly, or map it first.</h2>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  You do not need to choose services before contacting us. Describe the outcome or problem in your own words and we will help define the right strategy.
+                </p>
+              </div>
+              <Link
+                to="/submit"
+                className="inline-flex min-h-[48px] shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Start a conversation
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+            <AIRecommender defaultOpen />
           </div>
           <div className="flex gap-8 lg:gap-12 max-w-7xl mx-auto">
             {/* Sticky Sidebar - Desktop Only */}
@@ -217,7 +233,7 @@ export default function Services() {
                     <h2 className="text-lg sm:text-xl font-semibold">Corporate services</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    Set up or change the company without leaving legal and documentary loose ends.
+                    Possible solutions when the need involves setup, ownership, governance, or company records.
                   </p>
                 </div>
                 <CorporateServicesContent />
@@ -228,10 +244,10 @@ export default function Services() {
                 <div className="lg:hidden mb-6 sm:mb-8">
                   <div className="flex items-center gap-2 sm:gap-3 mb-2">
                     <Calculator className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-                    <h2 className="text-lg sm:text-xl font-semibold">Accounting Calculator</h2>
+                    <h2 className="text-lg sm:text-xl font-semibold">Accounting scope & calculator</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    Expose recurring filings, records, payroll, and year-end work before committing.
+                    Explore likely compliance work and estimate cost after the accounting need is understood.
                   </p>
                 </div>
                 <AccountingWizard />
@@ -245,7 +261,7 @@ export default function Services() {
                     <h2 className="text-lg sm:text-xl font-semibold">Business consulting</h2>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    Pressure-test the business decision, not a generic consulting package.
+                    Decision support shaped around the problem, expected outcome, and practical trade-offs.
                   </p>
                 </div>
                 <ConsultingServices />
