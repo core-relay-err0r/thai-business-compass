@@ -6,7 +6,7 @@ import { ArrowUpRight, Calculator, Building2, MessageSquare, Menu, X } from "luc
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 
-const CALCULATOR_URL = "https://calculator.pnd50.com";
+const CALCULATOR_URL = "/services#accounting";
 
 export function Header() {
   const location = useLocation();
@@ -44,9 +44,9 @@ export function Header() {
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
-            <a href={CALCULATOR_URL} className="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium hover:underline">
+            <Link to={CALCULATOR_URL} className="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium hover:underline">
               Calculator <ArrowUpRight aria-hidden="true" />
-            </a>
+            </Link>
             <Button onClick={() => setIsStartModalOpen(true)} className="rounded-none">Start here</Button>
           </div>
 
@@ -73,9 +73,9 @@ export function Header() {
                 <span>{label}</span><span className="text-xs text-muted-foreground">0{index + 1}</span>
               </Link>
             ))}
-            <a href={CALCULATOR_URL} onClick={closeMobile} className="mt-4 flex min-h-[48px] items-center justify-between border border-foreground px-4 text-sm font-medium">
+            <Link to={CALCULATOR_URL} onClick={closeMobile} className="mt-4 flex min-h-[48px] items-center justify-between border border-foreground px-4 text-sm font-medium">
               Cost calculator <ArrowUpRight aria-hidden="true" />
-            </a>
+            </Link>
             <div className="grid grid-cols-2 gap-3 pt-3">
               <Link to="/submit" onClick={closeMobile}><Button variant="outline" className="w-full rounded-none">Submit request</Button></Link>
               <Button className="w-full rounded-none" onClick={() => { closeMobile(); setIsStartModalOpen(true); }}>Start here</Button>

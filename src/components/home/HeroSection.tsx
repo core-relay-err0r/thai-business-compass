@@ -19,21 +19,18 @@ export function HeroSection() {
   }];
 
   return (
-    <>
-      {/* SEO: Primary heading for search engines */}
-      <h1 className="sr-only">PND50 - Thai Accounting Firm in Bangkok, Thailand | Accountant for Foreigners</h1>
-      <HeroSectionUI 
+    <HeroSectionUI
         title={<>
           Thailand rewards prepared businesses. <span className="text-primary">Not expensive mistakes.</span>
         </>} 
         subtitle="See the compliance, corporate work, and likely cost behind your next move — before a missed filing, weak structure, or vague quote turns into a bigger problem."
         callToAction={{
-          text: "Expose the real cost",
-          href: "https://calculator.pnd50.com"
+          text: "Find what I actually need",
+          href: "#diagnosis"
         }} 
         secondaryAction={{
-          text: "Challenge us with your case",
-          href: "/contact"
+          text: "I already know my scope",
+          href: "/services"
         }} 
         tagline="No mystery packages. No grey-area structures. No pressure to buy what you do not need."
         slides={slides} 
@@ -43,6 +40,5 @@ export function HeroSection() {
           address: "Bangkok, Thailand"
         }} 
       />
-    </>
   );
 }

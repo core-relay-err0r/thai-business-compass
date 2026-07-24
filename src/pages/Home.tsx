@@ -5,6 +5,9 @@ import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
 import { BottomCTA } from "@/components/home/BottomCTA";
+import { GuidedDiagnosis } from "@/components/home/GuidedDiagnosis";
+import { PricingLogic } from "@/components/home/PricingLogic";
+import { FitGuide } from "@/components/home/FitGuide";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { LocalBusinessSchema, OrganizationSchema } from "@/components/seo/StructuredData";
 
@@ -20,10 +23,13 @@ export default function Home() {
       <LocalBusinessSchema />
       <OrganizationSchema />
       <HeroSection />
+      <GuidedDiagnosis />
+      <HowItWorks />
       <ModuleCards />
+      <PricingLogic />
+      <FitGuide />
       <TrustSection />
       <Testimonials />
-      <HowItWorks />
       <BottomCTA />
     </Layout>
   );

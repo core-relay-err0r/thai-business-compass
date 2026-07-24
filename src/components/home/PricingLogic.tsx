@@ -1,102 +1,88 @@
-import { PRICING, CORPORATE_PRICING, formatUSD, formatPrice } from "@/lib/pricing";
+import { PRICING, CORPORATE_PRICING, formatUSD } from "@/lib/pricing";
 import { AnimatedSection } from "@/components/ui/animated-section";
+
+const priceDrivers = [
+  ["Transaction volume", "The number and complexity of monthly records"],
+  ["Registrations", "VAT, withholding tax, payroll, and social security"],
+  ["People", "Employee count and payroll filing scope"],
+  ["History", "Current records versus catch-up or cleanup work"],
+];
 
 export function PricingLogic() {
   return (
-    <section id="pricing-logic" className="py-20">
-      <AnimatedSection className="container">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Pricing Logic</h2>
-            <p className="text-muted-foreground">
-              Transparent, predictable pricing. Base fee + add-ons based on your setup.
+    <section id="pricing-logic" className="border-b border-border bg-background py-16 sm:py-20 lg:py-24">
+      <AnimatedSection className="container px-4 sm:px-6">
+        <div className="grid gap-8 border-b border-border pb-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">Understand the quote</p>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
+              Indicative prices below are shown in USD. Final scope and fees are confirmed after reviewing the company facts.
             </p>
           </div>
-
-          <div className="space-y-8">
-            {/* Monthly Accounting */}
-            <div className="bg-muted/30 rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-4">Monthly Accounting</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span>Base bookkeeping (up to 50 txns)</span>
-                  <span className="font-medium">{formatUSD(PRICING.BASE_ACCOUNTING)}/month</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ VAT reporting (PP.30)</span>
-                  <span>+{formatUSD(PRICING.VAT_ADDON)}/month</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ Recurring WHT (PND3/PND53)</span>
-                  <span>+{formatUSD(PRICING.RECURRING_WHT_ADDON)}/month</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ Payroll & social security (per block of 5)</span>
-                  <span>+{formatUSD(PRICING.PAYROLL_BLOCK)}/block/month</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ Medium volume (&gt;50 txns)</span>
-                  <span>+{formatUSD(PRICING.TX_MEDIUM_ADDON)}/month</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ High volume / complex scope</span>
-                  <span>Custom quote</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Annual */}
-            <div className="bg-muted/30 rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-4">Annual Services</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span>Year-end financial statements</span>
-                  <span className="font-medium">From {formatUSD(PRICING.YEAR_END_STATEMENTS)}/year</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Catch-up / backlog work</span>
-                  <span>From {formatUSD(PRICING.CATCHUP_BACKLOG)}/year</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>+ Annual audit (if required)</span>
-                  <span>From +{formatUSD(PRICING.AUDIT_ADDON)}/year</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Corporate */}
-            <div className="bg-muted/30 rounded-lg p-6">
-              <h3 className="font-semibold text-lg mb-4">Corporate Services (Turnkey, USD)</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span>Company incorporation</span>
-                  <span className="font-medium">{formatUSD(CORPORATE_PRICING.INCORPORATION)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Registered office</span>
-                  <span>From {formatUSD(CORPORATE_PRICING.REGISTERED_OFFICE)}/year</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Structural change (directors/shareholders)</span>
-                  <span>{formatUSD(CORPORATE_PRICING.STRUCTURAL_CHANGE)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Company review / cleanup</span>
-                  <span>{formatUSD(CORPORATE_PRICING.COMPANY_REVIEW)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Corporate documents</span>
-                  <span>{formatUSD(CORPORATE_PRICING.CORPORATE_DOCUMENTS)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Tax residency certificate</span>
-                  <span>{formatUSD(CORPORATE_PRICING.TAX_RESIDENCY)}</span>
-                </div>
-              </div>
-            </div>
+          <div>
+            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">
+              Price should follow the work—not the confidence of the salesperson.
+            </h2>
+            <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              Use these four drivers to compare quotes. If a provider cannot explain how each one changes the fee, the headline price is not yet comparable.
+            </p>
           </div>
+        </div>
+
+        <div className="grid border-b border-border md:grid-cols-4">
+          {priceDrivers.map(([title, description], index) => (
+            <div key={title} className={`py-5 md:px-5 ${index > 0 ? "border-t border-border md:border-l md:border-t-0" : ""}`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground">{title}</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{description}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid lg:grid-cols-3">
+          <article className="border-b border-border py-8 lg:border-b-0 lg:border-r lg:pr-8">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">Recurring</p>
+            <h3 className="mt-3 font-serif text-2xl font-medium">Monthly accounting</h3>
+            <dl className="mt-6 flex flex-col gap-4 text-sm">
+              <PriceRow label="Base bookkeeping (up to 50 transactions)" value={`${formatUSD(PRICING.BASE_ACCOUNTING)}/month`} strong />
+              <PriceRow label="VAT reporting (PP.30)" value={`+${formatUSD(PRICING.VAT_ADDON)}/month`} />
+              <PriceRow label="Recurring WHT (PND3/PND53)" value={`+${formatUSD(PRICING.RECURRING_WHT_ADDON)}/month`} />
+              <PriceRow label="Payroll and social security (per 5 employees)" value={`+${formatUSD(PRICING.PAYROLL_BLOCK)}/month`} />
+              <PriceRow label="Medium transaction volume" value={`+${formatUSD(PRICING.TX_MEDIUM_ADDON)}/month`} />
+            </dl>
+          </article>
+
+          <article className="border-b border-border py-8 lg:border-b-0 lg:border-r lg:px-8">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">Year end</p>
+            <h3 className="mt-3 font-serif text-2xl font-medium">Annual and cleanup work</h3>
+            <dl className="mt-6 flex flex-col gap-4 text-sm">
+              <PriceRow label="Year-end financial statements" value={`From ${formatUSD(PRICING.YEAR_END_STATEMENTS)}`} strong />
+              <PriceRow label="Catch-up or backlog work" value={`From ${formatUSD(PRICING.CATCHUP_BACKLOG)}`} />
+              <PriceRow label="Annual audit, when applicable" value={`From +${formatUSD(PRICING.AUDIT_ADDON)}`} />
+              <PriceRow label="Complex or high-volume scope" value="Custom quote" />
+            </dl>
+          </article>
+
+          <article className="py-8 lg:pl-8">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">One time</p>
+            <h3 className="mt-3 font-serif text-2xl font-medium">Corporate work</h3>
+            <dl className="mt-6 flex flex-col gap-4 text-sm">
+              <PriceRow label="Company incorporation" value={formatUSD(CORPORATE_PRICING.INCORPORATION)} strong />
+              <PriceRow label="Registered office" value={`From ${formatUSD(CORPORATE_PRICING.REGISTERED_OFFICE)}/year`} />
+              <PriceRow label="Director or shareholder change" value={formatUSD(CORPORATE_PRICING.STRUCTURAL_CHANGE)} />
+              <PriceRow label="Company review or cleanup" value={formatUSD(CORPORATE_PRICING.COMPANY_REVIEW)} />
+            </dl>
+          </article>
         </div>
       </AnimatedSection>
     </section>
+  );
+}
+
+function PriceRow({ label, value, strong = false }: { label: string; value: string; strong?: boolean }) {
+  return (
+    <div className="flex items-start justify-between gap-4 border-t border-border pt-4 first:border-t-0 first:pt-0">
+      <dt className="max-w-[65%] leading-relaxed text-muted-foreground">{label}</dt>
+      <dd className={`shrink-0 text-right ${strong ? "font-semibold text-foreground" : "text-muted-foreground"}`}>{value}</dd>
+    </div>
   );
 }

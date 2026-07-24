@@ -24,7 +24,7 @@ const ActionLink = ({ href, children, primary = false }: { href: string; childre
       : "border-foreground/30 bg-background text-foreground hover:bg-secondary"
   );
 
-  if (isExternal(href)) {
+  if (isExternal(href) || href.startsWith("#")) {
     return <a href={href} className={className}>{children}</a>;
   }
 

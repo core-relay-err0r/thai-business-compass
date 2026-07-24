@@ -16,9 +16,9 @@ export function BottomCTA() {
               Map your monthly accounting, year-end work, corporate changes, documents, and advisory scope before asking for a final quote.
             </p>
           </div>
-          <a href="https://calculator.pnd50.com">
+          <a href="/services">
             <Button size="lg" className="group min-h-[52px] border border-primary bg-primary px-6 text-primary-foreground hover:bg-background hover:text-foreground">
-              Expose the real cost
+              Build the right scope
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </a>

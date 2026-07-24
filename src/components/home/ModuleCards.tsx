@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
-const CALCULATOR_URL = "https://calculator.pnd50.com";
+const CALCULATOR_URL = "/services";
 
 const primaryServices = [
   {

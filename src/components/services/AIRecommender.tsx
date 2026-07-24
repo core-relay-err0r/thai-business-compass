@@ -59,10 +59,15 @@ const CONFIDENCE_BLURB: Record<"high" | "medium" | "low", string> = {
   low: "Your situation is unusual or some answers were unclear. Get in touch to refine.",
 };
 
-export function AIRecommender() {
+interface AIRecommenderProps {
+  defaultOpen?: boolean;
+  handoffToServices?: boolean;
+}
+
+export function AIRecommender({ defaultOpen = false, handoffToServices = false }: AIRecommenderProps) {
   const navigate = useNavigate();
   const { applyRecommendation } = useServices();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<FormState>(initialForm);
   const [result, setResult] = useState<AIRecommendation | null>(null);
@@ -79,8 +84,9 @@ export function AIRecommender() {
     try {
       const { data, error } = await supabase.functions.invoke("ai-recommend", { body: form });
       if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
-      setResult(data as AIRecommendation);
+      const response = data as AIRecommendation & { error?: string };
+      if (response.error) throw new Error(response.error);
+      setResult(response);
       setSubmittedForm(form);
       setExplainOpen(false);
     } catch (err) {
@@ -99,7 +105,10 @@ export function AIRecommender() {
       description: "We prefilled the calculator and selected services. You can adjust them below.",
       duration: 5000,
     });
-    // Scroll to live estimate / accounting section
+    if (handoffToServices) {
+      navigate("/services#accounting");
+      return;
+    }
     document.getElementById("accounting")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -108,7 +117,7 @@ export function AIRecommender() {
   };
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
+    <Card className="border-border bg-background text-foreground shadow-none">
       <CardContent className="p-4 sm:p-6">
         {/* Header / Trigger */}
         <button

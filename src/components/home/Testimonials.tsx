@@ -46,8 +46,8 @@ export function Testimonials() {
       testimonials={testimonials}
       primaryActionLabel="Get in Touch"
       primaryActionHref="/contact"
-      secondaryActionLabel="Cost Calculator"
-      secondaryActionHref="https://calculator.pnd50.com"
+      secondaryActionLabel="Compare your scope"
+      secondaryActionHref="/services"
       className="bg-muted/30 border-y border-border/40"
     />
   );
