@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingDown, Globe, Search, GitBranch, Building, Check, ArrowRight, ShoppingCart, Clock } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { CONSULTING_PRICING, formatTHB } from "@/lib/pricing";
+import { CONSULTING_PRICING, formatUSD } from "@/lib/pricing";
 
 const SERVICES = [
   {
@@ -105,7 +105,7 @@ export function ConsultingServices() {
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl sm:text-2xl font-semibold tracking-tight">
-                      {service.pricing.isFrom ? "From " : ""}{formatTHB(service.pricing.price)}
+                      {service.pricing.isFrom ? "From " : ""}{formatUSD(service.pricing.price)}
                     </span>
                   </div>
                 </div>
