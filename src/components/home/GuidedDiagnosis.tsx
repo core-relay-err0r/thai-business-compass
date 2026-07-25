@@ -13,7 +13,7 @@ export function GuidedDiagnosis() {
             </p>
           </div>
           <div>
-            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">
+            <h2 className="text-balance font-serif text-4xl font-medium leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
               Tell us what you need to achieve. We will work out what it takes.
             </h2>
             <p className="mt-5 max-w-3xl text-sm leading-relaxed text-background/70 sm:text-base">

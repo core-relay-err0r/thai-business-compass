@@ -17,7 +17,7 @@ export function FitGuide() {
         <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">How to compare providers</p>
           <div>
-            <h2 id="fit-guide-heading" className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">
+            <h2 id="fit-guide-heading" className="text-balance font-serif text-4xl font-medium leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
               Choose for control, not for the longest service list.
             </h2>
             <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">

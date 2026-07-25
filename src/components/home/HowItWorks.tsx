@@ -1,54 +1,60 @@
-import { MessageSquareText, FileSearch, Send } from "lucide-react";
+import { ArrowDownRight } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
 const steps = [
   {
-    icon: MessageSquareText,
     number: "01",
-    title: "Answer a few questions",
-    description: "Tell us about your company setup, team size, and operations. Takes about 2 minutes.",
+    label: "Your side",
+    title: "Bring the reality.",
+    description: "Tell us what is happening, what must change, and what success looks like. No service vocabulary required.",
   },
   {
-    icon: FileSearch,
     number: "02",
-    title: "Discuss the right approach",
-    description: "We review the facts, challenge assumptions, and separate essential work from optional or unnecessary services.",
+    label: "Our side",
+    title: "Challenge the assumptions.",
+    description: "We connect the facts, expose hidden dependencies, and separate essential work from optional noise.",
   },
   {
-    icon: Send,
     number: "03",
-    title: "Agree a focused plan",
-    description: "Only after the need is clear do we confirm the scope, responsibilities, next steps, and relevant pricing.",
+    label: "The outcome",
+    title: "Commit to less—confidently.",
+    description: "Only then do we agree the focused scope, ownership, sequence, and relevant planning price.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-8 sm:py-12 md:py-20 bg-muted/30">
+    <section id="how-it-works" className="border-b border-border bg-primary text-primary-foreground">
       <AnimatedSection className="container px-4 sm:px-6">
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">How it works</h2>
-          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
-            Bring the business need. We will turn it into a practical strategy and a scope you can question before committing.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto">
-          {steps.map((step, index) => (
-            <div key={step.number} className="relative">
-              {index < steps.length - 1 && (
-                <div className="hidden sm:block absolute top-8 left-[60%] w-full h-px bg-border" />
-              )}
-              <div className="text-center relative">
-                <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-background border-2 border-primary mx-auto mb-3 sm:mb-4 relative z-10">
-                  <step.icon className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
-                </div>
-                <div className="text-xs font-medium text-muted-foreground mb-2">{step.number}</div>
-                <h3 className="font-semibold text-base sm:text-lg mb-2">{step.title}</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground">{step.description}</p>
-              </div>
+        <div className="grid border-x border-primary-foreground/25 lg:grid-cols-[0.65fr_1.35fr]">
+          <div className="flex min-h-56 flex-col justify-between border-b border-primary-foreground/25 p-6 sm:p-8 lg:min-h-[30rem] lg:border-b-0 lg:border-r lg:p-10">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">The method</p>
+            <div>
+              <p className="font-serif text-7xl leading-none sm:text-8xl lg:text-9xl">3</p>
+              <p className="mt-3 max-w-xs text-sm leading-relaxed text-primary-foreground/75">One disciplined sequence. No premature package. No inflated scope.</p>
             </div>
-          ))}
+          </div>
+
+          <div>
+            <header className="border-b border-primary-foreground/25 p-6 sm:p-8 lg:p-10">
+              <h2 className="max-w-4xl text-balance font-serif text-4xl font-medium leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
+                Need first. Strategy second. Services last.
+              </h2>
+            </header>
+            <ol>
+              {steps.map((step) => (
+                <li key={step.number} className="group grid gap-5 border-b border-primary-foreground/25 p-6 last:border-b-0 sm:grid-cols-[4rem_1fr_auto] sm:items-start sm:p-8 lg:p-10">
+                  <span className="font-serif text-3xl text-primary-foreground/45">{step.number}</span>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary-foreground/65">{step.label}</p>
+                    <h3 className="mt-2 font-serif text-2xl font-medium sm:text-3xl">{step.title}</h3>
+                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-primary-foreground/75">{step.description}</p>
+                  </div>
+                  <ArrowDownRight className="hidden h-7 w-7 transition-transform group-hover:translate-x-1 group-hover:translate-y-1 sm:block" aria-hidden="true" />
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </AnimatedSection>
     </section>

@@ -95,7 +95,6 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                     alt={image.title}
                     className="home-editorial-image absolute inset-0 size-full object-cover object-center"
                     loading="eager"
-                    fetchPriority="high"
                   />
                   <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-4 p-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-background mix-blend-difference sm:p-5">
                     <span>PND50 / Strategy room</span>

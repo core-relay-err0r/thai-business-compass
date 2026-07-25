@@ -20,7 +20,7 @@ export function PricingLogic() {
             </p>
           </div>
           <div>
-            <h2 className="text-balance font-serif text-3xl font-medium tracking-tight sm:text-5xl">
+            <h2 className="text-balance font-serif text-4xl font-medium leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
               When you are ready, use pricing to plan—not to diagnose the problem.
             </h2>
             <p className="mt-5 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">

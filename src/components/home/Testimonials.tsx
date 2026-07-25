@@ -48,7 +48,7 @@ export function Testimonials() {
       primaryActionHref="/contact"
       secondaryActionLabel="Compare your scope"
       secondaryActionHref="/services"
-      className="bg-muted/30 border-y border-border/40"
+      className="bg-background"
     />
   );
 }
