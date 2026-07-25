@@ -1,3 +1,5 @@
+import { applyInternalLinks } from "./article-internal-links.mjs";
+
 // GEO/SEO editorial cluster: Thai company setup and corporate bank-account readiness.
 //
 // This file is the reproducible source of truth for the six published articles.
@@ -55,7 +57,7 @@ const S = {
   },
 };
 
-export const GEO_ARTICLES = [
+const GEO_ARTICLE_SOURCE = [
   // 1 ---------------------------------------------------------------------------
   {
     slug: "corporate-bank-account-thailand-foreign-founders-2026",
@@ -335,3 +337,5 @@ Even a perfectly prepared application is approved at the bank's discretion after
 This article is general information for planning, not legal, tax, or banking advice, and it is not a determination of eligibility. Bank requirements change and are applied case by case. Confirm current requirements with your bank and qualified professionals.`,
   },
 ];
+
+export const GEO_ARTICLES = GEO_ARTICLE_SOURCE.map(applyInternalLinks);

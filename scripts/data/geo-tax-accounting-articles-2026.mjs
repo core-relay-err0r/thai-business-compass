@@ -1,3 +1,5 @@
+import { applyInternalLinks } from "./article-internal-links.mjs";
+
 // GEO/SEO editorial cluster: Thai tax and accounting compliance for companies.
 //
 // This file is the reproducible source of truth for the six published tax/accounting
@@ -57,7 +59,7 @@ const S = {
   },
 };
 
-export const TAX_ACCOUNTING_ARTICLES = [
+const TAX_ACCOUNTING_ARTICLE_SOURCE = [
   // 1 ---------------------------------------------------------------------------
   {
     slug: "thailand-tax-accounting-calendar-2026-deadlines",
@@ -355,3 +357,5 @@ Ownership and director details, tax records, and bank information should all tel
 This article is general information for planning, not accounting or tax advice. Record-keeping and retention rules change. Confirm current requirements with the DBD, the Revenue Department, and a qualified accountant.`,
   },
 ];
+
+export const TAX_ACCOUNTING_ARTICLES = TAX_ACCOUNTING_ARTICLE_SOURCE.map(applyInternalLinks);

@@ -74,26 +74,51 @@ function normalizeSources(value) {
   });
 }
 
+function renderInlineMarkdown(value) {
+  const text = String(value ?? "");
+  const tokenPattern = /\[([^\]]+)]\(([^)\s]+)\)|\*\*(.+?)\*\*|(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g;
+  let html = "";
+  let cursor = 0;
+  let match;
+
+  while ((match = tokenPattern.exec(text)) !== null) {
+    html += escapeHtml(text.slice(cursor, match.index));
+    if (match[1] && match[2]) {
+      const label = escapeHtml(match[1]);
+      const href = match[2];
+      const isInternal = /^\/blog\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(href);
+      const externalUrl = safeUrl(href);
+      if (isInternal) html += `<a href="${escapeHtml(href)}">${label}</a>`;
+      else if (externalUrl) html += `<a href="${escapeHtml(externalUrl)}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+      else html += label;
+    } else if (match[3]) html += `<strong>${escapeHtml(match[3])}</strong>`;
+    else if (match[4]) html += `<em>${escapeHtml(match[4])}</em>`;
+    cursor = match.index + match[0].length;
+  }
+
+  return html + escapeHtml(text.slice(cursor));
+}
+
 function renderContentHtml(content) {
   const blocks = String(content || "").split(/\n\n+/);
   return blocks
     .map((block) => {
       const trimmed = block.trim();
       if (!trimmed) return "";
-      if (trimmed.startsWith("### ")) return `<h3>${escapeHtml(trimmed.slice(4))}</h3>`;
-      if (trimmed.startsWith("## ")) return `<h2>${escapeHtml(trimmed.slice(3))}</h2>`;
-      if (trimmed.startsWith("# ")) return `<h2>${escapeHtml(trimmed.slice(2))}</h2>`;
+      if (trimmed.startsWith("### ")) return `<h3>${renderInlineMarkdown(trimmed.slice(4))}</h3>`;
+      if (trimmed.startsWith("## ")) return `<h2>${renderInlineMarkdown(trimmed.slice(3))}</h2>`;
+      if (trimmed.startsWith("# ")) return `<h2>${renderInlineMarkdown(trimmed.slice(2))}</h2>`;
 
       const lines = trimmed.split("\n");
       const isList = lines.every((line) => /^(-\s|\d+\.\s)/.test(line.trim()));
       if (isList) {
         const ordered = /^\d+\.\s/.test(lines[0].trim());
         const items = lines
-          .map((line) => `<li>${escapeHtml(line.trim().replace(/^(-\s|\d+\.\s)/, ""))}</li>`)
+          .map((line) => `<li>${renderInlineMarkdown(line.trim().replace(/^(-\s|\d+\.\s)/, ""))}</li>`)
           .join("");
         return ordered ? `<ol>${items}</ol>` : `<ul>${items}</ul>`;
       }
-      return `<p>${escapeHtml(trimmed)}</p>`;
+      return `<p>${renderInlineMarkdown(trimmed)}</p>`;
     })
     .filter(Boolean)
     .join("\n");

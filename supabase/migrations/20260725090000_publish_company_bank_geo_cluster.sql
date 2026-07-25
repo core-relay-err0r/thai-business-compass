@@ -55,6 +55,11 @@ Frequently, yes. Many Thai banks require authorized directors or signatories to 
 ## How should foreign founders prepare?
 Sequence the work: incorporate the company, assemble corporate records, prepare a clean ownership chart and a plain-language business description, confirm the specific bank's current document list and attendance rules, then apply. Keep every document consistent with your registration and tax records.
 
+## Related reading
+- [company-registration checklist for foreign founders](/blog/thailand-company-registration-foreign-founders-checklist-2026)
+- [KYC and UBO readiness checklist](/blog/corporate-bank-account-readiness-kyc-ubo-checklist-thailand)
+- [correct company-to-bank setup sequence](/blog/company-first-or-bank-account-first-thailand-setup-sequence)
+
 This article is general information for planning, not legal, tax, immigration, or banking advice, and it is not a determination of eligibility. Bank requirements change and are applied case by case. Confirm the current requirements with your chosen bank and qualified professionals.$article$,
     $article$Open a Thai corporate bank account in 2026: documents, KYC and UBO checks, in-person attendance, preparation steps, and approval boundaries.$article$,
     $article$corporate bank account thailand foreign company$article$,
@@ -97,6 +102,12 @@ Capital requirements depend on your activity, ownership route, and whether forei
 ## What is the practical first move?
 Lock in your ownership route and confirm whether your activity is restricted before you file anything. Those two decisions determine your capital, licensing, and banking path.
 
+## Related reading
+- [foreign-ownership and nominee-risk questions](/blog/foreign-ownership-thai-company-fba-boi-nominee-questions)
+- [correct company-to-bank setup sequence](/blog/company-first-or-bank-account-first-thailand-setup-sequence)
+- [2026 tax and accounting calendar](/blog/thailand-tax-accounting-calendar-2026-deadlines)
+- [VAT registration and the THB 1.8 million threshold](/blog/vat-registration-thailand-1-8-million-threshold-pp30)
+
 This article is general information for planning, not legal, tax, or immigration advice, and it is not a determination of eligibility. Rules change and are applied case by case. Confirm current requirements with the DBD and qualified professionals.$article$,
     $article$Register a company in Thailand in 2026: entity choice, foreign ownership limits, registered office, capital evidence, and post-registration duties.$article$,
     $article$thailand company registration foreign founders$article$,
@@ -138,6 +149,11 @@ KYC is a cross-check. If your ownership percentages, director names, business de
 5. Source-of-funds and expected-activity explanation.
 6. Confirmation of the specific bank's current document list and attendance rules.
 
+## Related reading
+- [corporate bank account guide for foreign founders](/blog/corporate-bank-account-thailand-foreign-founders-2026)
+- [bank-application delay prevention guide](/blog/why-thai-corporate-bank-account-applications-get-delayed)
+- [monthly bookkeeping workflow](/blog/bookkeeping-thailand-foreign-owned-company-monthly-workflow)
+
 This article is general information for planning, not legal, tax, or banking advice, and it is not a determination of eligibility. Bank and regulatory requirements change and are applied case by case. Confirm current requirements with your bank and qualified professionals.$article$,
     $article$KYC, UBO and source-of-funds checklist for a Thai corporate bank account, based on customer due diligence rules and common bank practice.$article$,
     $article$thailand corporate bank account kyc ubo requirements$article$,
@@ -170,6 +186,11 @@ Some situations change the details rather than the order — for example, BOI-pr
 
 ## What is the realistic expectation on timing?
 Incorporation and bank onboarding are separate processes with their own timelines, and the account is approved at the bank's discretion after its checks. Preparing thoroughly shortens the bank stage but does not remove the bank's decision.
+
+## Related reading
+- [Thailand company-registration checklist](/blog/thailand-company-registration-foreign-founders-checklist-2026)
+- [corporate bank account requirements](/blog/corporate-bank-account-thailand-foreign-founders-2026)
+- [tax and accounting deadlines after incorporation](/blog/thailand-tax-accounting-calendar-2026-deadlines)
 
 This article is general information for planning, not legal, tax, immigration, or banking advice, and it is not a determination of eligibility. Requirements change and are applied case by case. Confirm current requirements with the DBD, your bank, and qualified professionals.$article$,
     $article$Company or bank account first in Thailand? Follow the correct setup order: incorporate, prepare corporate records, then apply to the bank.$article$,
@@ -211,6 +232,11 @@ Your ownership route and structure flow directly into bank KYC and beneficial-ow
 2. Which ownership route is lawful and practical for the plan?
 3. Can capital contributions be clearly evidenced?
 4. Does the structure reflect genuine ownership, with no reliance on nominees?
+
+## Related reading
+- [company-registration checklist for foreign founders](/blog/thailand-company-registration-foreign-founders-checklist-2026)
+- [KYC and beneficial-owner documentation](/blog/corporate-bank-account-readiness-kyc-ubo-checklist-thailand)
+- [common reasons bank applications are delayed](/blog/why-thai-corporate-bank-account-applications-get-delayed)
 
 This article is general information for planning, not legal advice, and it is not a determination of eligibility or a legal conclusion. Rules change and are applied case by case. Confirm current requirements and obtain advice from qualified Thai legal professionals.$article$,
     $article$Foreign ownership of a Thai company: FBA limits, BOI and Treaty of Amity routes, restricted activities, and nominee-shareholder risks.$article$,
@@ -255,6 +281,11 @@ Even a perfectly prepared application is approved at the bank's discretion after
 4. Prepare board authority and confirm the correct signatories.
 5. Confirm in-person attendance requirements.
 6. Pre-empt enhanced due diligence with strong source-of-funds evidence.
+
+## Related reading
+- [KYC, UBO and source-of-funds checklist](/blog/corporate-bank-account-readiness-kyc-ubo-checklist-thailand)
+- [corporate bank account requirements](/blog/corporate-bank-account-thailand-foreign-founders-2026)
+- [foreign-ownership and nominee-risk questions](/blog/foreign-ownership-thai-company-fba-boi-nominee-questions)
 
 This article is general information for planning, not legal, tax, or banking advice, and it is not a determination of eligibility. Bank requirements change and are applied case by case. Confirm current requirements with your bank and qualified professionals.$article$,
     $article$Why Thai corporate bank account applications get delayed: stale documents, ownership mismatches, unclear purpose, missing authority, and better fixes.$article$,

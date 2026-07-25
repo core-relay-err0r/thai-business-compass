@@ -20,41 +20,48 @@ function toAbsoluteUrl(path: string | null | undefined): string | undefined {
   return `${SITE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-// Parse inline markdown (bold, italic)
+// Parse a safe subset of inline Markdown: links, bold, and italic.
 function parseInlineMarkdown(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
-  let remaining = text;
+  const tokenPattern = /\[([^\]]+)]\(([^)\s]+)\)|\*\*(.+?)\*\*|(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g;
+  let cursor = 0;
+  let match: RegExpExecArray | null;
   let keyIndex = 0;
 
-  while (remaining.length > 0) {
-    // Match **bold** first (before *italic*)
-    const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
-    // Match *italic* (single asterisk)
-    const italicMatch = remaining.match(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/);
+  while ((match = tokenPattern.exec(text)) !== null) {
+    if (match.index > cursor) parts.push(text.slice(cursor, match.index));
 
-    if (boldMatch && (!italicMatch || boldMatch.index! <= italicMatch.index!)) {
-      // Add text before the bold
-      if (boldMatch.index! > 0) {
-        parts.push(remaining.slice(0, boldMatch.index));
+    if (match[1] && match[2]) {
+      const label = match[1];
+      const href = match[2];
+      const isInternal = /^\/blog\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(href);
+      const isExternal = /^https?:\/\/[^\s]+$/i.test(href);
+
+      if (isInternal) {
+        parts.push(
+          <Link key={keyIndex++} to={href} className="font-medium text-primary underline decoration-primary/35 underline-offset-4 transition-colors hover:decoration-primary">
+            {label}
+          </Link>
+        );
+      } else if (isExternal) {
+        parts.push(
+          <a key={keyIndex++} href={href} target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline decoration-primary/35 underline-offset-4 transition-colors hover:decoration-primary">
+            {label}
+          </a>
+        );
+      } else {
+        parts.push(label);
       }
-      // Add bold text
-      parts.push(<strong key={keyIndex++}>{boldMatch[1]}</strong>);
-      remaining = remaining.slice(boldMatch.index! + boldMatch[0].length);
-    } else if (italicMatch) {
-      // Add text before the italic
-      if (italicMatch.index! > 0) {
-        parts.push(remaining.slice(0, italicMatch.index));
-      }
-      // Add italic text
-      parts.push(<em key={keyIndex++}>{italicMatch[1]}</em>);
-      remaining = remaining.slice(italicMatch.index! + italicMatch[0].length);
-    } else {
-      // No more matches, add remaining text
-      parts.push(remaining);
-      break;
+    } else if (match[3]) {
+      parts.push(<strong key={keyIndex++}>{match[3]}</strong>);
+    } else if (match[4]) {
+      parts.push(<em key={keyIndex++}>{match[4]}</em>);
     }
+
+    cursor = match.index + match[0].length;
   }
 
+  if (cursor < text.length) parts.push(text.slice(cursor));
   return parts;
 }
 

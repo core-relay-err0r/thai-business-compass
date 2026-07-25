@@ -26,9 +26,10 @@ Companies with a non-calendar accounting period apply the same intervals to thei
 Statutory deadlines can shift for weekends and public holidays, and the Revenue Department has at times allowed additional days for electronic filing of certain returns. Treat the statutory date as the anchor and verify any extension for the specific form and period before relying on it.
 
 ## Related reading
-- VAT registration and the THB 1.8 million threshold.
-- PND 50 vs PND 51 explained.
-- Annual audit and financial statements.
+- [VAT registration and monthly PP.30 filing](/blog/vat-registration-thailand-1-8-million-threshold-pp30)
+- [PND 50 and PND 51 corporate tax filings](/blog/pnd50-vs-pnd51-thailand-corporate-income-tax)
+- [annual audit and financial-statement cycle](/blog/annual-audit-financial-statements-thailand-limited-company)
+- [monthly bookkeeping workflow](/blog/bookkeeping-thailand-foreign-owned-company-monthly-workflow)
 
 This article is general information for planning, not tax advice, and it is not a determination of your obligations. Deadlines change and depend on your accounting period. Confirm the current dates with the Revenue Department, the DBD, and a qualified accountant.', 'Thailand 2026 tax calendar: monthly VAT and withholding, half-year PND 51, annual PND 50, audit, and DBD financial-statement deadlines.', 'thailand tax accounting calendar 2026', 'A Thai company runs on three cycles: monthly (withholding by the 7th, VAT by the 15th), half-year (PND 51 within two months of the first six months), and annual (audited accounts, shareholder approval, PND 50 within 150 days, and DBD filing). Missing any one triggers penalties.', '[{"title":"The Revenue Department of Thailand (English portal)","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/","accessed_at":"2026-07-25"},{"title":"Value Added Tax (VAT) — registration and filing","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/6043.html","accessed_at":"2026-07-25"},{"title":"Financial statement submission and DBD e-Filing","publisher":"Department of Business Development (DBD), Ministry of Commerce","url":"https://www.dbd.go.th/en","accessed_at":"2026-07-25"}]'::jsonb, '2026-07-25T10:00:00.000Z', '2026-07-25', true, null, null, null, null),
   ('vat-registration-thailand-1-8-million-threshold-pp30', 'VAT Registration in Thailand: The THB 1.8 Million Threshold and PP.30 Explained', 'When VAT registration becomes mandatory in Thailand, how the 30-day window works, and what monthly PP.30 filing involves for a company.', 'Value Added Tax (VAT) is one of the first tax obligations a growing Thai company encounters. This article explains when registration becomes mandatory, the deadline to register, and what ongoing monthly filing involves.
@@ -58,8 +59,9 @@ Where a company has more than one branch, each branch generally files separately
 5. Confirm branch-filing arrangements if applicable.
 
 ## Related reading
-- Thailand tax and accounting calendar 2026.
-- Withholding tax forms PND 1, 3 and 53.
+- [2026 tax and accounting calendar](/blog/thailand-tax-accounting-calendar-2026-deadlines)
+- [Thai withholding-tax forms and deadlines](/blog/thai-withholding-tax-companies-pnd1-pnd3-pnd53)
+- [bookkeeping workflow for VAT-ready records](/blog/bookkeeping-thailand-foreign-owned-company-monthly-workflow)
 
 This article is general information for planning, not tax advice. VAT rates, thresholds, and procedures can change. Confirm current requirements with the Revenue Department and a qualified accountant.', 'Thailand VAT: the THB 1.8M threshold, the 30-day registration window, monthly PP.30 filing, tax invoices, and input vs output VAT.', 'vat registration thailand threshold pp30', 'VAT registration is mandatory once annual turnover exceeds THB 1.8 million; you must register within 30 days of crossing it. Registered businesses file PP.30 monthly by the 15th, even with no sales, and must issue compliant tax invoices.', '[{"title":"Value Added Tax (VAT) — registration and filing","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/6043.html","accessed_at":"2026-07-25"},{"title":"The Revenue Department of Thailand (English portal)","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/","accessed_at":"2026-07-25"},{"title":"Financial statement submission and DBD e-Filing","publisher":"Department of Business Development (DBD), Ministry of Commerce","url":"https://www.dbd.go.th/en","accessed_at":"2026-07-25"}]'::jsonb, '2026-07-25T10:01:00.000Z', '2026-07-25', true, null, null, null, null),
   ('thai-withholding-tax-companies-pnd1-pnd3-pnd53', 'Thai Withholding Tax for Companies: PND 1, PND 3 and PND 53 in Plain English', 'Which withholding tax form applies to which payment, when to remit, and why the rate always depends on the payment type and the recipient.', 'Withholding tax catches many new companies by surprise: when you pay certain kinds of income, you are responsible for deducting tax at source and remitting it to the Revenue Department. This article explains which form applies and when it is due.
@@ -91,8 +93,9 @@ Failing to withhold or remit does **not** remove the underlying tax liability an
 5. Remit by the 7th of the following month.
 
 ## Related reading
-- Thailand tax and accounting calendar 2026.
-- Bookkeeping workflow for foreign-owned companies.
+- [2026 tax and accounting calendar](/blog/thailand-tax-accounting-calendar-2026-deadlines)
+- [monthly bookkeeping workflow](/blog/bookkeeping-thailand-foreign-owned-company-monthly-workflow)
+- [VAT registration and PP.30 guide](/blog/vat-registration-thailand-1-8-million-threshold-pp30)
 
 This article is general information for planning, not tax advice, and it does not state a rate for your specific payments. Rates and rules change. Confirm current obligations with the Revenue Department and a qualified accountant.', 'Thai withholding tax explained: PND 1 for employees, PND 3 for individuals, PND 53 for companies, remitted by the 7th of the next month.', 'thai withholding tax pnd1 pnd3 pnd53', 'When your company pays certain income, you must withhold tax and remit it by the 7th of the following month using the right form: PND 1 for employees, PND 3 for individuals, and PND 53 for juristic persons. Rates depend on the payment type and any tax treaty.', '[{"title":"Withholding Tax","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/6045.html","accessed_at":"2026-07-25"},{"title":"The Revenue Department of Thailand (English portal)","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/","accessed_at":"2026-07-25"},{"title":"Financial statement submission and DBD e-Filing","publisher":"Department of Business Development (DBD), Ministry of Commerce","url":"https://www.dbd.go.th/en","accessed_at":"2026-07-25"}]'::jsonb, '2026-07-25T10:02:00.000Z', '2026-07-25', true, null, null, null, null),
   ('pnd50-vs-pnd51-thailand-corporate-income-tax', 'PND 50 vs PND 51: Thailand Corporate Income Tax Filings Explained', 'The difference between Thailand''s annual and half-year corporate income tax returns, their deadlines, and the estimation risk built into PND 51.', 'Thai companies file corporate income tax twice in each accounting period: once at the half-year and once annually. Confusing the two — or under-estimating on the half-year return — is a common and costly mistake. Here is how they differ.
@@ -120,8 +123,9 @@ PND 50 is built from the same numbers as your **audited accounts**, so the audit
 5. File PND 50 within 150 days and reconcile it to audited accounts.
 
 ## Related reading
-- Annual audit and financial statements in Thailand.
-- Thailand tax and accounting calendar 2026.
+- [annual audit and financial statements](/blog/annual-audit-financial-statements-thailand-limited-company)
+- [2026 tax and accounting calendar](/blog/thailand-tax-accounting-calendar-2026-deadlines)
+- [bookkeeping workflow that supports tax filings](/blog/bookkeeping-thailand-foreign-owned-company-monthly-workflow)
 
 This article is general information for planning, not tax advice, and it is not a determination of your rate or liability. Rates and rules change. Confirm current obligations with the Revenue Department and a qualified accountant.', 'PND 50 vs PND 51 in Thailand: annual vs half-year corporate income tax returns, deadlines, estimated-profit risk, and how they reconcile.', 'pnd50 vs pnd51 corporate income tax thailand', 'PND 51 is the half-year prepayment based on estimated annual profit, due within two months of the first six months. PND 50 is the annual return, due within 150 days of year-end and reconciled to your audited accounts. Under-estimating on PND 51 can trigger a surcharge.', '[{"title":"Corporate Income Tax","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/6044.html","accessed_at":"2026-07-25"},{"title":"The Revenue Department of Thailand (English portal)","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/","accessed_at":"2026-07-25"},{"title":"Financial statement submission and DBD e-Filing","publisher":"Department of Business Development (DBD), Ministry of Commerce","url":"https://www.dbd.go.th/en","accessed_at":"2026-07-25"}]'::jsonb, '2026-07-25T10:03:00.000Z', '2026-07-25', true, null, null, null, null),
   ('annual-audit-financial-statements-thailand-limited-company', 'Annual Audit and Financial Statements in Thailand: What Every Limited Company Must File', 'Why Thai limited companies generally need an independent annual audit — even when inactive — and how shareholder approval and DBD filing fit together.', 'Many founders are surprised that a Thai limited company must be audited every year — even a dormant one. This article explains the annual financial-statement obligation and how audit, shareholder approval, and DBD filing connect.
@@ -153,8 +157,9 @@ The audit is only as fast as your bookkeeping. If records, bank reconciliations,
 5. Reconcile PND 50 to the audited accounts and file within 150 days.
 
 ## Related reading
-- PND 50 vs PND 51 explained.
-- Bookkeeping workflow for foreign-owned companies.
+- [PND 50 and PND 51 explained](/blog/pnd50-vs-pnd51-thailand-corporate-income-tax)
+- [monthly bookkeeping and audit readiness](/blog/bookkeeping-thailand-foreign-owned-company-monthly-workflow)
+- [company-registration records checklist](/blog/thailand-company-registration-foreign-founders-checklist-2026)
 
 This article is general information for planning, not accounting, audit, or legal advice, and it is not a determination of your filing obligations. Requirements change and are applied case by case. Confirm current obligations with the DBD and a qualified auditor or accountant.', 'Thailand annual audit: limited companies generally need audited financial statements, shareholder approval within four months, and DBD e-Filing.', 'annual audit financial statements thailand company', 'A Thai limited company generally must have its annual financial statements independently audited, approved by shareholders within four months of year-end, and submitted to the DBD via e-Filing. This obligation usually applies even if the company was inactive.', '[{"title":"Financial statement submission and DBD e-Filing","publisher":"Department of Business Development (DBD), Ministry of Commerce","url":"https://www.dbd.go.th/en","accessed_at":"2026-07-25"},{"title":"Accounting and auditing standards guidance","publisher":"Federation of Accounting Professions (TFAC)","url":"https://www.tfac.or.th/en/","accessed_at":"2026-07-25"},{"title":"Corporate Income Tax","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/6044.html","accessed_at":"2026-07-25"}]'::jsonb, '2026-07-25T10:04:00.000Z', '2026-07-25', true, null, null, null, null),
   ('bookkeeping-thailand-foreign-owned-company-monthly-workflow', 'Bookkeeping in Thailand for Foreign-Owned Companies: Records, Documents and Monthly Workflow', 'An operational monthly bookkeeping checklist for foreign-owned Thai companies, and why clean records make VAT, withholding, and the annual audit far easier.', 'For a foreign-owned Thai company, bookkeeping is not just record-keeping — it is the foundation that every tax filing and the annual audit are built on. This article gives a practical monthly workflow and explains why staying current matters.
@@ -196,8 +201,10 @@ Ownership and director details, tax records, and bank information should all tel
 5. Retain documents for the legally required period.
 
 ## Related reading
-- Thailand tax and accounting calendar 2026.
-- Annual audit and financial statements.
+- [2026 tax and accounting calendar](/blog/thailand-tax-accounting-calendar-2026-deadlines)
+- [VAT registration and PP.30 filing](/blog/vat-registration-thailand-1-8-million-threshold-pp30)
+- [Thai withholding-tax forms](/blog/thai-withholding-tax-companies-pnd1-pnd3-pnd53)
+- [annual audit and financial statements](/blog/annual-audit-financial-statements-thailand-limited-company)
 
 This article is general information for planning, not accounting or tax advice. Record-keeping and retention rules change. Confirm current requirements with the DBD, the Revenue Department, and a qualified accountant.', 'Bookkeeping in Thailand: a monthly workflow for foreign-owned companies covering records, documents, reconciliations, retention, and audit readiness.', 'bookkeeping thailand foreign owned company', 'Good bookkeeping is a monthly discipline: capture every invoice, receipt, and bank transaction, reconcile accounts, and keep documents retained and consistent. Clean records are what make VAT, withholding, PND 50, and the annual audit straightforward.', '[{"title":"Financial statement submission and DBD e-Filing","publisher":"Department of Business Development (DBD), Ministry of Commerce","url":"https://www.dbd.go.th/en","accessed_at":"2026-07-25"},{"title":"Accounting and auditing standards guidance","publisher":"Federation of Accounting Professions (TFAC)","url":"https://www.tfac.or.th/en/","accessed_at":"2026-07-25"},{"title":"The Revenue Department of Thailand (English portal)","publisher":"The Revenue Department of Thailand","url":"https://www.rd.go.th/english/","accessed_at":"2026-07-25"}]'::jsonb, '2026-07-25T10:05:00.000Z', '2026-07-25', true, null, null, null, null)
 on conflict (slug) do update set
