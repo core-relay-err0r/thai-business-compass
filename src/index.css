@@ -208,6 +208,52 @@ All colors MUST be HSL.
 .home-editorial-image {
   animation: editorial-reveal 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
   filter: saturate(0.72) contrast(1.04);
+  transition: filter 700ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-editorial-hero figure:hover .home-editorial-image {
+  filter: saturate(0.9) contrast(1.06);
+  transform: scale(1.025);
+}
+
+.home-editorial-hero figure > a svg,
+.home-editorial a svg {
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-editorial-hero figure > a:hover svg {
+  transform: translate(3px, 3px) rotate(-8deg);
+}
+
+.editorial-reveal-section > * {
+  transition: opacity 650ms ease, transform 750ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.editorial-reveal-section:not(.is-visible) > * {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.editorial-reveal-section.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.editorial-reveal-section.is-visible > *:nth-child(2) {
+  transition-delay: 90ms;
+}
+
+.editorial-reveal-section.is-visible > *:nth-child(3) {
+  transition-delay: 160ms;
+}
+
+.home-editorial a:hover svg {
+  transform: translate(2px, -2px);
+}
+
+.home-editorial a:active,
+.home-editorial button:active {
+  transform: scale(0.985);
 }
 
 @keyframes editorial-rise {
@@ -238,5 +284,21 @@ All colors MUST be HSL.
   .home-editorial-hero a,
   .home-editorial-image {
     animation: none;
+  }
+
+  .home-editorial-image,
+  .home-editorial-hero figure > a svg,
+  .home-editorial a svg,
+  .editorial-reveal-section,
+  .editorial-reveal-section > * {
+    transition: none;
+  }
+
+  .home-editorial-hero figure:hover .home-editorial-image,
+  .home-editorial a:hover svg,
+  .home-editorial a:active,
+  .home-editorial button:active,
+  .editorial-reveal-section > * {
+    transform: none;
   }
 }

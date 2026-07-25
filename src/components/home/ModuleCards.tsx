@@ -38,7 +38,7 @@ export function ModuleCards() {
 
         <div className="grid border border-border lg:grid-cols-2">
           {primaryServices.map((service, index) => (
-            <article key={service.title} className={`group flex min-h-[34rem] flex-col p-6 transition-colors hover:bg-foreground hover:text-background sm:p-8 lg:p-10 ${index === 0 ? "border-b border-border lg:border-b-0 lg:border-r" : ""}`}>
+            <article key={service.title} className={`group flex min-h-[34rem] flex-col p-6 transition-[background-color,color,transform] duration-500 ease-out hover:-translate-y-1 hover:bg-foreground hover:text-background sm:p-8 lg:p-10 ${index === 0 ? "border-b border-border lg:border-b-0 lg:border-r" : ""}`}>
               <div className="flex items-start justify-between gap-6">
                 <span className="font-serif text-7xl leading-none text-primary sm:text-8xl">{service.index}</span>
                 <span className="max-w-32 text-right text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground group-hover:text-background/60">{service.eyebrow}</span>

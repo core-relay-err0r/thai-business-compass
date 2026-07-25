@@ -1,5 +1,5 @@
 import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
-import heroStrategyThailand from "@/assets/hero-strategy-thailand.png";
+import heroStrategyThailand from "@/assets/hero-strategy-thailand.webp";
 
 export function HeroSection() {
   const slides = [{

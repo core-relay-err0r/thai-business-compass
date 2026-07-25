@@ -15,10 +15,10 @@ export function AnimatedSection({ children, className, delay = 0 }: AnimatedSect
     <div
       ref={ref}
       className={cn(
-        "transition-all duration-700 ease-out",
+        "editorial-reveal-section transition-[opacity,transform] duration-700 ease-out",
         isVisible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-8",
+          ? "is-visible translate-y-0 opacity-100"
+          : "translate-y-8 opacity-0",
         className
       )}
       style={{ transitionDelay: `${delay}ms` }}
