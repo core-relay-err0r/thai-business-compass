@@ -112,13 +112,19 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
     document.getElementById("accounting")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const handleProceed = () => {
+    if (!result) return;
+    applyRecommendation(result);
+    navigate("/submit");
+  };
+
   const handleRefine = () => {
     setResult(null);
   };
 
   return (
-    <Card className="border-border bg-background text-foreground shadow-none">
-      <CardContent className="p-4 sm:p-6">
+    <Card className="overflow-hidden rounded-3xl border-border bg-background text-foreground shadow-sm">
+      <CardContent className="p-5 sm:p-7 lg:p-9">
         {/* Header / Trigger */}
         <button
           type="button"
@@ -309,7 +315,7 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
 
             {/* Result */}
             {result && (
-              <div className="space-y-5">
+              <div className="space-y-6 rounded-3xl bg-muted/30 p-4 sm:p-6 lg:p-7">
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                     <Sparkles className="w-4 h-4 text-primary" />
@@ -421,7 +427,7 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-lg bg-card border border-border">
+                  <div className="rounded-2xl border border-border bg-background p-5 shadow-sm">
                     <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Corporate</div>
                     {result.corporateServices.length > 0 ? (
                       <ul className="space-y-1.5">
@@ -436,7 +442,7 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
                       <p className="text-sm text-muted-foreground">None recommended.</p>
                     )}
                   </div>
-                  <div className="p-4 rounded-lg bg-card border border-border">
+                  <div className="rounded-2xl border border-border bg-background p-5 shadow-sm">
                     <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Accounting</div>
                     {result.accountingInputs ? (
                       <p className="text-sm text-muted-foreground">
@@ -446,14 +452,21 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
                       <p className="text-sm text-muted-foreground">No accounting setup recommended.</p>
                     )}
                   </div>
-                  <div className="p-4 rounded-lg bg-card border border-border">
+                  <div className="rounded-2xl border border-border bg-background p-5 shadow-sm">
                     <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Business consulting</div>
                     {result.consultingServices.length > 0 ? (
                       <ul className="space-y-1.5">
                         {result.consultingServices.map((s) => (
                           <li key={s.id} className="text-sm flex items-start gap-2">
                             <CheckCircle2 className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
-                            <span>{s.name}</span>
+                            <span>
+                              {s.name}
+                              {s.id === "bank-compliance" && (
+                                <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                                  Preparation for a bank application; final onboarding and approval remain with the bank.
+                                </span>
+                              )}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -464,7 +477,7 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
                 </div>
 
                 {result.notes.length > 0 && (
-                  <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
                     <div className="flex items-start gap-2">
                       <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
                       <div className="space-y-1">
@@ -479,17 +492,16 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
                   </div>
                 )}
 
-                <div className="flex flex-col sm:flex-row gap-3 sm:justify-end pt-2">
-                  <Button variant="ghost" onClick={handleRefine} className="min-h-[44px]">
+                <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-end">
+                  <Button variant="ghost" onClick={handleRefine} className="min-h-[44px] rounded-xl">
                     Refine answers
                   </Button>
-                  <Button variant="outline" onClick={() => navigate("/submit")} className="min-h-[44px]">
-                    Proceed to request
-                    <ArrowRight className="w-4 h-4 ml-1" />
+                  <Button variant="outline" onClick={handleApply} className="min-h-[44px] rounded-xl">
+                    Review suggested scope
                   </Button>
-                  <Button onClick={handleApply} className="min-h-[44px]">
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Apply to my estimate
+                  <Button onClick={handleProceed} className="min-h-[48px] rounded-xl px-6">
+                    Proceed to request
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
               </div>
