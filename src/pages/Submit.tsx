@@ -130,9 +130,13 @@ export default function Submit() {
 
       setIsSubmitted(true);
       toast.success("Request submitted successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Submission error:", error);
-      toast.error(error.message || "Failed to submit request. Please try again.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit request. Please try again."
+      );
       refreshCaptcha();
     } finally {
       setIsSubmitting(false);

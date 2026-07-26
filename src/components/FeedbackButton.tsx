@@ -48,8 +48,8 @@ export function FeedbackButton() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setStatus("success");
-    } catch (e: any) {
-      setErrorMsg(e?.message || "Something went wrong");
+    } catch (error: unknown) {
+      setErrorMsg(error instanceof Error ? error.message : "Something went wrong");
       setStatus("error");
     }
   };

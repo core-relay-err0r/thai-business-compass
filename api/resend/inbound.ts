@@ -15,7 +15,18 @@ export const config = {
   runtime: "nodejs",
 };
 
-export default async function handler(req: any, res: any) {
+type ApiRequest = {
+  method?: string;
+  body?: Record<string, unknown>;
+  headers: Record<string, string | string[] | undefined>;
+};
+type ApiResponse = {
+  setHeader(name: string, value: string): void;
+  status(code: number): ApiResponse;
+  json(body: unknown): ApiResponse;
+};
+
+export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method === "GET") {
     return res.status(200).json({ ok: true, message: "Resend inbound endpoint is live" });
   }

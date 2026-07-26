@@ -15,7 +15,15 @@ export const config = {
   runtime: "nodejs",
 };
 
-export default async function handler(req: any, res: any) {
+type ApiRequest = { method?: string; body?: unknown };
+type ApiResponse = {
+  setHeader(name: string, value: string): void;
+  status(code: number): ApiResponse;
+  json(body: unknown): ApiResponse;
+  send(body: string): ApiResponse;
+};
+
+export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed" });

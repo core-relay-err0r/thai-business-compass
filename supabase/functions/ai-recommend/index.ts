@@ -92,7 +92,13 @@ function getClientIp(req: Request): string {
     || "unknown";
 }
 
-const RATE: Map<string, { count: number; resetAt: number }> = (globalThis as any).__aiRecRate ??= new Map();
+type RateEntry = { count: number; resetAt: number };
+type RateLimitGlobal = typeof globalThis & {
+  __aiRecRate?: Map<string, RateEntry>;
+};
+
+const rateLimitGlobal = globalThis as RateLimitGlobal;
+const RATE = rateLimitGlobal.__aiRecRate ??= new Map<string, RateEntry>();
 const RATE_MAX = 8;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 

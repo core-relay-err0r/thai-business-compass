@@ -53,7 +53,7 @@ export default function Contact() {
         companyName: "",
         message: "",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error sending message:", error);
       toast.error("Failed to send message. Please try again or contact us directly.");
     } finally {

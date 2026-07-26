@@ -131,6 +131,8 @@ interface SubmissionRequest {
     timeline?: string;
     note?: string;
   }>;
+  captchaToken?: string;
+  captchaAnswer?: number;
 }
 
 function escapeHtml(text: string): string {
@@ -558,8 +560,8 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Server-verified CAPTCHA — required for all submissions
-    const captchaToken = (data as any).captchaToken;
-    const captchaAnswer = (data as any).captchaAnswer;
+    const captchaToken = data.captchaToken;
+    const captchaAnswer = data.captchaAnswer;
     const captchaOk = await verifyCaptcha(String(captchaToken ?? ""), Number(captchaAnswer));
     if (!captchaOk) {
       return new Response(JSON.stringify({ error: "Captcha verification failed" }), {
@@ -628,10 +630,11 @@ const handler = async (req: Request): Promise<Response> => {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in send-submission function:", error);
+    const message = error instanceof Error ? error.message : "Internal server error";
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
