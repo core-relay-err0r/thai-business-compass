@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { HeroSection } from "@/components/home/HeroSection";
+import { ClientFitSection } from "@/components/home/ClientFitSection";
 import { ModuleCards } from "@/components/home/ModuleCards";
 import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
@@ -23,6 +24,7 @@ export default function Home() {
       <OrganizationSchema />
       <main className="home-editorial">
         <HeroSection />
+        <ClientFitSection />
         <ModuleCards />
         <FitGuide />
         <TrustSection />

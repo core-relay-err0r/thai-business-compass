@@ -69,6 +69,13 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 <ActionLink href={callToAction.href} primary>{callToAction.text}</ActionLink>
                 <ActionLink href={secondaryAction.href}>{secondaryAction.text}</ActionLink>
               </div>
+              <a
+                href="#client-fit"
+                className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-foreground underline decoration-primary decoration-2 underline-offset-4 transition-colors hover:text-primary"
+              >
+                Check if we are the right fit
+                <ArrowDownRight aria-hidden="true" />
+              </a>
             </div>
           </div>
 
