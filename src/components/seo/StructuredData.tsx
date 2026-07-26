@@ -31,14 +31,14 @@ export function ArticleSchema({
   reviewer,
   citations = [],
 }: ArticleSchemaProps) {
-  const organizationId = "https://pnd50.com/#organization";
+  const organizationId = "https://www.pnd50.com/#organization";
   const schema = {
     "@context": "https://schema.org",
     "@type": "Article",
     "@id": `${url}#article`,
     headline: title,
     description,
-    image: image || "https://pnd50.com/favicon.png",
+    image: image || "https://www.pnd50.com/favicon.png",
     datePublished,
     dateModified: dateModified || datePublished,
     author: author.type === "Person"
@@ -52,7 +52,7 @@ export function ArticleSchema({
           "@type": "Organization",
           "@id": organizationId,
           name: author.name,
-          url: "https://pnd50.com",
+          url: "https://www.pnd50.com",
         },
     ...(reviewer
       ? {
@@ -69,10 +69,10 @@ export function ArticleSchema({
       "@type": "Organization",
       "@id": organizationId,
       name: "PND50",
-      url: "https://pnd50.com",
+      url: "https://www.pnd50.com",
       logo: {
         "@type": "ImageObject",
-        url: "https://pnd50.com/favicon.png",
+        url: "https://www.pnd50.com/favicon.png",
       },
     },
     mainEntityOfPage: {
@@ -100,11 +100,13 @@ export function ServiceSchema({ services }: ServiceSchemaProps) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": "https://www.pnd50.com/services#service-catalog",
     serviceType: services.map((s) => s.name),
     provider: {
       "@type": "AccountingService",
+      "@id": "https://www.pnd50.com/#accounting-service",
       name: "PND50",
-      url: "https://pnd50.com",
+      url: "https://www.pnd50.com",
       telephone: ["+66-2-017-2950", "+66-2-017-2949"],
       email: "info@pnd50.com",
       address: {
@@ -145,9 +147,10 @@ export function LocalBusinessSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "AccountingService",
+    "@id": "https://www.pnd50.com/#accounting-service",
     name: "PND50",
     description: "Bangkok-based accounting firm for foreign-owned companies in Thailand. Corporate tax, bookkeeping, payroll, and business advisory services.",
-    url: "https://pnd50.com",
+    url: "https://www.pnd50.com",
     telephone: ["+66-2-017-2950", "+66-2-017-2949"],
     email: "info@pnd50.com",
     priceRange: "$$",
@@ -177,9 +180,6 @@ export function LocalBusinessSchema() {
       "Company Registration",
       "Business Consulting",
     ],
-    sameAs: [
-      "https://wa.me/6620172950",
-    ],
   };
 
   return (
@@ -194,10 +194,11 @@ export function OrganizationSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": "https://www.pnd50.com/#organization",
     name: "PND50",
     legalName: "PND50 Co., Ltd.",
-    url: "https://pnd50.com",
-    logo: "https://pnd50.com/favicon.png",
+    url: "https://www.pnd50.com",
+    logo: "https://www.pnd50.com/favicon.png",
     description: "Thai accounting firm specializing in services for foreign-owned businesses. English-speaking accountants in Bangkok.",
     address: {
       "@type": "PostalAddress",

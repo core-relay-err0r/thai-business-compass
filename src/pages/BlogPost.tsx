@@ -12,7 +12,7 @@ import { format } from "date-fns";
 import { useEffect } from "react";
 import { getArticleAuthor, normalizeBlogSources } from "@/lib/blog";
 
-const SITE_URL = "https://pnd50.com";
+const SITE_URL = "https://www.pnd50.com";
 
 function toAbsoluteUrl(path: string | null | undefined): string | undefined {
   if (!path) return undefined;
@@ -232,15 +232,15 @@ export default function BlogPost() {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://pnd50.com/" },
-          { name: "Blog", url: "https://pnd50.com/blog" },
-          { name: post.title, url: `https://pnd50.com/blog/${post.slug}` },
+          { name: "Home", url: "https://www.pnd50.com/" },
+          { name: "Blog", url: "https://www.pnd50.com/blog" },
+          { name: post.title, url: `https://www.pnd50.com/blog/${post.slug}` },
         ]}
       />
       <ArticleSchema
         title={post.title}
         description={post.meta_description || post.excerpt || `Read about ${post.title}`}
-        url={`https://pnd50.com/blog/${post.slug}`}
+        url={`https://www.pnd50.com/blog/${post.slug}`}
         image={toAbsoluteUrl(post.featured_image)}
         datePublished={post.published_at || post.created_at}
         dateModified={modifiedDate}

@@ -1,7 +1,36 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/((?!api/|assets/|.*\\..*).*)", "destination": "/index.html" }
+  "redirects": [
+    {
+      "source": "/corporate",
+      "destination": "/services#corporate",
+      "permanent": true
+    },
+    {
+      "source": "/corporate-services",
+      "destination": "/services#corporate",
+      "permanent": true
+    },
+    {
+      "source": "/accounting",
+      "destination": "/services#accounting",
+      "permanent": true
+    },
+    {
+      "source": "/cost-calculator",
+      "destination": "/services#accounting",
+      "permanent": true
+    },
+    {
+      "source": "/consulting",
+      "destination": "/services#consulting",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/tos",
+      "permanent": true
+    }
   ]
 }

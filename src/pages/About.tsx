@@ -19,11 +19,11 @@ export default function About() {
     <Layout>
       <SEOHead
         title="About PND50 | Bangkok Accounting Firm for Foreign Companies"
-        description="PND50 is a Bangkok-based accounting firm with 10+ years helping foreign-owned businesses navigate Thai accounting, corporate tax, and compliance. English-speaking accountants."
+        description="PND50 is a Bangkok-based accounting firm helping foreign-owned businesses navigate Thai accounting, corporate tax, and compliance with an English-speaking team."
         path="/about"
         keywords="PND50 about, Bangkok accounting firm, English speaking accountant Thailand, accountant for foreigners Thailand, Thai accounting company"
       />
-      <BreadcrumbSchema items={[{ name: "Home", url: "https://pnd50.com/" }, { name: "About", url: "https://pnd50.com/about" }]} />
+      <BreadcrumbSchema items={[{ name: "Home", url: "https://www.pnd50.com/" }, { name: "About", url: "https://www.pnd50.com/about" }]} />
       <OrganizationSchema />
 
       <InternalPageHeader

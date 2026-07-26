@@ -36,8 +36,8 @@ export default function Blog() {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://pnd50.com/" },
-          { name: "Blog", url: "https://pnd50.com/blog" },
+          { name: "Home", url: "https://www.pnd50.com/" },
+          { name: "Blog", url: "https://www.pnd50.com/blog" },
         ]}
       />
 
