@@ -84,7 +84,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
               <img
                 src={image.src}
                 alt={image.alt}
-                className="home-editorial-image absolute inset-0 size-full object-cover object-[52%_center] contrast-125 saturate-[0.85]"
+                className="home-editorial-image absolute inset-0 size-full object-cover object-[50%_55%] contrast-125 saturate-[0.78]"
                 width={1024}
                 height={1024}
                 loading="eager"
@@ -95,12 +95,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 <span>PND50 Co., Ltd.</span>
                 <span>Bangkok · TH</span>
               </div>
-              <div aria-hidden="true" className="absolute -left-3 bottom-20 font-sans text-[10rem] font-bold leading-[0.72] tracking-[-0.12em] text-primary mix-blend-hard-light sm:text-[13rem] lg:-left-5 lg:text-[16rem]">
-                50
+              <div aria-hidden="true" className="absolute right-0 top-20 bg-primary px-4 py-2 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground [writing-mode:vertical-rl]">
+                No shortcuts · No excuses
               </div>
-              <div className="absolute bottom-0 left-0 max-w-[86%] border-t-4 border-primary bg-foreground p-5 text-background sm:p-6">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">No shortcuts</p>
-                <p className="mt-2 max-w-sm font-serif text-xl leading-tight sm:text-2xl">Compliance is not background work. It holds the business up.</p>
+              <div className="absolute bottom-0 left-0 max-w-[88%] border-t-4 border-primary bg-foreground p-5 text-background sm:p-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">The cost of getting it wrong</p>
+                <p className="mt-2 max-w-sm font-serif text-2xl leading-[0.95] sm:text-3xl">Your business should never stand under a question mark.</p>
               </div>
               <a href="#services" aria-label="Continue to services" className="absolute bottom-0 right-0 flex size-14 items-center justify-center bg-primary text-primary-foreground transition-colors hover:bg-background hover:text-foreground sm:size-16">
                 <ArrowDownRight aria-hidden="true" />

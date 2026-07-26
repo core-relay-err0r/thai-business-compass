@@ -1,5 +1,5 @@
 import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
-import heroRadicalCompliance from "@/assets/hero-radical-compliance.webp";
+import heroProvocativeCompliance from "@/assets/hero-provocative-compliance.webp";
 
 export function HeroSection() {
   return (
@@ -16,8 +16,8 @@ export function HeroSection() {
         href: "/submit",
       }}
       image={{
-        src: heroRadicalCompliance,
-        alt: "A solitary business figure on a skybridge between monumental Bangkok office towers",
+        src: heroProvocativeCompliance,
+        alt: "A business owner facing a monumental blue compliance blade above Bangkok",
       }}
       clarification="PND50 Co., Ltd. is a Bangkok accounting and corporate compliance company. Our name is inspired by Thailand’s P.N.D.50 annual corporate income tax return, while our work covers the wider business compliance cycle."
       contactInfo={{ address: "Bangkok, Thailand" }}
