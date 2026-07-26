@@ -95,10 +95,17 @@ export default function Contact() {
                 Choose the channel that works for you. A deadline, broken process, unclear structure, or difficult decision is enough to start.
               </p>
               <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 sm:gap-4 text-sm">
-                <a href="tel:+6620172949" className="flex items-center gap-2 hover:text-primary transition-colors min-h-[44px] sm:min-h-0">
-                  <Phone className="h-4 w-4" />
-                  +66 2 017 2949
-                </a>
+                <div className="flex items-start gap-2">
+                  <Phone className="mt-1 h-4 w-4 shrink-0" />
+                  <div className="flex flex-col">
+                    <a href="tel:+6620172950" className="flex min-h-[44px] items-center transition-colors hover:text-primary sm:min-h-0">
+                      +66(0)2 017 2950
+                    </a>
+                    <a href="tel:+6620172949" className="flex min-h-[44px] items-center transition-colors hover:text-primary sm:min-h-0">
+                      +66(0)2 017 2949
+                    </a>
+                  </div>
+                </div>
                 <span className="hidden sm:inline text-muted-foreground">|</span>
                 <a href="mailto:info@pnd50.com" className="flex items-center gap-2 hover:text-primary transition-colors min-h-[44px] sm:min-h-0">
                   <Mail className="h-4 w-4" />
@@ -274,12 +281,19 @@ export default function Contact() {
                     <h3 className="font-semibold text-sm sm:text-base">Direct Contact</h3>
                   </div>
                   <div className="space-y-2 sm:space-y-3">
-                    <a 
-                      href="tel:+6620172949" 
-                      className="flex items-center justify-between text-sm hover:text-primary transition-colors group min-h-[44px] sm:min-h-0"
+                    <a
+                      href="tel:+6620172950"
+                      className="group flex min-h-[44px] items-center justify-between text-sm transition-colors hover:text-primary sm:min-h-0"
                     >
-                      <span>+66 2 017 2949</span>
-                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <span>+66(0)2 017 2950</span>
+                      <ArrowRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                    </a>
+                    <a
+                      href="tel:+6620172949"
+                      className="group flex min-h-[44px] items-center justify-between text-sm transition-colors hover:text-primary sm:min-h-0"
+                    >
+                      <span>+66(0)2 017 2949</span>
+                      <ArrowRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
                     </a>
                     <a 
                       href="mailto:info@pnd50.com" 
@@ -303,7 +317,7 @@ export default function Contact() {
                   </div>
                   <div className="flex flex-wrap gap-2 sm:gap-3">
                     <a 
-                      href="https://wa.me/66843563805" 
+                      href="https://wa.me/6620172950"
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border border-green-500/30 bg-green-50 text-green-700 hover:bg-green-100 transition-colors text-xs sm:text-sm min-h-[44px]"
@@ -314,7 +328,7 @@ export default function Contact() {
                       WhatsApp
                     </a>
                     <a 
-                      href="https://t.me/+66843563805"
+                      href="https://t.me/+6620172950"
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border border-blue-500/30 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors text-xs sm:text-sm min-h-[44px]"

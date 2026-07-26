@@ -24,7 +24,7 @@ export function HeroSection() {
       slides={slides}
       contactInfo={{
         website: "info@pnd50.com",
-        phone: "+66 84 356 3805",
+        phone: "+66(0)2 017 2950 / +66(0)2 017 2949",
         address: "Bangkok, Thailand"
       }}
     />

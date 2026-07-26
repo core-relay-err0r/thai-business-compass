@@ -515,7 +515,9 @@ function generateClientConfirmationHtml(data: SubmissionRequest): string {
           <p style="margin: 0;">
             <a href="mailto:info@pnd50.com" style="color: #2563eb; text-decoration: none; font-weight: 500;">info@pnd50.com</a>
             <span style="color: #9ca3af; margin: 0 8px;">•</span>
-            <a href="tel:+66843563805" style="color: #2563eb; text-decoration: none; font-weight: 500;">+66 84 356 3805</a>
+            <a href="tel:+6620172950" style="color: #2563eb; text-decoration: none; font-weight: 500;">+66(0)2 017 2950</a>
+            <span style="color: #9ca3af; margin: 0 8px;">•</span>
+            <a href="tel:+6620172949" style="color: #2563eb; text-decoration: none; font-weight: 500;">+66(0)2 017 2949</a>
           </p>
         </div>
       </div>

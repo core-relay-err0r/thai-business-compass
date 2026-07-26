@@ -105,7 +105,7 @@ export function ServiceSchema({ services }: ServiceSchemaProps) {
       "@type": "AccountingService",
       name: "PND50",
       url: "https://pnd50.com",
-      telephone: "+66-2-017-2949",
+      telephone: ["+66-2-017-2950", "+66-2-017-2949"],
       email: "info@pnd50.com",
       address: {
         "@type": "PostalAddress",
@@ -148,7 +148,7 @@ export function LocalBusinessSchema() {
     name: "PND50",
     description: "Bangkok-based accounting firm for foreign-owned companies in Thailand. Corporate tax, bookkeeping, payroll, and business advisory services.",
     url: "https://pnd50.com",
-    telephone: "+66-2-017-2949",
+    telephone: ["+66-2-017-2950", "+66-2-017-2949"],
     email: "info@pnd50.com",
     priceRange: "$$",
     address: {
@@ -178,7 +178,7 @@ export function LocalBusinessSchema() {
       "Business Consulting",
     ],
     sameAs: [
-      "https://wa.me/66843563805",
+      "https://wa.me/6620172950",
     ],
   };
 
@@ -207,7 +207,7 @@ export function OrganizationSchema() {
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+66-2-017-2949",
+      telephone: ["+66-2-017-2950", "+66-2-017-2949"],
       contactType: "customer service",
       email: "info@pnd50.com",
       availableLanguage: ["English", "Thai"],

@@ -44,13 +44,23 @@ export function Footer() {
                 <Mail className="h-4 w-4" />
                 info@pnd50.com
               </a>
-              <a 
-                href="tel:+66843563805" 
-                className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors min-h-[44px] sm:min-h-0"
-              >
-                <Phone className="h-4 w-4" />
-                +66 84 356 3805
-              </a>
+              <div className="flex items-start gap-2 text-slate-400">
+                <Phone className="mt-1 h-4 w-4 shrink-0" />
+                <div className="flex flex-col">
+                  <a
+                    href="tel:+6620172950"
+                    className="flex min-h-[44px] items-center transition-colors hover:text-white sm:min-h-0"
+                  >
+                    +66(0)2 017 2950
+                  </a>
+                  <a
+                    href="tel:+6620172949"
+                    className="flex min-h-[44px] items-center transition-colors hover:text-white sm:min-h-0"
+                  >
+                    +66(0)2 017 2949
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
