@@ -8,12 +8,6 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { BreadcrumbSchema, OrganizationSchema } from "@/components/seo/StructuredData";
 import teamAtWork from "@/assets/team-at-work.jpg";
 
-const stats = [
-  ["10+", "Years in Thailand"],
-  ["150+", "International clients"],
-  ["100%", "Client satisfaction"],
-];
-
 const principles = [
   ["Clear communication", "Plain-English answers about your numbers, obligations, and next steps."],
   ["Proactive compliance", "Deadlines and regulatory requirements managed before they become problems."],
@@ -39,18 +33,6 @@ export default function About() {
         description="We help foreign-owned businesses see what matters, meet Thai obligations, and make defensible decisions without hiding behind jargon or unnecessary complexity."
       />
 
-      <section className="border-b border-border">
-        <div className="container px-4 sm:px-6">
-          <div className="grid border-x border-border sm:grid-cols-3">
-            {stats.map(([value, label], index) => (
-              <div key={label} className="border-b border-border px-5 py-7 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0 sm:px-8 sm:py-9">
-                <p className="font-serif text-4xl font-medium tracking-tight text-primary sm:text-5xl">{value}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <section className="py-14 sm:py-20">
         <div className="container px-4 sm:px-6">

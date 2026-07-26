@@ -27,14 +27,16 @@ export const ClientsSection = ({
         <h2 className="text-balance font-serif text-4xl font-medium leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">{title}</h2>
       </div>
 
-      <div className="grid border-b border-border sm:grid-cols-3">
-        {stats.map((stat, index) => (
-          <div key={stat.label} className={cn("py-7 sm:px-7", index > 0 && "border-t border-border sm:border-l sm:border-t-0")}>
-            <p className="font-serif text-5xl leading-none text-primary sm:text-6xl">{stat.value}</p>
-            <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{stat.label}</p>
-          </div>
-        ))}
-      </div>
+      {stats.length > 0 && (
+        <div className="grid border-b border-border sm:grid-cols-3">
+          {stats.map((stat, index) => (
+            <div key={stat.label} className={cn("py-7 sm:px-7", index > 0 && "border-t border-border sm:border-l sm:border-t-0")}>
+              <p className="font-serif text-5xl leading-none text-primary sm:text-6xl">{stat.value}</p>
+              <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-3">
         {testimonials.map((testimonial, index) => (

@@ -30,20 +30,21 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
         <div className="container flex h-14 items-center justify-between px-4 sm:h-16 sm:px-6">
-          <Link to="/" className="flex items-center gap-2" aria-label="PND50 home">
+          <Link to="/" className="flex items-center gap-2" aria-label="PND50 Accounting Thailand home">
             <img src={logo} alt="" className="size-8 sm:size-9" />
             <span className="text-xl font-semibold tracking-tight">PND50</span>
-            <span className="hidden border-l border-border pl-3 text-[10px] uppercase tracking-[0.14em] text-muted-foreground lg:inline">Thailand business compass</span>
+            <span className="hidden border-l border-border pl-3 text-[10px] uppercase tracking-[0.14em] text-muted-foreground lg:inline">Accounting Thailand</span>
           </Link>
 
-          <nav className="hidden h-full items-center gap-7 md:flex" aria-label="Primary navigation">
+          <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Primary navigation">
             <Link to="/services" className={navLink("/services")}>Services</Link>
+            <a href="/services#accounting" className={navLink("__accounting")}>Accounting &amp; Tax</a>
+            <a href="/services#corporate" className={navLink("__corporate")}>Corporate Compliance</a>
             <Link to="/about" className={navLink("/about")}>About</Link>
-            <Link to="/blog" className={navLink("/blog")}>Perspectives</Link>
             <Link to="/contact" className={navLink("/contact")}>Contact</Link>
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-3 xl:flex">
             <Link to={CALCULATOR_URL} className="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium hover:underline">
               Calculator <ArrowUpRight aria-hidden="true" />
             </Link>
@@ -51,7 +52,7 @@ export function Header() {
           </div>
 
           <button
-            className="flex size-11 items-center justify-center md:hidden"
+            className="flex size-11 items-center justify-center xl:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-navigation"
@@ -61,12 +62,13 @@ export function Header() {
           </button>
         </div>
 
-        <div id="mobile-navigation" className={cn("overflow-hidden border-border bg-background transition-all duration-300 md:hidden", isMobileMenuOpen ? "max-h-[620px] border-t opacity-100" : "max-h-0 opacity-0")}>
+        <div id="mobile-navigation" className={cn("overflow-hidden border-border bg-background transition-all duration-300 xl:hidden", isMobileMenuOpen ? "max-h-[620px] border-t opacity-100" : "max-h-0 opacity-0")}>
           <nav className="container flex flex-col px-4 py-4 sm:px-6" aria-label="Mobile navigation">
             {[
               ["/services", "Services"],
+              ["/services#accounting", "Accounting & Tax"],
+              ["/services#corporate", "Corporate Compliance"],
               ["/about", "About"],
-              ["/blog", "Perspectives"],
               ["/contact", "Contact"],
             ].map(([path, label], index) => (
               <Link key={path} to={path} onClick={closeMobile} className="flex min-h-[52px] items-center justify-between border-b border-border text-base font-medium">

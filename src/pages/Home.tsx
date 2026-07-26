@@ -5,7 +5,6 @@ import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
 import { BottomCTA } from "@/components/home/BottomCTA";
-import { GuidedDiagnosis } from "@/components/home/GuidedDiagnosis";
 import { PricingLogic } from "@/components/home/PricingLogic";
 import { FitGuide } from "@/components/home/FitGuide";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -24,11 +23,10 @@ export default function Home() {
       <OrganizationSchema />
       <main className="home-editorial">
         <HeroSection />
-        <GuidedDiagnosis />
-        <HowItWorks />
         <ModuleCards />
         <FitGuide />
         <TrustSection />
+        <HowItWorks />
         <Testimonials />
         <PricingLogic />
         <BottomCTA />

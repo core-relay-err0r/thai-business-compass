@@ -153,6 +153,11 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 3px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
 }
 
 @layer components {

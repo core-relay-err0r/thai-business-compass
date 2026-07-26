@@ -2,31 +2,25 @@ import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
 import heroStrategyThailand from "@/assets/hero-strategy-thailand.webp";
 
 export function HeroSection() {
-  const slides = [{
-    image: heroStrategyThailand,
-    title: "Your business is not a package",
-    description: "Bring the ambition, constraint, or problem. We will turn it into a clear path through Thailand."
-  }];
-
   return (
     <HeroSectionUI
-      title={<>You know the <span className="text-primary">need.</span><br />We design the move.</>}
-      subtitle="Start with the business reality—not a catalogue. We clarify what matters, challenge what does not, and build the most useful route forward in Thailand."
+      eyebrow="PND50 Co., Ltd. · Bangkok"
+      title="Accounting and corporate compliance for foreign-owned businesses in Thailand."
+      subtitle="From company setup and monthly bookkeeping to payroll, tax filings and year-end close, PND50 helps international businesses stay organised and compliant in Thailand."
       callToAction={{
-        text: "Put the situation on the table",
-        href: "/submit"
+        text: "View our services",
+        href: "/services#corporate",
       }}
       secondaryAction={{
-        text: "Map it in six questions",
-        href: "#diagnosis"
+        text: "Tell us what you need",
+        href: "/submit",
       }}
-      tagline="If it does not solve the need, it does not belong in the scope."
-      slides={slides}
-      contactInfo={{
-        website: "info@pnd50.com",
-        phone: "+66(0)2 017 2950 / +66(0)2 017 2949",
-        address: "Bangkok, Thailand"
+      image={{
+        src: heroStrategyThailand,
+        alt: "Bangkok business district viewed from a contemporary office",
       }}
+      clarification="PND50 Co., Ltd. is a Bangkok accounting and corporate compliance company. Our name is inspired by Thailand’s P.N.D.50 annual corporate income tax return, while our work covers the wider business compliance cycle."
+      contactInfo={{ address: "Bangkok, Thailand" }}
     />
   );
 }
