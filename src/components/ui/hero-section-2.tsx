@@ -80,26 +80,29 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
           </div>
 
           <div className="relative lg:border-l lg:border-foreground/20 lg:pl-6 xl:pl-8">
-            <figure className="relative h-full min-h-[460px] overflow-hidden bg-foreground lg:min-h-0">
+            <figure className="relative h-full min-h-[520px] overflow-hidden bg-foreground lg:min-h-0">
               <img
                 src={image.src}
                 alt={image.alt}
-                className="home-editorial-image absolute inset-0 size-full object-cover object-center"
+                className="home-editorial-image absolute inset-0 size-full object-cover object-[52%_center] contrast-125 saturate-[0.85]"
                 width={1024}
                 height={1024}
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
               />
-              <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-4 p-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-background mix-blend-difference sm:p-5">
+              <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-4 border-b border-background/50 bg-foreground/90 p-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-background sm:p-5">
                 <span>PND50 Co., Ltd.</span>
                 <span>Bangkok · TH</span>
               </div>
-              <div className="absolute bottom-0 left-0 max-w-[86%] bg-background p-5 sm:p-6">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Practical compliance</p>
-                <p className="mt-2 max-w-sm font-serif text-xl leading-tight sm:text-2xl">One team across the wider business compliance cycle.</p>
+              <div aria-hidden="true" className="absolute -left-3 bottom-20 font-sans text-[10rem] font-bold leading-[0.72] tracking-[-0.12em] text-primary mix-blend-hard-light sm:text-[13rem] lg:-left-5 lg:text-[16rem]">
+                50
               </div>
-              <a href="#services" aria-label="Continue to services" className="absolute bottom-0 right-0 flex size-14 items-center justify-center bg-primary text-primary-foreground transition-colors hover:bg-foreground sm:size-16">
+              <div className="absolute bottom-0 left-0 max-w-[86%] border-t-4 border-primary bg-foreground p-5 text-background sm:p-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">No shortcuts</p>
+                <p className="mt-2 max-w-sm font-serif text-xl leading-tight sm:text-2xl">Compliance is not background work. It holds the business up.</p>
+              </div>
+              <a href="#services" aria-label="Continue to services" className="absolute bottom-0 right-0 flex size-14 items-center justify-center bg-primary text-primary-foreground transition-colors hover:bg-background hover:text-foreground sm:size-16">
                 <ArrowDownRight aria-hidden="true" />
               </a>
             </figure>
