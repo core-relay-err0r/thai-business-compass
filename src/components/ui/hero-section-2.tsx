@@ -88,7 +88,6 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
                 width={1024}
                 height={1024}
                 loading="eager"
-                fetchPriority="high"
                 decoding="async"
               />
               <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-4 border-b border-background/50 bg-foreground/90 p-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-background sm:p-5">
