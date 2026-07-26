@@ -274,9 +274,19 @@ function renderContentHtml(content) {
     .map((block) => {
       const trimmed = block.trim();
       if (!trimmed) return "";
-      if (trimmed.startsWith("### ")) return `<h3>${renderInlineMarkdown(trimmed.slice(4))}</h3>`;
-      if (trimmed.startsWith("## ")) return `<h2>${renderInlineMarkdown(trimmed.slice(3))}</h2>`;
-      if (trimmed.startsWith("# ")) return `<h2>${renderInlineMarkdown(trimmed.slice(2))}</h2>`;
+
+      // A heading marker only applies to the FIRST line of the block.
+      // Any following lines are body content and must be rendered separately.
+      const headingMatch = trimmed.match(/^(#{1,3}) (.*)/);
+      if (headingMatch) {
+        const [, hashes, headingText] = headingMatch;
+        const tag = hashes === "###" ? "h3" : "h2";
+        const headingHtml = `<${tag}>${renderInlineMarkdown(headingText)}</${tag}>`;
+        const newlineIdx = trimmed.indexOf("\n");
+        const rest = newlineIdx === -1 ? "" : trimmed.slice(newlineIdx + 1).trim();
+        if (!rest) return headingHtml;
+        return `${headingHtml}\n${renderContentHtml(rest)}`;
+      }
 
       const lines = trimmed.split("\n");
       const isList = lines.every((line) => /^(-\s|\d+\.\s)/.test(line.trim()));

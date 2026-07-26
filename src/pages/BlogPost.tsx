@@ -71,26 +71,33 @@ function renderContent(content: string) {
   const blocks = content.split(/\n\n+/);
   
   return blocks.map((block, index) => {
-    // Check if it's a heading (starts with multiple #)
-    if (block.startsWith("### ")) {
+    // Check if it's a heading (starts with multiple #).
+    // The heading is only the FIRST line — any following lines in the same
+    // block are body content and must be rendered separately.
+    const headingMatch = block.match(/^(#{1,3}) (.*)/);
+    if (headingMatch) {
+      const [, hashes, headingText] = headingMatch;
+      const rest = block.slice(block.indexOf("\n") + 1);
+      const hasBody = block.includes("\n") && rest.trim().length > 0;
+
+      const heading =
+        hashes === "###" ? (
+          <h3 className="text-xl font-semibold mt-8 mb-4">{parseInlineMarkdown(headingText)}</h3>
+        ) : hashes === "##" ? (
+          <h2 className="text-2xl font-bold mt-10 mb-4">{parseInlineMarkdown(headingText)}</h2>
+        ) : (
+          <h1 className="text-3xl font-bold mt-10 mb-4">{parseInlineMarkdown(headingText)}</h1>
+        );
+
+      if (!hasBody) {
+        return <div key={index}>{heading}</div>;
+      }
+
       return (
-        <h3 key={index} className="text-xl font-semibold mt-8 mb-4">
-          {parseInlineMarkdown(block.replace("### ", ""))}
-        </h3>
-      );
-    }
-    if (block.startsWith("## ")) {
-      return (
-        <h2 key={index} className="text-2xl font-bold mt-10 mb-4">
-          {parseInlineMarkdown(block.replace("## ", ""))}
-        </h2>
-      );
-    }
-    if (block.startsWith("# ")) {
-      return (
-        <h1 key={index} className="text-3xl font-bold mt-10 mb-4">
-          {parseInlineMarkdown(block.replace("# ", ""))}
-        </h1>
+        <div key={index}>
+          {heading}
+          {renderContent(rest)}
+        </div>
       );
     }
     
