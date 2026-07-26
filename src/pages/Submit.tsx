@@ -12,6 +12,7 @@ import { formatUSD } from "@/lib/pricing";
 import { Check, Copy, Send, Calculator, Building2, MessageSquare, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Submit() {
   const {
@@ -146,6 +147,12 @@ export default function Submit() {
   if (isSubmitted) {
     return (
       <Layout>
+        <SEOHead
+          title="Request received | PND50"
+          description="Your request has been received by PND50. Our Bangkok accounting and compliance team will review it and respond with clear next steps."
+          path="/submit"
+          noIndex
+        />
         <section className="py-16 sm:py-20 md:py-32">
           <div className="container px-4 sm:px-6">
             <div className="max-w-xl mx-auto text-center">
@@ -178,6 +185,12 @@ export default function Submit() {
 
   return (
     <Layout>
+      <SEOHead
+        title="Submit your business request | PND50"
+        description="Send PND50 a structured brief for Thai accounting, tax, and corporate compliance support. Our team will review the facts and respond with relevant next steps."
+        path="/submit"
+        noIndex
+      />
       <InternalPageHeader
         eyebrow="Turn assumptions into a brief"
         meta="Review · Verify · Submit"

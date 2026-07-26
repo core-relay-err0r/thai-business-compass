@@ -3,12 +3,19 @@ import { Link, useLocation } from "react-router-dom";
 
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function NotFound() {
   const location = useLocation();
 
   return (
     <Layout>
+      <SEOHead
+        title="Page not found | PND50"
+        description="The requested page could not be found. Return to PND50 for Thai accounting, tax, and corporate compliance services."
+        path={location.pathname}
+        noIndex
+      />
       <main className="border-b border-border">
         <div className="container px-4 sm:px-6">
           <div className="grid min-h-[70vh] border-x border-border lg:grid-cols-[0.65fr_1.35fr]">
