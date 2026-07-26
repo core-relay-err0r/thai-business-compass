@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeEdgeFunction } from "@/lib/edge-functions";
 import { toast } from "@/hooks/use-toast";
 import { useServices, type AIRecommendation } from "@/contexts/ServiceContext";
 import { cn } from "@/lib/utils";
@@ -82,7 +82,7 @@ export function AIRecommender({ defaultOpen = false, handoffToServices = false }
     setLoading(true);
     setResult(null);
     try {
-      const { data, error } = await supabase.functions.invoke("ai-recommend", { body: form });
+      const { data, error } = await invokeEdgeFunction("ai-recommend", { body: form });
       if (error) throw error;
       const response = data as AIRecommendation & { error?: string };
       if (response.error) throw new Error(response.error);

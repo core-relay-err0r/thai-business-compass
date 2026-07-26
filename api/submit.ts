@@ -36,20 +36,16 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       return res.status(403).json({ error: "Bot detected" });
     }
 
-    const supabaseUrl = process.env.VITE_SUPABASE_URL;
-    const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    if (!supabaseUrl || !supabaseKey) {
-      console.error("[submit] missing Supabase env vars");
-      return res.status(500).json({ error: "Server misconfigured" });
-    }
+    // Edge functions live on the project pinned in supabase/config.toml,
+    // which can differ from the database project in the standard env vars.
+    const functionsUrl =
+      process.env.SUPABASE_FUNCTIONS_URL ||
+      process.env.VITE_SUPABASE_FUNCTIONS_URL ||
+      "https://gdjckutnbacltgamnqkt.supabase.co";
 
-    const upstream = await fetch(`${supabaseUrl}/functions/v1/send-submission`, {
+    const upstream = await fetch(`${functionsUrl}/functions/v1/send-submission`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${supabaseKey}`,
-        apikey: supabaseKey,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body ?? {}),
     });
 

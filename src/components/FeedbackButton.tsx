@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeEdgeFunction } from "@/lib/edge-functions";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -35,7 +35,7 @@ export function FeedbackButton() {
     if (!feedback.trim()) return;
     setStatus("sending");
     try {
-      const { data, error } = await supabase.functions.invoke(
+      const { data, error } = await invokeEdgeFunction<{ error?: string }>(
         "send-feedback-email",
         {
           body: {

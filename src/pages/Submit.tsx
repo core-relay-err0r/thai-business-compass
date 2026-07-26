@@ -11,7 +11,7 @@ import { useServices } from "@/contexts/ServiceContext";
 import { formatUSD } from "@/lib/pricing";
 import { Check, Copy, Send, Calculator, Building2, MessageSquare, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeEdgeFunction } from "@/lib/edge-functions";
 import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Submit() {
@@ -45,7 +45,7 @@ export default function Submit() {
     setCaptchaLoading(true);
     setCaptchaAnswer("");
     try {
-      const { data, error } = await supabase.functions.invoke("captcha-challenge", {
+      const { data, error } = await invokeEdgeFunction("captcha-challenge", {
         method: "GET",
       });
       if (error) throw error;
@@ -116,7 +116,7 @@ export default function Submit() {
       }
 
       if (usedFallback) {
-        const { data, error } = await supabase.functions.invoke("send-submission", {
+        const { data, error } = await invokeEdgeFunction("send-submission", {
           body: payload,
         });
         if (error) throw error;

@@ -18,7 +18,7 @@ import {
   Loader2
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeEdgeFunction } from "@/lib/edge-functions";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { LocalBusinessSchema } from "@/components/seo/StructuredData";
 
@@ -38,7 +38,7 @@ export default function Contact() {
     setIsSubmitting(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('send-contact', {
+      const { error } = await invokeEdgeFunction('send-contact', {
         body: formData
       });
 
