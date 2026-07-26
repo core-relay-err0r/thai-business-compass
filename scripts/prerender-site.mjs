@@ -456,7 +456,7 @@ function articleJsonLd(post, sources) {
 
 /* ---------- HTML injection ---------- */
 
-function injectIntoTemplate(template, { title, description, canonical, bodyHtml, jsonLd, noIndex }) {
+function injectIntoTemplate(template, { title, description, canonical, bodyHtml, jsonLd, noIndex, ogImage }) {
   let html = template;
 
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`);
@@ -482,6 +482,12 @@ function injectIntoTemplate(template, { title, description, canonical, bodyHtml,
       /<meta name="twitter:description"[^>]*>/,
       `<meta name="twitter:description" content="${escapeHtml(description)}" data-rh="true">`,
     );
+
+  if (ogImage) {
+    html = html
+      .replace(/<meta property="og:image"[^>]*>/, `<meta property="og:image" content="${escapeHtml(ogImage)}" data-rh="true">`)
+      .replace(/<meta name="twitter:image"[^>]*>/, `<meta name="twitter:image" content="${escapeHtml(ogImage)}" data-rh="true">`);
+  }
 
   const headExtras = [];
   if (noIndex) headExtras.push('<meta name="robots" content="noindex, nofollow" />');
@@ -773,6 +779,7 @@ async function main() {
         ]),
       ],
       noIndex: false,
+      ogImage: post.featured_image || undefined,
     });
     const dir = join(DIST, "blog", post.slug);
     await mkdir(dir, { recursive: true });
