@@ -27,7 +27,7 @@ export default function Contact() {
     fullName: "",
     email: "",
     phone: "",
-    whatsapp: "",
+
     companyName: "",
     message: "",
   });
@@ -49,7 +49,7 @@ export default function Contact() {
         fullName: "",
         email: "",
         phone: "",
-        whatsapp: "",
+    
         companyName: "",
         message: "",
       });
@@ -182,30 +182,17 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div className="space-y-1.5 sm:space-y-2">
-                      <Label htmlFor="phone" className="text-sm">Phone *</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        placeholder="+66 XX XXX XXXX"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                        className="min-h-[44px]"
-                      />
-                    </div>
-                    <div className="space-y-1.5 sm:space-y-2">
-                      <Label htmlFor="whatsapp" className="text-sm">WhatsApp</Label>
-                      <Input
-                        id="whatsapp"
-                        name="whatsapp"
-                        placeholder="+66 XX XXX XXXX"
-                        value={formData.whatsapp}
-                        onChange={handleChange}
-                        className="min-h-[44px]"
-                      />
-                    </div>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="phone" className="text-sm">Phone *</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      placeholder="+66 XX XXX XXXX"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      className="min-h-[44px]"
+                    />
                   </div>
 
                   <div className="space-y-1.5 sm:space-y-2">

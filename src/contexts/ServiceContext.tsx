@@ -44,7 +44,7 @@ interface ServiceState {
     name: string;
     email: string;
     phone: string;
-    preferredContact: "email" | "phone" | "whatsapp";
+    preferredContact: "email" | "phone";
   };
   
   companyInfo: {

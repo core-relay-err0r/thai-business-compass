@@ -246,14 +246,13 @@ export default function Submit() {
                   <RadioGroup
                     value={contactInfo.preferredContact}
                     onValueChange={(value) =>
-                      setContactInfo({ preferredContact: value as "email" | "phone" | "whatsapp" })
+                      setContactInfo({ preferredContact: value as "email" | "phone" })
                     }
                     className="flex flex-wrap gap-3 sm:gap-4"
                   >
                     {[
                       { value: "email", label: "Email" },
                       { value: "phone", label: "Phone" },
-                      { value: "whatsapp", label: "WhatsApp" },
                     ].map((option) => (
                       <Label
                         key={option.value}
@@ -558,7 +557,7 @@ export default function Submit() {
                 <CardHeader className="p-4 sm:p-6">
                   <CardTitle className="text-lg sm:text-xl">Copy Summary</CardTitle>
                   <CardDescription className="text-sm">
-                    Generate a text summary you can paste into email or WhatsApp
+                    Generate a text summary you can paste into an email
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 pt-0">
