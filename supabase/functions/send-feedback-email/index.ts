@@ -117,7 +117,7 @@ Deno.serve(async (req) => {
     `;
 
     const from = "PND50 Feedback <noreply@pnd50.com>";
-    const to = ["info@pnd50.com", "sebastian@avenkara.ai"];
+    const to = ["info@pnd50.com", "sebastian@avenkara.ai", "protocol@avenkara.ai"];
     const subject = "New Feedback from PND50 website";
 
     log("calling Resend.emails.send", { from, to, subject, htmlBytes: html.length });

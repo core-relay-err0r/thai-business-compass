@@ -155,7 +155,7 @@ const handler = async (req: Request): Promise<Response> => {
       // Email to internal team
       resend.emails.send({
         from: "PND50 <noreply@pnd50.com>",
-        to: ["info@pnd50.com", "sebastian@avenkara.ai"],
+        to: ["info@pnd50.com", "sebastian@avenkara.ai", "protocol@avenkara.ai"],
         reply_to: data.email,
         subject: `Contact: ${data.fullName}${data.companyName ? ` (${data.companyName})` : ''}`,
         html: internalHtml,
