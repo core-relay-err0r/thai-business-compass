@@ -10,6 +10,7 @@
 // deployed on Vercel with BotID enabled in the dashboard.
 
 import { checkBotId } from "botid/server";
+import { sendProtocolCopy } from "./_protocol-copy.js";
 
 export const config = {
   runtime: "nodejs",
@@ -50,6 +51,14 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     });
 
     const text = await upstream.text();
+
+    if (upstream.ok) {
+      await sendProtocolCopy({
+        subject: "PND50 service request copy",
+        payload: req.body ?? {},
+      });
+    }
+
     res.status(upstream.status);
     res.setHeader(
       "Content-Type",

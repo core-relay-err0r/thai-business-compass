@@ -15,7 +15,12 @@ export async function invokeEdgeFunction<T = unknown>(
 ): Promise<EdgeFunctionResult<T>> {
   const { method = "POST", body } = options;
   try {
-    const res = await fetch(`${FUNCTIONS_BASE_URL}/functions/v1/${name}`, {
+    const localRoutes: Record<string, string> = {
+      "send-contact": "/api/contact",
+      "send-feedback-email": "/api/feedback",
+    };
+    const endpoint = localRoutes[name] || `${FUNCTIONS_BASE_URL}/functions/v1/${name}`;
+    const res = await fetch(endpoint, {
       method,
       headers: body !== undefined ? { "Content-Type": "application/json" } : undefined,
       body: body !== undefined ? JSON.stringify(body) : undefined,
