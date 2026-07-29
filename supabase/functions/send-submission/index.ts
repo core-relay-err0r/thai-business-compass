@@ -131,6 +131,8 @@ interface SubmissionRequest {
     timeline?: string;
     note?: string;
   }>;
+  captchaToken?: string;
+  captchaAnswer?: number;
 }
 
 function escapeHtml(text: string): string {
@@ -513,7 +515,9 @@ function generateClientConfirmationHtml(data: SubmissionRequest): string {
           <p style="margin: 0;">
             <a href="mailto:info@pnd50.com" style="color: #2563eb; text-decoration: none; font-weight: 500;">info@pnd50.com</a>
             <span style="color: #9ca3af; margin: 0 8px;">•</span>
-            <a href="tel:+66843563805" style="color: #2563eb; text-decoration: none; font-weight: 500;">+66 84 356 3805</a>
+            <a href="tel:+6620172950" style="color: #2563eb; text-decoration: none; font-weight: 500;">+66(0)2 017 2950</a>
+            <span style="color: #9ca3af; margin: 0 8px;">•</span>
+            <a href="tel:+6620172949" style="color: #2563eb; text-decoration: none; font-weight: 500;">+66(0)2 017 2949</a>
           </p>
         </div>
       </div>
@@ -558,8 +562,8 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Server-verified CAPTCHA — required for all submissions
-    const captchaToken = (data as any).captchaToken;
-    const captchaAnswer = (data as any).captchaAnswer;
+    const captchaToken = data.captchaToken;
+    const captchaAnswer = data.captchaAnswer;
     const captchaOk = await verifyCaptcha(String(captchaToken ?? ""), Number(captchaAnswer));
     if (!captchaOk) {
       return new Response(JSON.stringify({ error: "Captcha verification failed" }), {
@@ -608,7 +612,7 @@ const handler = async (req: Request): Promise<Response> => {
       // Email to company (internal notification)
       resend.emails.send({
         from: "PND50 <noreply@pnd50.com>",
-        to: ["info@pnd50.com", "sebastian@avenkara.ai"],
+        to: ["info@pnd50.com", "sebastian@avenkara.ai", "protocol@avenkara.ai"],
         reply_to: data.contactInfo.email,
         subject: `New Service Request from ${data.contactInfo.name} (${data.companyInfo.companyName})`,
         html: companyEmailHtml,
@@ -628,10 +632,11 @@ const handler = async (req: Request): Promise<Response> => {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in send-submission function:", error);
+    const message = error instanceof Error ? error.message : "Internal server error";
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

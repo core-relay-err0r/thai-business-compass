@@ -3,15 +3,16 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, ArrowLeft, ArrowRight, BookOpen, Clock } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight, BookOpen, Clock, ExternalLink, ShieldCheck, UserRound } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { BreadcrumbSchema, ArticleSchema } from "@/components/seo/StructuredData";
 import { format } from "date-fns";
 import { useEffect } from "react";
+import { getArticleAuthor, normalizeBlogSources } from "@/lib/blog";
 
-const SITE_URL = "https://pnd50.com";
+const SITE_URL = "https://www.pnd50.com";
 
 function toAbsoluteUrl(path: string | null | undefined): string | undefined {
   if (!path) return undefined;
@@ -19,41 +20,48 @@ function toAbsoluteUrl(path: string | null | undefined): string | undefined {
   return `${SITE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 }
 
-// Parse inline markdown (bold, italic)
+// Parse a safe subset of inline Markdown: links, bold, and italic.
 function parseInlineMarkdown(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
-  let remaining = text;
+  const tokenPattern = /\[([^\]]+)]\(([^)\s]+)\)|\*\*(.+?)\*\*|(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g;
+  let cursor = 0;
+  let match: RegExpExecArray | null;
   let keyIndex = 0;
 
-  while (remaining.length > 0) {
-    // Match **bold** first (before *italic*)
-    const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
-    // Match *italic* (single asterisk)
-    const italicMatch = remaining.match(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/);
+  while ((match = tokenPattern.exec(text)) !== null) {
+    if (match.index > cursor) parts.push(text.slice(cursor, match.index));
 
-    if (boldMatch && (!italicMatch || boldMatch.index! <= italicMatch.index!)) {
-      // Add text before the bold
-      if (boldMatch.index! > 0) {
-        parts.push(remaining.slice(0, boldMatch.index));
+    if (match[1] && match[2]) {
+      const label = match[1];
+      const href = match[2];
+      const isInternal = /^\/blog\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(href);
+      const isExternal = /^https?:\/\/[^\s]+$/i.test(href);
+
+      if (isInternal) {
+        parts.push(
+          <Link key={keyIndex++} to={href} className="font-medium text-primary underline decoration-primary/35 underline-offset-4 transition-colors hover:decoration-primary">
+            {label}
+          </Link>
+        );
+      } else if (isExternal) {
+        parts.push(
+          <a key={keyIndex++} href={href} target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline decoration-primary/35 underline-offset-4 transition-colors hover:decoration-primary">
+            {label}
+          </a>
+        );
+      } else {
+        parts.push(label);
       }
-      // Add bold text
-      parts.push(<strong key={keyIndex++}>{boldMatch[1]}</strong>);
-      remaining = remaining.slice(boldMatch.index! + boldMatch[0].length);
-    } else if (italicMatch) {
-      // Add text before the italic
-      if (italicMatch.index! > 0) {
-        parts.push(remaining.slice(0, italicMatch.index));
-      }
-      // Add italic text
-      parts.push(<em key={keyIndex++}>{italicMatch[1]}</em>);
-      remaining = remaining.slice(italicMatch.index! + italicMatch[0].length);
-    } else {
-      // No more matches, add remaining text
-      parts.push(remaining);
-      break;
+    } else if (match[3]) {
+      parts.push(<strong key={keyIndex++}>{match[3]}</strong>);
+    } else if (match[4]) {
+      parts.push(<em key={keyIndex++}>{match[4]}</em>);
     }
+
+    cursor = match.index + match[0].length;
   }
 
+  if (cursor < text.length) parts.push(text.slice(cursor));
   return parts;
 }
 
@@ -63,26 +71,33 @@ function renderContent(content: string) {
   const blocks = content.split(/\n\n+/);
   
   return blocks.map((block, index) => {
-    // Check if it's a heading (starts with multiple #)
-    if (block.startsWith("### ")) {
+    // Check if it's a heading (starts with multiple #).
+    // The heading is only the FIRST line — any following lines in the same
+    // block are body content and must be rendered separately.
+    const headingMatch = block.match(/^(#{1,3}) (.*)/);
+    if (headingMatch) {
+      const [, hashes, headingText] = headingMatch;
+      const rest = block.slice(block.indexOf("\n") + 1);
+      const hasBody = block.includes("\n") && rest.trim().length > 0;
+
+      const heading =
+        hashes === "###" ? (
+          <h3 className="text-xl font-semibold mt-8 mb-4">{parseInlineMarkdown(headingText)}</h3>
+        ) : hashes === "##" ? (
+          <h2 className="text-2xl font-bold mt-10 mb-4">{parseInlineMarkdown(headingText)}</h2>
+        ) : (
+          <h1 className="text-3xl font-bold mt-10 mb-4">{parseInlineMarkdown(headingText)}</h1>
+        );
+
+      if (!hasBody) {
+        return <div key={index}>{heading}</div>;
+      }
+
       return (
-        <h3 key={index} className="text-xl font-semibold mt-8 mb-4">
-          {parseInlineMarkdown(block.replace("### ", ""))}
-        </h3>
-      );
-    }
-    if (block.startsWith("## ")) {
-      return (
-        <h2 key={index} className="text-2xl font-bold mt-10 mb-4">
-          {parseInlineMarkdown(block.replace("## ", ""))}
-        </h2>
-      );
-    }
-    if (block.startsWith("# ")) {
-      return (
-        <h1 key={index} className="text-3xl font-bold mt-10 mb-4">
-          {parseInlineMarkdown(block.replace("# ", ""))}
-        </h1>
+        <div key={index}>
+          {heading}
+          {renderContent(rest)}
+        </div>
       );
     }
     
@@ -209,6 +224,9 @@ export default function BlogPost() {
   }
 
   const readingTime = getReadingTime(post.content);
+  const sources = normalizeBlogSources(post.sources);
+  const author = getArticleAuthor(post);
+  const modifiedDate = post.reviewed_at || post.updated_at;
 
   return (
     <Layout>
@@ -221,18 +239,21 @@ export default function BlogPost() {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://pnd50.com/" },
-          { name: "Blog", url: "https://pnd50.com/blog" },
-          { name: post.title, url: `https://pnd50.com/blog/${post.slug}` },
+          { name: "Home", url: "https://www.pnd50.com/" },
+          { name: "Blog", url: "https://www.pnd50.com/blog" },
+          { name: post.title, url: `https://www.pnd50.com/blog/${post.slug}` },
         ]}
       />
       <ArticleSchema
         title={post.title}
         description={post.meta_description || post.excerpt || `Read about ${post.title}`}
-        url={`https://pnd50.com/blog/${post.slug}`}
+        url={`https://www.pnd50.com/blog/${post.slug}`}
         image={toAbsoluteUrl(post.featured_image)}
         datePublished={post.published_at || post.created_at}
-        dateModified={post.updated_at}
+        dateModified={modifiedDate}
+        author={author}
+        reviewer={post.reviewer_name ? { name: post.reviewer_name, role: post.reviewer_role } : undefined}
+        citations={sources.map((source) => source.url)}
       />
 
       {/* Article Header */}
@@ -266,13 +287,37 @@ export default function BlogPost() {
                 {post.published_at && (
                   <div className="flex items-center gap-1.5">
                     <Calendar className="w-4 h-4" />
-                    {format(new Date(post.published_at), "MMMM d, yyyy")}
+                    Published {format(new Date(post.published_at), "MMMM d, yyyy")}
                   </div>
                 )}
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
                   {readingTime} min read
                 </div>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-3 border-l-2 border-primary pl-4 text-sm sm:flex-row sm:flex-wrap sm:gap-x-6">
+                <div className="flex items-start gap-2">
+                  <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                  <p>
+                    <span className="text-muted-foreground">Written by </span>
+                    <span className="font-medium text-foreground">{author.name}</span>
+                    {author.role && <span className="text-muted-foreground"> · {author.role}</span>}
+                  </p>
+                </div>
+                {post.reviewer_name && (
+                  <div className="flex items-start gap-2">
+                    <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                    <p>
+                      <span className="text-muted-foreground">Reviewed by </span>
+                      <span className="font-medium text-foreground">{post.reviewer_name}</span>
+                      {post.reviewer_role && <span className="text-muted-foreground"> · {post.reviewer_role}</span>}
+                      {post.reviewed_at && (
+                        <span className="text-muted-foreground"> · {format(new Date(post.reviewed_at), "MMMM d, yyyy")}</span>
+                      )}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -293,6 +338,17 @@ export default function BlogPost() {
           </div>
         )}
 
+        {post.key_takeaway && (
+          <aside className="container px-4 pt-8 sm:px-6 sm:pt-12" aria-labelledby="key-takeaway-heading">
+            <div className="mx-auto max-w-3xl border border-border bg-muted/30 p-5 sm:p-6">
+              <p id="key-takeaway-heading" className="mb-2 text-xs font-semibold uppercase tracking-wider text-primary">
+                Key takeaway
+              </p>
+              <p className="text-base leading-relaxed text-foreground sm:text-lg">{post.key_takeaway}</p>
+            </div>
+          </aside>
+        )}
+
         {/* Article Content */}
         <div className="py-8 sm:py-12">
           <div className="container px-4 sm:px-6">
@@ -301,6 +357,39 @@ export default function BlogPost() {
             </div>
           </div>
         </div>
+
+        {sources.length > 0 && (
+          <section className="border-t border-border py-10 sm:py-12" aria-labelledby="article-sources-heading">
+            <div className="container px-4 sm:px-6">
+              <div className="mx-auto max-w-3xl">
+                <div className="mb-5 flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <h2 id="article-sources-heading" className="text-xl font-semibold sm:text-2xl">Sources</h2>
+                </div>
+                <ol className="flex flex-col gap-3">
+                  {sources.map((source, index) => (
+                    <li key={`${source.url}-${index}`} className="border-l-2 border-border pl-4 text-sm leading-relaxed">
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-start gap-1.5 font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+                      >
+                        <span>{source.title}</span>
+                        <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                      </a>
+                      <p className="mt-1 text-muted-foreground">
+                        {source.publisher}
+                        {source.published_at && ` · Published ${source.published_at}`}
+                        {source.accessed_at && ` · Accessed ${source.accessed_at}`}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* CTA Section */}
         <footer className="py-12 sm:py-16 bg-muted/30 border-t border-border">

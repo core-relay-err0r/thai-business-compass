@@ -16,43 +16,64 @@ export type Database = {
     Tables: {
       blog_posts: {
         Row: {
+          author_name: string | null
+          author_role: string | null
           content: string
           created_at: string
           excerpt: string | null
           featured_image: string | null
           id: string
           is_published: boolean
+          key_takeaway: string | null
           meta_description: string | null
           published_at: string | null
+          reviewed_at: string | null
+          reviewer_name: string | null
+          reviewer_role: string | null
           slug: string
+          sources: Json
           target_keyword: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          author_name?: string | null
+          author_role?: string | null
           content: string
           created_at?: string
           excerpt?: string | null
           featured_image?: string | null
           id?: string
           is_published?: boolean
+          key_takeaway?: string | null
           meta_description?: string | null
           published_at?: string | null
+          reviewed_at?: string | null
+          reviewer_name?: string | null
+          reviewer_role?: string | null
           slug: string
+          sources?: Json
           target_keyword?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          author_name?: string | null
+          author_role?: string | null
           content?: string
           created_at?: string
           excerpt?: string | null
           featured_image?: string | null
           id?: string
           is_published?: boolean
+          key_takeaway?: string | null
           meta_description?: string | null
           published_at?: string | null
+          reviewed_at?: string | null
+          reviewer_name?: string | null
+          reviewer_role?: string | null
           slug?: string
+          sources?: Json
           target_keyword?: string | null
           title?: string
           updated_at?: string

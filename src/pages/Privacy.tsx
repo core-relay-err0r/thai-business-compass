@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
-import { Shield } from "lucide-react";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Privacy() {
@@ -91,25 +91,12 @@ export default function Privacy() {
         description="PND50 Privacy Policy. Learn how we collect, use, and protect your personal information when using our Thai accounting and corporate services."
         path="/privacy"
       />
-      {/* Hero Section */}
-      <section className="py-12 sm:py-16 md:py-28 bg-muted/30 border-b">
-        <div className="container px-4 sm:px-6">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-primary/10 mb-4 sm:mb-6">
-              <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
-            </div>
-            <p className="text-primary font-semibold text-xs sm:text-sm uppercase tracking-wider mb-2 sm:mb-3">
-              LEGAL
-            </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-              Privacy Policy
-            </h1>
-            <p className="text-base sm:text-lg text-muted-foreground">
-              Last updated: January 2025
-            </p>
-          </div>
-        </div>
-      </section>
+      <InternalPageHeader
+        eyebrow="Legal"
+        meta="Last updated · January 2025"
+        title={<>Privacy <span className="text-primary">policy.</span></>}
+        description="How PND50 collects, uses, safeguards, and retains information provided through our services."
+      />
 
       {/* Content Section */}
       <section className="py-10 sm:py-16 md:py-24">

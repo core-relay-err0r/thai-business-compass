@@ -25,18 +25,23 @@ export const PRICING = {
   // Annual fees (USD) — displayed as "From X"
   YEAR_END_STATEMENTS: 800,
   CATCHUP_BACKLOG: 1000,
-  AUDIT_ADDON: 1000,
+  AUDIT_ADDON: 2000,
+  ANNUAL_PREPARATION_PERCENT: 30,
 } as const;
 
 // Audit revenue band pricing (USD)
 export const AUDIT_REVENUE_BANDS = [
-  { id: "under-2m", label: "Under ฿2M", auditFee: 1000 },
-  { id: "2m-5m", label: "฿2M – ฿5M", auditFee: 1500 },
-  { id: "5m-10m", label: "฿5M – ฿10M", auditFee: 2000 },
-  { id: "10m-30m", label: "฿10M – ฿30M", auditFee: 3000 },
-  { id: "30m-100m", label: "฿30M – ฿100M", auditFee: 5000 },
+  { id: "under-2m", label: "Under ฿2M", auditFee: 2000 },
+  { id: "2m-5m", label: "฿2M – ฿5M", auditFee: 3000 },
+  { id: "5m-10m", label: "฿5M – ฿10M", auditFee: 4000 },
+  { id: "10m-30m", label: "฿10M – ฿30M", auditFee: 6000 },
+  { id: "30m-100m", label: "฿30M – ฿100M", auditFee: 10000 },
   { id: "over-100m", label: "Over ฿100M", auditFee: null },
 ] as const;
+
+export function calculateAnnualPreparationFee(auditFee: number): number {
+  return Math.round(auditFee * PRICING.ANNUAL_PREPARATION_PERCENT / 100);
+}
 
 export type AuditRevenueBand = typeof AUDIT_REVENUE_BANDS[number]["id"] | "not-sure";
 
@@ -63,8 +68,9 @@ export const CORPORATE_PRICING = {
   MOFA_CONSULATE_LEGALIZATION: 400,
 } as const;
 
-// Approximate THB conversion rate (for reference display)
-export const USD_TO_THB = 35;
+// Simple fixed commercial conversion used consistently across the site.
+// Legacy price constants remain USD-denominated internally; every public price is rendered in THB.
+export const USD_TO_THB = 33;
 
 // Consulting services (USD)
 export const CONSULTING_PRICING = {
@@ -117,86 +123,107 @@ export function calculateAccountingCost(inputs: AccountingInputs): AccountingRes
   const annualAddons: { name: string; amount: number; required: boolean; isFrom?: boolean }[] = [];
   const potentialMonthly: { name: string; amount: number }[] = [];
   const potentialAnnual: { name: string; amount: number; isFrom?: boolean }[] = [];
-  const requiredItems: string[] = ["Monthly bookkeeping", "Tax filings"];
+  const isMonthlyEngagement = inputs.accountingIntent === "full";
+  const requiredItems: string[] = isMonthlyEngagement ? ["Monthly bookkeeping", "Tax filings"] : [];
   const recommendedItems: string[] = [];
   const notNeededItems: string[] = [];
   let isCustomQuote = false;
 
-  // VAT
-  if (inputs.vatRegistered === "yes") {
+  // Monthly obligations only apply to a full accounting engagement.
+  if (isMonthlyEngagement && inputs.vatRegistered === "yes") {
     monthlyAddons.push({ name: "VAT reporting (PP.30)", amount: PRICING.VAT_ADDON, required: true });
     requiredItems.push("VAT reporting & filings");
-  } else if (inputs.vatRegistered === "not-sure") {
+  } else if (isMonthlyEngagement && inputs.vatRegistered === "not-sure") {
     potentialMonthly.push({ name: "VAT reporting (PP.30)", amount: PRICING.VAT_ADDON });
-  } else {
+  } else if (isMonthlyEngagement) {
     notNeededItems.push("VAT reporting");
   }
 
   // Recurring WHT
-  if (inputs.recurringWHT === "yes") {
+  if (isMonthlyEngagement && inputs.recurringWHT === "yes") {
     monthlyAddons.push({ name: "Recurring WHT (PND3/PND53)", amount: PRICING.RECURRING_WHT_ADDON, required: true });
     requiredItems.push("Withholding tax filings");
-  } else if (inputs.recurringWHT === "not-sure") {
+  } else if (isMonthlyEngagement && inputs.recurringWHT === "not-sure") {
     potentialMonthly.push({ name: "Recurring WHT (PND3/PND53)", amount: PRICING.RECURRING_WHT_ADDON });
-  } else {
+  } else if (isMonthlyEngagement) {
     notNeededItems.push("Recurring WHT filings");
   }
 
   // Payroll (block model)
-  if (inputs.payrollNeeded && inputs.employeeCount > 0) {
+  if (isMonthlyEngagement && inputs.payrollNeeded && inputs.employeeCount > 0) {
     const blocks = Math.ceil(inputs.employeeCount / PRICING.PAYROLL_BLOCK_SIZE);
     const payrollCost = blocks * PRICING.PAYROLL_BLOCK;
     monthlyAddons.push({ name: `Payroll & social security (${inputs.employeeCount} employees)`, amount: payrollCost, required: true });
     requiredItems.push("Payroll processing", "Social security filings");
-  } else if (inputs.employeeCount > 0) {
+  } else if (isMonthlyEngagement && inputs.employeeCount > 0) {
     recommendedItems.push("Payroll processing");
-  } else {
+  } else if (isMonthlyEngagement) {
     notNeededItems.push("Payroll processing");
   }
 
   // Transaction complexity
-  if (inputs.transactionVolume === "medium") {
+  if (isMonthlyEngagement && inputs.transactionVolume === "medium") {
     monthlyAddons.push({ name: "Medium volume surcharge", amount: PRICING.TX_MEDIUM_ADDON, required: false });
     recommendedItems.push("Enhanced reconciliation");
-  } else if (inputs.transactionVolume === "high") {
+  } else if (isMonthlyEngagement && inputs.transactionVolume === "high") {
     isCustomQuote = true;
   }
 
-  // Year-end statements
-  if (inputs.yearEndStatements === "yes") {
-    annualAddons.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, required: true, isFrom: true });
-    requiredItems.push("Annual financial statements");
-  } else if (inputs.yearEndStatements === "not-sure") {
-    potentialAnnual.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, isFrom: true });
-  }
-
-  // Audit
-  if (inputs.auditRequired === "yes") {
+  if (!isMonthlyEngagement) {
     const band = inputs.auditRevenueBand && inputs.auditRevenueBand !== "not-sure"
-      ? AUDIT_REVENUE_BANDS.find(b => b.id === inputs.auditRevenueBand)
+      ? AUDIT_REVENUE_BANDS.find((item) => item.id === inputs.auditRevenueBand)
       : undefined;
-    const auditFee = band?.auditFee ?? PRICING.AUDIT_ADDON;
-    const isFromAudit = !band || band.auditFee === null;
-    annualAddons.push({ name: "Annual audit", amount: auditFee, required: true, isFrom: isFromAudit });
-    requiredItems.push("Annual audit");
-  } else if (inputs.auditRequired === "not-sure") {
-    potentialAnnual.push({ name: "Annual audit", amount: PRICING.AUDIT_ADDON, isFrom: true });
-  } else if (inputs.auditRequired === "no") {
-    notNeededItems.push("Annual audit");
-  }
+    const auditFee = band?.auditFee ?? (band ? 0 : PRICING.AUDIT_ADDON);
 
-  // Catch-up / backlog
-  if (inputs.catchupBacklog === "yes") {
-    annualAddons.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, required: true, isFrom: true });
-    requiredItems.push("Catch-up / backlog work");
-  } else if (inputs.catchupBacklog === "not-sure") {
-    potentialAnnual.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, isFrom: true });
+    if (band?.auditFee === null) {
+      isCustomQuote = true;
+      annualAddons.push({ name: "Accounting reconstruction & financial statements", amount: 0, required: true });
+      annualAddons.push({ name: "Independent annual audit", amount: 0, required: true });
+    } else {
+      annualAddons.push({
+        name: "Accounting reconstruction & financial statements",
+        amount: calculateAnnualPreparationFee(auditFee),
+        required: true,
+        isFrom: true,
+      });
+      annualAddons.push({ name: "Independent annual audit", amount: auditFee, required: true, isFrom: !band });
+    }
+    requiredItems.push("Accounting reconstruction & financial statements", "Independent annual audit");
   } else {
-    notNeededItems.push("Catch-up / backlog work");
+    // Existing monthly clients only need the annual services selected below; no reconstruction is added.
+    if (inputs.yearEndStatements === "yes") {
+      annualAddons.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, required: true, isFrom: true });
+      requiredItems.push("Annual financial statements");
+    } else if (inputs.yearEndStatements === "not-sure") {
+      potentialAnnual.push({ name: "Year-end financial statements", amount: PRICING.YEAR_END_STATEMENTS, isFrom: true });
+    }
+
+    if (inputs.auditRequired === "yes") {
+      const band = inputs.auditRevenueBand && inputs.auditRevenueBand !== "not-sure"
+        ? AUDIT_REVENUE_BANDS.find((item) => item.id === inputs.auditRevenueBand)
+        : undefined;
+      const auditFee = band?.auditFee ?? (band ? 0 : PRICING.AUDIT_ADDON);
+      if (band?.auditFee === null) isCustomQuote = true;
+      annualAddons.push({ name: "Independent annual audit", amount: auditFee, required: true, isFrom: !band });
+      requiredItems.push("Independent annual audit");
+    } else if (inputs.auditRequired === "not-sure") {
+      potentialAnnual.push({ name: "Independent annual audit", amount: PRICING.AUDIT_ADDON, isFrom: true });
+    } else {
+      notNeededItems.push("Independent annual audit");
+    }
+
+    if (inputs.catchupBacklog === "yes") {
+      annualAddons.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, required: true, isFrom: true });
+      requiredItems.push("Catch-up / backlog work");
+    } else if (inputs.catchupBacklog === "not-sure") {
+      potentialAnnual.push({ name: "Catch-up / backlog year-end work", amount: PRICING.CATCHUP_BACKLOG, isFrom: true });
+    } else {
+      notNeededItems.push("Catch-up / backlog work");
+    }
   }
 
   // Calculate totals
-  const monthlyBase = PRICING.BASE_ACCOUNTING;
+  const monthlyBase = isMonthlyEngagement ? PRICING.BASE_ACCOUNTING : 0;
   const annualBase = 0;
   
   const totalMonthlyAddons = monthlyAddons.reduce((sum, addon) => sum + addon.amount, 0);
@@ -237,10 +264,10 @@ export function formatPrice(amount: number): string {
   }).format(amount);
 }
 
-export function formatUSD(amount: number): string {
-  return `$${formatPrice(amount)}`;
+export function formatTHB(amountInUSD: number): string {
+  return `฿${formatPrice(Math.round(amountInUSD * USD_TO_THB))}`;
 }
 
-export function formatTHB(amount: number): string {
-  return `฿${formatPrice(Math.round(amount * USD_TO_THB))}`;
+export function formatUSD(amountInUSD: number): string {
+  return `$${formatPrice(amountInUSD)} (approx. ${formatTHB(amountInUSD)})`;
 }

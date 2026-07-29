@@ -101,7 +101,7 @@ export function RegisteredOfficePopup({ open, onOpenChange, onConfirm }: Registe
 
           {/* Note */}
           <p className="text-xs text-muted-foreground/70">
-            We do not provide offices directly. We assist with selection only.
+            We coordinate the address filing and, if selected, help compare third-party office options. We do not supply premises; availability, landlord documents, and authority acceptance must be confirmed.
           </p>
 
           {/* Footer */}

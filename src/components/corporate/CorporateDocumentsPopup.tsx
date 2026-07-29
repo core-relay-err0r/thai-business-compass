@@ -56,9 +56,9 @@ export function CorporateDocumentsPopup({ open, onOpenChange, onConfirm }: Corpo
 
         <div className="space-y-6">
           <div>
-            <p className="text-sm font-medium mb-1">Included:</p>
+            <p className="text-sm font-medium mb-1">Base scope:</p>
             <p className="text-sm text-muted-foreground">
-              Full corporate documents set.
+              Obtain the agreed current company-document set from the relevant source. We confirm the exact documents and intended use before proceeding.
             </p>
           </div>
 
@@ -116,7 +116,7 @@ export function CorporateDocumentsPopup({ open, onOpenChange, onConfirm }: Corpo
 
           {/* Note */}
           <p className="text-xs text-muted-foreground/70">
-            Used for banks, authorities, or legal procedures.
+            Acceptance, format, certification, and processing time are controlled by the receiving and issuing authorities. External fees may apply.
           </p>
 
           {/* Footer */}

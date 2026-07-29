@@ -5,9 +5,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   const servicesLinks = [
-    { label: "Corporate Services", href: "/services#corporate" },
+    { label: "Corporate services", href: "/services#corporate" },
     { label: "Accounting", href: "/services#accounting" },
-    { label: "Consulting", href: "/services#consulting" },
+    { label: "Business consulting", href: "/services#consulting" },
   ];
 
   const companyLinks = [
@@ -20,7 +20,7 @@ export function Footer() {
     <footer className="bg-slate-900 text-slate-300 relative overflow-hidden">
       {/* Background Watermark - Hidden on mobile */}
       <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none overflow-hidden">
-        <span className="hidden md:block text-[10rem] lg:text-[15rem] xl:text-[20rem] font-bold text-slate-800/30 tracking-tight -mr-5 lg:-mr-10">
+        <span className="hidden max-w-full md:block text-[10rem] lg:text-[15rem] xl:text-[20rem] font-bold text-slate-800/30 tracking-tight">
           PND50
         </span>
       </div>
@@ -44,13 +44,23 @@ export function Footer() {
                 <Mail className="h-4 w-4" />
                 info@pnd50.com
               </a>
-              <a 
-                href="tel:+66843563805" 
-                className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors min-h-[44px] sm:min-h-0"
-              >
-                <Phone className="h-4 w-4" />
-                +66 84 356 3805
-              </a>
+              <div className="flex items-start gap-2 text-slate-400">
+                <Phone className="mt-1 h-4 w-4 shrink-0" />
+                <div className="flex flex-col">
+                  <a
+                    href="tel:+6620172950"
+                    className="flex min-h-[44px] items-center transition-colors hover:text-white sm:min-h-0"
+                  >
+                    +66(0)2 017 2950
+                  </a>
+                  <a
+                    href="tel:+6620172949"
+                    className="flex min-h-[44px] items-center transition-colors hover:text-white sm:min-h-0"
+                  >
+                    +66(0)2 017 2949
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeEdgeFunction } from "@/lib/edge-functions";
 import { toast } from "@/hooks/use-toast";
 import { useServices, type AIRecommendation } from "@/contexts/ServiceContext";
 import { cn } from "@/lib/utils";
@@ -31,11 +31,11 @@ const initialForm: FormState = {
 };
 
 const REVENUE_OPTIONS: { value: FormState["revenueRange"]; label: string }[] = [
-  { value: "0-5k", label: "Up to $5,000" },
-  { value: "5k-50k", label: "$5,000 – $50,000" },
-  { value: "50k-100k", label: "$50,000 – $100,000" },
-  { value: "100k-1m", label: "$100,000 – $1,000,000" },
-  { value: "1m+", label: "Over $1,000,000" },
+  { value: "0-5k", label: "Up to ฿165,000" },
+  { value: "5k-50k", label: "฿165,000 – ฿1.65M" },
+  { value: "50k-100k", label: "฿1.65M – ฿3.3M" },
+  { value: "100k-1m", label: "฿3.3M – ฿33M" },
+  { value: "1m+", label: "Over ฿33M" },
 ];
 
 const STAGE_LABELS: Record<FormState["businessStage"], string> = {
@@ -59,10 +59,15 @@ const CONFIDENCE_BLURB: Record<"high" | "medium" | "low", string> = {
   low: "Your situation is unusual or some answers were unclear. Get in touch to refine.",
 };
 
-export function AIRecommender() {
+interface AIRecommenderProps {
+  defaultOpen?: boolean;
+  handoffToServices?: boolean;
+}
+
+export function AIRecommender({ defaultOpen = false, handoffToServices = false }: AIRecommenderProps) {
   const navigate = useNavigate();
   const { applyRecommendation } = useServices();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState<FormState>(initialForm);
   const [result, setResult] = useState<AIRecommendation | null>(null);
@@ -77,10 +82,11 @@ export function AIRecommender() {
     setLoading(true);
     setResult(null);
     try {
-      const { data, error } = await supabase.functions.invoke("ai-recommend", { body: form });
+      const { data, error } = await invokeEdgeFunction("ai-recommend", { body: form });
       if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
-      setResult(data as AIRecommendation);
+      const response = data as AIRecommendation & { error?: string };
+      if (response.error) throw new Error(response.error);
+      setResult(response);
       setSubmittedForm(form);
       setExplainOpen(false);
     } catch (err) {
@@ -95,12 +101,21 @@ export function AIRecommender() {
     if (!result) return;
     applyRecommendation(result);
     toast({
-      title: "✨ Applied to your estimate",
-      description: "Calculator and selected services have been pre-filled. You can fine-tune anything below.",
+      title: "Applied to your estimate",
+      description: "We prefilled the calculator and selected services. You can adjust them below.",
       duration: 5000,
     });
-    // Scroll to live estimate / accounting section
+    if (handoffToServices) {
+      navigate("/services#accounting");
+      return;
+    }
     document.getElementById("accounting")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleProceed = () => {
+    if (!result) return;
+    applyRecommendation(result);
+    navigate("/submit");
   };
 
   const handleRefine = () => {
@@ -108,8 +123,8 @@ export function AIRecommender() {
   };
 
   return (
-    <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
-      <CardContent className="p-4 sm:p-6">
+    <Card className="overflow-hidden rounded-3xl border-border bg-background text-foreground shadow-sm">
+      <CardContent className="p-5 sm:p-7 lg:p-9">
         {/* Header / Trigger */}
         <button
           type="button"
@@ -121,9 +136,9 @@ export function AIRecommender() {
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-semibold">Not sure where to start?</h2>
+              <h2 className="text-base sm:text-lg font-semibold">Start with your situation, not a service list</h2>
               <p className="text-xs sm:text-sm text-muted-foreground">
-                Get an AI recommendation tailored to your business in under a minute.
+                Map your needs before we discuss the most practical strategy together.
               </p>
             </div>
           </div>
@@ -196,7 +211,7 @@ export function AIRecommender() {
 
                   {/* Revenue */}
                   <div className="md:col-span-2">
-                    <Label className="text-sm font-medium mb-2 block">Monthly revenue (USD)</Label>
+                    <Label className="text-sm font-medium mb-2 block">Monthly revenue (THB)</Label>
                     <RadioGroup
                       value={form.revenueRange}
                       onValueChange={(v) => setForm({ ...form, revenueRange: v as FormState["revenueRange"] })}
@@ -290,7 +305,7 @@ export function AIRecommender() {
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4 mr-2" />
-                        Get my recommendation
+                        Map my needs
                       </>
                     )}
                   </Button>
@@ -300,7 +315,7 @@ export function AIRecommender() {
 
             {/* Result */}
             {result && (
-              <div className="space-y-5">
+              <div className="space-y-6 rounded-3xl bg-muted/30 p-4 sm:p-6 lg:p-7">
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                     <Sparkles className="w-4 h-4 text-primary" />
@@ -326,6 +341,9 @@ export function AIRecommender() {
                       </button>
                     </div>
                     <p className="text-sm text-foreground leading-relaxed">{result.summary}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      This is a planning recommendation, not a legal, tax, immigration, or eligibility determination. Confirm the final scope against your records and current requirements.
+                    </p>
 
                     {explainOpen && (
                       <div className="mt-3 p-4 rounded-lg border border-border bg-card/60 space-y-4 text-sm">
@@ -409,7 +427,7 @@ export function AIRecommender() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-lg bg-card border border-border">
+                  <div className="rounded-2xl border border-border bg-background p-5 shadow-sm">
                     <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Corporate</div>
                     {result.corporateServices.length > 0 ? (
                       <ul className="space-y-1.5">
@@ -424,7 +442,7 @@ export function AIRecommender() {
                       <p className="text-sm text-muted-foreground">None recommended.</p>
                     )}
                   </div>
-                  <div className="p-4 rounded-lg bg-card border border-border">
+                  <div className="rounded-2xl border border-border bg-background p-5 shadow-sm">
                     <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Accounting</div>
                     {result.accountingInputs ? (
                       <p className="text-sm text-muted-foreground">
@@ -434,14 +452,21 @@ export function AIRecommender() {
                       <p className="text-sm text-muted-foreground">No accounting setup recommended.</p>
                     )}
                   </div>
-                  <div className="p-4 rounded-lg bg-card border border-border">
-                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Consulting</div>
+                  <div className="rounded-2xl border border-border bg-background p-5 shadow-sm">
+                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Business consulting</div>
                     {result.consultingServices.length > 0 ? (
                       <ul className="space-y-1.5">
                         {result.consultingServices.map((s) => (
                           <li key={s.id} className="text-sm flex items-start gap-2">
                             <CheckCircle2 className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
-                            <span>{s.name}</span>
+                            <span>
+                              {s.name}
+                              {s.id === "bank-compliance" && (
+                                <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                                  Preparation for a bank application; final onboarding and approval remain with the bank.
+                                </span>
+                              )}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -452,7 +477,7 @@ export function AIRecommender() {
                 </div>
 
                 {result.notes.length > 0 && (
-                  <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
                     <div className="flex items-start gap-2">
                       <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
                       <div className="space-y-1">
@@ -467,17 +492,16 @@ export function AIRecommender() {
                   </div>
                 )}
 
-                <div className="flex flex-col sm:flex-row gap-3 sm:justify-end pt-2">
-                  <Button variant="ghost" onClick={handleRefine} className="min-h-[44px]">
+                <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-end">
+                  <Button variant="ghost" onClick={handleRefine} className="min-h-[44px] rounded-xl">
                     Refine answers
                   </Button>
-                  <Button variant="outline" onClick={() => navigate("/submit")} className="min-h-[44px]">
-                    Proceed to request
-                    <ArrowRight className="w-4 h-4 ml-1" />
+                  <Button variant="outline" onClick={handleApply} className="min-h-[44px] rounded-xl">
+                    Review suggested scope
                   </Button>
-                  <Button onClick={handleApply} className="min-h-[44px]">
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Apply to my estimate
+                  <Button onClick={handleProceed} className="min-h-[48px] rounded-xl px-6">
+                    Proceed to request
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
               </div>

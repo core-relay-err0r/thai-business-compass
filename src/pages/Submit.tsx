@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,10 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useServices } from "@/contexts/ServiceContext";
-import { formatPrice } from "@/lib/pricing";
+import { formatUSD } from "@/lib/pricing";
 import { Check, Copy, Send, Calculator, Building2, MessageSquare, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeEdgeFunction } from "@/lib/edge-functions";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Submit() {
   const {
@@ -43,7 +45,7 @@ export default function Submit() {
     setCaptchaLoading(true);
     setCaptchaAnswer("");
     try {
-      const { data, error } = await supabase.functions.invoke("captcha-challenge", {
+      const { data, error } = await invokeEdgeFunction("captcha-challenge", {
         method: "GET",
       });
       if (error) throw error;
@@ -114,7 +116,7 @@ export default function Submit() {
       }
 
       if (usedFallback) {
-        const { data, error } = await supabase.functions.invoke("send-submission", {
+        const { data, error } = await invokeEdgeFunction("send-submission", {
           body: payload,
         });
         if (error) throw error;
@@ -129,9 +131,13 @@ export default function Submit() {
 
       setIsSubmitted(true);
       toast.success("Request submitted successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Submission error:", error);
-      toast.error(error.message || "Failed to submit request. Please try again.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit request. Please try again."
+      );
       refreshCaptcha();
     } finally {
       setIsSubmitting(false);
@@ -141,15 +147,21 @@ export default function Submit() {
   if (isSubmitted) {
     return (
       <Layout>
+        <SEOHead
+          title="Request received | PND50"
+          description="Your request has been received by PND50. Our Bangkok accounting and compliance team will review it and respond with clear next steps."
+          path="/submit"
+          noIndex
+        />
         <section className="py-16 sm:py-20 md:py-32">
           <div className="container px-4 sm:px-6">
             <div className="max-w-xl mx-auto text-center">
               <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-primary/10 mx-auto mb-4 sm:mb-6">
                 <Check className="h-7 w-7 sm:h-8 sm:w-8 text-primary" />
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Request Submitted</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">The guessing stops here.</h1>
               <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
-                Thank you for your submission. We'll review your request and reply with next steps within 1 business day.
+                Your brief is with our team. We will review the scope and reply with concrete next steps within 1 business day.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <Button
@@ -173,15 +185,20 @@ export default function Submit() {
 
   return (
     <Layout>
-      <section className="py-8 sm:py-12 md:py-20">
+      <SEOHead
+        title="Submit your business request | PND50"
+        description="Send PND50 a structured brief for Thai accounting, tax, and corporate compliance support. Our team will review the facts and respond with relevant next steps."
+        path="/submit"
+        noIndex
+      />
+      <InternalPageHeader
+        eyebrow="Turn assumptions into a brief"
+        meta="Review · Verify · Submit"
+        title={<>Give us the facts. <span className="text-primary">We will challenge the gaps.</span></>}
+        description="Review the scope, add the context we cannot infer, and send one structured request. Our team will respond with relevant next steps — not a generic sales pitch."
+      />
+      <section className="py-10 sm:py-14 md:py-16">
         <div className="container px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto mb-8 sm:mb-12 text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Submit Request</h1>
-            <p className="text-base sm:text-lg text-muted-foreground">
-              Review your selections and provide your contact details.
-            </p>
-          </div>
-
           <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
             {/* Contact Info */}
             <Card>
@@ -229,14 +246,13 @@ export default function Submit() {
                   <RadioGroup
                     value={contactInfo.preferredContact}
                     onValueChange={(value) =>
-                      setContactInfo({ preferredContact: value as "email" | "phone" | "whatsapp" })
+                      setContactInfo({ preferredContact: value as "email" | "phone" })
                     }
                     className="flex flex-wrap gap-3 sm:gap-4"
                   >
                     {[
                       { value: "email", label: "Email" },
                       { value: "phone", label: "Phone" },
-                      { value: "whatsapp", label: "WhatsApp" },
                     ].map((option) => (
                       <Label
                         key={option.value}
@@ -309,20 +325,28 @@ export default function Submit() {
                       <div className="pb-5 sm:pb-6">
                         <div className="flex items-center gap-2 mb-3">
                           <Calculator className="h-4 w-4 text-primary" />
-                          <span className="font-medium">Accounting Services</span>
+                          <span className="font-medium">Accounting</span>
                         </div>
-                        <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-2">
-                          <div>
-                            <span className="text-primary">Monthly:</span>{" "}
-                            <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}</span>
+                        {accountingResult!.isCustomQuote ? (
+                          <div className="mb-2 text-sm font-medium text-primary">Custom quote required</div>
+                        ) : (
+                          <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-2">
+                            {accountingResult!.monthlyBase > 0 && (
+                              <div>
+                                <span className="text-primary">Monthly:</span>{" "}
+                                <span className="font-medium">{formatUSD(accountingResult!.totalMonthly)}</span>
+                              </div>
+                            )}
+                            <div>
+                              <span className="text-primary">First year:</span>{" "}
+                              <span className="font-medium">
+                                {accountingResult!.annualAddons.some((a) => a.isFrom) ? "From " : ""}{formatUSD(accountingResult!.totalAnnual)}
+                              </span>
+                            </div>
                           </div>
-                          <div>
-                            <span className="text-primary">Annual:</span>{" "}
-                            <span className="font-medium">${formatPrice(accountingResult!.totalAnnual)}</span>
-                          </div>
-                        </div>
+                        )}
                         <div className="text-xs text-muted-foreground">
-                          Required: {accountingResult!.requiredItems.join(", ")}
+                          Included from your answers: {accountingResult!.requiredItems.join(", ")}
                         </div>
                       </div>
                     )}
@@ -331,19 +355,19 @@ export default function Submit() {
                       <div className={`${hasAccountingData ? "pt-5 sm:pt-6" : ""} ${hasConsultingData ? "pb-5 sm:pb-6" : ""}`}>
                         <div className="flex items-center gap-2 mb-3">
                           <Building2 className="h-4 w-4 text-primary" />
-                          <span className="font-medium">Corporate Services</span>
+                          <span className="font-medium">Corporate services</span>
                         </div>
                         <div className="space-y-2">
                           {selectedCorporateServices.map((service) => (
                             <div key={service.id} className="flex justify-between text-sm">
                               <span className="text-primary">{service.name}</span>
-                              <span className="font-medium">${formatPrice(service.price)}</span>
+                              <span className="font-medium">{formatUSD(service.price)}</span>
                             </div>
                           ))}
                           <div className="flex justify-between text-sm pt-3 border-t border-border/50">
                             <span>Total</span>
                             <span className="font-medium">
-                              ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
+                              {formatUSD(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
                             </span>
                           </div>
                         </div>
@@ -354,21 +378,21 @@ export default function Submit() {
                       <div className={`${hasAccountingData || hasCorporateData ? "pt-5 sm:pt-6" : ""}`}>
                         <div className="flex items-center gap-2 mb-3">
                           <MessageSquare className="h-4 w-4 text-primary" />
-                          <span className="font-medium">Consulting Services</span>
+                          <span className="font-medium">Business consulting</span>
                         </div>
                         <div className="space-y-2">
                           {selectedConsultingServices.map((service) => (
                             <div key={service.id} className="flex justify-between text-sm">
                               <span className="text-primary">{service.name}</span>
                               <span className="font-medium">
-                                {service.isFrom ? "From " : ""}${formatPrice(service.price)}
+                                {service.isFrom ? "From " : ""}{formatUSD(service.price)}
                               </span>
                             </div>
                           ))}
                           <div className="flex justify-between text-sm pt-3 border-t border-border/50">
                             <span>Total</span>
                             <span className="font-medium">
-                              {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
+                              {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}{formatUSD(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
                             </span>
                           </div>
                         </div>
@@ -388,12 +412,12 @@ export default function Submit() {
               </CardContent>
             </Card>
 
-            {/* Payment Summary */}
+            {/* Cost summary */}
             {hasAnySelection && (
               <Card className="bg-muted/30 border-primary/10">
                 <CardHeader className="p-4 sm:p-6">
-                  <CardTitle className="text-lg sm:text-xl">Payment Summary</CardTitle>
-                  <CardDescription className="text-sm">How you'll pay for these services</CardDescription>
+                  <CardTitle className="text-lg sm:text-xl">Cost summary</CardTitle>
+                  <CardDescription className="text-sm">When each service is invoiced</CardDescription>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 pt-0 space-y-0">
                   {/* Initial Payment Section */}
@@ -405,17 +429,17 @@ export default function Submit() {
                       <p className="text-xs text-muted-foreground">Due at engagement start</p>
                       {hasCorporateData && (
                         <div className="flex justify-between text-sm">
-                          <span>Corporate Services</span>
+                          <span>Corporate services</span>
                           <span className="font-medium">
-                            ${formatPrice(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
+                            {formatUSD(selectedCorporateServices.reduce((sum, s) => sum + s.price, 0))}
                           </span>
                         </div>
                       )}
                       {hasConsultingData && (
                         <div className="flex justify-between text-sm">
-                          <span>Consulting</span>
+                          <span>Business consulting</span>
                           <span className="font-medium">
-                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
+                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}{formatUSD(selectedConsultingServices.reduce((sum, s) => sum + s.price, 0))}
                           </span>
                         </div>
                       )}
@@ -423,7 +447,7 @@ export default function Submit() {
                         <div className="flex justify-between text-sm pt-2 border-t border-border/50">
                           <span className="font-medium">Initial Total</span>
                           <span className="font-medium">
-                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}${formatPrice(
+                            {selectedConsultingServices.some(s => s.isFrom) ? "From " : ""}{formatUSD(
                               selectedCorporateServices.reduce((sum, s) => sum + s.price, 0) +
                               selectedConsultingServices.reduce((sum, s) => sum + s.price, 0)
                             )}
@@ -434,18 +458,18 @@ export default function Submit() {
                   )}
 
                   {/* Monthly Recurring Section */}
-                  {hasAccountingData && (
+                  {hasAccountingData && accountingResult!.monthlyBase > 0 && !accountingResult!.isCustomQuote && (
                     <div className={`space-y-2 py-4 border-b border-border ${!(hasCorporateData || hasConsultingData) ? 'pt-0' : ''}`}>
                       <h4 className="text-xs uppercase tracking-wide text-muted-foreground font-medium">
                         Monthly Recurring
                       </h4>
                       <div className="flex justify-between text-sm">
-                        <span>Accounting Services</span>
-                        <span className="font-medium">${formatPrice(accountingResult!.totalMonthly)}/month</span>
+                        <span>Accounting</span>
+                        <span className="font-medium">{formatUSD(accountingResult!.totalMonthly)}/month</span>
                       </div>
                       <div className="flex justify-between text-sm text-muted-foreground">
                         <span>First year (12 months)</span>
-                        <span>${formatPrice(accountingResult!.totalMonthly * 12)}</span>
+                        <span>{formatUSD(accountingResult!.totalMonthly * 12)}</span>
                       </div>
                     </div>
                   )}
@@ -460,13 +484,21 @@ export default function Submit() {
                       {accountingResult!.annualAddons.map((addon, index) => (
                         <div key={index} className="flex justify-between text-sm">
                           <span>{addon.name}</span>
-                          <span className="font-medium">${formatPrice(addon.amount)}</span>
+                          <span className="font-medium">
+                            {addon.amount === 0 ? "Custom quote" : `${addon.isFrom ? "From " : ""}${formatUSD(addon.amount)}`}
+                          </span>
                         </div>
                       ))}
-                      <div className="flex justify-between text-sm pt-2 border-t border-border/50">
-                        <span className="font-medium">Annual Total</span>
+                      <div className="flex justify-between gap-4 text-sm pt-2 border-t border-border/50">
                         <span className="font-medium">
-                          ${formatPrice(accountingResult!.annualAddons.reduce((sum, a) => sum + a.amount, 0))}
+                          {accountingResult!.annualAddons.some((addon) => addon.amount === 0)
+                            ? "Known annual fees subtotal"
+                            : accountingResult!.monthlyBase === 0 ? "Complete annual closing" : "Annual fees subtotal"}
+                        </span>
+                        <span className="font-medium text-right">
+                          {accountingResult!.annualAddons.every((addon) => addon.amount === 0)
+                            ? "Quote required"
+                            : `${formatUSD(accountingResult!.annualAddons.reduce((sum, addon) => sum + addon.amount, 0))}`}
                         </span>
                       </div>
                     </div>
@@ -477,17 +509,17 @@ export default function Submit() {
                     {(() => {
                       const corporateTotal = selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
                       const consultingTotal = selectedConsultingServices.reduce((sum, s) => sum + s.price, 0);
-                      const hasFromItems = selectedConsultingServices.some(s => s.isFrom);
+                      const hasFromItems = selectedConsultingServices.some(s => s.isFrom) || accountingResult?.annualAddons.some((a) => a.isFrom);
                       const monthlyFee = accountingResult?.totalMonthly ?? 0;
                       const annualFees = accountingResult?.annualAddons.reduce((sum, a) => sum + a.amount, 0) ?? 0;
 
                       const firstYearTotal = corporateTotal + consultingTotal + (monthlyFee * 12) + annualFees;
 
                       return (
-                        <div className="flex justify-between font-medium text-base">
-                          <span>Estimated First-Year Total</span>
-                          <span>
-                            {hasFromItems ? "From " : ""}${formatPrice(firstYearTotal)}
+                        <div className="flex justify-between gap-4 font-medium text-base">
+                          <span>First-year estimate</span>
+                          <span className="text-right">
+                            {accountingResult?.isCustomQuote ? "Quote required" : `${hasFromItems ? "From " : ""}${formatUSD(firstYearTotal)}`}
                           </span>
                         </div>
                       );
@@ -496,8 +528,8 @@ export default function Submit() {
 
                   {/* Disclaimer */}
                   <p className="text-xs text-muted-foreground mt-4 leading-relaxed">
-                    Estimates based on your inputs. Final pricing confirmed after initial consultation.
-                    {hasConsultingData && " Consulting fees scoped based on specific requirements."}
+                    Planning estimates are based on your inputs and do not determine legal or tax obligations. Final scope, third-party fees, authority-dependent timing, and pricing are confirmed after record review.
+                    {hasConsultingData && " Business consulting fees cover the stated deliverable; regulated opinions, searches, filings, and implementation are separately scoped."}
                   </p>
                 </CardContent>
               </Card>
@@ -525,7 +557,7 @@ export default function Submit() {
                 <CardHeader className="p-4 sm:p-6">
                   <CardTitle className="text-lg sm:text-xl">Copy Summary</CardTitle>
                   <CardDescription className="text-sm">
-                    Generate a text summary you can paste into email or WhatsApp
+                    Generate a text summary you can paste into an email
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 pt-0">
@@ -606,7 +638,7 @@ export default function Submit() {
                 ) : (
                   <>
                     <Send className="mr-2 h-4 w-4" />
-                    Submit Request
+                    Send request
                   </>
                 )}
               </Button>

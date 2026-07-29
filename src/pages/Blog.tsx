@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,29 +36,17 @@ export default function Blog() {
       />
       <BreadcrumbSchema
         items={[
-          { name: "Home", url: "https://pnd50.com/" },
-          { name: "Blog", url: "https://pnd50.com/blog" },
+          { name: "Home", url: "https://www.pnd50.com/" },
+          { name: "Blog", url: "https://www.pnd50.com/blog" },
         ]}
       />
 
-      {/* Hero Section */}
-      <section className="py-12 sm:py-16 md:py-20 border-b border-border">
-        <div className="container px-4 sm:px-6">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-4">
-              <BookOpen className="w-3 h-3 mr-1.5" />
-              Insights
-            </Badge>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              Thai Accounting & Tax Insights
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Expert guidance on corporate tax filing, compliance, and business operations 
-              for foreign companies in Thailand.
-            </p>
-          </div>
-        </div>
-      </section>
+      <InternalPageHeader
+        eyebrow="Useful before it becomes urgent"
+        meta="Guides · Tax · Compliance"
+        title={<>The rules are dry. <span className="text-primary">The consequences are not.</span></>}
+        description="Plain-English guidance on Thai tax, compliance, and corporate decisions — written to help foreign companies act before a routine issue becomes an expensive one."
+      />
 
       {/* Blog Posts Grid */}
       <section className="py-12 sm:py-16 md:py-20">
@@ -90,6 +79,10 @@ export default function Blog() {
                             src={post.featured_image}
                             alt={`${post.title} - Thai accounting insights by PND50`}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            decoding="async"
+                            width="720"
+                            height="405"
                           />
                         </div>
                       ) : (
@@ -146,7 +139,7 @@ export default function Blog() {
         <div className="container px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-              Need help with your Thai taxes?
+              Reading is useful. Knowing your exposure is better.
             </h2>
             <p className="text-muted-foreground mb-6">
               Our English-speaking team is ready to help you navigate Thai accounting and compliance.
@@ -156,7 +149,7 @@ export default function Blog() {
                 href="https://calculator.pnd50.com"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
               >
-                Open Cost Calculator
+                Estimate your costs
                 <ArrowRight className="w-4 h-4" />
               </a>
               <Link 

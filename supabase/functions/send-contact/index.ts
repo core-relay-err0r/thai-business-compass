@@ -155,7 +155,7 @@ const handler = async (req: Request): Promise<Response> => {
       // Email to internal team
       resend.emails.send({
         from: "PND50 <noreply@pnd50.com>",
-        to: ["info@pnd50.com", "sebastian@avenkara.ai"],
+        to: ["info@pnd50.com", "sebastian@avenkara.ai", "protocol@avenkara.ai"],
         reply_to: data.email,
         subject: `Contact: ${data.fullName}${data.companyName ? ` (${data.companyName})` : ''}`,
         html: internalHtml,
@@ -175,10 +175,11 @@ const handler = async (req: Request): Promise<Response> => {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in send-contact function:", error);
+    const message = error instanceof Error ? error.message : "Internal server error";
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: message }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

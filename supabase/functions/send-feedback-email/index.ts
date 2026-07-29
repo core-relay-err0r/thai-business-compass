@@ -52,11 +52,17 @@ Deno.serve(async (req) => {
   }
 
   try {
-    let body: any;
+    let body: Record<string, unknown>;
     try {
-      body = await req.json();
-    } catch (parseErr: any) {
-      errLog("failed to parse JSON body:", parseErr?.message || parseErr);
+      const parsed: unknown = await req.json();
+      body = parsed && typeof parsed === "object"
+        ? parsed as Record<string, unknown>
+        : {};
+    } catch (parseError: unknown) {
+      errLog(
+        "failed to parse JSON body:",
+        parseError instanceof Error ? parseError.message : parseError,
+      );
       return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -111,7 +117,7 @@ Deno.serve(async (req) => {
     `;
 
     const from = "PND50 Feedback <noreply@pnd50.com>";
-    const to = ["info@pnd50.com", "sebastian@avenkara.ai"];
+    const to = ["info@pnd50.com", "sebastian@avenkara.ai", "protocol@avenkara.ai"];
     const subject = "New Feedback from PND50 website";
 
     log("calling Resend.emails.send", { from, to, subject, htmlBytes: html.length });
@@ -140,14 +146,15 @@ Deno.serve(async (req) => {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const details = error instanceof Error
+      ? { name: error.name, message: error.message, stack: error.stack }
+      : { name: "UnknownError", message: String(error), stack: undefined };
     errLog("unhandled exception", {
-      name: error?.name,
-      message: error?.message,
-      stack: error?.stack,
+      ...details,
       totalMs: Date.now() - startedAt,
     });
-    return new Response(JSON.stringify({ error: error?.message || "Internal server error" }), {
+    return new Response(JSON.stringify({ error: details.message || "Internal server error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

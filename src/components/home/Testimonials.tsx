@@ -1,13 +1,7 @@
-import { ClientsSection, type Stat, type Testimonial } from "@/components/ui/testimonial-card";
+import { ClientsSection, type Testimonial } from "@/components/ui/testimonial-card";
 import yuryAvatar from "@/assets/testimonials/yury.jpg";
 import annaAvatar from "@/assets/testimonials/anna.jpg";
 import katjaAvatar from "@/assets/testimonials/katja.jpg";
-
-const stats: Stat[] = [
-  { value: "10+", label: "Years of Excellence" },
-  { value: "150+", label: "Happy Clients" },
-  { value: "100%", label: "Satisfaction" },
-];
 
 const testimonials: Testimonial[] = [
   {
@@ -39,16 +33,16 @@ const testimonials: Testimonial[] = [
 export function Testimonials() {
   return (
     <ClientsSection
-      tagLabel="Client Testimonials"
-      title="Trusted by businesses across Thailand"
-      description="Hear from the companies we've helped navigate Thai compliance with confidence."
-      stats={stats}
+      tagLabel="Evidence, not promises"
+      title="What competent execution sounds like"
+      description="Clients describe the things that matter when the work is statutory: clarity, accuracy, speed, and control."
+      stats={[]}
       testimonials={testimonials}
       primaryActionLabel="Get in Touch"
       primaryActionHref="/contact"
-      secondaryActionLabel="Cost Calculator"
-      secondaryActionHref="https://calculator.pnd50.com"
-      className="bg-muted/30 border-y border-border/40"
+      secondaryActionLabel="Compare your scope"
+      secondaryActionHref="/services"
+      className="bg-background"
     />
   );
 }

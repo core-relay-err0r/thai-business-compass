@@ -1,56 +1,26 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { AnimatedSection } from "@/components/ui/animated-section";
-import { motion } from "framer-motion";
 
 export function BottomCTA() {
   return (
-    <section className="py-8 sm:py-16 md:py-24 relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/10" />
-      
-      {/* Grid pattern overlay */}
-      <div className="absolute inset-0 hero-grid-pattern opacity-40" />
-      
-      {/* Floating orbs */}
-      <motion.div
-        className="absolute top-10 left-[10%] w-24 sm:w-32 h-24 sm:h-32 rounded-full bg-primary/10 blur-3xl"
-        animate={{
-          y: [0, -20, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute bottom-10 right-[15%] w-32 sm:w-40 h-32 sm:h-40 rounded-full bg-primary/15 blur-3xl"
-        animate={{
-          y: [0, 20, 0],
-          scale: [1.1, 1, 1.1],
-        }}
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      
-      <AnimatedSection className="container relative z-10 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 text-foreground">
-            Not sure what services you need?
-          </h2>
-          <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
-            Use our cost estimate tool to understand monthly accounting, year-end audit, company changes, documents, and advisory costs before requesting a final quote.
-          </p>
-          <a href="https://calculator.pnd50.com">
-            <Button size="lg" className="group neumorphic-button min-h-[44px]">
-              Open Cost Calculator
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
+    <section className="bg-primary text-primary-foreground">
+      <AnimatedSection className="container px-4 sm:px-6">
+        <div className="grid border-x border-primary-foreground/25 lg:grid-cols-[1.45fr_0.55fr]">
+          <div className="border-b border-primary-foreground/25 p-6 sm:p-10 lg:border-b-0 lg:border-r lg:p-14">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">The next move</p>
+            <h2 className="mt-20 max-w-5xl text-balance font-serif text-5xl font-medium leading-[0.92] tracking-tight sm:text-7xl lg:text-8xl">
+              Put the situation on the table.
+            </h2>
+            <p className="mt-8 max-w-2xl text-sm leading-relaxed text-primary-foreground/75 sm:text-base">
+              You know what your business needs. We know how to turn that need into a focused plan—and what to leave out.
+            </p>
+          </div>
+          <a href="/submit" className="group flex min-h-72 flex-col justify-between p-6 transition-colors hover:bg-foreground hover:text-background sm:p-10 lg:min-h-[34rem] lg:p-12">
+            <ArrowUpRight className="ml-auto h-12 w-12 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2" aria-hidden="true" />
+            <div>
+              <p className="font-serif text-3xl font-medium sm:text-4xl">Let’s talk.</p>
+              <p className="mt-3 text-sm opacity-70">No package selection required.</p>
+            </div>
           </a>
         </div>
       </AnimatedSection>

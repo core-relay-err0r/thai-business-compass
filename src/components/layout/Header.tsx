@@ -1,126 +1,110 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Calculator, Building2, MessageSquare, Menu, X } from "lucide-react";
+import { ArrowUpRight, Calculator, Building2, MessageSquare, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
-const CALCULATOR_URL = "https://calculator.pnd50.com";
+
+const CALCULATOR_URL = "/services#accounting";
+
 export function Header() {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isStartModalOpen, setIsStartModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const startOptions = [{
-    href: "/services#corporate",
-    icon: Building2,
-    title: "Corporate",
-    description: "One-time corporate services"
-  }, {
-    href: "/services#accounting",
-    icon: Calculator,
-    title: "Accounting",
-    description: "Calculate monthly + yearly cost"
-  }, {
-    href: "/services#consulting",
-    icon: MessageSquare,
-    title: "Consulting",
-    description: "Business problem solving"
-  }];
-  return <>
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 sm:h-16 items-center justify-between">
-          <div className="flex items-center gap-4 sm:gap-6 md:gap-8">
-            <Link to="/" className="flex items-center gap-1.5 sm:gap-2">
-              <img src={logo} alt="PND50 Logo" className="h-6 w-6 sm:h-8 sm:w-8" />
-              <span className="text-lg sm:text-xl font-bold tracking-tight">PND50</span>
+
+  const startOptions = [
+    { href: "/services#accounting", icon: Calculator, title: "Accounting & Tax", description: "Recurring monthly and annual compliance" },
+    { href: "/services#corporate", icon: Building2, title: "Corporate", description: "One-time company services" },
+    { href: "/services#consulting", icon: MessageSquare, title: "Business consulting", description: "Business problem solving" },
+  ];
+
+  const navLink = (path: string) => cn(
+    "flex min-h-[44px] items-center border-b-2 border-transparent text-sm font-medium transition-colors hover:border-primary hover:text-primary",
+    (location.pathname === path || (path === "/blog" && location.pathname.startsWith("/blog/"))) && "border-primary text-primary"
+  );
+
+  const closeMobile = () => setIsMobileMenuOpen(false);
+
+  return (
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
+        <div className="container flex h-14 items-center justify-between px-4 sm:h-16 sm:px-6">
+          <Link to="/" className="flex items-center gap-2" aria-label="PND50 Accounting Thailand home">
+            <img src={logo} alt="" className="size-8 sm:size-9" />
+            <span className="text-xl font-semibold tracking-tight">PND50</span>
+            <span className="hidden border-l border-border pl-3 text-[10px] uppercase tracking-[0.14em] text-muted-foreground lg:inline">Accounting Thailand</span>
+          </Link>
+
+          <nav className="hidden h-full items-center gap-7 xl:flex" aria-label="Primary navigation">
+            <Link to="/services" className={navLink("/services")}>Services</Link>
+            <a href="/services#accounting" className={navLink("__accounting")}>Accounting &amp; Tax</a>
+            <a href="/services#corporate" className={navLink("__corporate")}>Corporate Compliance</a>
+            <Link to="/about" className={navLink("/about")}>About</Link>
+            <Link to="/contact" className={navLink("/contact")}>Contact</Link>
+          </nav>
+
+          <div className="hidden items-center gap-3 xl:flex">
+            <Link to={CALCULATOR_URL} className="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium hover:underline">
+              Calculator <ArrowUpRight aria-hidden="true" />
             </Link>
-
-            <nav className="hidden md:flex items-center gap-6">
-
-              <Link to="/about" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/about" ? "text-foreground" : "text-muted-foreground"}`}>About Us
-            </Link>
-
-              <Link to="/contact" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/contact" ? "text-foreground" : "text-muted-foreground"}`}>
-                Contact
-              </Link>
-
-              <Link to="/blog" className={`text-sm font-medium transition-colors hover:text-foreground ${location.pathname === "/blog" || location.pathname.startsWith("/blog/") ? "text-foreground" : "text-muted-foreground"}`}>
-                Blog
-              </Link>
-
-              <a
-                href={CALCULATOR_URL}
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <Calculator className="h-4 w-4" />
-                Cost Calculator
-              </a>
-            </nav>
+            <Button onClick={() => setIsStartModalOpen(true)} className="rounded-none">Start here</Button>
           </div>
 
-          <button className="md:hidden p-2.5 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}>
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <button
+            className="flex size-11 items-center justify-center xl:hidden"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {isMobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
           </button>
         </div>
 
-        {/* Mobile menu */}
-        <div className={`md:hidden border-t border-border/40 bg-background overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-          <nav className="container py-4 flex flex-col gap-1">
-            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.pathname === "/about" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
-              About
-            </Link>
-            <Link to="/blog" onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.pathname === "/blog" || location.pathname.startsWith("/blog/") ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
-              Blog
-            </Link>
-            <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className={`text-sm font-medium transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center ${location.pathname === "/contact" ? "text-foreground bg-accent" : "text-muted-foreground"}`}>
-              Contact
-            </Link>
-            <a
-              href={CALCULATOR_URL}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground py-3 px-2 rounded-lg hover:bg-accent min-h-[44px] flex items-center"
-            >
-              <Calculator className="h-4 w-4 mr-3" />
-              Cost Calculator
-            </a>
-            <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/40">
-              <Link to="/submit" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button variant="outline" size="default" className="w-full min-h-[44px]">
-                  Submit Request
-                </Button>
+        <div id="mobile-navigation" className={cn("overflow-hidden border-border bg-background transition-all duration-300 xl:hidden", isMobileMenuOpen ? "max-h-[620px] border-t opacity-100" : "max-h-0 opacity-0")}>
+          <nav className="container flex flex-col px-4 py-4 sm:px-6" aria-label="Mobile navigation">
+            {[
+              ["/services", "Services"],
+              ["/services#accounting", "Accounting & Tax"],
+              ["/services#corporate", "Corporate Compliance"],
+              ["/about", "About"],
+              ["/contact", "Contact"],
+            ].map(([path, label], index) => (
+              <Link key={path} to={path} onClick={closeMobile} className="flex min-h-[52px] items-center justify-between border-b border-border text-base font-medium">
+                <span>{label}</span><span className="text-xs text-muted-foreground">0{index + 1}</span>
               </Link>
-              <Button size="default" onClick={() => {
-              setIsMobileMenuOpen(false);
-              setIsStartModalOpen(true);
-            }} className="w-full min-h-[44px]">
-                Start
-              </Button>
+            ))}
+            <Link to={CALCULATOR_URL} onClick={closeMobile} className="mt-4 flex min-h-[48px] items-center justify-between border border-foreground px-4 text-sm font-medium">
+              Cost calculator <ArrowUpRight aria-hidden="true" />
+            </Link>
+            <div className="grid grid-cols-2 gap-3 pt-3">
+              <Link to="/submit" onClick={closeMobile}><Button variant="outline" className="w-full rounded-none">Submit request</Button></Link>
+              <Button className="w-full rounded-none" onClick={() => { closeMobile(); setIsStartModalOpen(true); }}>Start here</Button>
             </div>
           </nav>
         </div>
       </header>
 
-      {/* Start Modal */}
       <Dialog open={isStartModalOpen} onOpenChange={setIsStartModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="rounded-none sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-center">What do you need?</DialogTitle>
+            <DialogTitle className="font-serif text-2xl font-medium">What does your business need?</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-3 py-4">
-            {startOptions.map(option => <Link key={option.href} to={option.href} onClick={() => setIsStartModalOpen(false)} className="flex items-center gap-4 p-4 rounded-lg border border-border hover:border-foreground/20 hover:bg-accent/50 transition-colors">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <option.icon className="h-5 w-5 text-primary" />
-                </div>
-                <div>
+          <div className="flex flex-col py-4">
+            {startOptions.map((option, index) => (
+              <Link key={option.href} to={option.href} onClick={() => setIsStartModalOpen(false)} className="group flex items-center gap-4 border-t border-border py-5 last:border-b">
+                <span className="text-xs text-muted-foreground">0{index + 1}</span>
+                <div className="flex-1">
                   <div className="font-medium">{option.title}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {option.description}
-                  </div>
+                  <div className="text-sm text-muted-foreground">{option.description}</div>
                 </div>
-              </Link>)}
+                <ArrowUpRight aria-hidden="true" className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </Link>
+            ))}
           </div>
         </DialogContent>
       </Dialog>
-    </>;
+    </>
+  );
 }

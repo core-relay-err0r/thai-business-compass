@@ -1,49 +1,26 @@
 import { HeroSection as HeroSectionUI } from "@/components/ui/hero-section-2";
-import heroCorporate from "@/assets/hero-corporate.jpg";
-import heroAccounting from "@/assets/hero-accounting.jpg";
-import heroConsulting from "@/assets/hero-consulting.jpg";
+import heroProvocativeCompliance from "@/assets/hero-provocative-compliance.webp";
 
 export function HeroSection() {
-  const slides = [{
-    image: heroCorporate,
-    title: "Corporate",
-    description: "Company setup, registration, and structural changes for your Thai business."
-  }, {
-    image: heroAccounting,
-    title: "Accounting",
-    description: "Monthly bookkeeping, tax filings, and financial compliance handled for you."
-  }, {
-    image: heroConsulting,
-    title: "Consulting",
-    description: "Strategic advisory for business challenges, restructuring, and market entry."
-  }];
-
   return (
-    <>
-      {/* SEO: Primary heading for search engines */}
-      <h1 className="sr-only">PND50 - Thai Accounting Firm in Bangkok, Thailand | Accountant for Foreigners</h1>
-      <HeroSectionUI 
-        title={<>
-          Figure out what your business actually needs in Thailand —{" "}
-          <span className="text-accent">before you talk to anyone.</span>
-        </>} 
-        subtitle="An interactive way for foreign founders to understand their company setup, accounting, corporate actions, and advisory scope — with clear structure and transparent cost." 
-        callToAction={{
-          text: "Estimate Cost",
-          href: "https://calculator.pnd50.com"
-        }} 
-        secondaryAction={{
-          text: "Contact us",
-          href: "/contact"
-        }} 
-        tagline="Understand first. Decide later. No pressure." 
-        slides={slides} 
-        contactInfo={{
-          website: "info@pnd50.com",
-          phone: "+66 84 356 3805",
-          address: "Bangkok, Thailand"
-        }} 
-      />
-    </>
+    <HeroSectionUI
+      eyebrow="PND50 Co., Ltd. · Bangkok"
+      title="Accounting and corporate compliance for foreign-owned businesses in Thailand."
+      subtitle="From company setup and monthly bookkeeping to payroll, tax filings and year-end close, PND50 helps international businesses stay organised and compliant in Thailand."
+      callToAction={{
+        text: "View our services",
+        href: "/services#corporate",
+      }}
+      secondaryAction={{
+        text: "Tell us what you need",
+        href: "/submit",
+      }}
+      image={{
+        src: heroProvocativeCompliance,
+        alt: "A business owner facing a monumental blue compliance blade above Bangkok",
+      }}
+      clarification="PND50 Co., Ltd. is a Bangkok accounting and corporate compliance company. Our name is inspired by Thailand’s P.N.D.50 annual corporate income tax return, while our work covers the wider business compliance cycle."
+      contactInfo={{ address: "Bangkok, Thailand" }}
+    />
   );
 }

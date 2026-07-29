@@ -15,7 +15,14 @@ export const config = {
   runtime: "nodejs",
 };
 
-export default async function handler(req: any, res: any) {
+type ApiRequest = { method?: string };
+type ApiResponse = {
+  setHeader(name: string, value: string): void;
+  status(code: number): ApiResponse;
+  json(body: unknown): ApiResponse;
+};
+
+export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Method not allowed. Use POST." });
@@ -39,11 +46,11 @@ export default async function handler(req: any, res: any) {
       message: "Verified human — BotID is active and you passed the check.",
       verification,
     });
-  } catch (err: any) {
-    console.error("[botid-test] error:", err);
+  } catch (error: unknown) {
+    console.error("[botid-test] error:", error);
     return res.status(500).json({
       ok: false,
-      error: err?.message ?? "Internal error",
+      error: error instanceof Error ? error.message : "Internal error",
       hint:
         "If this fails on Vercel, BotID may not be enabled in the project's BotID tab.",
     });

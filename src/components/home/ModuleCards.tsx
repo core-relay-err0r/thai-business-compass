@@ -1,81 +1,82 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calculator, Building2, MessageSquare, ArrowRight } from "lucide-react";
+import { ArrowUpRight, Check } from "lucide-react";
+import { Link } from "react-router-dom";
 import { AnimatedSection } from "@/components/ui/animated-section";
 
-const CALCULATOR_URL = "https://calculator.pnd50.com";
-
-const modules = [
+const servicePillars = [
   {
-    href: CALCULATOR_URL,
-    cta: "Estimate setup cost",
-    icon: Building2,
-    title: "Corporate Services",
-    description: "Choose the event (incorporation, director change, share transfer). Get scope + one-time price.",
-    features: ["Company registration Thailand", "Director changes", "Share transfers", "Business setup Thailand"],
+    index: "01",
+    title: "Accounting & Tax",
+    description: "Ongoing financial records and reporting organised around your Thailand operations.",
+    items: [
+      "Monthly bookkeeping",
+      "Tax filing and compliance",
+      "Payroll support",
+      "Financial statements",
+      "Year-end accounting and tax close",
+    ],
   },
   {
-    href: CALCULATOR_URL,
-    cta: "Check monthly cost",
-    icon: Calculator,
-    title: "Accounting",
-    description: "Calculate monthly + yearly cost while learning what's required.",
-    features: ["Monthly bookkeeping", "Corporate tax filing", "VAT reporting", "Payroll services Thailand"],
-  },
-  {
-    href: CALCULATOR_URL,
-    cta: "Check advisory options",
-    icon: MessageSquare,
-    title: "Consulting",
-    description: "Choose the business problem. Get expected outcomes + price range.",
-    features: ["Business advisory", "Market entry", "Due diligence", "Tax planning Thailand"],
+    index: "02",
+    title: "Corporate Setup & Compliance",
+    description: "Practical coordination for establishing and maintaining a compliant company structure.",
+    items: [
+      "Company registration support",
+      "Accounting and tax setup",
+      "Corporate changes and statutory filings",
+      "Ongoing compliance coordination",
+      "Support for foreign-owned businesses",
+    ],
   },
 ];
 
 export function ModuleCards() {
   return (
-    <section className="py-8 sm:py-12 md:py-20 bg-muted/30">
+    <section id="services" className="scroll-mt-20 border-b border-border bg-background py-16 sm:py-20 lg:py-28" aria-labelledby="services-heading">
       <AnimatedSection className="container px-4 sm:px-6">
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">What do you need?</h2>
-          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
-            Choose your starting point. Each module guides you through the scope and shows you the cost.
-          </p>
+        <div className="grid gap-8 pb-12 lg:grid-cols-[0.55fr_1.45fr] lg:items-end">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">What we do</p>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">Two connected areas of work, scoped around the obligations your business actually has.</p>
+          </div>
+          <h2 id="services-heading" className="text-balance font-serif text-4xl font-medium leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">
+            Accounting clarity. <span className="text-muted-foreground">Corporate continuity.</span>
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
-          {modules.map((module) => (
-            <Card key={module.href} className="relative group hover:shadow-lg transition-shadow flex flex-col h-full">
-              <CardHeader className="p-4 sm:p-6">
-                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-primary/10 mb-3 sm:mb-4">
-                  <module.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                </div>
-                <CardTitle className="text-lg sm:text-xl">{module.title}</CardTitle>
-                <CardDescription className="text-xs sm:text-sm">
-                  {module.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0 flex flex-col flex-1">
-                <ul className="text-xs sm:text-sm text-muted-foreground space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
-                  {module.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary/60" />
-                      {feature}
+        <div className="grid border border-border lg:grid-cols-2">
+          {servicePillars.map((service, index) => (
+            <article key={service.title} className={`flex flex-col p-6 sm:p-8 lg:p-10 ${index === 0 ? "border-b border-border lg:border-b-0 lg:border-r" : ""}`}>
+              <div className="flex items-start justify-between gap-6">
+                <span className="font-serif text-6xl leading-none text-primary sm:text-7xl">{service.index}</span>
+                <span className="max-w-32 text-right text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Service pillar</span>
+              </div>
+              <div className="mt-12 sm:mt-16">
+                <h3 className="text-balance font-serif text-3xl font-medium leading-tight tracking-tight sm:text-5xl">{service.title}</h3>
+                <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{service.description}</p>
+                <ul className="mt-8 border-t border-border">
+                  {service.items.map((item) => (
+                    <li key={item} className="flex min-h-12 items-center gap-3 border-b border-border py-3 text-sm">
+                      <Check aria-hidden="true" className="shrink-0 text-primary" />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <div className="mt-auto">
-                  <a href={module.href}>
-                    <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors min-h-[44px]">
-                      {module.cta}
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </a>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+            </article>
           ))}
         </div>
+
+        <div className="flex flex-col gap-5 border-x border-b border-border p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8 lg:p-10">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">Next step</p>
+            <p className="mt-2 max-w-2xl font-serif text-2xl font-medium">See the full scope and choose the support your company needs.</p>
+          </div>
+          <Link to="/services#corporate" className="inline-flex min-h-12 shrink-0 items-center justify-between gap-6 border border-foreground bg-foreground px-5 text-sm font-semibold text-background transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground">
+            View our services
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
+        </div>
+
       </AnimatedSection>
     </section>
   );

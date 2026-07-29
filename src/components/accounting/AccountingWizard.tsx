@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, ArrowRight, HelpCircle, CheckCircle2, Clock, CircleDashed, Calculator, FileText } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { AccountingInputs, calculateAccountingCost, formatUSD, USD_TO_THB, formatPrice, AUDIT_REVENUE_BANDS, AuditRevenueBand } from "@/lib/pricing";
+import { AccountingInputs, calculateAccountingCost, calculateAnnualPreparationFee, formatUSD, formatPrice, AUDIT_REVENUE_BANDS, AuditRevenueBand } from "@/lib/pricing";
 
 const STEPS = [
   { id: 0, title: "Intent" },
@@ -86,7 +86,9 @@ export function AccountingWizard() {
 
   const handleNext = () => {
     setAccountingInputs(localInputs);
-    if (currentStep < 5) {
+    if (currentStep === 0 && localInputs.accountingIntent === "year-end-only") {
+      setCurrentStep(4);
+    } else if (currentStep < 5) {
       setCurrentStep((prev) => prev + 1);
     }
   };
@@ -98,7 +100,11 @@ export function AccountingWizard() {
         setLiveResult(null);
         setLiveAccountingResult(null);
       }
-      setCurrentStep((prev) => prev - 1);
+      if (currentStep === 4 && localInputs.accountingIntent === "year-end-only") {
+        setCurrentStep(0);
+      } else {
+        setCurrentStep((prev) => prev - 1);
+      }
     }
   };
 
@@ -109,8 +115,8 @@ export function AccountingWizard() {
     setLiveResult(result);
     setLiveAccountingResult(result);
     toast({
-      title: "✅ Estimate saved!",
-      description: "Your accounting estimate has been added to the calculator on the left.",
+      title: "Estimate saved",
+      description: "Your accounting estimate is now included in the service summary.",
       duration: 4000,
     });
   };
@@ -236,12 +242,18 @@ function Step0Intent({ inputs, setInputs }: StepProps) {
             <span className="font-semibold text-base sm:text-lg">Full accounting support</span>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Monthly accounting, payroll, taxes, and year-end filings.
+            Monthly bookkeeping plus the payroll, tax returns, and year-end work indicated by your answers.
           </p>
         </button>
 
         <button
-          onClick={() => setInputs({ ...inputs, accountingIntent: "year-end-only" })}
+          onClick={() => setInputs({
+            ...inputs,
+            accountingIntent: "year-end-only",
+            yearEndStatements: "yes",
+            catchupBacklog: "yes",
+            auditRequired: "yes",
+          })}
           className={`p-4 sm:p-6 rounded-lg border-2 text-left transition-all min-h-[100px] ${
             inputs.accountingIntent === "year-end-only"
               ? "border-primary bg-primary/5"
@@ -250,10 +262,10 @@ function Step0Intent({ inputs, setInputs }: StepProps) {
         >
           <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
             <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-            <span className="font-semibold text-base sm:text-lg">Year-end only</span>
+            <span className="font-semibold text-base sm:text-lg">Annual closing without monthly bookkeeping</span>
           </div>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Annual financial statements and audit support if required.
+            One complete package: reconstruct the year&apos;s accounting and financial statements, then audit the prepared accounts.
           </p>
         </button>
       </div>
@@ -277,18 +289,18 @@ function Step1CompanyBasics({ inputs, setInputs }: StepProps) {
       </div>
 
       <div>
-        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Monthly Revenue Range (USD)</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Monthly Revenue Range (THB)</h3>
         <RadioGroup
           value={inputs.revenueRange}
           onValueChange={(value) => setInputs({ ...inputs, revenueRange: value as AccountingInputs["revenueRange"] })}
           className="grid gap-2 sm:gap-3"
         >
           {[
-            { value: "0-5k", label: "Up to $5,000" },
-            { value: "5k-50k", label: "$5,000 – $50,000" },
-            { value: "50k-100k", label: "$50,000 – $100,000" },
-            { value: "100k-1m", label: "$100,000 – $1,000,000" },
-            { value: "1m+", label: "Over $1,000,000" },
+            { value: "0-5k", label: "Up to ฿165,000" },
+            { value: "5k-50k", label: "฿165,000 – ฿1.65M" },
+            { value: "50k-100k", label: "฿1.65M – ฿3.3M" },
+            { value: "100k-1m", label: "฿3.3M – ฿33M" },
+            { value: "1m+", label: "Over ฿33M" },
           ].map((option) => (
             <Label
               key={option.value}
@@ -406,7 +418,7 @@ function Step2Team({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              Payroll includes salary records and social security filings.
+              Payroll covers salary calculations and support for applicable payroll withholding and social security filings, based on the employee data supplied.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -446,7 +458,7 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              More transactions means more reconciliation work. Low: &lt;50, Medium: 50-200, High: 200+
+              More transactions generally require more recording and reconciliation work. Up to 50 uses the base band; higher or more complex volumes may require an adjusted or custom quote.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -483,7 +495,7 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-              Required when your company makes payments subject to withholding tax.
+              These filings may apply when the company makes payments subject to Thai withholding tax; the form and rate depend on the payment and recipient.
             </TooltipContent>
           </Tooltip>
         </div>
@@ -542,11 +554,28 @@ function Step3Operations({ inputs, setInputs }: StepProps) {
 }
 
 function Step4YearEnd({ inputs, setInputs }: StepProps) {
+  const isAnnualClosing = inputs.accountingIntent === "year-end-only";
+
   return (
     <div className="space-y-8">
+      {isAnnualClosing && (
+        <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 sm:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Complete annual closing</p>
+          <h3 className="mt-2 text-lg font-semibold">Two required parts, shown separately</h3>
+          <ol className="mt-4 flex flex-col gap-3 text-sm">
+            <li><strong>1. Accounting reconstruction &amp; financial statements</strong><br /><span className="text-muted-foreground">From 30% of the audit fee. We collect invoices and records, enter the year&apos;s transactions, reconcile accounts, rebuild missing monthly books, and prepare the annual statements.</span></li>
+            <li><strong>2. Independent annual audit</strong><br /><span className="text-muted-foreground">The prepared financial statements are audited. The fee follows the annual-revenue band below.</span></li>
+          </ol>
+          <p className="mt-4 border-t border-primary/20 pt-4 text-sm font-semibold">Annual closing = accounting preparation + independent audit</p>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">30% is the baseline. High transaction volume or complexity, inventory and warehouse accounting, incomplete records, foreign-currency activity, multiple accounts, or extensive reconciliation may require a higher quote after record review.</p>
+        </div>
+      )}
+
+      {!isAnnualClosing && (
+        <>
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-lg font-semibold">Annual Financial Statements Required?</h3>
+          <h3 className="text-lg font-semibold">Include Annual Financial Statements?</h3>
           <Tooltip>
             <TooltipTrigger>
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
@@ -614,7 +643,7 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
 
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-lg font-semibold">Annual Audit Required?</h3>
+          <h3 className="text-lg font-semibold">Include an Annual Audit Estimate?</h3>
           <Tooltip>
             <TooltipTrigger>
               <HelpCircle className="h-4 w-4 text-muted-foreground" />
@@ -645,9 +674,11 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
           ))}
         </div>
       </div>
+        </>
+      )}
 
-      {/* Revenue band — shown when audit is yes or not-sure */}
-      {(inputs.auditRequired === "yes" || inputs.auditRequired === "not-sure") && (
+      {/* Revenue band — always required for annual closing, optional in monthly service */}
+      {(isAnnualClosing || inputs.auditRequired === "yes" || inputs.auditRequired === "not-sure") && (
         <div>
           <div className="flex items-center gap-2 mb-4">
             <h3 className="text-lg font-semibold">Annual Revenue Band (THB)</h3>
@@ -675,8 +706,12 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
                   <RadioGroupItem value={band.id} id={`band-${band.id}`} />
                   <span className="text-sm">{band.label}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {band.auditFee ? formatUSD(band.auditFee) : "Custom quote"}
+                <span className="max-w-[58%] text-right text-xs text-muted-foreground">
+                  {band.auditFee
+                    ? isAnnualClosing
+                      ? `Audit ${formatUSD(band.auditFee)} · closing from ${formatUSD(band.auditFee + calculateAnnualPreparationFee(band.auditFee))}`
+                      : formatUSD(band.auditFee)
+                    : "Custom quote"}
                 </span>
               </Label>
             ))}
@@ -689,7 +724,7 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
                 <span className="text-sm">Not sure</span>
               </div>
               <span className="text-sm text-muted-foreground">
-                From {formatUSD(1000)}
+                {isAnnualClosing ? `Closing from ${formatUSD(2600)}` : `Audit from ${formatUSD(2000)}`}
               </span>
             </Label>
           </RadioGroup>
@@ -702,11 +737,11 @@ function Step4YearEnd({ inputs, setInputs }: StepProps) {
 function Step5Summary({ inputs }: StepProps) {
   const intentLabel = inputs.accountingIntent === "full" ? "Full accounting support" : "Year-end only";
   const revenueLabels: Record<string, string> = {
-    "0-5k": "Up to $5,000",
-    "5k-50k": "$5,000 – $50,000",
-    "50k-100k": "$50,000 – $100,000",
-    "100k-1m": "$100,000 – $1,000,000",
-    "1m+": "Over $1,000,000",
+    "0-5k": "Up to ฿165,000",
+    "5k-50k": "฿165,000 – ฿1.65M",
+    "50k-100k": "฿1.65M – ฿3.3M",
+    "100k-1m": "฿3.3M – ฿33M",
+    "1m+": "Over ฿33M",
   };
   const vatLabels: Record<string, string> = { yes: "Yes", no: "No", "not-sure": "Not sure" };
   const purposeLabels: Record<string, string> = { operations: "Operations", visa: "Visa / formal only", "not-sure": "Not sure" };
@@ -773,7 +808,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
         <div className="space-y-3 sm:space-y-4">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <h4 className="font-semibold text-sm sm:text-base">What is required</h4>
+            <h4 className="font-semibold text-sm sm:text-base">Included based on your answers</h4>
           </div>
           <ul className="space-y-2">
             {result.requiredItems.map((item) => (
@@ -839,25 +874,32 @@ function Step5Results({ result, onAdjust }: Step5Props) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-border">
         <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
-          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Monthly Cost</div>
+          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Monthly estimate</div>
           {result.isCustomQuote ? (
             <div className="text-xl sm:text-2xl font-bold text-primary">
               Custom quote required
             </div>
           ) : (
             <>
-              <div className="text-2xl sm:text-3xl font-bold">
-                {formatUSD(result.totalMonthly)}
-                {result.potentialMonthly.length > 0 && (
-                  <span className="text-lg sm:text-xl font-normal text-muted-foreground">
-                    –{formatPrice(result.totalMonthlyMax)}
-                  </span>
-                )}
-                <span className="text-base sm:text-lg font-normal text-muted-foreground">/mo</span>
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                ≈ ฿{formatPrice(result.totalMonthly * USD_TO_THB)}
-              </div>
+              {result.monthlyBase === 0 ? (
+                <>
+                  <div className="text-xl sm:text-2xl font-bold">No monthly fee</div>
+                  <div className="text-xs text-muted-foreground mt-1">Year-end work is billed annually.</div>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl sm:text-3xl font-bold">
+                    {formatUSD(result.totalMonthly)}
+                    {result.potentialMonthly.length > 0 && (
+                      <span className="text-lg sm:text-xl font-normal text-muted-foreground">
+                        –{formatPrice(result.totalMonthlyMax)}
+                      </span>
+                    )}
+                    <span className="text-base sm:text-lg font-normal text-muted-foreground">/month</span>
+                  </div>
+
+                </>
+              )}
               {result.annualAddons.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-border/60">
                   <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
@@ -870,7 +912,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
                     {result.annualAddons.map((a, idx) => (
                       <li key={idx} className="flex justify-between text-xs sm:text-sm">
                         <span className="text-muted-foreground">{a.name}</span>
-                        <span className="font-medium">{a.isFrom ? "From " : ""}{formatUSD(a.amount)}/yr</span>
+                        <span className="font-medium">{a.isFrom ? "From " : ""}{formatUSD(a.amount)}/year</span>
                       </li>
                     ))}
                   </ul>
@@ -880,7 +922,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
           )}
         </div>
         <div className="p-4 sm:p-6 bg-primary/5 rounded-lg">
-          <div className="text-xs sm:text-sm text-muted-foreground mb-1">Estimated Annual Cost</div>
+          <div className="text-xs sm:text-sm text-muted-foreground mb-1">First-year estimate</div>
           {result.isCustomQuote ? (
             <div className="text-xl sm:text-2xl font-bold text-primary">
               Custom quote required
@@ -895,9 +937,7 @@ function Step5Results({ result, onAdjust }: Step5Props) {
                   </span>
                 )}
               </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                ≈ ฿{formatPrice(result.totalAnnual * USD_TO_THB)}
-              </div>
+
             </>
           )}
           {result.annualAddons.some(a => a.name === "Annual audit") && (
@@ -908,8 +948,8 @@ function Step5Results({ result, onAdjust }: Step5Props) {
         </div>
       </div>
 
-      <p className="text-xs sm:text-sm text-muted-foreground text-center text-red-600 border-0 bg-red-50">
-        **This is an estimate based on standard Thai requirements.**
+      <p className="rounded-lg border border-border bg-muted/30 p-3 text-center text-xs text-muted-foreground sm:text-sm">
+        This planning estimate is not a legal or tax determination. Applicable filings, deadlines, audit scope, and final pricing are confirmed after reviewing the entity, registrations, transactions, records, and filing period.
       </p>
 
       <div className="flex justify-center">

@@ -57,10 +57,10 @@ export function CompanyReviewPopup({ open, onOpenChange, onConfirm }: CompanyRev
         <div className="space-y-6">
           <div>
             <p className="text-sm text-muted-foreground">
-              Reviewing current company status and registrations.
+              We check the available corporate records and selected registrations, then provide a findings list for follow-up.
             </p>
             <p className="text-xs text-muted-foreground/70 mt-1">
-              This service provides clarity, not corrections.
+              Corrections, filings, authority fees, and legal opinions are not included in the base review.
             </p>
           </div>
 

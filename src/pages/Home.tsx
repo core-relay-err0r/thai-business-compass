@@ -1,10 +1,13 @@
 import { Layout } from "@/components/layout/Layout";
 import { HeroSection } from "@/components/home/HeroSection";
+import { ClientFitSection } from "@/components/home/ClientFitSection";
 import { ModuleCards } from "@/components/home/ModuleCards";
 import { TrustSection } from "@/components/home/TrustSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
 import { BottomCTA } from "@/components/home/BottomCTA";
+import { PricingLogic } from "@/components/home/PricingLogic";
+import { FitGuide } from "@/components/home/FitGuide";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { LocalBusinessSchema, OrganizationSchema } from "@/components/seo/StructuredData";
 
@@ -19,12 +22,17 @@ export default function Home() {
       />
       <LocalBusinessSchema />
       <OrganizationSchema />
-      <HeroSection />
-      <ModuleCards />
-      <TrustSection />
-      <Testimonials />
-      <HowItWorks />
-      <BottomCTA />
+      <main className="home-editorial">
+        <HeroSection />
+        <ClientFitSection />
+        <ModuleCards />
+        <FitGuide />
+        <TrustSection />
+        <HowItWorks />
+        <Testimonials />
+        <PricingLogic />
+        <BottomCTA />
+      </main>
     </Layout>
   );
 }

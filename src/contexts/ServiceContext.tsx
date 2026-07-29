@@ -44,7 +44,7 @@ interface ServiceState {
     name: string;
     email: string;
     phone: string;
-    preferredContact: "email" | "phone" | "whatsapp";
+    preferredContact: "email" | "phone";
   };
   
   companyInfo: {
@@ -226,15 +226,21 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
       // Accounting
       if (hasAccountingData) {
-        lines.push("\n📊 Accounting Services");
-        lines.push(`   Monthly: $${state.accountingResult!.totalMonthly.toLocaleString()}`);
-        lines.push(`   Annual: $${state.accountingResult!.totalAnnual.toLocaleString()}`);
+        lines.push("\nACCOUNTING");
+        if (state.accountingResult!.isCustomQuote) {
+          lines.push("   Price: Custom quote required");
+        } else {
+          if (state.accountingResult!.monthlyBase > 0) {
+            lines.push(`   Monthly recurring: $${state.accountingResult!.totalMonthly.toLocaleString()}`);
+          }
+          lines.push(`   Estimated first year: $${state.accountingResult!.totalAnnual.toLocaleString()}`);
+        }
         lines.push(`   Required: ${state.accountingResult!.requiredItems.join(", ")}`);
       }
 
       // Corporate
       if (hasCorporateData) {
-        lines.push("\n🏢 Corporate Services");
+        lines.push("\nCORPORATE SERVICES");
         state.selectedCorporateServices.forEach((s) => {
           lines.push(`   • ${s.name}: $${s.price.toLocaleString()}`);
         });
@@ -244,7 +250,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
       // Consulting
       if (hasConsultingData) {
-        lines.push("\n💼 Consulting Services");
+        lines.push("\nBUSINESS CONSULTING");
         state.selectedConsultingServices.forEach((s) => {
           const prefix = s.isFrom ? "From " : "";
           lines.push(`   • ${s.name}: ${prefix}$${s.price.toLocaleString()}`);
@@ -254,9 +260,9 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         lines.push(`   Total: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
       }
 
-      // Payment Summary
+      // Cost summary
       lines.push("\n" + "─".repeat(40));
-      lines.push("PAYMENT SUMMARY");
+      lines.push("COST SUMMARY");
       lines.push("─".repeat(40));
 
       const corporateTotal = state.selectedCorporateServices.reduce((sum, s) => sum + s.price, 0);
@@ -272,7 +278,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
           lines.push(`   Corporate Services: $${corporateTotal.toLocaleString()}`);
         }
         if (hasConsultingData) {
-          lines.push(`   Consulting: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
+          lines.push(`   Business consulting: ${hasFromItems ? "From " : ""}$${consultingTotal.toLocaleString()}`);
         }
         if (hasCorporateData && hasConsultingData) {
           const initialTotal = corporateTotal + consultingTotal;
@@ -281,7 +287,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       }
 
       // Monthly Recurring
-      if (hasAccountingData) {
+      if (hasAccountingData && state.accountingResult!.monthlyBase > 0 && !state.accountingResult!.isCustomQuote) {
         lines.push("\nMONTHLY RECURRING");
         lines.push(`   Accounting Services: $${monthlyFee.toLocaleString()}/month`);
         lines.push(`   First Year (12 months): $${(monthlyFee * 12).toLocaleString()}`);
@@ -291,20 +297,29 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
       if (hasAccountingData && state.accountingResult!.annualAddons.length > 0) {
         lines.push("\nANNUAL FEES (due at year-end)");
         state.accountingResult!.annualAddons.forEach((addon) => {
-          lines.push(`   ${addon.name}: $${addon.amount.toLocaleString()}`);
+          lines.push(`   ${addon.name}: ${addon.amount === 0 ? "Custom quote" : `$${addon.amount.toLocaleString()}`}`);
         });
-        lines.push(`   Annual Total: $${annualFees.toLocaleString()}`);
+        const hasQuotedAnnualFee = state.accountingResult!.annualAddons.some((addon) => addon.amount === 0);
+        lines.push(
+          state.accountingResult!.annualAddons.every((addon) => addon.amount === 0)
+            ? "   Known annual fees subtotal: Quote required"
+            : `   ${hasQuotedAnnualFee ? "Known annual fees subtotal" : "Annual fees subtotal"}: $${annualFees.toLocaleString()}`
+        );
       }
 
       // Grand Total
       const firstYearTotal = corporateTotal + consultingTotal + (monthlyFee * 12) + annualFees;
 
       lines.push("\n" + "═".repeat(40));
-      lines.push(`ESTIMATED FIRST-YEAR TOTAL: ${hasFromItems ? "From " : ""}$${firstYearTotal.toLocaleString()}`);
+      lines.push(
+        state.accountingResult?.isCustomQuote
+          ? "FIRST-YEAR ESTIMATE: Custom quote required"
+          : `FIRST-YEAR ESTIMATE: ${hasFromItems || state.accountingResult?.annualAddons.some((a) => a.isFrom) ? "From " : ""}$${firstYearTotal.toLocaleString()}`
+      );
       lines.push("═".repeat(40));
       lines.push("\nNote: Final pricing confirmed after initial consultation.");
       if (hasConsultingData) {
-        lines.push("Consulting fees scoped based on specific requirements.");
+        lines.push("Business consulting fees are scoped to the specific requirements.");
       }
     }
 

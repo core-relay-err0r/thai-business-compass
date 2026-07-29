@@ -1,183 +1,76 @@
 "use client";
 
-import * as React from "react";
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
-
+import { ArrowUpRight, Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
-// --- Type Definitions for props ---
-export interface Stat {
-  value: string;
-  label: string;
-}
-
-export interface Testimonial {
-  name: string;
-  title: string;
-  quote?: string;
-  avatarSrc: string;
-  rating: number;
-}
-
+export interface Stat { value: string; label: string; }
+export interface Testimonial { name: string; title: string; quote?: string; avatarSrc: string; rating: number; }
 export interface ClientsSectionProps {
-  tagLabel: string;
-  title: string;
-  description: string;
-  stats: Stat[];
-  testimonials: Testimonial[];
-  primaryActionLabel: string;
-  secondaryActionLabel: string;
-  primaryActionHref?: string;
-  secondaryActionHref?: string;
-  className?: string;
+  tagLabel: string; title: string; description: string; stats: Stat[]; testimonials: Testimonial[];
+  primaryActionLabel: string; secondaryActionLabel: string; primaryActionHref?: string; secondaryActionHref?: string; className?: string;
 }
-
-// --- Internal Sub-Components ---
-
-const StatCard = ({ value, label }: Stat) => (
-  <Card className="bg-card border-border/50">
-    <CardContent className="p-4 text-center">
-      <p className="text-2xl font-bold text-foreground">{value}</p>
-      <p className="text-sm text-muted-foreground">{label}</p>
-    </CardContent>
-  </Card>
-);
-
-const StickyTestimonialCard = ({
-  testimonial,
-  index,
-}: {
-  testimonial: Testimonial;
-  index: number;
-}) => {
-  return (
-    <div
-      className="sticky"
-      style={{ top: `calc(6rem + ${index * 2}rem)` }}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-      >
-        <Card className="border-border/50 shadow-lg overflow-hidden">
-          <CardContent className="p-6 sm:p-8">
-            {/* Top section: Image and Author */}
-            <div className="flex items-center gap-4 mb-5">
-              <Avatar className="h-14 w-14 border-2 border-primary/20">
-                <AvatarImage src={testimonial.avatarSrc} alt={testimonial.name} />
-                <AvatarFallback>
-                  {testimonial.name
-                    .replace(/^(Mr\.|Mrs\.|Ms\.)\s*/, "")
-                    .split(" ")
-                    .map((w) => w[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-foreground">{testimonial.name}</p>
-                <p className="text-sm text-muted-foreground">{testimonial.title}</p>
-              </div>
-            </div>
-
-            {/* Middle section: Rating */}
-            <div className="flex items-center gap-2 mb-5">
-              <span className="text-lg font-bold text-foreground">
-                {testimonial.rating.toFixed(1)}
-              </span>
-              <div className="flex gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className={cn(
-                      "h-4 w-4",
-                      i < Math.round(testimonial.rating)
-                        ? "fill-primary text-primary"
-                        : "fill-muted text-muted"
-                    )}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom section: Quote */}
-            {testimonial.quote && (
-              <p className="text-muted-foreground leading-relaxed italic">
-                &ldquo;{testimonial.quote}&rdquo;
-              </p>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
-  );
-};
-
-// --- Main Exported Component ---
 
 export const ClientsSection = ({
-  tagLabel,
-  title,
-  description,
-  stats,
-  testimonials,
-  primaryActionLabel,
-  secondaryActionLabel,
-  primaryActionHref = "#",
-  secondaryActionHref = "#",
-  className,
-}: ClientsSectionProps) => {
-  return (
-    <section className={cn("py-8 sm:py-16 md:py-24", className)}>
-      <div className="container px-4 sm:px-6">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left Column: Sticky Content */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-muted/50 px-3 py-1 text-sm text-muted-foreground mb-4">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              {tagLabel}
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              {title}
-            </h2>
-            <p className="text-muted-foreground text-base sm:text-lg mb-8 max-w-md">
-              {description}
-            </p>
-
-            <div className="grid grid-cols-3 gap-3 mb-8">
-              {stats.map((stat) => (
-                <StatCard key={stat.label} {...stat} />
-              ))}
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Button asChild variant="outline" size="lg">
-                <a href={secondaryActionHref}>{secondaryActionLabel}</a>
-              </Button>
-              <Button asChild size="lg">
-                <a href={primaryActionHref}>{primaryActionLabel}</a>
-              </Button>
-            </div>
-          </div>
-
-          {/* Right Column: Container for the sticky card stack */}
-          <div className="space-y-6">
-            {testimonials.map((testimonial, index) => (
-              <StickyTestimonialCard
-                key={testimonial.name}
-                testimonial={testimonial}
-                index={index}
-              />
-            ))}
-          </div>
+  tagLabel, title, description, stats, testimonials, primaryActionLabel, secondaryActionLabel,
+  primaryActionHref = "#", secondaryActionHref = "#", className,
+}: ClientsSectionProps) => (
+  <section className={cn("border-b border-border py-16 sm:py-20 lg:py-28", className)}>
+    <div className="container px-4 sm:px-6">
+      <div className="grid gap-10 border-b border-border pb-10 lg:grid-cols-[0.55fr_1.45fr] lg:items-end">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">{tagLabel}</p>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>
         </div>
+        <h2 className="text-balance font-serif text-4xl font-medium leading-[0.98] tracking-tight sm:text-6xl lg:text-7xl">{title}</h2>
       </div>
-    </section>
-  );
-};
+
+      {stats.length > 0 && (
+        <div className="grid border-b border-border sm:grid-cols-3">
+          {stats.map((stat, index) => (
+            <div key={stat.label} className={cn("py-7 sm:px-7", index > 0 && "border-t border-border sm:border-l sm:border-t-0")}>
+              <p className="font-serif text-5xl leading-none text-primary sm:text-6xl">{stat.value}</p>
+              <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="grid lg:grid-cols-3">
+        {testimonials.map((testimonial, index) => (
+          <motion.article
+            key={testimonial.name}
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: index * 0.08 }}
+            className={cn("flex min-h-[30rem] flex-col py-8 sm:p-8 lg:p-10", index > 0 && "border-t border-border lg:border-l lg:border-t-0")}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <span className="font-serif text-5xl text-muted-foreground/35">0{index + 1}</span>
+              <Quote className="h-8 w-8 text-primary" aria-hidden="true" />
+            </div>
+            {testimonial.quote && <blockquote className="mt-12 text-balance font-serif text-xl leading-relaxed sm:text-2xl">“{testimonial.quote}”</blockquote>}
+            <div className="mt-auto flex items-center gap-4 pt-10">
+              <Avatar className="h-12 w-12 border border-border">
+                <AvatarImage src={testimonial.avatarSrc} alt={testimonial.name} />
+                <AvatarFallback>{testimonial.name.replace(/^(Mr\.|Mrs\.|Ms\.)\s*/, "").split(" ").map((word) => word[0]).join("")}</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-semibold">{testimonial.name}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{testimonial.title}</p>
+              </div>
+            </div>
+          </motion.article>
+        ))}
+      </div>
+
+      <div className="flex flex-col gap-3 border-t border-border pt-8 sm:flex-row sm:justify-end">
+        <Button asChild variant="outline" size="lg"><a href={secondaryActionHref}>{secondaryActionLabel}</a></Button>
+        <Button asChild size="lg"><a href={primaryActionHref}>{primaryActionLabel}<ArrowUpRight className="ml-2 h-4 w-4" aria-hidden="true" /></a></Button>
+      </div>
+    </div>
+  </section>
+);

@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { DEFAULT_OG_IMAGE, absoluteSiteUrl } from "@/lib/site-config";
 
 interface SEOHeadProps {
   title: string;
@@ -9,9 +10,6 @@ interface SEOHeadProps {
   noIndex?: boolean;
 }
 
-const SITE_URL = "https://pnd50.com";
-const DEFAULT_OG_IMAGE = "https://pnd50.com/og-image.png";
-
 export function SEOHead({
   title,
   description,
@@ -21,7 +19,7 @@ export function SEOHead({
   noIndex = false,
 }: SEOHeadProps) {
   const fullTitle = title.includes("PND50") ? title : `${title} | PND50`;
-  const canonicalUrl = `${SITE_URL}${path}`;
+  const canonicalUrl = absoluteSiteUrl(path);
 
   return (
     <Helmet>

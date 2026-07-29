@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout/Layout";
-import { FileText } from "lucide-react";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function Terms() {
@@ -108,25 +108,12 @@ export default function Terms() {
         description="PND50 Terms of Service. Read our terms and conditions for using Thai accounting, corporate, and consulting services."
         path="/tos"
       />
-      {/* Hero Section */}
-      <section className="py-20 md:py-28 bg-muted/30 border-b">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-              <FileText className="w-8 h-8 text-primary" />
-            </div>
-            <p className="text-primary font-semibold text-sm uppercase tracking-wider mb-3">
-              LEGAL
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Terms of Service
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Last updated: January 2025
-            </p>
-          </div>
-        </div>
-      </section>
+      <InternalPageHeader
+        eyebrow="Legal"
+        meta="Last updated · January 2025"
+        title={<>Terms of <span className="text-primary">service.</span></>}
+        description="The terms governing PND50 accounting, corporate, and consulting engagements in Thailand."
+      />
 
       {/* Content Section */}
       <section className="py-16 md:py-24">
@@ -135,8 +122,8 @@ export default function Terms() {
             {/* Introduction */}
             <div className="bg-muted/30 rounded-lg p-6 mb-10 border">
               <p className="text-muted-foreground leading-relaxed">
-                These Terms of Service govern your use of PND50's accounting, corporate, and consulting 
-                services. By engaging our services, you agree to comply with and be bound by these terms.
+                These Terms of Service govern your use of PND50&apos;s accounting, corporate, and consulting
+                services. By engaging us, you agree to be bound by these terms.
               </p>
             </div>
 

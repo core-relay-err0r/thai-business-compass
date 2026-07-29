@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TrendingDown, Globe, Search, GitBranch, Building, Check, ArrowRight, ShoppingCart, Clock } from "lucide-react";
 import { useServices } from "@/contexts/ServiceContext";
-import { CONSULTING_PRICING, formatPrice, USD_TO_THB } from "@/lib/pricing";
+import { CONSULTING_PRICING, formatUSD } from "@/lib/pricing";
 
 const SERVICES = [
   {
@@ -12,35 +12,35 @@ const SERVICES = [
     icon: TrendingDown,
     title: "Reduce Costs",
     pricing: CONSULTING_PRICING.REDUCE_COSTS,
-    description: "Identify opportunities to reduce operational and tax costs.",
+    description: "Review the selected cost base and deliver a prioritized action list, with assumptions, owners, and implementation trade-offs.",
   },
   {
     id: "new-market",
     icon: Globe,
     title: "Enter a New Market",
     pricing: CONSULTING_PRICING.NEW_MARKET,
-    description: "Evaluate and plan market entry strategy for Thailand or ASEAN.",
+    description: "Test a Thailand or ASEAN entry case across customer, channel, operating model, and key execution risks.",
   },
   {
     id: "due-diligence",
     icon: Search,
     title: "Due Diligence / Risk Check",
     pricing: CONSULTING_PRICING.DUE_DILIGENCE,
-    description: "Comprehensive review of a target company or potential partner.",
+    description: "Run a scoped commercial and document-based risk check on a target or partner, then flag issues for specialist review.",
   },
   {
     id: "structure-strategy",
     icon: GitBranch,
     title: "Business Structure Strategy",
     pricing: CONSULTING_PRICING.STRUCTURE_STRATEGY,
-    description: "Optimize your corporate structure for growth, tax, or liability.",
+    description: "Compare practical structure options for growth, tax, and liability objectives, with legal and tax conclusions referred where required.",
   },
   {
     id: "bank-compliance",
     icon: Building,
     title: "Bank & Compliance Readiness",
     pricing: CONSULTING_PRICING.BANK_COMPLIANCE,
-    description: "Prepare for bank account opening or compliance requirements.",
+    description: "Review the requested bank or payment-provider documents, identify gaps, and prepare a response pack for submission.",
   },
 ];
 
@@ -60,13 +60,19 @@ export function ConsultingServices() {
         price: service.pricing.price,
         isFrom: service.pricing.isFrom,
         timeline: service.pricing.timeline,
-        note: "note" in service.pricing ? (service.pricing as any).note : undefined,
+        note: "note" in service.pricing ? service.pricing.note : undefined,
       });
     }
   };
 
   return (
     <>
+      <div className="mb-6 border-l-2 border-primary pl-4">
+        <p className="text-sm font-medium text-foreground">Bring the problem, not a preselected package.</p>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          These are examples of how we can structure the work. We will first clarify the decision you need to make, then confirm the useful scope and remove anything that does not serve it. Indicative fees and timelines remain below as planning references.
+        </p>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {SERVICES.map((service) => {
           const Icon = service.icon;
@@ -99,25 +105,21 @@ export function ConsultingServices() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0 space-y-3 sm:space-y-4">
-                <div className="space-y-1">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl sm:text-2xl font-semibold tracking-tight">
-                      {service.pricing.isFrom ? "From " : ""}${formatPrice(service.pricing.price)}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground/70">
-                    ≈ {service.pricing.isFrom ? "From " : ""}฿{formatPrice(service.pricing.price * USD_TO_THB)}
+                <div className="border-t border-border pt-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Indicative planning fee</p>
+                  <p className="mt-1 text-sm font-medium text-muted-foreground">
+                    {service.pricing.isFrom ? "From " : ""}{formatUSD(service.pricing.price)}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                   <Clock className="h-4 w-4" />
-                  {service.pricing.timeline}
+                  Indicative delivery: {service.pricing.timeline}
                 </div>
 
                 {"note" in service.pricing && (
                   <p className="text-xs text-muted-foreground/70 italic">
-                    {(service.pricing as any).note}
+                    {service.pricing.note}
                   </p>
                 )}
 
@@ -132,10 +134,10 @@ export function ConsultingServices() {
                   {selected ? (
                     <>
                       <Check className="mr-2 h-4 w-4" />
-                      Added to request
+                      Added for discussion
                     </>
                   ) : (
-                    "Add to request"
+                    "Discuss this need"
                   )}
                 </Button>
               </CardContent>

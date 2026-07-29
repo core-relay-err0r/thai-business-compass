@@ -15,7 +15,30 @@ export const config = {
   runtime: "nodejs",
 };
 
-export default async function handler(req: any, res: any) {
+type ApiRequest = {
+  method?: string;
+  body?: Record<string, unknown>;
+  headers: Record<string, string | string[] | undefined>;
+};
+type ApiResponse = {
+  setHeader(name: string, value: string): void;
+  status(code: number): ApiResponse;
+  json(body: unknown): ApiResponse;
+};
+
+type InboundEmail = {
+  subject?: string;
+  from?: string;
+  to?: string | string[];
+  text?: string;
+  html?: string;
+};
+
+function asInboundEmail(value: unknown): InboundEmail {
+  return value && typeof value === "object" ? (value as InboundEmail) : {};
+}
+
+export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method === "GET") {
     return res.status(200).json({ ok: true, message: "Resend inbound endpoint is live" });
   }
@@ -27,7 +50,7 @@ export default async function handler(req: any, res: any) {
 
   try {
     const payload = req.body ?? {};
-    const email = payload.data ?? payload;
+    const email = asInboundEmail(payload.data ?? payload);
 
     console.log("[resend-inbound] received at", new Date().toISOString());
     console.log("[resend-inbound] headers:", JSON.stringify(req.headers, null, 2));

@@ -1,326 +1,126 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from "react";
+import { ArrowDownRight, ArrowUpRight, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { PhoneCall } from 'lucide-react';
 
-// Icon component for contact details
-const InfoIcon = ({
-  type
-}: {
-  type: 'website' | 'phone' | 'address';
-}) => {
-  const icons = {
-    website: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect width="20" height="16" x="2" y="4" rx="2" />
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-      </svg>,
-    phone: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-      </svg>,
-    address: <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </svg>
-  };
-  return <div className="p-2 rounded-full bg-primary/10 text-primary">{icons[type]}</div>;
-};
-
-// Prop types for the HeroSection component
 interface HeroSectionProps {
   className?: string;
-  logo?: {
-    url?: string;
-    alt?: string;
-    text?: string;
-  };
-  slogan?: string;
-  title: React.ReactNode;
+  eyebrow: string;
+  title: string;
   subtitle: string;
-  callToAction: {
-    text: string;
-    href: string;
-  };
-  secondaryAction?: {
-    text: string;
-    href: string;
-  };
-  backgroundImage?: string;
-  slides?: {
-    image: string;
-    title: string;
-    description: string;
-  }[];
-  contactInfo?: {
-    website: string;
-    phone: string;
-    address: string;
-  };
-  tagline?: string;
+  callToAction: { text: string; href: string };
+  secondaryAction: { text: string; href: string };
+  image: { src: string; alt: string };
+  clarification: string;
+  contactInfo?: { address: string };
 }
+
+function ActionLink({ href, children, primary = false }: { href: string; children: React.ReactNode; primary?: boolean }) {
+  const className = cn(
+    "group inline-flex min-h-[50px] items-center justify-between gap-6 border px-5 py-3 text-sm font-semibold transition-colors",
+    primary
+      ? "border-primary bg-primary text-primary-foreground hover:border-foreground hover:bg-foreground"
+      : "border-foreground/30 text-foreground hover:border-foreground hover:bg-foreground hover:text-background",
+  );
+
+  return (
+    <Link to={href} className={className}>
+      {children}
+      <ArrowUpRight aria-hidden="true" className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+    </Link>
+  );
+}
+
 const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(({
   className,
-  logo,
-  slogan,
+  eyebrow,
   title,
   subtitle,
   callToAction,
   secondaryAction,
-  backgroundImage,
-  slides,
+  image,
+  clarification,
   contactInfo,
-  tagline,
   ...props
-}, ref) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(heroRef, { once: true, amount: 0.1 });
+}, ref) => (
+  <section ref={ref} className={cn("home-editorial-hero overflow-hidden border-b border-border bg-background", className)} {...props}>
+    <div className="container px-4 sm:px-6">
+      <div className="flex flex-col py-5 lg:min-h-[760px] lg:py-0">
+        <div className="flex items-center justify-between border-b border-foreground/20 py-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground lg:py-5">
+          <span>{eyebrow}</span>
+          <span className="hidden sm:inline">Accounting · Tax · Corporate compliance</span>
+        </div>
 
-  // Trigger entrance animation once
-  useEffect(() => {
-    if (isInView && !hasAnimated) {
-      setHasAnimated(true);
-    }
-  }, [isInView, hasAnimated]);
-
-  // Auto-rotate slides
-  useEffect(() => {
-    if (!slides || slides.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % slides.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [slides]);
-
-  // Animation variants for the container to orchestrate children animations
-  const containerVariants = {
-    hidden: {
-      opacity: 0
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  // Animation variants for individual text/UI elements
-  const itemVariants = {
-    hidden: {
-      y: 20,
-      opacity: 0
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.4, 0, 0.2, 1] as const
-      }
-    }
-  };
-  return <div ref={(node) => {
-    // Combine refs
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-    (heroRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-  }} className={cn("relative w-full flex flex-col lg:flex-row bg-background overflow-hidden lg:min-h-[calc(100vh-var(--header-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem))]", className)} {...props}>
-        
-        {/* Left Side: Content */}
-        <motion.div className="w-full lg:w-[60%] flex flex-col justify-center px-4 py-6 sm:px-8 sm:py-10 md:p-12 lg:p-16 xl:p-20 lg:pl-[8%] xl:pl-[10%] relative z-10 lg:py-24 xl:py-28" variants={containerVariants} initial="hidden" animate="visible">
-          {/* Top Section: Logo & Main Content */}
-            <div className="flex flex-col gap-4 sm:gap-6 md:gap-10 lg:gap-14 lg:my-auto">
-            {logo && <motion.div variants={itemVariants} className="flex items-center gap-2 sm:gap-3">
-                {logo.url && <img src={logo.url} alt={logo.alt || "Logo"} className="h-8 sm:h-10 w-auto" />}
-                <div className="flex flex-col">
-                  {logo.text && <span className="text-lg sm:text-xl font-bold tracking-tight">{logo.text}</span>}
-                  {slogan && <span className="text-xs text-primary uppercase tracking-wider font-medium">{slogan}</span>}
-                </div>
-              </motion.div>}
-
-            {/* Mobile Image Carousel */}
-            {slides && slides.length > 0 && <motion.div variants={itemVariants} className="lg:hidden relative rounded-2xl overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.div key={currentSlide} initial={{
-              opacity: 0
-            }} animate={{
-              opacity: 1
-            }} exit={{
-              opacity: 0
-            }} transition={{
-              duration: 0.6
-            }} className="relative aspect-[16/9]">
-                    <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-full object-cover" />
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-                    
-                    {/* Text overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                      <span className="inline-block px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider bg-background/90 text-foreground border border-border rounded-full mb-2">
-                        {slides[currentSlide].title}
-                      </span>
-                      <p className="text-xs text-foreground/80 line-clamp-2">
-                        {slides[currentSlide].description}
-                      </p>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-                
-                {/* Slide indicators */}
-                <div className="absolute bottom-3 right-3 flex gap-1.5 z-10">
-                  {slides.map((_, index) => <button key={index} onClick={() => setCurrentSlide(index)} className={cn("w-1.5 h-1.5 rounded-full transition-all duration-300", index === currentSlide ? "bg-primary w-4" : "bg-muted-foreground/40")} aria-label={`Go to slide ${index + 1}`} />)}
-                </div>
-              </motion.div>}
-
-            <div className="flex flex-col gap-3 sm:gap-5 md:gap-8 max-w-2xl lg:py-12 xl:py-16">
-              <motion.h1 variants={itemVariants} className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.15]">
+        <div className="grid flex-1 gap-8 py-7 lg:grid-cols-[minmax(0,1.12fr)_minmax(380px,0.68fr)] lg:gap-0 lg:py-0">
+          <div className="flex flex-col justify-between lg:py-10 lg:pr-10 xl:py-12">
+            <div>
+              <p className="mb-7 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+                <span className="flex size-6 items-center justify-center rounded-full border border-primary">01</span>
+                Bangkok accounting &amp; compliance
+              </p>
+              <h1 className="max-w-5xl text-balance font-serif text-[clamp(2.85rem,5.7vw,6.7rem)] font-medium leading-[0.9] tracking-[-0.055em]">
                 {title}
-              </motion.h1>
-              
-              <motion.p variants={itemVariants} className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed lg:text-lg">
-                {subtitle}
-              </motion.p>
-              
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
-                <a href={callToAction.href} className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors neumorphic-button group min-h-[44px]">
-                  {callToAction.text}
-                </a>
-                {secondaryAction && <a href={secondaryAction.href} className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm font-medium rounded-lg border border-border bg-background transition-colors group min-h-[44px]">
-                    {secondaryAction.text}
-                    <PhoneCall className="w-4 h-4 opacity-0 -ml-4 transition-all group-hover:opacity-100 group-hover:ml-0" />
-                  </a>}
-              </motion.div>
+              </h1>
+            </div>
 
-              {tagline && <motion.p variants={itemVariants} className="text-xs sm:text-sm text-muted-foreground/60 pt-1 sm:pt-2">
-                  {tagline}
-                </motion.p>}
+            <div className="mt-10 max-w-3xl xl:mt-14">
+              <p className="text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">{subtitle}</p>
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <ActionLink href={callToAction.href} primary>{callToAction.text}</ActionLink>
+                <ActionLink href={secondaryAction.href}>{secondaryAction.text}</ActionLink>
+              </div>
+              <a
+                href="#client-fit"
+                className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-foreground underline decoration-primary decoration-2 underline-offset-4 transition-colors hover:text-primary"
+              >
+                Check if we are the right fit
+                <ArrowDownRight aria-hidden="true" />
+              </a>
             </div>
           </div>
 
-          {/* Bottom Section: Footer Info - Desktop only */}
-          {contactInfo && <motion.div variants={itemVariants} className="hidden lg:block mt-8 sm:mt-10 lg:mt-0 pt-6 sm:pt-8 border-t border-border/40">
-              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm text-muted-foreground">
-                <Link to="/contact" className="flex items-center gap-2 hover:text-primary transition-colors">
-                  <InfoIcon type="website" />
-                  {contactInfo.website}
-                </Link>
-                <Link to="/contact" className="flex items-center gap-2 hover:text-primary transition-colors">
-                  <InfoIcon type="phone" />
-                  {contactInfo.phone}
-                </Link>
-                <Link to="/contact" className="flex items-center gap-2 hover:text-primary transition-colors">
-                  <InfoIcon type="address" />
-                  {contactInfo.address}
-                </Link>
+          <div className="relative lg:border-l lg:border-foreground/20 lg:pl-6 xl:pl-8">
+            <figure className="relative h-full min-h-[520px] overflow-hidden bg-foreground lg:min-h-0">
+              <img
+                src={image.src}
+                alt={image.alt}
+                className="home-editorial-image absolute inset-0 size-full object-cover object-[50%_55%] contrast-125 saturate-[0.78]"
+                width={1024}
+                height={1024}
+                loading="eager"
+                decoding="async"
+              />
+              <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-4 border-b border-background/50 bg-foreground/90 p-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-background sm:p-5">
+                <span>PND50 Co., Ltd.</span>
+                <span>Bangkok · TH</span>
               </div>
-            </motion.div>}
-        </motion.div>
+              <div aria-hidden="true" className="absolute right-0 top-20 bg-primary px-4 py-2 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground [writing-mode:vertical-rl]">
+                No shortcuts · No excuses
+              </div>
+              <div className="absolute bottom-0 left-0 max-w-[88%] border-t-4 border-primary bg-foreground p-5 text-background sm:p-6">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">The cost of getting it wrong</p>
+                <p className="mt-2 max-w-sm font-serif text-2xl leading-[0.95] sm:text-3xl">Your business should never stand under a question mark.</p>
+              </div>
+              <a href="#services" aria-label="Continue to services" className="absolute bottom-0 right-0 flex size-14 items-center justify-center bg-primary text-primary-foreground transition-colors hover:bg-background hover:text-foreground sm:size-16">
+                <ArrowDownRight aria-hidden="true" />
+              </a>
+            </figure>
+          </div>
+        </div>
 
-        {/* Right Side: Visual with diagonal clip */}
-        <motion.div 
-          className="hidden lg:block absolute top-0 right-0 w-[40%] h-full"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ 
-            opacity: hasAnimated ? 1 : 0, 
-            x: hasAnimated ? 0 : 40 
-          }}
-          transition={{ 
-            duration: 0.9, 
-            delay: 0.3,
-            ease: [0.22, 1, 0.36, 1]
-          }}
-          style={{
-            clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0% 100%)'
-          }}
-        >
-          {slides && slides.length > 0 ? <div className="absolute inset-0">
-              {/* Render all slides, control visibility with opacity for smoother transitions */}
-              {slides.map((slide, index) => (
-                <div
-                  key={index}
-                  className="absolute inset-0 transition-opacity duration-700 ease-in-out"
-                  style={{
-                    opacity: index === currentSlide ? 1 : 0,
-                    willChange: 'opacity',
-                  }}
-                >
-                  <img 
-                    src={slide.image} 
-                    alt={slide.title} 
-                    className="w-full h-full object-cover"
-                    loading={index === 0 ? "eager" : "lazy"}
-                  />
-                  {/* Gradient overlays for fading effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 via-20% to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 via-30% to-transparent" />
-                  
-                  {/* Text overlay */}
-                  <div 
-                    className="absolute bottom-0 left-0 right-0 p-8 transition-all duration-500 ease-out"
-                    style={{
-                      opacity: index === currentSlide ? 1 : 0,
-                      transform: index === currentSlide ? 'translateY(0)' : 'translateY(10px)',
-                      transitionDelay: index === currentSlide ? '200ms' : '0ms',
-                    }}
-                  >
-                    <span className="inline-block px-3 py-1 text-xs font-medium uppercase tracking-wider bg-background/90 text-foreground border border-border rounded-full mb-3">
-                      {slide.title}
-                    </span>
-                    <p className="text-sm text-foreground/80 max-w-xs">
-                      {slide.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-              
-              {/* Slide indicators */}
-              <div className="absolute bottom-4 right-4 flex gap-2 z-10">
-                {slides.map((_, index) => <button key={index} onClick={() => setCurrentSlide(index)} className={cn("w-2 h-2 rounded-full transition-all duration-300", index === currentSlide ? "bg-primary w-6" : "bg-muted-foreground/40 hover:bg-muted-foreground/60")} aria-label={`Go to slide ${index + 1}`} />)}
-              </div>
-            </div> : backgroundImage ? <motion.div className="absolute inset-0" initial={{
-        clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)"
-      }} animate={{
-        clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)"
-      }} transition={{
-        duration: 1.2,
-        ease: [0.22, 1, 0.36, 1]
-      }}>
-              <img src={backgroundImage} alt="Hero background" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/20 to-transparent" />
-            </motion.div> : <motion.div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5" initial={{
-        clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)"
-      }} animate={{
-        clipPath: "polygon(10% 0, 100% 0, 100% 100%, 0% 100%)"
-      }} transition={{
-        duration: 1.2,
-        ease: [0.22, 1, 0.36, 1]
-      }}>
-              {/* Grid pattern */}
-              <div className="absolute inset-0 hero-grid-pattern opacity-60" />
-              
-              {/* Floating orbs */}
-              <motion.div className="absolute top-1/4 right-1/4 w-64 h-64 rounded-full bg-primary/10 blur-3xl" animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3]
-        }} transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }} />
-              <motion.div className="absolute bottom-1/4 right-1/3 w-48 h-48 rounded-full bg-primary/15 blur-3xl" animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.2, 0.4, 0.2]
-        }} transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }} />
-            </motion.div>}
-        </motion.div>
-      </div>;
-});
+        <div className="grid border-t border-foreground/20 py-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-10">
+          <p className="max-w-4xl text-sm leading-relaxed text-muted-foreground">{clarification}</p>
+          {contactInfo && (
+            <span className="mt-4 flex items-center gap-2 text-sm font-medium lg:mt-0">
+              <MapPin aria-hidden="true" className="text-primary" />
+              {contactInfo.address}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+));
+
 HeroSection.displayName = "HeroSection";
 export { HeroSection };
