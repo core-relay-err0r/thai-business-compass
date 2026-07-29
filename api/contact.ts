@@ -27,13 +27,17 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     );
     const text = await upstream.text();
 
-    if (upstream.ok) {
-      await sendProtocolCopy({ subject: "PND50 contact enquiry copy", payload: req.body ?? {} });
-    }
+    const protocolCopy = upstream.ok
+      ? await sendProtocolCopy({ subject: "PND50 contact enquiry copy", payload: req.body ?? {} })
+      : null;
 
     res.status(upstream.status);
-    res.setHeader("Content-Type", upstream.headers.get("content-type") ?? "application/json");
-    return res.send(text);
+    res.setHeader("Content-Type", "application/json");
+    try {
+      return res.json({ ...JSON.parse(text), protocolCopyDelivered: Boolean(protocolCopy) });
+    } catch {
+      return res.json({ success: upstream.ok, protocolCopyDelivered: Boolean(protocolCopy) });
+    }
   } catch (error) {
     console.error("[contact] relay error", error);
     return res.status(500).json({ error: "Unable to send enquiry" });
