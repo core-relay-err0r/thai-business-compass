@@ -1,6 +1,10 @@
 import { Resend } from "resend";
 
-const RECIPIENT = "protocol@avenkara.ai";
+const RECIPIENTS = [
+  "info@pnd50.com",
+  "sebastian@avenkara.ai",
+  "protocol@avenkara.ai",
+];
 
 function escapeHtml(value: string) {
   return value
@@ -28,7 +32,7 @@ export async function sendProtocolCopy({
   const json = JSON.stringify(payload, null, 2).slice(0, 25_000);
   const response = await resend.emails.send({
     from: "PND50 Website <noreply@pnd50.com>",
-    to: [RECIPIENT],
+    to: RECIPIENTS,
     subject,
     html: `<main style="font-family:Arial,sans-serif;max-width:720px;margin:auto;padding:24px;color:#111"><h1 style="font-size:22px">${escapeHtml(subject)}</h1><p>Automatic copy from pnd50.com.</p><pre style="white-space:pre-wrap;background:#f4f4f4;padding:16px;border:1px solid #ddd">${escapeHtml(json)}</pre></main>`,
   });
