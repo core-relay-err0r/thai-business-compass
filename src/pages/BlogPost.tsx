@@ -11,6 +11,7 @@ import { BreadcrumbSchema, ArticleSchema } from "@/components/seo/StructuredData
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { getArticleAuthor, normalizeBlogSources } from "@/lib/blog";
+import { SubscriptionSection } from "@/components/subscription/SubscriptionSection";
 
 const SITE_URL = "https://www.pnd50.com";
 
@@ -229,7 +230,7 @@ export default function BlogPost() {
   const modifiedDate = post.reviewed_at || post.updated_at;
 
   return (
-    <Layout>
+    <Layout showFooterSubscription={false}>
       <SEOHead
         title={post.title}
         description={post.meta_description || post.excerpt || `Read about ${post.title} - PND50 Thailand accounting insights`}
@@ -390,6 +391,12 @@ export default function BlogPost() {
             </div>
           </section>
         )}
+
+        <div className="container px-4 py-8 sm:px-6 sm:py-12">
+          <div className="mx-auto max-w-3xl">
+            <SubscriptionSection signupLocation="article_end" embedded />
+          </div>
+        </div>
 
         {/* CTA Section */}
         <footer className="py-12 sm:py-16 bg-muted/30 border-t border-border">

@@ -20,6 +20,7 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /submit
+Disallow: /unsubscribe
 
 Sitemap: https://www.pnd50.com/sitemap.xml
 Host: https://www.pnd50.com

@@ -9,13 +9,14 @@ export default function Privacy() {
       content: (
         <>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            We collect information you provide directly to us, such as when you create an account, 
-            request our services, communicate with us, or submit a contact form. This may include:
+            We collect information you provide directly when you request services, communicate with us,
+            submit a form, or subscribe to practical updates. Depending on the interaction, this may include:
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
             <li>Name, email address, and phone number</li>
             <li>Company name and business information</li>
             <li>Financial and accounting documents</li>
+            <li>Subscription interest, page language, source page, signup location, consent time, UTM parameters, and referrer</li>
             <li>Any other information you choose to provide</li>
           </ul>
         </>
@@ -25,54 +26,84 @@ export default function Privacy() {
       title: "2. How We Use Your Information",
       content: (
         <p className="text-muted-foreground leading-relaxed">
-          We use the information we collect to provide, maintain, and improve our services, 
-          including processing your requests, communicating with you about our services, 
-          and ensuring compliance with legal and regulatory requirements.
+          We use the information to respond to requests, provide agreed services, maintain our systems,
+          understand which topics are useful, and send practical accounting, tax, payroll, and corporate
+          updates when you have subscribed. Subscription data is not used to make automated legal or tax decisions.
         </p>
       ),
     },
     {
-      title: "3. Information Sharing",
+      title: "3. Email Updates, Consent, and Unsubscribe",
       content: (
         <p className="text-muted-foreground leading-relaxed">
-          We do not sell, trade, or otherwise transfer your personal information to third parties 
-          without your consent, except as required to provide our services or comply with legal 
-          obligations. We may share information with trusted service providers who assist us in 
-          operating our business.
+          When you submit a subscription form, we record the time and context of your request. You can
+          unsubscribe at any time using the link included in subscription emails. Unsubscribing changes
+          the subscription status so further practical updates are not sent to that subscription.
         </p>
       ),
     },
     {
-      title: "4. Data Security",
+      title: "4. Service Providers and Information Sharing",
       content: (
         <p className="text-muted-foreground leading-relaxed">
-          We implement appropriate security measures to protect your personal information against 
-          unauthorized access, alteration, disclosure, or destruction. However, no method of 
-          transmission over the internet is 100% secure.
+          We do not sell subscription data. We may use service providers that operate the website,
+          store form data, deliver email, prevent abuse, or measure site usage. These currently include
+          Vercel, Supabase, Resend, and Microsoft Clarity. Information may also be disclosed when required
+          to comply with applicable obligations or protect the security of our services.
         </p>
       ),
     },
     {
-      title: "5. Data Retention",
+      title: "5. Analytics and Browser Storage",
       content: (
         <p className="text-muted-foreground leading-relaxed">
-          We retain your personal information for as long as necessary to fulfill the purposes 
-          for which it was collected, comply with legal obligations, and resolve disputes.
+          We use Microsoft Clarity and internal website events to understand whether subscription forms
+          are viewed, submitted, completed, or return an error. Subscription analytics events do not include
+          the email address. Browser storage records a successful subscription and, when a popup is dismissed,
+          hides it for 14 days.
         </p>
       ),
     },
     {
-      title: "6. Your Rights",
+      title: "6. Data Security",
       content: (
         <p className="text-muted-foreground leading-relaxed">
-          You have the right to access, correct, or delete your personal information. 
-          You may also object to or restrict certain processing of your data. 
-          To exercise these rights, please contact us using the information below.
+          We use access controls and server-side processing intended to limit unauthorized access,
+          alteration, disclosure, or destruction. No internet transmission or storage method is completely secure.
         </p>
       ),
     },
     {
-      title: "7. Contact Us",
+      title: "7. Data Retention",
+      content: (
+        <p className="text-muted-foreground leading-relaxed">
+          We retain information for as long as reasonably needed for the purpose for which it was collected,
+          to maintain suppression records after unsubscribe, to resolve disputes, and to meet applicable obligations.
+          Retention periods may differ by record type and engagement.
+        </p>
+      ),
+    },
+    {
+      title: "8. Your Choices and Requests",
+      content: (
+        <p className="text-muted-foreground leading-relaxed">
+          You may ask to access, correct, or delete personal information associated with you, or object to
+          particular processing. Some records may need to be retained where there is a valid operational or legal reason.
+          Contact us using the address below to make a request.
+        </p>
+      ),
+    },
+    {
+      title: "9. Nature of Practical Updates",
+      content: (
+        <p className="text-muted-foreground leading-relaxed">
+          Subscription emails provide general practical information. They do not replace accounting, tax,
+          legal, payroll, or other professional advice based on your company&apos;s specific facts.
+        </p>
+      ),
+    },
+    {
+      title: "10. Contact Us",
       content: (
         <p className="text-muted-foreground leading-relaxed">
           If you have any questions about this Privacy Policy, please contact us at{" "}
@@ -93,7 +124,7 @@ export default function Privacy() {
       />
       <InternalPageHeader
         eyebrow="Legal"
-        meta="Last updated · January 2025"
+        meta="Last updated · August 2026"
         title={<>Privacy <span className="text-primary">policy.</span></>}
         description="How PND50 collects, uses, safeguards, and retains information provided through our services."
       />

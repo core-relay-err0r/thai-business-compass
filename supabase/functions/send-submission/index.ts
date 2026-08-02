@@ -1,5 +1,7 @@
 import { Resend } from "resend";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { buildSubmissionLeadEvent } from "../_shared/pnd50-lead-events.ts";
+import { sendLeadEvent } from "../_shared/lead-router.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -627,6 +629,23 @@ const handler = async (req: Request): Promise<Response> => {
     ]);
 
     console.log("Emails sent successfully:", { company: companyResponse, client: clientResponse });
+
+    const companyAccepted = Boolean(companyResponse.data?.id) && !companyResponse.error;
+    if (companyAccepted) {
+      const routerResult = await sendLeadEvent(buildSubmissionLeadEvent(data));
+      if (routerResult.ok) {
+        console.info("[lead-router] service request accepted", {
+          responseStatus: routerResult.responseStatus,
+        });
+      } else if (routerResult.status !== "disabled") {
+        console.warn("[lead-router] service request delivery not confirmed", {
+          status: routerResult.status,
+          responseStatus: routerResult.responseStatus,
+        });
+      }
+    } else {
+      console.warn("[lead-router] service request skipped because company email was not accepted");
+    }
 
     return new Response(JSON.stringify({ success: true, data: { company: companyResponse, client: clientResponse } }), {
       status: 200,

@@ -12,6 +12,7 @@ import { ArrowRight, Building2, Calculator, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { FAQSchema, ServiceSchema } from "@/components/seo/StructuredData";
+import { SubscriptionSection } from "@/components/subscription/SubscriptionSection";
 
 const servicesList = [
   {
@@ -237,6 +238,12 @@ export default function Services() {
                   </p>
                 </div>
                 <CorporateServicesContent />
+                <SubscriptionSection
+                  signupLocation="service_corporate"
+                  interest="company_registration"
+                  embedded
+                  className="mt-10"
+                />
               </div>
 
               {/* Accounting Section */}
@@ -251,6 +258,12 @@ export default function Services() {
                   </p>
                 </div>
                 <AccountingWizard />
+                <SubscriptionSection
+                  signupLocation="service_accounting"
+                  interest="bookkeeping"
+                  embedded
+                  className="mt-10"
+                />
               </div>
 
               {/* Consulting Section */}

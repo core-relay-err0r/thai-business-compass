@@ -17,8 +17,13 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   }
 
   try {
+    const functionsUrl =
+      process.env.SUPABASE_FUNCTIONS_URL ||
+      process.env.VITE_SUPABASE_FUNCTIONS_URL ||
+      "https://vrvwketvspgatfdqmrha.supabase.co";
+
     const upstream = await fetch(
-      "https://gdjckutnbacltgamnqkt.supabase.co/functions/v1/send-contact",
+      `${functionsUrl}/functions/v1/send-contact`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
