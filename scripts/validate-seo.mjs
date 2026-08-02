@@ -27,6 +27,9 @@ function validateHtml(html, path, { noIndex = false } = {}) {
   if (occurrences(html, /<link rel="canonical"/g) !== 1) fail(`${path} must have exactly one canonical link`);
   if (!html.includes(`href="${canonical}"`)) fail(`${path} canonical must be ${canonical}`);
   if (occurrences(html, /<meta name="description"/g) !== 1) fail(`${path} must have exactly one description`);
+  if (!html.includes('id="prerender-content"')) fail(`${path} must preserve the crawl shell`);
+  if (!html.includes('document.documentElement.classList.add("js")')) fail(`${path} must enable the early JavaScript marker`);
+  if (!html.includes("html.js #prerender-content{display:none!important}")) fail(`${path} must hide the crawl shell before paint when JavaScript is enabled`);
   if (occurrences(html, /<h1(?:\s|>)/g) !== 1) fail(`${path} crawl shell must have exactly one H1`);
   if (!html.includes(`property="og:url" content="${canonical}"`)) fail(`${path} Open Graph URL is not canonical`);
   if (html.includes('href="https://pnd50.com') || html.includes('content="https://pnd50.com')) {
