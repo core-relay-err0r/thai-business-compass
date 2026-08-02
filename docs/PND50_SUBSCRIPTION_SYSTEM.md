@@ -4,6 +4,8 @@
 
 Implemented and production-activated at the backend on 2026-08-02. The isolated subscriber migration is applied to Supabase project `vrvwketvspgatfdqmrha`; `subscribe-updates` and `unsubscribe-updates` are active; and the shared relay credential is configured only for Vercel Production and Supabase Edge Functions. The website source in this commit is the Git-triggered Vercel Production release artifact.
 
+Git preservation completed through PR #2 at merge commit `a537089`. The first public form smoke test exposed a stale relay credential in the initial deployment, so the Vercel Production and Supabase Edge Function values were re-synchronized. The valid production deployment must postdate that credential rotation.
+
 One controlled synthetic subscription, duplicate replay, and unsubscribe passed. The replay updated one existing row instead of creating another. No campaign email, legal or tax advice, Pushover alert, or contact-form submission was sent by this acceptance test.
 
 The current public site is English-only. Russian copy is ready and activates automatically for a future `/ru` route or Russian document language.
