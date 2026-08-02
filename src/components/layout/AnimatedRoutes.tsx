@@ -10,6 +10,7 @@ const Privacy = lazy(() => import("@/pages/Privacy"));
 const Terms = lazy(() => import("@/pages/Terms"));
 const Blog = lazy(() => import("@/pages/Blog"));
 const BlogPost = lazy(() => import("@/pages/BlogPost"));
+const Unsubscribe = lazy(() => import("@/pages/Unsubscribe"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
 function RouteFallback() {
@@ -39,6 +40,7 @@ export function AnimatedRoutes() {
         <Route path="/terms" element={<Navigate to="/tos" replace />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/unsubscribe" element={<Unsubscribe />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

@@ -1,11 +1,11 @@
 // Supabase Edge Functions live on the project defined in supabase/config.toml
-// (gdjckutnbacltgamnqkt), while the database/content project may differ.
+// (vrvwketvspgatfdqmrha), while the database/content project may differ.
 // supabase-js derives the functions URL from the database project URL, which
 // broke every form in production. This helper always targets the functions host.
 
 const FUNCTIONS_BASE_URL =
   import.meta.env.VITE_SUPABASE_FUNCTIONS_URL ||
-  "https://gdjckutnbacltgamnqkt.supabase.co";
+  "https://vrvwketvspgatfdqmrha.supabase.co";
 
 export type EdgeFunctionResult<T> = { data: T | null; error: Error | null };
 

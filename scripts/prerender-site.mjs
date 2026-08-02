@@ -40,6 +40,15 @@ const NOINDEX_ROUTES = [
     links: [{ href: "/contact", label: "Contact PND50 directly" }],
     schema: [],
   },
+  {
+    path: "/unsubscribe",
+    title: "Email preferences | PND50",
+    description: "Manage your PND50 practical-update subscription.",
+    h1: "Email preferences",
+    body: ["Use the secure link in a PND50 subscription email to unsubscribe."],
+    links: [{ href: "/privacy", label: "Privacy Policy" }],
+    schema: [],
+  },
 ];
 
 const STATIC_ROUTES = [
@@ -148,7 +157,7 @@ const STATIC_ROUTES = [
       "PND50 Privacy Policy. Learn how we collect, use, and protect your personal information when using our Thai accounting and corporate services.",
     h1: "Privacy policy",
     body: [
-      "This policy explains how PND50 collects, uses, safeguards, and retains information provided through our services.",
+      "This policy explains how PND50 collects, uses, safeguards, and retains information provided through our services and practical-update subscription forms.",
       "For privacy questions, contact info@pnd50.com.",
     ],
     schema: [],
@@ -618,6 +627,7 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /submit
+Disallow: /unsubscribe
 
 Sitemap: ${SITE_URL}/sitemap.xml
 Host: ${SITE_URL}

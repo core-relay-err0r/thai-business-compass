@@ -42,7 +42,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     const functionsUrl =
       process.env.SUPABASE_FUNCTIONS_URL ||
       process.env.VITE_SUPABASE_FUNCTIONS_URL ||
-      "https://gdjckutnbacltgamnqkt.supabase.co";
+      "https://vrvwketvspgatfdqmrha.supabase.co";
 
     const upstream = await fetch(`${functionsUrl}/functions/v1/send-submission`, {
       method: "POST",
