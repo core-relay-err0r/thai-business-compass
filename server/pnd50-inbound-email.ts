@@ -8,6 +8,8 @@ const SPAM_PATTERN = /\b(backlink|guest post|seo (?:service|offer)|domain author
 
 type Environment = Record<string, string | undefined>;
 
+type InboundDeliveryMode = "forward" | "observed_copy";
+
 type WebhookHeaders = {
   id: string;
   timestamp: string;
@@ -272,6 +274,18 @@ function validReceivedData(value: unknown): value is ReceivedEmailData {
   return Boolean(emailId && parseMailbox(data.from).email && Array.isArray(data.to));
 }
 
+function inboundDeliveryMode(env: Environment): InboundDeliveryMode | null {
+  const configured = env.PND50_INBOUND_DELIVERY_MODE?.trim() || "forward";
+  return configured === "forward" || configured === "observed_copy"
+    ? configured
+    : null;
+}
+
+function receivedFor(data: ReceivedEmailData, expectedRecipient: string) {
+  if (!Array.isArray(data.to)) return false;
+  return data.to.some((recipient) => parseMailbox(recipient).email === expectedRecipient);
+}
+
 export function createInboundEmailHandler({
   env,
   createResendClient,
@@ -292,6 +306,18 @@ export function createInboundEmailHandler({
     if (!webhookSecret) {
       logger.error("[resend-inbound] webhook verification is not configured");
       return res.status(503).json({ error: "WEBHOOK_NOT_CONFIGURED" });
+    }
+
+    const deliveryMode = inboundDeliveryMode(env);
+    if (!deliveryMode) {
+      logger.error("[resend-inbound] delivery mode is invalid");
+      return res.status(503).json({ error: "INVALID_DELIVERY_MODE" });
+    }
+
+    const observedRecipient = parseMailbox(env.PND50_INBOUND_OBSERVED_RECIPIENT).email;
+    if (deliveryMode === "observed_copy" && !observedRecipient) {
+      logger.error("[resend-inbound] observed-copy recipient is not configured");
+      return res.status(503).json({ error: "OBSERVED_RECIPIENT_NOT_CONFIGURED" });
     }
 
     let rawBody: string;
@@ -334,6 +360,17 @@ export function createInboundEmailHandler({
     }
 
     const data = event.data;
+    if (
+      deliveryMode === "observed_copy" &&
+      !receivedFor(data, observedRecipient)
+    ) {
+      return res.status(200).json({
+        received: true,
+        ignored: true,
+        reason: "RECIPIENT_NOT_ALLOWED",
+      });
+    }
+
     const emailId = compact(data.email_id, 160);
     const sender = parseMailbox(data.from);
     const forwardFrom = env.FORWARD_FROM?.trim() || "forwarder@pnd50.com";
@@ -357,7 +394,7 @@ export function createInboundEmailHandler({
     if (!previewFixture) {
       const apiKey = env.RESEND_API_KEY?.trim();
       const forwardTo = env.FORWARD_TO?.trim();
-      if (!apiKey || !forwardTo) {
+      if (!apiKey || (deliveryMode === "forward" && !forwardTo)) {
         logger.error("[resend-inbound] forwarding is not configured");
         return res.status(503).json({ error: "FORWARDING_NOT_CONFIGURED" });
       }
@@ -370,20 +407,22 @@ export function createInboundEmailHandler({
         logger.warn("[resend-inbound] email content retrieval failed");
       }
 
-      try {
-        const forwarded = await client.forward({
-          emailId,
-          to: forwardTo,
-          from: forwardFrom,
-          idempotencyKey: `pnd50-inbound-forward-${emailId}`.slice(0, 256),
-        });
-        if (forwarded.error || !forwarded.data?.id) {
+      if (deliveryMode === "forward") {
+        try {
+          const forwarded = await client.forward({
+            emailId,
+            to: forwardTo as string,
+            from: forwardFrom,
+            idempotencyKey: `pnd50-inbound-forward-${emailId}`.slice(0, 256),
+          });
+          if (forwarded.error || !forwarded.data?.id) {
+            logger.error("[resend-inbound] email forwarding was rejected");
+            return res.status(502).json({ error: "FORWARD_FAILED" });
+          }
+        } catch {
           logger.error("[resend-inbound] email forwarding was rejected");
           return res.status(502).json({ error: "FORWARD_FAILED" });
         }
-      } catch {
-        logger.error("[resend-inbound] email forwarding failed");
-        return res.status(502).json({ error: "FORWARD_FAILED" });
       }
     }
 
@@ -405,12 +444,14 @@ export function createInboundEmailHandler({
     logger.info("[resend-inbound] processed inbound email", {
       eventId: leadEvent.event_id,
       fixture: previewFixture,
+      deliveryMode,
       routerAccepted,
     });
     return res.status(200).json({
       received: true,
-      forwarded: true,
+      forwarded: deliveryMode === "forward",
       fixture: previewFixture,
+      delivery_mode: deliveryMode,
       router_accepted: routerAccepted,
       event_id: leadEvent.event_id,
     });

@@ -212,6 +212,121 @@ describe("PND50 inbound Resend webhook", () => {
     );
   });
 
+  it("routes an allowlisted observed copy without forwarding it back to Gmail", async () => {
+    const calls: string[] = [];
+    const client = resendClient({
+      retrieve: vi.fn(async () => {
+        calls.push("retrieve");
+        return { data: { text: "Need an accounting quote", headers: {} } };
+      }),
+      forward: vi.fn(async () => {
+        calls.push("forward");
+        return { data: { id: "unexpected-forward" } };
+      }),
+    });
+    const options = handlerOptions({
+      env: {
+        RESEND_WEBHOOK_SECRET: secret,
+        RESEND_API_KEY: "re_test_only",
+        VERCEL_ENV: "production",
+        PND50_INBOUND_DELIVERY_MODE: "observed_copy",
+        PND50_INBOUND_OBSERVED_RECIPIENT: "pnd50-leads@owned.resend.app",
+      },
+      client,
+      createResendClient: () => client,
+      sendRouter: vi.fn(async () => {
+        calls.push("router");
+        return { ok: true as const, status: "accepted" as const, responseStatus: 202 };
+      }),
+    });
+    const { response, result } = responseRecorder();
+    await createInboundEmailHandler(options)(
+      signedRequest(emailEvent({ to: ["pnd50-leads@owned.resend.app"] })),
+      response,
+    );
+
+    expect(result()).toMatchObject({
+      statusCode: 200,
+      body: {
+        received: true,
+        forwarded: false,
+        delivery_mode: "observed_copy",
+        router_accepted: true,
+      },
+    });
+    expect(calls).toEqual(["retrieve", "router"]);
+    expect(client.forward).not.toHaveBeenCalled();
+  });
+
+  it("ignores observed copies sent to a different receiving address", async () => {
+    const options = handlerOptions({
+      env: {
+        RESEND_WEBHOOK_SECRET: secret,
+        RESEND_API_KEY: "re_test_only",
+        VERCEL_ENV: "production",
+        PND50_INBOUND_DELIVERY_MODE: "observed_copy",
+        PND50_INBOUND_OBSERVED_RECIPIENT: "pnd50-leads@owned.resend.app",
+      },
+    });
+    const { response, result } = responseRecorder();
+    await createInboundEmailHandler(options)(
+      signedRequest(emailEvent({ to: ["another-project@owned.resend.app"] })),
+      response,
+    );
+
+    expect(result()).toEqual({
+      statusCode: 200,
+      body: {
+        received: true,
+        ignored: true,
+        reason: "RECIPIENT_NOT_ALLOWED",
+      },
+    });
+    expect(options.client.retrieve).not.toHaveBeenCalled();
+    expect(options.client.forward).not.toHaveBeenCalled();
+    expect(options.sendRouter).not.toHaveBeenCalled();
+  });
+
+  it("fails closed when observed-copy mode has no receiving allowlist", async () => {
+    const options = handlerOptions({
+      env: {
+        RESEND_WEBHOOK_SECRET: secret,
+        RESEND_API_KEY: "re_test_only",
+        PND50_INBOUND_DELIVERY_MODE: "observed_copy",
+      },
+    });
+    const { response, result } = responseRecorder();
+    await createInboundEmailHandler(options)(signedRequest(emailEvent()), response);
+
+    expect(result()).toEqual({
+      statusCode: 503,
+      body: { error: "OBSERVED_RECIPIENT_NOT_CONFIGURED" },
+    });
+    expect(options.client.retrieve).not.toHaveBeenCalled();
+    expect(options.client.forward).not.toHaveBeenCalled();
+    expect(options.sendRouter).not.toHaveBeenCalled();
+  });
+
+  it("fails closed for an unknown delivery mode", async () => {
+    const base = handlerOptions();
+    const options = handlerOptions({
+      env: {
+        ...base.env,
+        PND50_INBOUND_DELIVERY_MODE: "mirror_everything",
+      },
+    });
+    const { response, result } = responseRecorder();
+    await createInboundEmailHandler(options)(signedRequest(emailEvent()), response);
+
+    expect(result()).toEqual({
+      statusCode: 503,
+      body: { error: "INVALID_DELIVERY_MODE" },
+    });
+    expect(options.client.retrieve).not.toHaveBeenCalled();
+    expect(options.client.forward).not.toHaveBeenCalled();
+    expect(options.sendRouter).not.toHaveBeenCalled();
+  });
+
   it("does not route when forwarding fails", async () => {
     const client = resendClient({
       forward: vi.fn(async () => ({ error: { name: "provider_error" } })),
