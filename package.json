@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:inbound-email": "vitest run src/test/pnd50-inbound-email.test.ts",
     "test:lead-router": "node --test supabase/functions/_shared/lead-router.test.mjs",
     "test:watch": "vitest"
   },
