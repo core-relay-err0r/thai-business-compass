@@ -1,10 +1,11 @@
-import type { LeadEventInput, RouterResult } from "./lead-router.js";
+import type { LeadEventInput, RouterReceipt, RouterResult } from "./lead-router.js";
 
 const MAX_WEBHOOK_BYTES = 1_000_000;
 const EMAIL_PATTERN = /[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+/i;
 const AUTO_REPLY_PATTERN = /\b(auto(?:matic)? reply|auto.?response|out of office|away from (?:the )?office|delivery status notification|undeliverable|mail delivery subsystem)\b/i;
 const BULK_PATTERN = /\b(newsletter|unsubscribe|weekly digest|monthly digest|mailing list)\b/i;
 const SPAM_PATTERN = /\b(backlink|guest post|seo (?:service|offer)|domain authority|website traffic|crypto promotion|web development offer)\b/i;
+const DEFAULT_INTERNAL_DOMAINS = new Set(["pnd50.com", "burakornpartners.com"]);
 
 type Environment = Record<string, string | undefined>;
 
@@ -23,6 +24,9 @@ type ReceivedEmailData = {
   to?: unknown;
   subject?: unknown;
   attachments?: unknown;
+  fixture_text?: unknown;
+  fixture_html?: unknown;
+  fixture_internal_sender?: unknown;
 };
 
 type VerifiedWebhook = {
@@ -130,11 +134,100 @@ function parseMailbox(value: unknown) {
   return { email, name: name && name.toLowerCase() !== email ? name : "" };
 }
 
+function decodeBasicHtmlEntities(value: string) {
+  return value
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#(?:39|x27);/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+}
+
 function stripHtml(value: string | null | undefined) {
-  return String(value ?? "")
+  const withoutQuotedHistory = String(value ?? "")
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+    .replace(/<blockquote\b[\s\S]*$/i, " ")
+    .replace(
+      /<div\b[^>]*class=(["'])[^"']*(?:gmail_quote|yahoo_quoted|protonmail_quote)[^"']*\1[^>]*>[\s\S]*$/i,
+      " ",
+    )
+    .replace(/<(?:br|p|div|li|tr|h[1-6])\b[^>]*>/gi, "\n")
+    .replace(/<\/(?:p|div|li|tr|h[1-6])>/gi, "\n")
     .replace(/<[^>]+>/g, " ");
+  return decodeBasicHtmlEntities(withoutQuotedHistory);
+}
+
+function stripQuotedHistory(value: string) {
+  const lines = value.replace(/\r\n?/g, "\n").split("\n");
+  let cutoff = lines.length;
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index].trim();
+    const window = lines.slice(index, index + 7).map((item) => item.trim());
+    const joinedWindow = window.join(" ");
+    const startsGmailReply = /^on\b/i.test(line) && /\bwrote:(?:\s|$)/i.test(joinedWindow);
+    const startsMessageBlock = /^[-_]{2,}\s*(?:original message|forwarded message)\s*[-_]{2,}$/i.test(line);
+    const startsOutlookReply =
+      /^from:\s*\S/i.test(line) &&
+      window.some((item) => /^(?:sent|date):\s*\S/i.test(item)) &&
+      window.some((item) => /^to:\s*\S/i.test(item)) &&
+      window.some((item) => /^subject:\s*\S/i.test(item));
+
+    if (startsGmailReply || startsMessageBlock || startsOutlookReply) {
+      cutoff = index;
+      break;
+    }
+  }
+
+  const newestLines = lines
+    .slice(0, cutoff)
+    .filter((line) => !/^\s*>/.test(line));
+  const signatureIndex = newestLines.findIndex(
+    (line, index) =>
+      index > 0 &&
+      /^(?:(?:best|kind|warm)\s+regards|regards|sincerely)[,!]?\s*$/i.test(line.trim()),
+  );
+  return newestLines
+    .slice(0, signatureIndex >= 0 ? signatureIndex : newestLines.length)
+    .join("\n");
+}
+
+function newestMessageText(details: ReceivedEmailDetails | null) {
+  const plainText = String(details?.text ?? "");
+  const source = plainText.trim() ? plainText : stripHtml(details?.html);
+  return stripQuotedHistory(source);
+}
+
+function listValues(value: string | undefined) {
+  return String(value ?? "")
+    .split(/[,;\n]/)
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function senderDomain(email: string) {
+  const separator = email.lastIndexOf("@");
+  return separator >= 0 ? email.slice(separator + 1).toLowerCase() : "";
+}
+
+function isConfiguredInternalSender(email: string, env: Environment) {
+  const normalizedEmail = email.trim().toLowerCase();
+  const exactSenders = new Set(
+    listValues(env.PND50_INBOUND_INTERNAL_SENDERS)
+      .map((value) => parseMailbox(value).email)
+      .filter(Boolean),
+  );
+  const internalDomains = new Set([
+    ...DEFAULT_INTERNAL_DOMAINS,
+    ...listValues(env.PND50_INBOUND_INTERNAL_DOMAINS).map((value) => value.replace(/^@/, "")),
+  ]);
+  return exactSenders.has(normalizedEmail) || internalDomains.has(senderDomain(normalizedEmail));
+}
+
+function resendRecordUrl(emailId: string) {
+  return `https://resend.com/emails/${encodeURIComponent(emailId)}`;
 }
 
 function normalizedHeaders(headers: Record<string, string> | null | undefined) {
@@ -148,7 +241,7 @@ function classifyInbound(
   details: ReceivedEmailDetails | null,
 ) {
   const headers = normalizedHeaders(details?.headers);
-  const text = compact(`${subject} ${details?.text ?? ""} ${stripHtml(details?.html)}`, 8_000);
+  const text = compact(`${subject} ${newestMessageText(details)}`, 8_000);
   const autoSubmitted = headers["auto-submitted"];
   const precedence = headers.precedence?.toLowerCase();
 
@@ -203,24 +296,29 @@ function validDate(value: unknown, fallback: Date) {
 }
 
 function eventMessage(kind: string, intent: string) {
+  if (kind === "internal") return "Internal email observed and journaled without paging.";
   if (kind !== "human") return "Inbound email classified as automated or bulk traffic.";
   if (intent === "unknown") return "Inbound email received without a clear commercial intent.";
-  return `Inbound email indicates commercial intent: ${intent.replaceAll("_", " ")}.`;
+  return `Inbound email indicates commercial intent: ${intent.replace(/_/g, " ")}.`;
 }
 
 export function buildInboundLeadEvent({
   data,
   details,
+  internalSender = false,
   now,
 }: {
   data: ReceivedEmailData;
   details: ReceivedEmailDetails | null;
+  internalSender?: boolean;
   now: Date;
 }): LeadEventInput {
   const emailId = compact(data.email_id, 160);
   const sender = parseMailbox(data.from);
   const subject = compact(data.subject, 300);
-  const classification = classifyInbound(subject, details);
+  const classification = internalSender
+    ? { kind: "internal", eventType: "internal_email", intent: "unknown" }
+    : classifyInbound(subject, details);
   const recipients = Array.isArray(data.to) ? data.to : [];
   const attachments = Array.isArray(data.attachments) ? data.attachments : [];
 
@@ -231,7 +329,9 @@ export function buildInboundLeadEvent({
     source_channel: "email",
     source_url: "https://pnd50.com",
     source_route: "/api/resend/inbound",
+    source_record_url: resendRecordUrl(emailId),
     ...(sender.name ? { lead_name: sender.name } : {}),
+    ...(senderDomain(sender.email) ? { company: senderDomain(sender.email) } : {}),
     lead_email: sender.email,
     message: eventMessage(classification.kind, classification.intent),
     detected_intent: classification.intent,
@@ -239,6 +339,7 @@ export function buildInboundLeadEvent({
     metadata: {
       event_type: classification.eventType,
       inbound_kind: classification.kind,
+      sender_scope: internalSender ? "internal" : "external",
       recipient_count: Math.min(recipients.length, 20),
       has_attachments: attachments.length > 0,
       subject_present: Boolean(subject),
@@ -258,12 +359,23 @@ function isPreviewFixture(env: Environment, data: ReceivedEmailData) {
   const sender = parseMailbox(data.from).email;
   const recipients = Array.isArray(data.to) ? data.to.map((item) => compact(item, 320)) : [];
   const attachments = Array.isArray(data.attachments) ? data.attachments : [];
+  const observedRecipient = parseMailbox(env.PND50_INBOUND_OBSERVED_RECIPIENT).email;
+  const allowedRecipients = new Set([
+    "info@pnd50.com",
+    ...(observedRecipient ? [observedRecipient] : []),
+  ]);
+  const fixtureText = data.fixture_text;
+  const fixtureHtml = data.fixture_html;
+  const fixtureInternalSender = data.fixture_internal_sender;
   return (
     emailId.startsWith("pnd50-preview-fixture-") &&
     sender.endsWith("@example.com") &&
     recipients.length > 0 &&
-    recipients.every((recipient) => recipient.toLowerCase().endsWith("@pnd50.com")) &&
-    attachments.length === 0
+    recipients.every((recipient) => allowedRecipients.has(parseMailbox(recipient).email)) &&
+    attachments.length === 0 &&
+    (fixtureText === undefined || (typeof fixtureText === "string" && fixtureText.length <= 8_000)) &&
+    (fixtureHtml === undefined || (typeof fixtureHtml === "string" && fixtureHtml.length <= 8_000)) &&
+    (fixtureInternalSender === undefined || typeof fixtureInternalSender === "boolean")
   );
 }
 
@@ -390,8 +502,28 @@ export function createInboundEmailHandler({
       return res.status(403).json({ error: "PREVIEW_FIXTURE_REQUIRED" });
     }
 
+    const internalSender =
+      isConfiguredInternalSender(sender.email, env) ||
+      (previewFixture && data.fixture_internal_sender === true);
+    if (internalSender && deliveryMode === "forward" && !previewFixture) {
+      logger.info("[resend-inbound] internal sender suppressed before forwarding");
+      return res.status(200).json({
+        received: true,
+        forwarded: false,
+        ignored: true,
+        internal_sender: true,
+        reason: "INTERNAL_SENDER",
+      });
+    }
+
     let details: ReceivedEmailDetails | null = null;
-    if (!previewFixture) {
+    if (previewFixture) {
+      details = {
+        text: typeof data.fixture_text === "string" ? data.fixture_text : null,
+        html: typeof data.fixture_html === "string" ? data.fixture_html : null,
+        headers: {},
+      };
+    } else if (!internalSender) {
       const apiKey = env.RESEND_API_KEY?.trim();
       const forwardTo = env.FORWARD_TO?.trim();
       if (!apiKey || (deliveryMode === "forward" && !forwardTo)) {
@@ -426,12 +558,20 @@ export function createInboundEmailHandler({
       }
     }
 
-    const leadEvent = buildInboundLeadEvent({ data, details, now: now() });
+    const leadEvent = buildInboundLeadEvent({
+      data,
+      details,
+      internalSender,
+      now: now(),
+    });
     let routerAccepted = false;
+    let routerPreview: RouterReceipt | undefined;
     try {
       const routerResult = await sendRouter(leadEvent, env);
       routerAccepted = routerResult.ok;
-      if (!routerResult.ok) {
+      if (routerResult.ok) {
+        routerPreview = routerResult.receipt;
+      } else {
         logger.warn("[resend-inbound] Lead Router did not accept the event", {
           status: routerResult.status,
           responseStatus: routerResult.responseStatus,
@@ -445,14 +585,17 @@ export function createInboundEmailHandler({
       eventId: leadEvent.event_id,
       fixture: previewFixture,
       deliveryMode,
+      internalSender,
       routerAccepted,
     });
     return res.status(200).json({
       received: true,
-      forwarded: deliveryMode === "forward",
+      forwarded: deliveryMode === "forward" && !internalSender,
       fixture: previewFixture,
+      internal_sender: internalSender,
       delivery_mode: deliveryMode,
       router_accepted: routerAccepted,
+      ...(previewFixture && routerPreview ? { router_preview: routerPreview } : {}),
       event_id: leadEvent.event_id,
     });
   };

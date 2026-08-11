@@ -4,6 +4,9 @@ const previewUrl = process.env.PND50_INBOUND_PREVIEW_URL?.trim();
 const webhookSecret = process.env.RESEND_WEBHOOK_SECRET?.trim();
 const previewBypass = process.env.PND50_INBOUND_PREVIEW_BYPASS?.trim();
 const replay = process.argv.includes("--replay");
+const scenario =
+  process.argv.find((argument) => argument.startsWith("--scenario="))?.split("=", 2)[1] ||
+  "quote";
 
 if (!previewUrl || !webhookSecret) {
   throw new Error("PND50_INBOUND_PREVIEW_URL and RESEND_WEBHOOK_SECRET are required.");
@@ -17,22 +20,50 @@ if (!endpoint.hostname.endsWith(".vercel.app")) {
   throw new Error("The synthetic fixture requires a Vercel Preview hostname.");
 }
 
+const scenarios = {
+  quote: {
+    from: "Preview Buyer <pnd50-preview-buyer@example.com>",
+    subject: "Accounting quote request for a Thailand company",
+    fixture_text: "Please send an accounting proposal for the next step.",
+  },
+  quoted_history: {
+    from: "Preview Buyer <pnd50-preview-buyer@example.com>",
+    subject: "Re: Thailand company setup",
+    fixture_text: [
+      "Could you send the proposal and fees for the next step?",
+      "",
+      "On Monday, August 10, 2026, Previous Sender wrote:",
+      "> The earlier invoice was paid.",
+    ].join("\n"),
+  },
+  internal_sender: {
+    from: "Preview Internal <internal@example.com>",
+    subject: "Payment invoice requires attention",
+    fixture_text: "Please review the payment today.",
+    fixture_internal_sender: true,
+  },
+};
+
+const selectedScenario = scenarios[scenario];
+if (!selectedScenario) {
+  throw new Error(`Unsupported fixture scenario: ${scenario}`);
+}
+
 const emailId =
   process.env.PND50_INBOUND_FIXTURE_EMAIL_ID?.trim() ||
-  `pnd50-preview-fixture-${new Date().toISOString().slice(0, 10)}-v1`;
+  `pnd50-preview-fixture-${scenario}-${new Date().toISOString().slice(0, 10)}-v1`;
 const payload = JSON.stringify({
   type: "email.received",
   created_at: new Date().toISOString(),
   data: {
     email_id: emailId,
     created_at: new Date().toISOString(),
-    from: "Preview Buyer <pnd50-preview-buyer@example.com>",
+    ...selectedScenario,
     to: ["info@pnd50.com"],
     bcc: [],
     cc: [],
     received_for: ["info@pnd50.com"],
     message_id: `fixture-${emailId}`,
-    subject: "Accounting quote request for a Thailand company",
     attachments: [],
   },
 });
@@ -65,10 +96,12 @@ async function deliver(attempt) {
   const body = await response.json().catch(() => ({}));
   const safe = {
     attempt,
+    scenario,
     status: response.status,
     received: body.received === true,
     forwarded: body.forwarded === true,
     fixture: body.fixture === true,
+    internal_sender: body.internal_sender === true,
     router_accepted: body.router_accepted === true,
     event_id: typeof body.event_id === "string" ? body.event_id : null,
   };

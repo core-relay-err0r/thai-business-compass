@@ -1,7 +1,7 @@
 import { createHmac } from "node:crypto";
 import { Resend } from "resend";
 import { describe, expect, it, vi } from "vitest";
-import { sendLeadEvent } from "../../server/lead-router.js";
+import { sendLeadEvent, type LeadEventInput } from "../../server/lead-router.js";
 import {
   buildInboundLeadEvent,
   createInboundEmailHandler,
@@ -92,7 +92,7 @@ function resendClient(
 
 function handlerOptions(overrides: Record<string, unknown> = {}) {
   const client = resendClient();
-  const sendRouter = vi.fn(async () => ({
+  const sendRouter = vi.fn(async (_event: LeadEventInput, _env: Record<string, string | undefined>) => ({
     ok: true as const,
     status: "accepted" as const,
     responseStatus: 202,
@@ -145,6 +145,45 @@ describe("PND50 inbound Resend webhook", () => {
     });
   });
 
+  it("journals a signed Preview internal fixture without retrieving or forwarding", async () => {
+    const options = handlerOptions({
+      env: {
+        RESEND_WEBHOOK_SECRET: secret,
+        VERCEL_ENV: "preview",
+        PND50_INBOUND_FIXTURE_MODE: "true",
+      },
+    });
+    const { response, result } = responseRecorder();
+    await createInboundEmailHandler(options)(
+      signedRequest(
+        emailEvent({
+          from: "Preview Internal <internal@example.com>",
+          subject: "Payment invoice requires attention",
+          fixture_internal_sender: true,
+          fixture_text: "Please review the payment today.",
+        }),
+      ),
+      response,
+    );
+
+    expect(result()).toMatchObject({
+      statusCode: 200,
+      body: {
+        received: true,
+        fixture: true,
+        internal_sender: true,
+        router_accepted: true,
+      },
+    });
+    expect(options.client.retrieve).not.toHaveBeenCalled();
+    expect(options.client.forward).not.toHaveBeenCalled();
+    expect(options.sendRouter).toHaveBeenCalledTimes(1);
+    expect(options.sendRouter.mock.calls[0][0]).toMatchObject({
+      detected_intent: "unknown",
+      metadata: { event_type: "internal_email", inbound_kind: "internal" },
+    });
+  });
+
   it("rejects an invalid signature before retrieval, forwarding, or routing", async () => {
     const options = handlerOptions();
     const { response, result } = responseRecorder();
@@ -194,7 +233,7 @@ describe("PND50 inbound Resend webhook", () => {
     const options = handlerOptions({
       client,
       createResendClient: () => client,
-      sendRouter: vi.fn(async () => {
+      sendRouter: vi.fn(async (_event: LeadEventInput, _env: Record<string, string | undefined>) => {
         calls.push("router");
         return { ok: true as const, status: "accepted" as const, responseStatus: 202 };
       }),
@@ -234,7 +273,7 @@ describe("PND50 inbound Resend webhook", () => {
       },
       client,
       createResendClient: () => client,
-      sendRouter: vi.fn(async () => {
+      sendRouter: vi.fn(async (_event: LeadEventInput, _env: Record<string, string | undefined>) => {
         calls.push("router");
         return { ok: true as const, status: "accepted" as const, responseStatus: 202 };
       }),
@@ -256,6 +295,84 @@ describe("PND50 inbound Resend webhook", () => {
     });
     expect(calls).toEqual(["retrieve", "router"]);
     expect(client.forward).not.toHaveBeenCalled();
+  });
+
+  it("journals a configured internal observed copy without retrieving its content", async () => {
+    const client = resendClient();
+    const options = handlerOptions({
+      env: {
+        RESEND_WEBHOOK_SECRET: secret,
+        VERCEL_ENV: "production",
+        PND50_INBOUND_DELIVERY_MODE: "observed_copy",
+        PND50_INBOUND_OBSERVED_RECIPIENT: "pnd50-leads@owned.resend.app",
+        PND50_INBOUND_INTERNAL_SENDERS: "owner@example.net",
+      },
+      client,
+      createResendClient: () => client,
+    });
+    const { response, result } = responseRecorder();
+    await createInboundEmailHandler(options)(
+      signedRequest(
+        emailEvent({
+          from: "Owner <owner@example.net>",
+          to: ["pnd50-leads@owned.resend.app"],
+          subject: "Payment and invoice status",
+        }),
+      ),
+      response,
+    );
+
+    expect(result()).toMatchObject({
+      statusCode: 200,
+      body: {
+        received: true,
+        forwarded: false,
+        internal_sender: true,
+        router_accepted: true,
+      },
+    });
+    expect(client.retrieve).not.toHaveBeenCalled();
+    expect(client.forward).not.toHaveBeenCalled();
+    expect(options.sendRouter.mock.calls[0][0]).toMatchObject({
+      company: "example.net",
+      detected_intent: "unknown",
+      metadata: { event_type: "internal_email", inbound_kind: "internal" },
+    });
+  });
+
+  it("treats the Burakorn operating domain as internal by default", async () => {
+    const client = resendClient();
+    const options = handlerOptions({
+      env: {
+        RESEND_WEBHOOK_SECRET: secret,
+        VERCEL_ENV: "production",
+        PND50_INBOUND_DELIVERY_MODE: "observed_copy",
+        PND50_INBOUND_OBSERVED_RECIPIENT: "pnd50-leads@owned.resend.app",
+      },
+      client,
+      createResendClient: () => client,
+    });
+    const { response, result } = responseRecorder();
+    await createInboundEmailHandler(options)(
+      signedRequest(
+        emailEvent({
+          from: "Operations <staff@burakornpartners.com>",
+          to: ["pnd50-leads@owned.resend.app"],
+          subject: "Urgent payment status",
+        }),
+      ),
+      response,
+    );
+
+    expect(result()).toMatchObject({
+      statusCode: 200,
+      body: { internal_sender: true, router_accepted: true },
+    });
+    expect(client.retrieve).not.toHaveBeenCalled();
+    expect(options.sendRouter.mock.calls[0][0]).toMatchObject({
+      detected_intent: "unknown",
+      metadata: { inbound_kind: "internal" },
+    });
   });
 
   it("ignores observed copies sent to a different receiving address", async () => {
@@ -341,7 +458,7 @@ describe("PND50 inbound Resend webhook", () => {
 
   it("keeps a successful forward successful when the Router fails", async () => {
     const options = handlerOptions({
-      sendRouter: vi.fn(async () => {
+      sendRouter: vi.fn(async (_event: LeadEventInput, _env: Record<string, string | undefined>) => {
         throw new Error("router unavailable");
       }),
     });
@@ -364,11 +481,19 @@ describe("PND50 inbound Resend webhook", () => {
       },
     });
     const { response, result } = responseRecorder();
-    await createInboundEmailHandler(options)(signedRequest(emailEvent()), response);
+    await createInboundEmailHandler(options)(
+      signedRequest(
+        emailEvent({
+          fixture_internal_sender: true,
+          fixture_text: "Synthetic internal payment fixture",
+        }),
+      ),
+      response,
+    );
 
     expect(result()).toMatchObject({
       statusCode: 200,
-      body: { fixture: false, forwarded: true },
+      body: { fixture: false, forwarded: true, internal_sender: false },
     });
     expect(options.client.retrieve).toHaveBeenCalledTimes(1);
     expect(options.client.forward).toHaveBeenCalledTimes(1);
@@ -432,6 +557,76 @@ describe("PND50 inbound LeadEvent privacy and classification", () => {
     expect(event.message).toBe("Inbound email indicates commercial intent: accounting.");
   });
 
+  it("classifies only the newest plain-text segment before quoted history", () => {
+    const event = buildInboundLeadEvent({
+      data: { ...baseData, subject: "Re: Thailand company setup" },
+      details: {
+        text: [
+          "Could you send the proposal and fees for the next step?",
+          "",
+          "On Monday, August 10, 2026, Previous Sender wrote:",
+          "> The earlier invoice was paid.",
+        ].join("\n"),
+        headers: {},
+      },
+      now,
+    });
+    expect(event.detected_intent).toBe("quote_request");
+  });
+
+  it("does not promote a neutral reply from payment words in quoted history", () => {
+    const event = buildInboundLeadEvent({
+      data: { ...baseData, subject: "Re: Thailand company setup" },
+      details: {
+        text: [
+          "Thank you. We will review and reply tomorrow.",
+          "",
+          "-----Original Message-----",
+          "Please pay the attached invoice today.",
+        ].join("\n"),
+        headers: {},
+      },
+      now,
+    });
+    expect(event.detected_intent).toBe("unknown");
+  });
+
+  it("removes HTML blockquotes before classification", () => {
+    const event = buildInboundLeadEvent({
+      data: { ...baseData, subject: "Re: Thailand company setup" },
+      details: {
+        html: "<p>Please send your proposal.</p><blockquote><p>The invoice was paid.</p></blockquote>",
+        headers: {},
+      },
+      now,
+    });
+    expect(event.detected_intent).toBe("quote_request");
+  });
+
+  it("journals an internal sender without commercial classification", () => {
+    const event = buildInboundLeadEvent({
+      data: { ...baseData, subject: "Urgent payment and invoice" },
+      details: { text: "Please pay this invoice today.", headers: {} },
+      internalSender: true,
+      now,
+    });
+    expect(event.detected_intent).toBe("unknown");
+    expect(event.message).toBe("Internal email observed and journaled without paging.");
+    expect(event.metadata).toMatchObject({
+      event_type: "internal_email",
+      inbound_kind: "internal",
+      sender_scope: "internal",
+    });
+  });
+
+  it("adds a domain-only source hint and authenticated Resend record link", () => {
+    const event = buildInboundLeadEvent({ data: baseData, details: null, now });
+    expect(event.company).toBe("example.com");
+    expect(event.source_record_url).toBe(
+      "https://resend.com/emails/pnd50-preview-fixture-email-001",
+    );
+  });
+
   it("keeps a stable event id for exact webhook replays", () => {
     const first = buildInboundLeadEvent({ data: baseData, details: null, now });
     const replay = buildInboundLeadEvent({
@@ -461,7 +656,9 @@ describe("PND50 Node Lead Router adapter", () => {
   });
 
   it("posts only the normalized event with Preview authentication", async () => {
-    const fetchImpl = vi.fn(async () => new Response("{}", { status: 202 }));
+    const fetchImpl = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+      new Response("{}", { status: 202 }),
+    );
     await expect(
       sendLeadEvent(event, {
         env: {
@@ -482,5 +679,76 @@ describe("PND50 Node Lead Router adapter", () => {
     });
     expect(init.body).toBe(JSON.stringify(event));
     expect(init.body).not.toContain("PUSHOVER");
+  });
+
+  it("fails closed if a Vercel Preview is pointed at the Production Router alias", async () => {
+    const fetchImpl = vi.fn();
+    await expect(
+      sendLeadEvent(event, {
+        env: {
+          VERCEL_ENV: "preview",
+          LEAD_ROUTER_URL: "https://lead-alarm-router.vercel.app",
+          LEAD_ROUTER_SHARED_SECRET: "preview-only-secret",
+        },
+        fetchImpl,
+      }),
+    ).resolves.toEqual({ ok: false, status: "invalid_configuration" });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("allows the stable private Router Preview alias", async () => {
+    const fetchImpl = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+      new Response("{}", { status: 202 }),
+    );
+    await expect(
+      sendLeadEvent(event, {
+        env: {
+          VERCEL_ENV: "preview",
+          LEAD_ROUTER_URL: "https://lead-alarm-router-karhar91-burakorn.vercel.app",
+          LEAD_ROUTER_SHARED_SECRET: "preview-only-secret",
+        },
+        fetchImpl,
+      }),
+    ).resolves.toEqual({ ok: true, status: "accepted", responseStatus: 202 });
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it("allows the verified private Router Preview deployment host", async () => {
+    const fetchImpl = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+      Response.json(
+        {
+          event: { priority: "P1", detected_intent: "quote_request" },
+          notification: {
+            duplicate: true,
+            delivery_status: "suppressed_duplicate",
+            dry_run: true,
+            payload: { message: "must not escape through the receipt" },
+          },
+        },
+        { status: 202 },
+      ),
+    );
+    await expect(
+      sendLeadEvent(event, {
+        env: {
+          VERCEL_ENV: "preview",
+          LEAD_ROUTER_URL: "https://lead-alarm-router-8h15hdcbo-burakorn.vercel.app",
+          LEAD_ROUTER_SHARED_SECRET: "preview-only-secret",
+        },
+        fetchImpl,
+      }),
+    ).resolves.toEqual({
+      ok: true,
+      status: "accepted",
+      responseStatus: 202,
+      receipt: {
+        priority: "P1",
+        detected_intent: "quote_request",
+        duplicate: true,
+        delivery_status: "suppressed_duplicate",
+        dry_run: true,
+      },
+    });
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
   });
 });
