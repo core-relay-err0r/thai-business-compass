@@ -8,12 +8,12 @@ export function HeroSection() {
       title="Accounting and corporate compliance for foreign-owned businesses in Thailand."
       subtitle="From company setup and monthly bookkeeping to payroll, tax filings and year-end close, PND50 helps international businesses stay organised and compliant in Thailand."
       callToAction={{
-        text: "View our services",
-        href: "/services#corporate",
-      }}
-      secondaryAction={{
         text: "Contact us",
         href: "/contact",
+      }}
+      secondaryAction={{
+        text: "View services",
+        href: "/services",
       }}
       image={{
         src: heroProvocativeCompliance,
