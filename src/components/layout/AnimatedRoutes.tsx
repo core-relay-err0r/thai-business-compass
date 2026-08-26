@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 const Home = lazy(() => import("@/pages/Home"));
 const Services = lazy(() => import("@/pages/Services"));
+const CostEstimator = lazy(() => import("@/pages/CostEstimator"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const About = lazy(() => import("@/pages/About"));
 const Submit = lazy(() => import("@/pages/Submit"));
@@ -29,7 +30,8 @@ export function AnimatedRoutes() {
         <Route path="/corporate" element={<Navigate to="/services#corporate" replace />} />
         <Route path="/corporate-services" element={<Navigate to="/services#corporate" replace />} />
         <Route path="/accounting" element={<Navigate to="/services#accounting" replace />} />
-        <Route path="/cost-calculator" element={<Navigate to="/services#accounting" replace />} />
+        <Route path="/cost-calculator" element={<Navigate to="/tools/cost-estimator" replace />} />
+        <Route path="/tools/cost-estimator" element={<CostEstimator />} />
         <Route path="/consulting" element={<Navigate to="/services#consulting" replace />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />

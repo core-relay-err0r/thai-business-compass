@@ -33,7 +33,7 @@
     },
     {
       "source": "/cost-calculator",
-      "destination": "/services#accounting",
+      "destination": "/tools/cost-estimator",
       "permanent": true
     },
     {

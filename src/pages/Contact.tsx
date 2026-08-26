@@ -148,8 +148,8 @@ export default function Contact() {
                     <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   </div>
                   <div>
-                    <h2 className="font-semibold text-sm sm:text-base">Send a Message</h2>
-                    <p className="text-xs sm:text-sm text-muted-foreground">Fill out the form and we'll be in touch</p>
+                    <h2 className="font-semibold text-sm sm:text-base">Tell us what you need</h2>
+                    <p className="text-xs sm:text-sm text-muted-foreground">Four short fields. No service selection required.</p>
                   </div>
                 </div>
 
@@ -183,27 +183,25 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-1.5 sm:space-y-2">
-                    <Label htmlFor="phone" className="text-sm">Phone *</Label>
+                    <Label htmlFor="phone" className="text-sm">Phone <span className="font-normal text-muted-foreground">(optional)</span></Label>
                     <Input
                       id="phone"
                       name="phone"
                       placeholder="+66 XX XXX XXXX"
                       value={formData.phone}
                       onChange={handleChange}
-                      required
                       className="min-h-[44px]"
                     />
                   </div>
 
                   <div className="space-y-1.5 sm:space-y-2">
-                    <Label htmlFor="companyName" className="text-sm">Company Name *</Label>
+                    <Label htmlFor="companyName" className="text-sm">Company Name <span className="font-normal text-muted-foreground">(optional)</span></Label>
                     <Input
                       id="companyName"
                       name="companyName"
                       placeholder="Your Company Ltd."
                       value={formData.companyName}
                       onChange={handleChange}
-                      required
                       className="min-h-[44px]"
                     />
                   </div>

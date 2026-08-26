@@ -32,6 +32,18 @@ const CONTACT = {
 // conversion workflow marked noindex, not a search landing page.
 const NOINDEX_ROUTES = [
   {
+    path: "/tools/cost-estimator",
+    title: "Accounting Cost Estimator Thailand | PND50",
+    description: "Build a preliminary accounting and compliance estimate for your Thai company. Final scope and fees are confirmed after review by PND50.",
+    h1: "Accounting cost estimator for Thailand",
+    body: ["Build an optional preliminary estimate, or contact PND50 directly without selecting services first."],
+    links: [
+      { href: "/contact", label: "Contact PND50 directly" },
+      { href: "/services", label: "Browse accounting services" },
+    ],
+    schema: [],
+  },
+  {
     path: "/submit",
     title: "Tell us what you need | PND50",
     description: "Describe your accounting, tax, corporate, or business issue to the PND50 team in Bangkok.",
@@ -618,6 +630,7 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /submit
+Disallow: /tools/cost-estimator
 
 Sitemap: ${SITE_URL}/sitemap.xml
 Host: ${SITE_URL}

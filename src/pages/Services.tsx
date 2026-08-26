@@ -3,11 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
-import { AccountingWizard } from "@/components/accounting/AccountingWizard";
-import { LiveEstimate } from "@/components/accounting/LiveEstimate";
-import { MobileEstimateSheet } from "@/components/accounting/MobileEstimateSheet";
 import { ConsultingServices } from "@/components/consulting/ConsultingServices";
-import { AIRecommender } from "@/components/services/AIRecommender";
 import { ArrowRight, Building2, Calculator, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -164,14 +160,13 @@ export default function Services() {
                 </p>
               </div>
               <Link
-                to="/submit"
+                to="/contact"
                 className="inline-flex min-h-[48px] shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Start a conversation
+                Get a consultation
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
-            <AIRecommender defaultOpen />
           </div>
           <div className="flex gap-8 lg:gap-12 max-w-7xl mx-auto">
             {/* Sticky Sidebar - Desktop Only */}
@@ -216,10 +211,6 @@ export default function Services() {
                   })}
                 </div>
 
-                {/* Live Estimate - Always visible */}
-                <div className="pt-6 border-t border-border">
-                  <LiveEstimate />
-                </div>
               </div>
             </div>
 
@@ -250,7 +241,25 @@ export default function Services() {
                     Explore likely compliance work and estimate cost after the accounting need is understood.
                   </p>
                 </div>
-                <AccountingWizard />
+                <div className="border border-border bg-muted/20 p-5 sm:p-6">
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Monthly bookkeeping, tax filing, payroll, and year-end work are scoped around your registrations, transaction volume, and deadlines. You do not need to calculate the scope before contacting us.
+                  </p>
+                  <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                    <Link
+                      to="/contact"
+                      className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+                    >
+                      Tell us what you need <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                    <Link
+                      to="/tools/cost-estimator"
+                      className="inline-flex min-h-11 items-center justify-center border border-border px-4 text-sm font-medium hover:bg-muted"
+                    >
+                      Use the optional cost estimator
+                    </Link>
+                  </div>
+                </div>
               </div>
 
               {/* Consulting Section */}
@@ -271,8 +280,6 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Mobile Floating Estimate Button */}
-      <MobileEstimateSheet />
     </Layout>
   );
 }

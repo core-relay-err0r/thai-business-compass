@@ -56,7 +56,7 @@ export function ClientFitSection() {
             </div>
 
             <Link
-              to="/submit"
+              to="/contact"
               className="group mt-10 inline-flex min-h-[54px] items-center justify-between gap-6 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-background hover:text-foreground"
             >
               This sounds right — let&apos;s talk

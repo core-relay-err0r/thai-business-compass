@@ -7,7 +7,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(ROOT, "dist");
 const SITE_URL = "https://www.pnd50.com";
 const STATIC_PATHS = ["/", "/services", "/about", "/contact", "/blog", "/privacy", "/tos"];
-const NOINDEX_PATHS = ["/submit"];
+const NOINDEX_PATHS = ["/submit", "/tools/cost-estimator"];
 const LEGACY_PATHS = ["/corporate", "/corporate-services", "/accounting", "/cost-calculator", "/consulting", "/terms"];
 
 function occurrences(text, pattern) {
