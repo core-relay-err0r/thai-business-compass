@@ -227,7 +227,7 @@ export default function Contact() {
                       </>
                     ) : (
                       <>
-                        Send Message
+                        Send message
                         <Send className="ml-2 h-4 w-4" />
                       </>
                     )}

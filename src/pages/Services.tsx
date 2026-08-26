@@ -163,7 +163,7 @@ export default function Services() {
                 to="/contact"
                 className="inline-flex min-h-[48px] shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Get a consultation
+                Contact us
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
@@ -250,13 +250,13 @@ export default function Services() {
                       to="/contact"
                       className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                     >
-                      Tell us what you need <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      Contact us <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </Link>
                     <Link
                       to="/tools/cost-estimator"
                       className="inline-flex min-h-11 items-center justify-center border border-border px-4 text-sm font-medium hover:bg-muted"
                     >
-                      Use the optional cost estimator
+                      Get an estimate
                     </Link>
                   </div>
                 </div>

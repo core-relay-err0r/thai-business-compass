@@ -59,7 +59,7 @@ export function ClientFitSection() {
               to="/contact"
               className="group mt-10 inline-flex min-h-[54px] items-center justify-between gap-6 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-background hover:text-foreground"
             >
-              This sounds right — let&apos;s talk
+              Contact us
               <ArrowUpRight aria-hidden="true" className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </div>

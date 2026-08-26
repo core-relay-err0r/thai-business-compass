@@ -411,7 +411,7 @@ export default function BlogPost() {
                 </Link>
                 <Link to="/contact">
                   <Button variant="outline" size="lg" className="min-h-[44px] w-full sm:w-auto">
-                    Get in Touch
+                    Contact us
                   </Button>
                 </Link>
               </div>

@@ -45,7 +45,7 @@ export function Header() {
         </nav>
 
         <Button asChild className="hidden rounded-none xl:inline-flex">
-          <Link to="/contact">Get a consultation <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" /></Link>
+          <Link to="/contact">Contact us <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" /></Link>
         </Button>
 
         <button
@@ -79,7 +79,7 @@ export function Header() {
           ))}
           <Button asChild className="mt-4 min-h-12 w-full rounded-none">
             <Link to="/contact" onClick={closeMobile}>
-              Get a consultation <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+              Contact us <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
             </Link>
           </Button>
         </nav>

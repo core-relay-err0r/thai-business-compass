@@ -86,8 +86,8 @@ export default function About() {
               <h2 className="mt-3 text-balance font-serif text-3xl font-medium tracking-tight">Make Thai compliance simpler.</h2>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <a href="https://calculator.pnd50.com"><Button size="lg" className="w-full sm:w-auto">Open cost calculator <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
-              <Link to="/contact"><Button variant="outline" size="lg" className="w-full sm:w-auto">Talk to our team</Button></Link>
+              <Link to="/tools/cost-estimator"><Button size="lg" className="w-full sm:w-auto">Get an estimate <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+              <Link to="/contact"><Button variant="outline" size="lg" className="w-full sm:w-auto">Contact us</Button></Link>
             </div>
           </div>
         </div>

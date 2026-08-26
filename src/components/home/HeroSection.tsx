@@ -12,8 +12,8 @@ export function HeroSection() {
         href: "/services#corporate",
       }}
       secondaryAction={{
-        text: "Tell us what you need",
-        href: "/submit",
+        text: "Contact us",
+        href: "/contact",
       }}
       image={{
         src: heroProvocativeCompliance,

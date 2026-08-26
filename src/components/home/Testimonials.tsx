@@ -38,7 +38,7 @@ export function Testimonials() {
       description="Clients describe the things that matter when the work is statutory: clarity, accuracy, speed, and control."
       stats={[]}
       testimonials={testimonials}
-      primaryActionLabel="Get in Touch"
+      primaryActionLabel="Contact us"
       primaryActionHref="/contact"
       secondaryActionLabel="Compare your scope"
       secondaryActionHref="/services"

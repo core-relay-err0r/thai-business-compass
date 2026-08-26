@@ -18,7 +18,7 @@ export function BottomCTA() {
           <a href="/contact" className="group flex min-h-72 flex-col justify-between p-6 transition-colors hover:bg-foreground hover:text-background sm:p-10 lg:min-h-[34rem] lg:p-12">
             <ArrowUpRight className="ml-auto h-12 w-12 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2" aria-hidden="true" />
             <div>
-              <p className="font-serif text-3xl font-medium sm:text-4xl">Let’s talk.</p>
+              <p className="font-serif text-3xl font-medium sm:text-4xl">Contact us</p>
               <p className="mt-3 text-sm opacity-70">No package selection required.</p>
             </div>
           </a>

@@ -38,7 +38,7 @@ export default function CostEstimator() {
               <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Services
             </Link>
             <Link to="/contact" className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-              Contact us instead <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              Contact us <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
