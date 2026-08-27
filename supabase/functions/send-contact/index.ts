@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { buildContactLeadEvent } from "../_shared/pnd50-lead-events.ts";
 import { sendLeadEvent } from "../_shared/lead-router.ts";
+import { summarizeResendDelivery } from "../_shared/resend-delivery.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -152,8 +153,8 @@ const handler = async (req: Request): Promise<Response> => {
     const internalHtml = generateEmailHtml(data);
     const clientHtml = generateClientConfirmationHtml(data);
 
-    // Send both emails in parallel
-    const [internalResponse, clientResponse] = await Promise.all([
+    // Keep the accepted lead independent from a failed client confirmation.
+    const [internalResult, clientResult] = await Promise.allSettled([
       // Email to internal team
       resend.emails.send({
         from: "PND50 <noreply@pnd50.com>",
@@ -171,34 +172,56 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     ]);
 
-    console.log("Emails sent successfully:", { internal: internalResponse, client: clientResponse });
+    const internalDelivery = summarizeResendDelivery(
+      internalResult.status === "fulfilled" ? internalResult.value : undefined,
+    );
+    const clientDelivery = summarizeResendDelivery(
+      clientResult.status === "fulfilled" ? clientResult.value : undefined,
+    );
 
-    const internalAccepted = Boolean(internalResponse.data?.id) && !internalResponse.error;
-    if (internalAccepted) {
-      const routerResult = await sendLeadEvent(buildContactLeadEvent(data));
-      if (routerResult.ok) {
-        console.info("[lead-router] contact accepted", {
-          responseStatus: routerResult.responseStatus,
-        });
-      } else if (routerResult.status !== "disabled") {
-        console.warn("[lead-router] contact delivery not confirmed", {
-          status: routerResult.status,
-          responseStatus: routerResult.responseStatus,
-        });
-      }
-    } else {
+    console.info("[resend] contact delivery result", {
+      internalAccepted: internalDelivery.accepted,
+      internalErrorCode:
+        internalResult.status === "rejected" ? "request_failed" : internalDelivery.errorCode,
+      clientAccepted: clientDelivery.accepted,
+      clientErrorCode:
+        clientResult.status === "rejected" ? "request_failed" : clientDelivery.errorCode,
+    });
+
+    if (!internalDelivery.accepted) {
       console.warn("[lead-router] contact skipped because internal email was not accepted");
+      return new Response(JSON.stringify({ error: "Unable to deliver enquiry" }), {
+        status: 502,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
-    return new Response(JSON.stringify({ success: true, data: { internal: internalResponse, client: clientResponse } }), {
+    const routerResult = await sendLeadEvent(buildContactLeadEvent(data));
+    if (routerResult.ok) {
+      console.info("[lead-router] contact accepted", {
+        responseStatus: routerResult.responseStatus,
+      });
+    } else if (routerResult.status !== "disabled") {
+      console.warn("[lead-router] contact delivery not confirmed", {
+        status: routerResult.status,
+        responseStatus: routerResult.responseStatus,
+      });
+    }
+
+    return new Response(JSON.stringify({
+      success: true,
+      internalDelivered: true,
+      clientConfirmationDelivered: clientDelivery.accepted,
+    }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (error: unknown) {
-    console.error("Error in send-contact function:", error);
-    const message = error instanceof Error ? error.message : "Internal server error";
+    console.error("[send-contact] unhandled failure", {
+      errorCode: error instanceof Error ? error.name : "unknown_error",
+    });
     return new Response(
-      JSON.stringify({ error: message }),
+      JSON.stringify({ error: "Internal server error" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
