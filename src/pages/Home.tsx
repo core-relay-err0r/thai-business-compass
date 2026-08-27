@@ -10,6 +10,7 @@ import { PricingLogic } from "@/components/home/PricingLogic";
 import { FitGuide } from "@/components/home/FitGuide";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { LocalBusinessSchema, OrganizationSchema } from "@/components/seo/StructuredData";
+import { SubscriptionSection } from "@/components/subscription/SubscriptionSection";
 
 export default function Home() {
   return (
@@ -26,6 +27,11 @@ export default function Home() {
         <HeroSection />
         <ClientFitSection />
         <ModuleCards />
+        <SubscriptionSection
+          signupLocation="home_services"
+          interest="general_thailand_compliance"
+          tone="dark"
+        />
         <FitGuide />
         <TrustSection />
         <HowItWorks />

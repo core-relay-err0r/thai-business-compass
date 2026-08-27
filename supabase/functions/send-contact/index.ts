@@ -1,4 +1,6 @@
 import { Resend } from "resend";
+import { buildContactLeadEvent } from "../_shared/pnd50-lead-events.ts";
+import { sendLeadEvent } from "../_shared/lead-router.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -170,6 +172,23 @@ const handler = async (req: Request): Promise<Response> => {
     ]);
 
     console.log("Emails sent successfully:", { internal: internalResponse, client: clientResponse });
+
+    const internalAccepted = Boolean(internalResponse.data?.id) && !internalResponse.error;
+    if (internalAccepted) {
+      const routerResult = await sendLeadEvent(buildContactLeadEvent(data));
+      if (routerResult.ok) {
+        console.info("[lead-router] contact accepted", {
+          responseStatus: routerResult.responseStatus,
+        });
+      } else if (routerResult.status !== "disabled") {
+        console.warn("[lead-router] contact delivery not confirmed", {
+          status: routerResult.status,
+          responseStatus: routerResult.responseStatus,
+        });
+      }
+    } else {
+      console.warn("[lead-router] contact skipped because internal email was not accepted");
+    }
 
     return new Response(JSON.stringify({ success: true, data: { internal: internalResponse, client: clientResponse } }), {
       status: 200,

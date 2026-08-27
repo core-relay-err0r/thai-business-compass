@@ -7,7 +7,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = join(ROOT, "dist");
 const SITE_URL = "https://www.pnd50.com";
 const STATIC_PATHS = ["/", "/services", "/about", "/contact", "/blog", "/privacy", "/tos"];
-const NOINDEX_PATHS = ["/submit", "/tools/cost-estimator"];
+const NOINDEX_PATHS = ["/submit", "/tools/cost-estimator", "/unsubscribe"];
 const LEGACY_PATHS = ["/corporate", "/corporate-services", "/accounting", "/cost-calculator", "/consulting", "/terms"];
 
 function occurrences(text, pattern) {
@@ -81,13 +81,14 @@ async function validate() {
   const robots = await readFile(join(DIST, "robots.txt"), "utf8");
   if (!robots.includes(`Sitemap: ${SITE_URL}/sitemap.xml`)) fail("robots.txt sitemap URL is inconsistent");
   if (!robots.includes("Disallow: /submit")) fail("robots.txt must disallow the conversion workflow");
+  if (!robots.includes("Disallow: /unsubscribe")) fail("robots.txt must disallow the email-preference workflow");
 
   const llms = await readFile(join(DIST, "llms.txt"), "utf8");
   if (!llms.includes("PND50 Co., Ltd.")) fail("llms.txt is missing the legal entity name");
   if (!llms.includes(SITE_URL)) fail("llms.txt is missing the canonical origin");
 
   console.log(
-    `[validate-seo] Validated ${STATIC_PATHS.length} static routes, ${NOINDEX_PATHS.length} noindex route, ${articleSlugs.length} article(s), and crawler discovery files.`,
+    `[validate-seo] Validated ${STATIC_PATHS.length} static routes, ${NOINDEX_PATHS.length} noindex route(s), ${articleSlugs.length} article(s), and crawler discovery files.`,
   );
 }
 

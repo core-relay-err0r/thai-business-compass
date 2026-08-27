@@ -1,9 +1,15 @@
-project_id = "gdjckutnbacltgamnqkt"
+project_id = "vrvwketvspgatfdqmrha"
 
 [functions.send-submission]
 verify_jwt = false
 
 [functions.send-contact]
+verify_jwt = false
+
+[functions.subscribe-updates]
+verify_jwt = false
+
+[functions.unsubscribe-updates]
 verify_jwt = false
 
 [functions.send-feedback-to-telegram]

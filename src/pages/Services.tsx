@@ -74,7 +74,7 @@ const sectionData = {
 export default function Services() {
   const location = useLocation();
   const [activeSection, setActiveSection] = useState<ActiveSection>("corporate");
-  
+
   const corporateRef = useRef<HTMLDivElement>(null);
   const accountingRef = useRef<HTMLDivElement>(null);
   const consultingRef = useRef<HTMLDivElement>(null);
@@ -114,7 +114,7 @@ export default function Services() {
 
     window.addEventListener("scroll", handleScroll);
     handleScroll(); // Initial check
-    
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -124,7 +124,7 @@ export default function Services() {
       accounting: accountingRef,
       consulting: consultingRef,
     };
-    
+
     refs[section].current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -228,6 +228,12 @@ export default function Services() {
                   </p>
                 </div>
                 <CorporateServicesContent />
+                <SubscriptionSection
+                  signupLocation="service_corporate"
+                  interest="company_registration"
+                  embedded
+                  className="mt-10"
+                />
               </div>
 
               {/* Accounting Section */}
@@ -241,25 +247,25 @@ export default function Services() {
                     Explore likely compliance work and estimate cost after the accounting need is understood.
                   </p>
                 </div>
-                <div className="border border-border bg-muted/20 p-5 sm:p-6">
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    Monthly bookkeeping, tax filing, payroll, and year-end work are scoped around your registrations, transaction volume, and deadlines. You do not need to calculate the scope before contacting us.
-                  </p>
-                  <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                    <Link
-                      to="/contact"
-                      className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-                    >
-                      Contact us <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                    </Link>
-                    <Link
-                      to="/tools/cost-estimator"
-                      className="inline-flex min-h-11 items-center justify-center border border-border px-4 text-sm font-medium hover:bg-muted"
-                    >
-                      Get an estimate
-                    </Link>
-                  </div>
-                </div>
+      <div className="border border-border bg-muted/20 p-5 sm:p-6">
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Monthly bookkeeping, tax filing, payroll, and year-end work are scoped around your registrations, transaction volume, and deadlines. You do not need to calculate the scope before contacting us.
+        </p>
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <Link
+            to="/contact"
+            className="inline-flex min-h-11 items-center justify-center gap-2 bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+          >
+            Contact us <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <Link
+            to="/tools/cost-estimator"
+            className="inline-flex min-h-11 items-center justify-center border border-border px-4 text-sm font-medium hover:bg-muted"
+          >
+            Get an estimate
+          </Link>
+        </div>
+      </div>
               </div>
 
               {/* Consulting Section */}
