@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { CorporateServicesContent } from "@/components/corporate/CorporateServices";
 import { ConsultingServices } from "@/components/consulting/ConsultingServices";
+import { SubscriptionSection } from "@/components/subscription/SubscriptionSection";
 import { ArrowRight, Building2, Calculator, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SEOHead } from "@/components/seo/SEOHead";
