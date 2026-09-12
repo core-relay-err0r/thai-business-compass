@@ -93,7 +93,7 @@ const STATIC_ROUTES = [
     title: "Accounting Services Thailand | Tax Filing & Bookkeeping | PND50",
     description:
       "Professional accounting services in Thailand for foreign companies. Monthly bookkeeping, corporate tax filing, VAT returns, payroll, and financial reporting by English-speaking accountants.",
-    h1: "Accounting, tax, and corporate services in Thailand",
+    h1: "Describe the problem. We will find the right approach.",
     answer:
       "PND50 provides monthly bookkeeping, corporate income tax (P.N.D.50) filing, VAT and withholding tax returns, payroll, company registration, and business advisory for foreign-owned companies in Thailand.",
     body: [
@@ -133,7 +133,7 @@ const STATIC_ROUTES = [
     title: "Contact PND50 | Thai Accounting & Tax Services | Bangkok",
     description:
       "Contact PND50 for Thai accounting, corporate tax, and business advisory services. Speak with our English-speaking team in EmQuartier, Bangkok.",
-    h1: "Contact PND50",
+    h1: "Tell us what you need.",
     answer:
       "Contact PND50 by email at info@pnd50.com or by phone at +66 (0)2 017 2950. The office is at Suite 3065, 30th Floor, Bhiraj Tower at EmQuartier, 689 Sukhumvit Rd, Watthana, Bangkok 10110, Thailand.",
     body: [
@@ -521,9 +521,10 @@ function injectIntoTemplate(template, { title, description, canonical, bodyHtml,
   }
 
   const headExtras = [];
-  if (noIndex) headExtras.push('<meta name="robots" content="noindex, nofollow" />');
+  if (noIndex) headExtras.push('<meta name="robots" content="noindex, nofollow" data-rh="true" />');
   for (const entry of jsonLd) {
-    headExtras.push(`<script type="application/ld+json">${escapeJsonLd(entry)}</script>`);
+    // Helmet must replace prerendered metadata during SPA navigation.
+    headExtras.push(`<script type="application/ld+json" data-rh="true">${escapeJsonLd(entry)}</script>`);
   }
   if (headExtras.length) {
     html = html.replace("</head>", `    ${headExtras.join("\n    ")}\n  </head>`);

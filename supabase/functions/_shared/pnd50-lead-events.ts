@@ -1,4 +1,5 @@
 import type { LeadEventInput } from "./lead-router.ts";
+import { sanitizeContactAttribution, type ContactAttribution } from "./contact-attribution.ts";
 
 interface SubmissionRequest {
   contactInfo: { name: string; email: string; phone?: string; preferredContact: string };
@@ -16,6 +17,7 @@ interface ContactRequest {
   whatsapp?: string;
   companyName?: string;
   message: string;
+  attribution?: ContactAttribution;
 }
 
 function compact(value: unknown, maxLength: number) {
@@ -86,6 +88,7 @@ export function buildContactLeadEvent(
     metadata: {
       event_type: "contact_request",
       has_whatsapp: Boolean(data.whatsapp),
+      attribution: sanitizeContactAttribution(data.attribution),
     },
   };
 }

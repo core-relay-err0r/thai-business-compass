@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Check, Loader2, Mail, Phone, Send } from "lucide-react";
 import { toast } from "sonner";
 
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { invokeEdgeFunction } from "@/lib/edge-functions";
+import { captureContactAttribution, trackContactEvent } from "@/lib/contact-attribution";
 
 const trustPoints = [
   "English-speaking team",
@@ -26,19 +27,33 @@ export default function Contact() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState("");
+  const submitting = useRef(false);
+  const started = useRef(false);
+  const invalidTracked = useRef(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     setIsSubmitting(true);
+    setStatus("Sending your request...");
+    trackContactEvent("contact_form_submit");
 
     try {
-      const { error } = await invokeEdgeFunction("send-contact", {
-        body: formData,
+      const { data, error } = await invokeEdgeFunction<{ success?: boolean; internalDelivered?: boolean }>("send-contact", {
+        body: { ...formData, attribution: captureContactAttribution() },
       });
 
       if (error) throw error;
+      if (data?.success !== true || data.internalDelivered !== true) {
+        throw new Error("Contact acceptance was not confirmed");
+      }
 
+      trackContactEvent("contact_form_success");
+      setStatus("Request sent. We will reply within one business day.");
       toast.success("Request sent. We will reply within one business day.");
+      started.current = false;
       setFormData({
         fullName: "",
         email: "",
@@ -46,15 +61,22 @@ export default function Contact() {
         companyName: "",
         message: "",
       });
-    } catch (error: unknown) {
-      console.error("Error sending message:", error);
-      toast.error("Failed to send your request. Please try again or email us directly.");
+    } catch {
+      trackContactEvent("contact_form_error");
+      setStatus("We could not confirm receipt. Your details are still here. Please try again or email info@pnd50.com.");
+      toast.error("We could not confirm receipt. Please try again or email us directly.");
     } finally {
+      submitting.current = false;
       setIsSubmitting(false);
     }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!started.current) {
+      trackContactEvent("contact_form_start");
+      started.current = true;
+    }
+    invalidTracked.current = false;
     setFormData((current) => ({
       ...current,
       [event.target.name]: event.target.value,
@@ -98,7 +120,10 @@ export default function Contact() {
             </div>
 
             <div className="border border-border bg-card p-4 sm:p-7 lg:p-8">
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
+              <form onSubmit={handleSubmit} aria-busy={isSubmitting} onInvalid={() => {
+                if (!invalidTracked.current) trackContactEvent("contact_form_invalid");
+                invalidTracked.current = true;
+              }} className="flex flex-col gap-4 sm:gap-5">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="fullName">Full name</Label>
@@ -172,6 +197,7 @@ export default function Contact() {
                     </>
                   )}
                 </Button>
+                <p role="status" aria-live="polite" className="text-sm leading-relaxed">{status}</p>
                 <p className="text-center text-xs leading-relaxed text-muted-foreground">
                   Your details are used only to respond to this request.
                 </p>
@@ -192,11 +218,11 @@ export default function Contact() {
       <section className="border-b border-border" aria-label="Direct contact details">
         <div className="container flex flex-col gap-4 px-4 py-6 text-sm sm:px-6 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-            <a href="mailto:info@pnd50.com" className="inline-flex min-h-11 items-center gap-2 hover:text-primary">
+            <a href="mailto:info@pnd50.com" onClick={() => trackContactEvent("contact_email_click")} className="inline-flex min-h-11 items-center gap-2 hover:text-primary">
               <Mail className="h-4 w-4" aria-hidden="true" />
               info@pnd50.com
             </a>
-            <a href="tel:+6620172950" className="inline-flex min-h-11 items-center gap-2 hover:text-primary">
+            <a href="tel:+6620172950" onClick={() => trackContactEvent("contact_phone_click")} className="inline-flex min-h-11 items-center gap-2 hover:text-primary">
               <Phone className="h-4 w-4" aria-hidden="true" />
               +66 (0)2 017 2950
             </a>

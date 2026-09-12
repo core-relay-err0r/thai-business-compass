@@ -38,13 +38,17 @@ function validateHtml(html, path, { noIndex = false } = {}) {
   if (noIndex && !html.includes('name="robots" content="noindex, nofollow"')) fail(`${path} must be noindex`);
   if (!noIndex && html.includes('name="robots" content="noindex')) fail(`${path} must be indexable`);
 
-  const jsonLdPattern = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g;
+  const jsonLdPattern = /<script type="application\/ld\+json"([^>]*)>([\s\S]*?)<\/script>/g;
   for (const match of html.matchAll(jsonLdPattern)) {
+    if (!match[1].includes('data-rh="true"')) fail(`${path} JSON-LD must be managed by Helmet`);
     try {
-      JSON.parse(match[1]);
+      JSON.parse(match[2]);
     } catch (error) {
       fail(`${path} contains invalid JSON-LD: ${error.message}`);
     }
+  }
+  if (noIndex && !html.includes('name="robots" content="noindex, nofollow" data-rh="true"')) {
+    fail(`${path} robots tag must be managed by Helmet`);
   }
 }
 

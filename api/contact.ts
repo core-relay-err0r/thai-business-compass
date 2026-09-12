@@ -32,17 +32,29 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     );
     const text = await upstream.text();
 
-    const protocolCopy = upstream.ok
-      ? await sendProtocolCopy({ subject: "PND50 contact enquiry copy", payload: req.body ?? {} })
-      : null;
-
-    res.status(upstream.status);
-    res.setHeader("Content-Type", "application/json");
+    let data: Record<string, unknown>;
     try {
-      return res.json({ ...JSON.parse(text), protocolCopyDelivered: Boolean(protocolCopy) });
+      const parsed: unknown = JSON.parse(text);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("Invalid response");
+      data = parsed as Record<string, unknown>;
     } catch {
-      return res.json({ success: upstream.ok, protocolCopyDelivered: Boolean(protocolCopy) });
+      return res.status(502).json({ error: "Enquiry acceptance was not confirmed" });
     }
+
+    if (!upstream.ok) return res.status(upstream.status).json(data);
+    if (data.success !== true || data.internalDelivered !== true) {
+      return res.status(502).json({ error: "Enquiry acceptance was not confirmed" });
+    }
+
+    // An optional copy must not turn an already accepted enquiry into a retry.
+    let protocolCopyDelivered = false;
+    try {
+      const copy = await sendProtocolCopy({ subject: "PND50 contact enquiry copy", payload: req.body ?? {} });
+      protocolCopyDelivered = Boolean(copy?.id);
+    } catch {
+      console.warn("[contact] optional protocol copy was not confirmed");
+    }
+    return res.status(upstream.status).json({ ...data, protocolCopyDelivered });
   } catch (error) {
     console.error("[contact] relay error", error);
     return res.status(500).json({ error: "Unable to send enquiry" });

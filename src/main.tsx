@@ -2,7 +2,9 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { setupBotId } from "./lib/botid";
+import { captureContactAttribution } from "./lib/contact-attribution";
 
+captureContactAttribution();
 setupBotId();
 
 // Build-time HTML gives non-JavaScript crawlers complete route content.

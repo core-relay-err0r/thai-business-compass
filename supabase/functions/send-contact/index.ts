@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { buildContactLeadEvent } from "../_shared/pnd50-lead-events.ts";
 import { sendLeadEvent } from "../_shared/lead-router.ts";
 import { summarizeResendDelivery } from "../_shared/resend-delivery.ts";
+import { sanitizeContactAttribution, type ContactAttribution } from "../_shared/contact-attribution.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -18,6 +19,7 @@ interface ContactRequest {
   whatsapp?: string;
   companyName?: string;
   message: string;
+  attribution?: ContactAttribution;
 }
 
 function escapeHtml(text: string): string {
@@ -63,6 +65,10 @@ function generateEmailHtml(data: ContactRequest): string {
         <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; white-space: pre-wrap; line-height: 1.6;">
 ${escapeHtml(data.message)}
         </div>
+        <h2 style="font-size: 16px; margin-top: 24px;">Traffic attribution (browser supplied, not verified)</h2>
+        <table style="width: 100%;">
+          ${Object.entries(sanitizeContactAttribution(data.attribution)).map(([key, value]) => `<tr><td>${escapeHtml(key)}</td><td>${escapeHtml(value)}</td></tr>`).join("") || '<tr><td>Not available</td></tr>'}
+        </table>
       </div>
       
       <p style="text-align: center; color: #999; font-size: 12px; margin-top: 24px;">
@@ -124,6 +130,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const data: ContactRequest = await req.json();
+    data.attribution = sanitizeContactAttribution(data.attribution);
 
     // Truncate and sanitize inputs
     data.fullName = truncate(String(data.fullName || '').trim(), 100);
