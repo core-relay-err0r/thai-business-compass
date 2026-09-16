@@ -62,7 +62,7 @@ export function Header() {
       <div
         id="mobile-navigation"
         className={cn(
-          "overflow-hidden border-border bg-background transition-all duration-300 xl:hidden",
+          "absolute inset-x-0 top-full overflow-hidden border-border bg-background transition-all duration-300 xl:hidden",
           isMobileMenuOpen ? "max-h-[560px] border-t opacity-100" : "max-h-0 opacity-0",
         )}
       >

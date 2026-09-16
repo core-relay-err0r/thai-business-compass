@@ -80,12 +80,12 @@ export default function Services() {
   const accountingRef = useRef<HTMLDivElement>(null);
   const consultingRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to hash on page load or hash change (only if hash exists)
+  // A repeated router link gets a new key even when its hash is unchanged.
   useEffect(() => {
     const hash = location.hash.replace("#", "") as ActiveSection;
     if (hash && ["corporate", "accounting", "consulting"].includes(hash)) {
       // Small delay to ensure DOM is ready
-      setTimeout(() => {
+      const timer = window.setTimeout(() => {
         const refs = {
           corporate: corporateRef,
           accounting: accountingRef,
@@ -93,8 +93,9 @@ export default function Services() {
         };
         refs[hash].current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
+      return () => window.clearTimeout(timer);
     }
-  }, [location.hash]);
+  }, [location.hash, location.key]);
 
   useEffect(() => {
     const handleScroll = () => {
