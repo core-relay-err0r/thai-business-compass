@@ -63,6 +63,9 @@ export default function About() {
               <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">
                 Your questions are handled by people who understand both Thai requirements and international business expectations. We combine human judgement with reliable systems so you always know where things stand.
               </p>
+              <p className="mt-5 max-w-xl leading-relaxed text-muted-foreground">
+                PND50 collaborates with Avenkara and other businesses in the Burakorn ecosystem on operational improvements. Accounting and tax services are provided by PND50 Co., Ltd.
+              </p>
               <ul className="mt-8 grid gap-4">
                 {["English-speaking specialists", "One accountable point of contact", "Transparent scope and next steps"].map((item) => (
                   <li key={item} className="flex items-center gap-3 border-t border-border pt-4 text-sm font-medium">

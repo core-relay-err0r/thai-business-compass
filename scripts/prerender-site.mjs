@@ -119,6 +119,7 @@ const STATIC_ROUTES = [
     body: [
       "We help foreign-owned businesses meet Thai obligations, understand their numbers, and make defensible decisions without unnecessary complexity.",
       "The firm operates from Bhiraj Tower at EmQuartier in Bangkok with an English-speaking team.",
+      "PND50 collaborates with Avenkara and other businesses in the Burakorn ecosystem on operational improvements. Accounting and tax services are provided by PND50 Co., Ltd.",
     ],
     links: [
       { href: "/services", label: "Our services" },
